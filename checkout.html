@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | Jonezie Peptides</title>
+  <meta name="description" content="Checkout page for Jonezie Peptides." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="announcement-bar">
+    <div class="announcement-inner">
+      <span>Jonezie Peptides checkout.</span>
+      <strong>Review order and send checkout request.</strong>
+    </div>
+  </div>
+  <div class="page-shell">
+    <header class="site-header product-header">
+      <a class="brand" href="index.html" aria-label="Jonezie Peptides home">
+        <img src="JONEZIE pepper logo.png" alt="Jonezie Peptides logo" />
+        <span>
+          <strong>Jonezie Peptides</strong>
+          <em>Research compounds with attitude.</em>
+        </span>
+      </a>
+      <nav class="site-nav product-nav-static">
+        <a href="index.html#featured">Featured</a>
+        <a href="index.html#full-catalog">Catalog</a>
+        <a href="checkout.html" class="nav-cta">Checkout</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="section-shell block-section checkout-layout">
+        <div>
+          <div class="section-heading compact">
+            <p class="eyebrow">Checkout</p>
+            <h1 class="checkout-title">Review your cart and place the order request.</h1>
+            <p>This checkout flow keeps the static site moving while we build out fuller ecommerce later. Customers can review items, fill in their details, and send a ready-to-order email.</p>
+          </div>
+          <div class="checkout-cart" data-checkout-cart></div>
+        </div>
+
+        <aside class="checkout-panel">
+          <div class="checkout-summary-card">
+            <p class="eyebrow">Order Summary</p>
+            <div class="checkout-summary-row"><span>Items</span><strong data-summary-items>0</strong></div>
+            <div class="checkout-summary-row"><span>Estimated Total</span><strong data-summary-total>$0.00</strong></div>
+          </div>
+
+          <form class="checkout-form" data-checkout-form>
+            <label>
+              Full Name
+              <input type="text" name="customerName" placeholder="Name" required />
+            </label>
+            <label>
+              Email
+              <input type="email" name="customerEmail" placeholder="Email" required />
+            </label>
+            <label>
+              Phone
+              <input type="text" name="customerPhone" placeholder="Phone" />
+            </label>
+            <label>
+              Notes
+              <textarea name="customerNotes" rows="5" placeholder="Any order notes, shipping details, or questions"></textarea>
+            </label>
+            <div class="purchase-actions checkout-actions">
+              <button class="button primary purchase-button" type="submit">Send Order Email</button>
+              <button class="button secondary purchase-button" type="button" data-clear-cart>Clear Cart</button>
+            </div>
+          </form>
+          <p class="purchase-note">Checkout currently opens an email to zvl1380@gmail.com with the customer details and cart contents already filled in.</p>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Jonezie Peptides</p>
+      <span>Research Use Only. Not for human consumption.</span>
+    </footer>
+  </div>
+
+  <script src="checkout.js"></script>
+</body>
+</html>

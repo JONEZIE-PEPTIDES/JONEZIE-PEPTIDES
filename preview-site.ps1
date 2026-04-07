@@ -29,7 +29,11 @@ try {
     $requestPath = [System.Uri]::UnescapeDataString($context.Request.Url.AbsolutePath.TrimStart('/'))
     if ([string]::IsNullOrWhiteSpace($requestPath)) { $requestPath = 'index.html' }
     $localPath = Join-Path $siteRoot $requestPath
-    if ((Test-Path $localPath) -and (Get-Item $localPath).PSIsContainer) { $localPath = Join-Path $localPath 'index.html' }
+
+    if ((Test-Path $localPath) -and (Get-Item $localPath).PSIsContainer) {
+      $localPath = Join-Path $localPath 'index.html'
+    }
+
     if (Test-Path $localPath) {
       $ext = [System.IO.Path]::GetExtension($localPath).ToLowerInvariant()
       $contentType = if ($mimeTypes.ContainsKey($ext)) { $mimeTypes[$ext] } else { 'application/octet-stream' }
@@ -45,6 +49,7 @@ try {
       $context.Response.ContentLength64 = $message.Length
       $context.Response.OutputStream.Write($message, 0, $message.Length)
     }
+
     $context.Response.OutputStream.Close()
   }
 }
