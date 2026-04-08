@@ -1,5 +1,6 @@
 const CART_KEY = 'jonezie_cart';
 const catalogData = window.JONEZIE_CATALOG || null;
+const imageMap = window.JONEZIE_IMAGE_MAP || {};
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 
 function escapeHtml(value) {
@@ -45,6 +46,13 @@ function setCart(cart) {
   window.localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
+function getProductImageForOption(product, option) {
+  const mapped = imageMap.products?.[product.slug];
+  if (!mapped) return product.image || PRODUCT_FALLBACK_IMAGE;
+  if (option?.mgOption && mapped.options?.[option.mgOption]) return mapped.options[option.mgOption];
+  return mapped.default || product.image || PRODUCT_FALLBACK_IMAGE;
+}
+
 function addItemToCart(item) {
   const cart = getCart();
   const existing = cart.find((entry) => entry.slug === item.slug && entry.code === item.code && entry.packKey === item.packKey);
@@ -70,14 +78,8 @@ function renderProductPage() {
 
   const titleNode = document.querySelector('[data-product-title]');
   const eyebrowNode = document.querySelector('[data-product-category]');
-  const descriptionNode = document.querySelector('[data-product-description]');
-  const heroImage = document.querySelector('[data-product-image]');
-  const currentPriceNode = document.querySelector('[data-product-starting-price]');
-  const currentPriceBlurb = document.querySelector('[data-product-price-blurb]');
-  const optionsGrid = document.querySelector('[data-product-options]');
   const highlightsGrid = document.querySelector('[data-product-highlights]');
   const faqList = document.querySelector('[data-product-faq]');
-  const checkoutLink = document.querySelector('[data-product-checkout]');
   const selectedTitle = document.querySelector('[data-selected-title]');
   const selectedSubtitle = document.querySelector('[data-selected-subtitle]');
   const packPicker = document.querySelector('[data-pack-picker]');
@@ -88,28 +90,11 @@ function renderProductPage() {
   const selectedTotal = document.querySelector('[data-selected-total]');
   const addToCartButton = document.querySelector('[data-add-to-cart]');
   const buyNowButton = document.querySelector('[data-buy-now]');
+  const optionsGrid = document.querySelector('[data-product-options]');
 
   document.title = `${product.name} | Jonezie Peptides`;
-  const meta = document.querySelector('meta[name="description"]');
-  if (meta) meta.setAttribute('content', `${product.name} product page for the Jonezie Peptides storefront.`);
   if (titleNode) titleNode.textContent = product.name;
   if (eyebrowNode) eyebrowNode.textContent = product.category;
-  if (descriptionNode) descriptionNode.textContent = product.description;
-  if (heroImage) {
-    heroImage.src = (product.image || '').replace('../', '');
-    heroImage.alt = `${product.name} product visual`;
-    heroImage.onerror = () => {
-      heroImage.onerror = null;
-      heroImage.src = PRODUCT_FALLBACK_IMAGE;
-    };
-  }
-  if (currentPriceNode) {
-    currentPriceNode.textContent = `Single from ${product.startingPriceSingle || 'Pending'} | 8-pack from ${product.startingPrice8 || 'Pending'} | 10-pack from ${product.startingPrice10 || 'Pending'}`;
-  }
-  if (currentPriceBlurb) {
-    currentPriceBlurb.textContent = 'Select an MG option below, choose your pack size, and move straight into checkout from this page.';
-  }
-  if (checkoutLink) checkoutLink.href = 'checkout.html';
 
   function getAvailablePacks(option) {
     return [
@@ -213,7 +198,7 @@ function renderProductPage() {
       unitPrice,
       unitPriceDisplay: selectedOption[selectedPackKey],
       quantity,
-      image: product.image
+      image: getProductImageForOption(product, selectedOption)
     };
   }
 
@@ -249,39 +234,39 @@ function renderProductPage() {
     highlightsGrid.innerHTML = `
       <article>
         <p class="eyebrow">Positioning</p>
-        <h2>How Jonezie frames this product</h2>
-        <p>${escapeHtml(product.description)}</p>
+        <h2>How this product should feel on Jonezie</h2>
+        <p>${escapeHtml(product.description)} The goal is to present it with cleaner visuals, easier pricing, and a more premium buy flow than the average catalog-first peptide site.</p>
       </article>
       <article>
         <p class="eyebrow">Selection</p>
-        <h2>How ordering works</h2>
-        <p>Choose the MG option first, pick your preferred pack size, and move straight into checkout from the product page.</p>
+        <h2>How the page is built to move</h2>
+        <p>Choose the MG option first, lock in the pack size, and move forward fast. The whole point is to make the page feel more current, less cluttered, and easier to act on.</p>
       </article>
       <article>
         <p class="eyebrow">Available now</p>
-        <h2>MG options loaded</h2>
+        <h2>Strength options currently loaded</h2>
         <p>${escapeHtml(optionText)}</p>
       </article>
       <article>
         <p class="eyebrow">Pricing</p>
         <h2>Current pack structure</h2>
-        <p>Official pricing is now loaded for single-vial, 8-vial, and 10-vial configurations across the catalog.</p>
+        <p>Pricing is shown in a cleaner tiered format so buyers can compare single-vial, 8-vial, and 10-vial options without hunting through scattered text.</p>
       </article>`;
   }
 
   if (faqList) {
     faqList.innerHTML = `
       <details open>
-        <summary>How do I order from this page?</summary>
-        <p>Select the MG option, choose the pack size in the purchase panel, add it to cart, and move into checkout.</p>
+        <summary>How does ordering work from this page?</summary>
+        <p>Select the MG option, choose the pack format in the order panel, add it to cart, and move straight into checkout. The page is built to keep that process simple and obvious.</p>
       </details>
       <details>
-        <summary>Which pricing is live on this page now?</summary>
-        <p>This page shows your official single-vial, 8-pack, and 10-pack pricing for each available MG option.</p>
+        <summary>What pricing is shown here?</summary>
+        <p>This page is designed to show the loaded pricing structure for each available MG option so buyers can compare formats without switching pages or asking for basic details first.</p>
       </details>
       <details>
-        <summary>Can the product page hold more content later?</summary>
-        <p>Yes. We can still add stronger product copy, image galleries, lab-document sections, and ordering notes without changing the core layout.</p>
+        <summary>Can this page hold more credibility content later?</summary>
+        <p>Yes. We can keep layering in stronger product copy, image galleries, batch or documentation sections, ordering notes, and other trust-building elements without changing the overall layout.</p>
       </details>`;
   }
 

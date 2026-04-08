@@ -1,6 +1,7 @@
 const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
 const catalogData = window.JONEZIE_CATALOG || null;
+const imageMap = window.JONEZIE_IMAGE_MAP || {};
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 
 if (menuToggle && siteNav) {
@@ -37,11 +38,39 @@ function getProductUrl(slug) {
 }
 
 function withFallbackImage(path) {
-  return escapeHtml((path || '').replace('../', ''));
+  return escapeHtml((path || PRODUCT_FALLBACK_IMAGE).replace('../', ''));
+}
+
+function getProductImage(product) {
+  return imageMap.products?.[product.slug]?.default || product.image || PRODUCT_FALLBACK_IMAGE;
 }
 
 function priceSummary(product) {
   return `Single ${product.startingPriceSingle || 'Pending'} | 8-pack ${product.startingPrice8 || 'Pending'} | 10-pack ${product.startingPrice10 || 'Pending'}`;
+}
+
+function renderOptionChips(product) {
+  return (product.options || [])
+    .map((option) => `<span>${escapeHtml(option.mgOption)}</span>`)
+    .join('');
+}
+
+function bindCardLinks() {
+  document.querySelectorAll('[data-card-link]').forEach((card) => {
+    const href = card.getAttribute('data-card-link');
+    if (!href) return;
+
+    card.addEventListener('click', () => {
+      window.location.href = href;
+    });
+
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        window.location.href = href;
+      }
+    });
+  });
 }
 
 function renderFeatured() {
@@ -51,21 +80,25 @@ function renderFeatured() {
   const featured = (catalogData.featured || []).slice(0, 6);
   grid.innerHTML = featured.map((product) => {
     const optionCount = product.options.length;
+    const productUrl = getProductUrl(product.slug);
     return `
-      <article class="product-card ${getAccent(product.category)}">
-        <img src="${withFallbackImage(product.image)}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
+      <article class="product-card ${getAccent(product.category)} clickable-card" data-card-link="${productUrl}" tabindex="0" role="link" aria-label="Open ${escapeHtml(product.name)} product page">
+        <img src="${withFallbackImage(getProductImage(product))}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
         <div class="product-copy">
           <div class="product-badge">${escapeHtml(product.category)}</div>
           <h3>${escapeHtml(product.name)}</h3>
-          <a class="catalog-link" href="${getProductUrl(product.slug)}">Open product page</a>
           <p>${escapeHtml(product.description)}</p>
+          <div class="option-chips">${renderOptionChips(product)}</div>
           <div class="catalog-meta compact-meta">
             <span>${optionCount} MG option${optionCount === 1 ? '' : 's'}</span>
             <span>${escapeHtml(priceSummary(product))}</span>
           </div>
+          <span class="catalog-link">View product</span>
         </div>
       </article>`;
   }).join('');
+
+  bindCardLinks();
 }
 
 function renderCatalog() {
@@ -75,23 +108,26 @@ function renderCatalog() {
   const products = [...(catalogData.products || [])].sort((a, b) => a.name.localeCompare(b.name));
   grid.innerHTML = products.map((product) => {
     const optionCount = product.options.length;
-    const optionPreview = product.options.slice(0, 3).map((option) => `<span>${escapeHtml(option.mgOption)}</span>`).join('');
+    const productUrl = getProductUrl(product.slug);
     return `
-      <article class="catalog-card">
+      <article class="catalog-card clickable-card" data-card-link="${productUrl}" tabindex="0" role="link" aria-label="Open ${escapeHtml(product.name)} product page">
+        <img class="catalog-thumb" src="${withFallbackImage(getProductImage(product))}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
         <div class="catalog-top">
           <span class="catalog-tag">${escapeHtml(product.category)}</span>
           <span class="catalog-price-rule">full pricing live</span>
         </div>
         <h3>${escapeHtml(product.name)}</h3>
-        <a class="catalog-link" href="${getProductUrl(product.slug)}">Open product page</a>
         <p>${escapeHtml(product.description)}</p>
-        <div class="option-chips">${optionPreview}</div>
+        <div class="option-chips">${renderOptionChips(product)}</div>
         <div class="catalog-meta">
           <span>${optionCount} strength option${optionCount === 1 ? '' : 's'}</span>
           <span>${escapeHtml(priceSummary(product))}</span>
         </div>
+        <span class="catalog-link">View product</span>
       </article>`;
   }).join('');
+
+  bindCardLinks();
 }
 
 function renderCounts() {
