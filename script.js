@@ -1,6 +1,7 @@
 const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
 const catalogData = window.JONEZIE_CATALOG || null;
+const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 
 if (menuToggle && siteNav) {
   menuToggle.addEventListener('click', () => {
@@ -31,6 +32,14 @@ function getAccent(category) {
   return 'accent-cyan';
 }
 
+function getProductUrl(slug) {
+  return `product.html?slug=${encodeURIComponent(slug)}`;
+}
+
+function withFallbackImage(path) {
+  return escapeHtml((path || '').replace('../', ''));
+}
+
 function priceSummary(product) {
   return `Single ${product.startingPriceSingle || 'Pending'} | 8-pack ${product.startingPrice8 || 'Pending'} | 10-pack ${product.startingPrice10 || 'Pending'}`;
 }
@@ -44,11 +53,11 @@ function renderFeatured() {
     const optionCount = product.options.length;
     return `
       <article class="product-card ${getAccent(product.category)}">
-        <img src="${escapeHtml(product.image.replace('../', ''))}" alt="${escapeHtml(product.name)} product visual" />
+        <img src="${withFallbackImage(product.image)}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
         <div class="product-copy">
           <div class="product-badge">${escapeHtml(product.category)}</div>
           <h3>${escapeHtml(product.name)}</h3>
-          <a class="catalog-link" href="products/${escapeHtml(product.slug)}.html">Open product page</a>
+          <a class="catalog-link" href="${getProductUrl(product.slug)}">Open product page</a>
           <p>${escapeHtml(product.description)}</p>
           <div class="catalog-meta compact-meta">
             <span>${optionCount} MG option${optionCount === 1 ? '' : 's'}</span>
@@ -74,7 +83,7 @@ function renderCatalog() {
           <span class="catalog-price-rule">full pricing live</span>
         </div>
         <h3>${escapeHtml(product.name)}</h3>
-        <a class="catalog-link" href="products/${escapeHtml(product.slug)}.html">Open product page</a>
+        <a class="catalog-link" href="${getProductUrl(product.slug)}">Open product page</a>
         <p>${escapeHtml(product.description)}</p>
         <div class="option-chips">${optionPreview}</div>
         <div class="catalog-meta">

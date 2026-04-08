@@ -1,5 +1,6 @@
 const CART_KEY = 'jonezie_cart';
 const catalogData = window.JONEZIE_CATALOG || null;
+const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 
 function escapeHtml(value) {
   return String(value)
@@ -11,6 +12,9 @@ function escapeHtml(value) {
 }
 
 function getSlugFromPath() {
+  const params = new URLSearchParams(window.location.search);
+  const querySlug = params.get('slug');
+  if (querySlug) return querySlug;
   const path = window.location.pathname.replace(/\\/g, '/');
   const parts = path.split('/');
   const file = parts[parts.length - 1] || '';
@@ -92,8 +96,12 @@ function renderProductPage() {
   if (eyebrowNode) eyebrowNode.textContent = product.category;
   if (descriptionNode) descriptionNode.textContent = product.description;
   if (heroImage) {
-    heroImage.src = product.image;
+    heroImage.src = (product.image || '').replace('../', '');
     heroImage.alt = `${product.name} product visual`;
+    heroImage.onerror = () => {
+      heroImage.onerror = null;
+      heroImage.src = PRODUCT_FALLBACK_IMAGE;
+    };
   }
   if (currentPriceNode) {
     currentPriceNode.textContent = `Single from ${product.startingPriceSingle || 'Pending'} | 8-pack from ${product.startingPrice8 || 'Pending'} | 10-pack from ${product.startingPrice10 || 'Pending'}`;
@@ -101,7 +109,7 @@ function renderProductPage() {
   if (currentPriceBlurb) {
     currentPriceBlurb.textContent = 'Select an MG option below, choose your pack size, and move straight into checkout from this page.';
   }
-  if (checkoutLink) checkoutLink.href = '../checkout.html';
+  if (checkoutLink) checkoutLink.href = 'checkout.html';
 
   function getAvailablePacks(option) {
     return [
@@ -233,7 +241,7 @@ function renderProductPage() {
     const item = getSelectedCartItem();
     if (!item) return;
     setCart([item]);
-    window.location.href = '../checkout.html';
+    window.location.href = 'checkout.html';
   });
 
   if (highlightsGrid) {

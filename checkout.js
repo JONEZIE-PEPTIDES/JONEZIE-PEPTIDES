@@ -4,6 +4,7 @@ const summaryItems = document.querySelector('[data-summary-items]');
 const summaryTotal = document.querySelector('[data-summary-total]');
 const form = document.querySelector('[data-checkout-form]');
 const clearCartButton = document.querySelector('[data-clear-cart]');
+const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 
 function getCart() {
   try {
@@ -44,7 +45,7 @@ function renderCart() {
 
   cartRoot.innerHTML = cart.map((item, index) => `
     <article class="checkout-item-card">
-      <img src="${item.image.replace('../', '')}" alt="${item.name} product image" />
+      <img src="${String(item.image || '').replace('../', '')}" alt="${item.name} product image" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
       <div class="checkout-item-copy">
         <h2>${item.name}</h2>
         <p>${item.mgOption} | ${item.packLabel}</p>
