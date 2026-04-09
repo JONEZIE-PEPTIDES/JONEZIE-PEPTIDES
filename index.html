@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@700&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="brand-mark.svg" />
-  <link rel="stylesheet" href="styles.css?v=20260409e" />
+  <link rel="stylesheet" href="styles.css?v=20260409j" />
 </head>
 <body>
   <div class="page-shell home-shell">
@@ -25,9 +25,31 @@
         <span></span>
       </button>
       <nav id="site-nav" class="site-nav">
+        <form class="nav-search" data-nav-search-form role="search" action="product.html">
+          <label class="sr-only" for="nav-search-home">Search products</label>
+          <span class="nav-search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" role="presentation">
+              <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M16 16l4.2 4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <input id="nav-search-home" type="search" data-nav-search-input list="nav-search-list-home" placeholder="Search products" />
+          <datalist id="nav-search-list-home"></datalist>
+        </form>
         <a href="#featured">Products</a>
         <a href="#faq">FAQ</a>
         <a href="#contact" class="nav-cta">Get Started</a>
+        <a href="checkout.html" class="nav-cart" data-cart-link aria-label="Open cart">
+          <span class="nav-cart-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" role="presentation">
+              <path d="M3 4h2.2l2.1 9.3c.1.4.4.7.8.7h8.9c.4 0 .8-.3.9-.7l1.6-6.3H7.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="10" cy="19" r="1.6" fill="currentColor"/>
+              <circle cx="17" cy="19" r="1.6" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="nav-cart-label">Cart</span>
+          <span class="nav-cart-count" data-cart-count hidden>0</span>
+        </a>
       </nav>
     </header>
 
@@ -203,8 +225,13 @@
     </footer>
   </div>
 
-  <script src="catalog-data.js?v=20260409e"></script>
-  <script src="product-content.js?v=20260409e"></script>
-  <script src="script.js?v=20260409e"></script>
+  <script src="catalog-data.js?v=20260409j"></script>
+  <script src="catalog-admin-config.js?v=20260409j"></script>
+  <script src="catalog-admin.js?v=20260409j"></script>
+  <script src="catalog-image-overrides.js?v=20260409j"></script>
+  <script src="product-content.js?v=20260409j"></script>
+  <script src="cart-nav.js?v=20260409j"></script>
+  <script src="nav-search.js?v=20260409j"></script>
+  <script src="script.js?v=20260409j"></script>
 </body>
 </html>

@@ -50,8 +50,18 @@ function getImageSrc(path) {
   return `${sanitized}?v=${IMAGE_ASSET_VERSION}`;
 }
 
-function priceSummary(product) {
-  return `Single ${product.startingPriceSingle || 'Pending'} | 8-pack ${product.startingPrice8 || 'Pending'} | 10-pack ${product.startingPrice10 || 'Pending'}`;
+function renderStrengthChips(options) {
+  const limit = 4;
+  const strengthList = (options || [])
+    .map((option) => escapeHtml(option.mgOption))
+    .filter(Boolean);
+
+  const visible = strengthList.slice(0, limit).map((strength) => `<span>${strength}</span>`);
+  if (strengthList.length > limit) {
+    visible.push(`<span class="more-chip">+${strengthList.length - limit}</span>`);
+  }
+
+  return visible.join('');
 }
 
 function getProductContent(product) {
@@ -64,9 +74,9 @@ function renderFeatured() {
 
   const featured = (catalogData.featured || []).slice(0, 6);
   grid.innerHTML = featured.map((product) => {
-    const optionCount = product.options.length;
     const productContent = getProductContent(product);
     const description = productContent?.shortDescription || product.description;
+    const strengthChips = renderStrengthChips(product.options);
     const imageSrc = getImageSrc(product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
@@ -80,10 +90,7 @@ function renderFeatured() {
           <h3>${escapeHtml(product.name)}</h3>
           <span class="catalog-link">Open product page</span>
           <p>${escapeHtml(description)}</p>
-          <div class="catalog-meta compact-meta">
-            <span>${optionCount} MG option${optionCount === 1 ? '' : 's'}</span>
-            <span>${escapeHtml(priceSummary(product))}</span>
-          </div>
+          <div class="option-chips">${strengthChips}</div>
         </div>
       </a>`;
   }).join('');
@@ -95,10 +102,9 @@ function renderCatalog() {
 
   const products = [...(catalogData.products || [])].sort((a, b) => a.name.localeCompare(b.name));
   grid.innerHTML = products.map((product) => {
-    const optionCount = product.options.length;
     const productContent = getProductContent(product);
     const description = productContent?.shortDescription || product.description;
-    const optionPreview = product.options.slice(0, 3).map((option) => `<span>${escapeHtml(option.mgOption)}</span>`).join('');
+    const strengthChips = renderStrengthChips(product.options);
     const imageSrc = getImageSrc(product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
@@ -111,11 +117,7 @@ function renderCatalog() {
         <h3>${escapeHtml(product.name)}</h3>
         <span class="catalog-link">Open product page</span>
         <p>${escapeHtml(description)}</p>
-        <div class="option-chips">${optionPreview}</div>
-        <div class="catalog-meta">
-          <span>${optionCount} strength option${optionCount === 1 ? '' : 's'}</span>
-          <span>${escapeHtml(priceSummary(product))}</span>
-        </div>
+        <div class="option-chips">${strengthChips}</div>
       </a>`;
   }).join('');
 }

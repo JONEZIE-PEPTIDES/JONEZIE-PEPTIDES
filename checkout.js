@@ -22,10 +22,18 @@ function getCart() {
 
 function setCart(cart) {
   window.localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  window.dispatchEvent(new CustomEvent('jonezie:cart-updated'));
 }
 
 function formatMoney(value) {
   return `$${Number(value || 0).toFixed(2)}`;
+}
+
+function getInventoryLabel(status) {
+  const value = String(status || 'in_stock').toLowerCase();
+  if (value === 'backorder') return 'Backorder';
+  if (value === 'sold_out') return 'Sold Out';
+  return 'In Stock';
 }
 
 function getPromoDetails() {
@@ -73,6 +81,7 @@ function renderCart() {
         <h2>${item.name}</h2>
         <p>${item.mgOption} | ${item.packLabel}</p>
         <div class="checkout-item-meta">
+          <span>Availability: ${getInventoryLabel(item.inventoryStatus)}</span>
           <span>Unit price: ${item.unitPriceDisplay}</span>
           <span>Quantity: ${item.quantity}</span>
           <span>Line total: ${formatMoney(item.unitPrice * item.quantity)}</span>
@@ -120,7 +129,7 @@ form?.addEventListener('submit', (event) => {
   ];
 
   cart.forEach((item) => {
-    lines.push(`- ${item.name} | ${item.mgOption} | ${item.packLabel} | Qty ${item.quantity} | ${item.unitPriceDisplay} each | ${formatMoney(item.unitPrice * item.quantity)} total`);
+    lines.push(`- ${item.name} | ${item.mgOption} | ${item.packLabel} | ${getInventoryLabel(item.inventoryStatus)} | Qty ${item.quantity} | ${item.unitPriceDisplay} each | ${formatMoney(item.unitPrice * item.quantity)} total`);
   });
 
   lines.push('');

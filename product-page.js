@@ -65,6 +65,21 @@ function parsePrice(value) {
   return Number.isFinite(numeric) ? numeric : null;
 }
 
+function getInventoryStatus(option) {
+  const status = String(option?.inventoryStatus || 'in_stock').toLowerCase();
+  if (status === 'backorder' || status === 'sold_out' || status === 'in_stock') return status;
+  return 'in_stock';
+}
+
+function getInventoryLabel(status) {
+  const labels = {
+    in_stock: 'In Stock',
+    backorder: 'Backorder',
+    sold_out: 'Sold Out'
+  };
+  return labels[status] || labels.in_stock;
+}
+
 function formatMoney(value) {
   if (!Number.isFinite(value)) return 'Pending';
   return `$${value.toFixed(2)}`;
@@ -80,6 +95,7 @@ function getCart() {
 
 function setCart(cart) {
   window.localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  window.dispatchEvent(new CustomEvent('jonezie:cart-updated'));
 }
 
 function addItemToCart(item) {
@@ -100,7 +116,8 @@ function renderProductPage() {
   const product = allProducts.find((item, index) => item.slug === slug && allProducts.findIndex((entry) => entry.slug === item.slug) === index);
   if (!product) return;
 
-  let selectedOption = product.options[0] || null;
+  const firstAvailableOption = product.options.find((option) => getInventoryStatus(option) !== 'sold_out');
+  let selectedOption = firstAvailableOption || product.options[0] || null;
   let selectedPackKey = selectedOption && selectedOption.singleVialPrice ? 'singleVialPrice' : 'eightVialPrice';
   if (selectedOption && !selectedOption[selectedPackKey]) {
     selectedPackKey = selectedOption.eightVialPrice ? 'eightVialPrice' : 'tenVialPrice';
@@ -156,10 +173,13 @@ function renderProductPage() {
     if (!optionsGrid) return;
     optionsGrid.innerHTML = product.options.map((option) => {
       const isActive = selectedOption && selectedOption.code === option.code;
+      const inventoryStatus = getInventoryStatus(option);
+      const isSoldOut = inventoryStatus === 'sold_out';
       return `
-        <button type="button" class="spec-card spec-card-button${isActive ? ' is-selected' : ''}" data-option-code="${escapeHtml(option.code)}">
+        <button type="button" class="spec-card spec-card-button${isActive ? ' is-selected' : ''}${isSoldOut ? ' is-sold-out' : ''}" data-option-code="${escapeHtml(option.code)}" ${isSoldOut ? 'disabled aria-disabled="true"' : ''}>
           <p class="eyebrow">${escapeHtml(option.code)}</p>
           <h3>${escapeHtml(option.mgOption)}</h3>
+          <p class="inventory-pill inventory-${inventoryStatus}">${getInventoryLabel(inventoryStatus)}</p>
           <div class="spec-price-row"><span>Single</span><strong>${escapeHtml(option.singleVialPrice || 'Pending')}</strong></div>
           <div class="spec-price-row"><span>8-pack</span><strong>${escapeHtml(option.eightVialPrice || 'Pending')}</strong></div>
           <div class="spec-price-row live-row"><span>10-pack</span><strong>${escapeHtml(option.tenVialPrice || 'Pending')}</strong></div>
@@ -206,20 +226,32 @@ function renderProductPage() {
     };
     const packLabel = packMap[selectedPackKey] || 'Pack';
     const unitPrice = parsePrice(selectedOption[selectedPackKey]);
+    const selectedStatus = getInventoryStatus(selectedOption);
+    const isSoldOut = selectedStatus === 'sold_out';
     const total = Number.isFinite(unitPrice) ? unitPrice * quantity : null;
 
     if (selectedTitle) selectedTitle.textContent = `${product.name} ${selectedOption.mgOption}`;
-    if (selectedSubtitle) selectedSubtitle.textContent = `${packLabel} selected for ${selectedOption.code}.`;
-    if (selectedPrice) selectedPrice.textContent = unitPrice !== null ? formatMoney(unitPrice) : 'Pending';
-    if (selectedTotal) selectedTotal.textContent = total !== null ? formatMoney(total) : 'Pending';
+    if (selectedSubtitle) {
+      if (selectedStatus === 'backorder') {
+        selectedSubtitle.textContent = `${selectedOption.code} is currently on backorder.`;
+      } else if (isSoldOut) {
+        selectedSubtitle.textContent = `${selectedOption.code} is currently sold out.`;
+      } else {
+        selectedSubtitle.textContent = `${packLabel} selected for ${selectedOption.code}.`;
+      }
+    }
+    if (selectedPrice) selectedPrice.textContent = isSoldOut ? 'Sold Out' : (unitPrice !== null ? formatMoney(unitPrice) : 'Pending');
+    if (selectedTotal) selectedTotal.textContent = isSoldOut ? 'Sold Out' : (total !== null ? formatMoney(total) : 'Pending');
 
-    const disabled = unitPrice === null;
+    const disabled = unitPrice === null || isSoldOut;
     if (addToCartButton) addToCartButton.disabled = disabled;
     if (buyNowButton) buyNowButton.disabled = disabled;
   }
 
   function getSelectedCartItem() {
     if (!selectedOption) return null;
+    const selectedStatus = getInventoryStatus(selectedOption);
+    if (selectedStatus === 'sold_out') return null;
     const unitPrice = parsePrice(selectedOption[selectedPackKey]);
     if (unitPrice === null) return null;
     const packMap = {
@@ -238,7 +270,8 @@ function renderProductPage() {
       unitPrice,
       unitPriceDisplay: selectedOption[selectedPackKey],
       quantity,
-      image: product.image
+      image: product.image,
+      inventoryStatus: selectedStatus
     };
   }
 
