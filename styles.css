@@ -546,6 +546,13 @@ img { display: block; max-width: 100%; }
   background: linear-gradient(135deg, #9fe8ff 0%, #b8d8ff 24%, #d39ce6 56%, #ff5ba7 100%);
 }
 .product-copy { padding: 22px; }
+.product-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
 .product-badge {
   display: inline-flex;
   margin-bottom: 16px;
@@ -556,6 +563,9 @@ img { display: block; max-width: 100%; }
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+.product-top .product-badge {
+  margin-bottom: 0;
 }
 .product-copy h3,
 .steps-grid h3,

@@ -62,7 +62,10 @@ function renderFeatured() {
       <a class="product-card card-link-shell ${getAccent(product.category)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
         <img src="${withFallbackImage(product.image)}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
         <div class="product-copy">
-          <div class="product-badge">${escapeHtml(product.category)}</div>
+          <div class="product-top">
+            <div class="product-badge">${escapeHtml(product.category)}</div>
+            <span class="catalog-price-rule">view pricing</span>
+          </div>
           <h3>${escapeHtml(product.name)}</h3>
           <span class="catalog-link">Open product page</span>
           <p>${escapeHtml(description)}</p>
@@ -90,7 +93,7 @@ function renderCatalog() {
         <img src="${withFallbackImage(product.image)}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
         <div class="catalog-top">
           <span class="catalog-tag">${escapeHtml(product.category)}</span>
-          <span class="catalog-price-rule">full pricing live</span>
+          <span class="catalog-price-rule">view pricing</span>
         </div>
         <h3>${escapeHtml(product.name)}</h3>
         <span class="catalog-link">Open product page</span>
