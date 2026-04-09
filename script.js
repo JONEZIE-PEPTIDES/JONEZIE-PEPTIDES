@@ -3,6 +3,7 @@ const siteNav = document.querySelector('.site-nav');
 const catalogData = window.JONEZIE_CATALOG || null;
 const contentData = window.JONEZIE_PRODUCT_CONTENT || null;
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
+const IMAGE_ASSET_VERSION = '20260409e';
 
 if (menuToggle && siteNav) {
   menuToggle.addEventListener('click', () => {
@@ -41,6 +42,14 @@ function withFallbackImage(path) {
   return escapeHtml((path || '').replace('../', ''));
 }
 
+function getImageSrc(path) {
+  const sanitized = withFallbackImage(path).trim();
+  const fallback = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
+  if (!sanitized) return fallback;
+  if (sanitized.includes('?')) return sanitized;
+  return `${sanitized}?v=${IMAGE_ASSET_VERSION}`;
+}
+
 function priceSummary(product) {
   return `Single ${product.startingPriceSingle || 'Pending'} | 8-pack ${product.startingPrice8 || 'Pending'} | 10-pack ${product.startingPrice10 || 'Pending'}`;
 }
@@ -58,9 +67,11 @@ function renderFeatured() {
     const optionCount = product.options.length;
     const productContent = getProductContent(product);
     const description = productContent?.shortDescription || product.description;
+    const imageSrc = getImageSrc(product.image);
+    const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
       <a class="product-card card-link-shell ${getAccent(product.category)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
-        <img src="${withFallbackImage(product.image)}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
+        <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         <div class="product-copy">
           <div class="product-top">
             <div class="product-badge">${escapeHtml(product.category)}</div>
@@ -88,9 +99,11 @@ function renderCatalog() {
     const productContent = getProductContent(product);
     const description = productContent?.shortDescription || product.description;
     const optionPreview = product.options.slice(0, 3).map((option) => `<span>${escapeHtml(option.mgOption)}</span>`).join('');
+    const imageSrc = getImageSrc(product.image);
+    const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
       <a class="catalog-card card-link-shell" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
-        <img src="${withFallbackImage(product.image)}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
+        <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         <div class="catalog-top">
           <span class="catalog-tag">${escapeHtml(product.category)}</span>
           <span class="catalog-price-rule">view pricing</span>
