@@ -3,7 +3,11 @@
   if (!catalog) return;
 
   const IMAGE_OVERRIDES_BY_SLUG = {
-    'ghk-cu': 'ghk-cu-100mg-official.png'
+    'ghk-cu': 'ghk-cu-100mg-official.png',
+    'tirzepatide': 'tirzepatide-15mg-official.png',
+    'mt-1': 'mt-1-10mg-official.png',
+    mt1: 'mt-1-10mg-official.png',
+    'melanotan-1': 'mt-1-10mg-official.png'
   };
 
   function applyOverrides(list) {
