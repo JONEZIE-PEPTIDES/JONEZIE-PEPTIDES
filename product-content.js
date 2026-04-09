@@ -227,6 +227,15 @@ window.JONEZIE_PRODUCT_CONTENT = {
         'It is best positioned as a cellular-energy and metabolism product rather than generic anti-aging filler.'
       ]
     },
+    'mt-1': {
+      shortDescription: 'MT-1 is a melanocortin-pathway peptide used in pigmentation and photoprotection research. It is usually positioned around melanin signaling and UV-response models.',
+      researchSummary: 'Published melanocortin research has examined increased eumelanin production, UV-response biology, and skin-pigmentation signaling pathways.',
+      researchFindings: [
+        'MT-1 research has focused on melanocortin receptor signaling tied to melanogenesis and pigmentation outcomes.',
+        'The broader literature has explored UV-response and photoprotection concepts through higher melanin expression.',
+        'Product copy should stay research-first and avoid treatment or cosmetic outcome guarantees.'
+      ]
+    },
     retatrutide: {
       shortDescription: 'Retatrutide is a triple-agonist metabolic peptide studied for body-weight regulation and deep appetite signaling. It is one of the strongest high-interest compounds in the modern obesity-research pipeline.',
       researchSummary: 'Clinical studies have reported substantial weight loss and strong metabolic effects through combined GLP-1, GIP, and glucagon receptor activity.',
