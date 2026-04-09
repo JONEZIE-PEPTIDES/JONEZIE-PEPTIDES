@@ -109,6 +109,8 @@ form?.addEventListener('submit', (event) => {
   const lines = [
     `New Jonezie order request`,
     ``,
+    `Research-use notice: items requested below are for laboratory research only.`,
+    ``,
     `Customer: ${name}`,
     `Email: ${email}`,
     `Phone: ${phone}`,

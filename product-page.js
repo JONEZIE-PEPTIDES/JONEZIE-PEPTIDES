@@ -1,7 +1,22 @@
 const CART_KEY = 'jonezie_cart';
 const catalogData = window.JONEZIE_CATALOG || null;
-const imageMap = window.JONEZIE_IMAGE_MAP || {};
-const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
+const contentData = window.JONEZIE_PRODUCT_CONTENT || null;
+const menuToggle = document.querySelector('.menu-toggle');
+const siteNav = document.querySelector('.site-nav');
+
+if (menuToggle && siteNav) {
+  menuToggle.addEventListener('click', () => {
+    const isOpen = siteNav.classList.toggle('is-open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  siteNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      siteNav.classList.remove('is-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
 
 function escapeHtml(value) {
   return String(value)
@@ -10,6 +25,27 @@ function escapeHtml(value) {
     .replace(/>/g, '&gt;')
     .replace(/\"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function getProductContent(product) {
+  return contentData?.products?.[product.slug] || null;
+}
+
+function getProductHeaderSummary(product) {
+  const productContent = getProductContent(product);
+  if (productContent?.researchSummary) return productContent.researchSummary;
+  if (productContent?.shortDescription) return productContent.shortDescription;
+  const categoryFallbacks = {
+    Metabolic: 'Research interest usually centers on appetite, metabolic signaling, and body-composition support.',
+    Recovery: 'Research interest usually centers on tissue repair, recovery support, and movement-focused healing response.',
+    Aesthetics: 'Research interest usually centers on skin support, cosmetic pathways, and appearance-focused recovery.',
+    Growth: 'Research interest usually centers on growth-hormone signaling, recovery, and body-composition support.',
+    Cognitive: 'Research interest usually centers on focus, neuro-support, and restoration pathways.',
+    Performance: 'Research interest usually centers on drive, performance support, and high-output function.',
+    Support: 'Used as a support item within the broader peptide workflow.'
+  };
+
+  return categoryFallbacks[product.category] || product.description;
 }
 
 function getSlugFromPath() {
@@ -46,13 +82,6 @@ function setCart(cart) {
   window.localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-function getProductImageForOption(product, option) {
-  const mapped = imageMap.products?.[product.slug];
-  if (!mapped) return product.image || PRODUCT_FALLBACK_IMAGE;
-  if (option?.mgOption && mapped.options?.[option.mgOption]) return mapped.options[option.mgOption];
-  return mapped.default || product.image || PRODUCT_FALLBACK_IMAGE;
-}
-
 function addItemToCart(item) {
   const cart = getCart();
   const existing = cart.find((entry) => entry.slug === item.slug && entry.code === item.code && entry.packKey === item.packKey);
@@ -67,7 +96,8 @@ function addItemToCart(item) {
 function renderProductPage() {
   if (!catalogData) return;
   const slug = getSlugFromPath();
-  const product = (catalogData.products || []).find((item) => item.slug === slug);
+  const allProducts = [...(catalogData.featured || []), ...(catalogData.products || [])];
+  const product = allProducts.find((item, index) => item.slug === slug && allProducts.findIndex((entry) => entry.slug === item.slug) === index);
   if (!product) return;
 
   let selectedOption = product.options[0] || null;
@@ -78,8 +108,10 @@ function renderProductPage() {
 
   const titleNode = document.querySelector('[data-product-title]');
   const eyebrowNode = document.querySelector('[data-product-category]');
+  const descriptionNode = document.querySelector('[data-product-description]');
+  const optionsGrid = document.querySelector('[data-product-options]');
   const highlightsGrid = document.querySelector('[data-product-highlights]');
-  const faqList = document.querySelector('[data-product-faq]');
+  const checkoutLink = document.querySelector('[data-product-checkout]');
   const selectedTitle = document.querySelector('[data-selected-title]');
   const selectedSubtitle = document.querySelector('[data-selected-subtitle]');
   const packPicker = document.querySelector('[data-pack-picker]');
@@ -90,11 +122,19 @@ function renderProductPage() {
   const selectedTotal = document.querySelector('[data-selected-total]');
   const addToCartButton = document.querySelector('[data-add-to-cart]');
   const buyNowButton = document.querySelector('[data-buy-now]');
-  const optionsGrid = document.querySelector('[data-product-options]');
 
   document.title = `${product.name} | Jonezie Peptides`;
+  const meta = document.querySelector('meta[name="description"]');
+  const productContent = getProductContent(product);
+  const shortDescription = productContent?.shortDescription || product.description;
+  const researchSummary = getProductHeaderSummary(product);
+  const researchFindings = productContent?.researchFindings || [];
+  const siteDisclaimer = contentData?.disclaimerLong || 'Products listed on this site are offered strictly for research use only and are not for human consumption.';
+  if (meta) meta.setAttribute('content', getProductHeaderSummary(product));
   if (titleNode) titleNode.textContent = product.name;
   if (eyebrowNode) eyebrowNode.textContent = product.category;
+  if (descriptionNode) descriptionNode.textContent = researchSummary;
+  if (checkoutLink) checkoutLink.href = 'checkout.html';
 
   function getAvailablePacks(option) {
     return [
@@ -198,7 +238,7 @@ function renderProductPage() {
       unitPrice,
       unitPriceDisplay: selectedOption[selectedPackKey],
       quantity,
-      image: getProductImageForOption(product, selectedOption)
+      image: product.image
     };
   }
 
@@ -231,43 +271,30 @@ function renderProductPage() {
 
   if (highlightsGrid) {
     const optionText = product.options.map((option) => option.mgOption).join(', ');
+    const findingsMarkup = researchFindings.length
+      ? `<ul class="research-list">${researchFindings.map((finding) => `<li>${escapeHtml(finding)}</li>`).join('')}</ul>`
+      : `<p>${escapeHtml(researchSummary)}</p>`;
     highlightsGrid.innerHTML = `
       <article>
-        <p class="eyebrow">Positioning</p>
-        <h2>How this product should feel on Jonezie</h2>
-        <p>${escapeHtml(product.description)} The goal is to present it with cleaner visuals, easier pricing, and a more premium buy flow than the average catalog-first peptide site.</p>
+        <p class="eyebrow">Overview</p>
+        <h2>What this compound is researched for</h2>
+        <p>${escapeHtml(shortDescription)}</p>
       </article>
       <article>
-        <p class="eyebrow">Selection</p>
-        <h2>How the page is built to move</h2>
-        <p>Choose the MG option first, lock in the pack size, and move forward fast. The whole point is to make the page feel more current, less cluttered, and easier to act on.</p>
+        <p class="eyebrow">Research</p>
+        <h2>What published research has examined</h2>
+        ${findingsMarkup}
       </article>
       <article>
-        <p class="eyebrow">Available now</p>
-        <h2>Strength options currently loaded</h2>
+        <p class="eyebrow">Available</p>
+        <h2>MG options loaded</h2>
         <p>${escapeHtml(optionText)}</p>
       </article>
       <article>
-        <p class="eyebrow">Pricing</p>
-        <h2>Current pack structure</h2>
-        <p>Pricing is shown in a cleaner tiered format so buyers can compare single-vial, 8-vial, and 10-vial options without hunting through scattered text.</p>
+        <p class="eyebrow">Notice</p>
+        <h2>Research-use disclaimer</h2>
+        <p>${escapeHtml(siteDisclaimer)}</p>
       </article>`;
-  }
-
-  if (faqList) {
-    faqList.innerHTML = `
-      <details open>
-        <summary>How does ordering work from this page?</summary>
-        <p>Select the MG option, choose the pack format in the order panel, add it to cart, and move straight into checkout. The page is built to keep that process simple and obvious.</p>
-      </details>
-      <details>
-        <summary>What pricing is shown here?</summary>
-        <p>This page is designed to show the loaded pricing structure for each available MG option so buyers can compare formats without switching pages or asking for basic details first.</p>
-      </details>
-      <details>
-        <summary>Can this page hold more credibility content later?</summary>
-        <p>Yes. We can keep layering in stronger product copy, image galleries, batch or documentation sections, ordering notes, and other trust-building elements without changing the overall layout.</p>
-      </details>`;
   }
 
   ensureSelectedPack();
