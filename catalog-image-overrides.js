@@ -17,10 +17,13 @@
     hcg: 'hcg-official.png',
     aod: 'aod-official.png',
     tesamorelin: 'tesamorelin-official.png',
+    'bac-water': 'bac-water-official.png',
     'ghk-cu': 'ghk-cu-100mg-official.png',
     'mots-c': 'mots-c-official.png',
+    'cjc-1295-with-dac': 'cjc-1295-with-dac-official.png',
     'kisspeptin-10': 'kisspeptin-10-official.png',
     dermorphin: 'dermorphin-official.png',
+    dsip: 'dsip-official.png',
     glutathione: 'glutathione-official.png',
     cagrilintide: 'cagrilintide-official.png',
     'cagrilintide-2-5mg-plus-semaglutide-2-5mg': 'cagrilintide-semaglutide-official.png',
@@ -31,6 +34,10 @@
     'snap-8': 'snap-8-official.png',
     pnc27: 'pnc27-official.png',
     tb500: 'tb500-official.png',
+    'ghrp-6-acetate': 'ghrp-6-acetate-official.png',
+    'cjc-1295-without-dac-plus-ipamorelin': 'cjc-1295-without-dac-official.png',
+    'ghk-cu-35mg-plus-tb-500-10mg-plus-bpc-157-5mg': 'glow-official.png',
+    'ghk-cu-50mg-plus-kpv-10mg-plus-bpc-157-10mg': 'klow-official.png',
     'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg': 'klow-official.png',
     'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'glow-official.png',
     nad: 'nad-official.png',
@@ -40,7 +47,13 @@
     retatrutide: 'reta-20mg-official.png',
     'mt-1': 'mt-1-10mg-official.png',
     mt1: 'mt-1-10mg-official.png',
-    'melanotan-1': 'mt-1-10mg-official.png'
+    'melanotan-1': 'mt-1-10mg-official.png',
+    'slu-pp-322': 'slu-pp-322-official.png',
+    'lemon-bottle': 'lemon-bottle-official.png',
+    vip: 'vip-official.png',
+    mazdutide: 'mazdutide-official.png',
+    'thymosin-alpha-1': 'thymosin-alpha-1-official.png',
+    lc216: 'lc216-official.png'
   };
 
   function applyOverrides(list) {

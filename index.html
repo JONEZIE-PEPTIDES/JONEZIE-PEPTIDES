@@ -9,17 +9,33 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@700&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="brand-mark.svg" />
-  <link rel="stylesheet" href="styles.css?v=20260409p" />
+  <link rel="stylesheet" href="styles.css?v=20260410m" />
 </head>
 <body>
   <div class="page-shell home-shell">
     <header class="site-header site-header-home">
-      <a class="brand brand-home" href="#top" aria-label="Jonezie Peptides home">
-        <img src="pepper-mascot.png" alt="Jonezie pepper mascot" />
-        <span class="brand-home-wordmark">
-          <strong>Jonezie</strong>
-        </span>
-      </a>
+      <div class="brand brand-home brand-dropdown" data-brand-menu>
+        <button class="brand-menu-trigger" type="button" aria-expanded="false" aria-controls="brand-menu-home">
+          <span class="brand-menu-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" role="presentation">
+              <path d="M5 8h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M5 16h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+        <a class="brand-master-link" href="#top" aria-label="Jonezie Labs home">
+          <img class="brand-master-logo" src="jonezie-labs-master-logo.png?v=20260410c" alt="Jonezie Labs" />
+        </a>
+        <div id="brand-menu-home" class="brand-menu-panel" hidden>
+          <a href="#full-catalog">Full Products</a>
+          <a href="#featured">Popular Products</a>
+          <a href="#merch">Merch</a>
+          <a href="#faq">FAQ</a>
+          <a href="#mission">About Us</a>
+          <a href="#process">Ordering</a>
+        </div>
+      </div>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
         <span></span>
         <span></span>
@@ -36,10 +52,7 @@
           <input id="nav-search-home" type="search" data-nav-search-input list="nav-search-list-home" placeholder="Search products" />
           <datalist id="nav-search-list-home"></datalist>
         </form>
-        <a href="#mission">Our Why</a>
-        <a href="#featured">Products</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact" class="nav-cta">Get Started</a>
+        <a href="#full-catalog" class="nav-products-pill">Products</a>
         <a href="checkout.html" class="nav-cart" data-cart-link aria-label="Open cart">
           <span class="nav-cart-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" role="presentation">
@@ -118,16 +131,10 @@
           <p class="eyebrow">Full Catalog</p>
           <h2>Browse full inventory of compounds.</h2>
         </div>
-        <div class="catalog-policy">
-          <span>Catalog source: current Jonezie product sheet.</span>
-          <span>Pricing live now: single, 8-pack, and 10-pack where loaded.</span>
-          <span>Product imagery and deeper content can keep expanding as new assets are added.</span>
-          <span>All listings are for laboratory research use only.</span>
-        </div>
         <div class="catalog-grid" data-catalog-grid></div>
       </section>
 
-      <section class="section-shell block-section faq-section">
+      <section class="section-shell block-section faq-section" hidden>
         <div class="section-heading centered compact">
           <p class="eyebrow">Research Use Notice</p>
           <h2>Catalog content is written for research buyers, not treatment claims.</h2>
@@ -135,7 +142,7 @@
         </div>
       </section>
 
-      <section id="process" class="section-shell block-section">
+      <section id="process" class="section-shell block-section" hidden>
         <div class="section-heading centered compact">
           <p class="eyebrow">How It Works</p>
           <h2>A cleaner path from product discovery to checkout request.</h2>
@@ -160,40 +167,106 @@
       </section>
 
       <section id="merch" class="section-shell block-section merch-section">
-        <div class="section-heading centered compact">
-          <p class="eyebrow">Merch</p>
-          <h2>Merch keeps the brand memorable without crowding the research catalog.</h2>
-          <p>Merch supports the brand side of Jonezie while the compound catalog stays the main focus of the storefront.</p>
+        <div class="section-heading centered compact merch-heading">
+          <img class="merch-title-image" src="merch-title-image-tight.png?v=20260410c" alt="Merch" />
         </div>
         <div class="merch-shelf">
           <article class="merch-product merch-product-wide">
-            <div class="merch-card">
-              <img src="product-placeholder.svg" alt="Jonezie Peptides t-shirt" />
+            <div class="merch-card" data-merch-zoom role="button" tabindex="0" aria-label="Open larger image of Jonezie Labs Signature Hat">
+              <img src="jonezie-labs-hat.png?v=20260410a" alt="Jonezie Labs signature hat" />
             </div>
             <div class="merch-copy">
-              <p class="eyebrow">Current Merch Drop</p>
-              <h3>Jonezie Peptides tee</h3>
-              <p>A clean brand tee that adds identity to the storefront without pulling attention away from the core catalog.</p>
+              <p class="eyebrow">Featured Merch Drop</p>
+              <h3>Jonezie Labs Signature Hat</h3>
+              <p>Premium navy snapback with the Jonezie Labs neon mark across the front panel. Built as a statement merch piece that matches the brand identity and gives the storefront a clean flagship wearable.</p>
               <div class="merch-meta">
-                <span>Price: $40</span>
-                <span>Sizes: Medium, Large</span>
+                <span>Price: $110.00</span>
+                <span>Adjustable snapback fit</span>
+              </div>
+              <div class="merch-purchase" data-merch-purchase data-merch-slug="jonezie-labs-signature-hat" data-merch-name="Jonezie Labs Signature Hat" data-merch-image="jonezie-labs-hat.png?v=20260410a" data-merch-price="110.00">
+                <div class="merch-purchase-row">
+                  <label>Size</label>
+                  <select data-merch-size>
+                    <option value="One Size">One Size</option>
+                  </select>
+                </div>
+                <div class="merch-purchase-row">
+                  <label>Quantity</label>
+                  <div class="merch-qty-control">
+                    <button type="button" data-merch-qty-minus aria-label="Decrease quantity">-</button>
+                    <input data-merch-qty type="number" min="1" value="1" inputmode="numeric" />
+                    <button type="button" data-merch-qty-plus aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <button class="button primary merch-add-button" type="button" data-merch-add>Add To Cart</button>
+                <p class="merch-add-feedback" data-merch-feedback aria-live="polite"></p>
               </div>
             </div>
           </article>
           <article class="merch-product merch-product-sticker">
-            <div class="sticker-art">
-              <div class="sticker-frame">
-                <p>Have a hot girl summer</p>
-                <span>Reta beach sticker</span>
-              </div>
+            <div class="sticker-art" data-merch-zoom role="button" tabindex="0" aria-label="Open larger image of Hot Girl Summer sticker">
+              <img src="hot-girl-summer-sticker.png" alt="Hot Girl Summer sticker" />
             </div>
             <div class="merch-copy compact-copy">
               <p class="eyebrow">New Merch Add-On</p>
-              <h3>Hot Girl Summer sticker</h3>
+              <h3>Hot Girl Summer Sticker</h3>
               <p>A smaller add-on that keeps the mascot side of the brand visible while the product catalog stays front and center.</p>
               <div class="merch-meta">
-                <span>Price: $5</span>
+                <span>Price: $5.00</span>
                 <span>Sticker format</span>
+              </div>
+              <div class="merch-purchase" data-merch-purchase data-merch-slug="hot-girl-summer-sticker" data-merch-name="Hot Girl Summer Sticker" data-merch-image="hot-girl-summer-sticker.png" data-merch-price="5.00">
+                <div class="merch-purchase-row">
+                  <label>Format</label>
+                  <select data-merch-size>
+                    <option value="Standard">Standard</option>
+                  </select>
+                </div>
+                <div class="merch-purchase-row">
+                  <label>Quantity</label>
+                  <div class="merch-qty-control">
+                    <button type="button" data-merch-qty-minus aria-label="Decrease quantity">-</button>
+                    <input data-merch-qty type="number" min="1" value="1" inputmode="numeric" />
+                    <button type="button" data-merch-qty-plus aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <button class="button primary merch-add-button" type="button" data-merch-add>Add To Cart</button>
+                <p class="merch-add-feedback" data-merch-feedback aria-live="polite"></p>
+              </div>
+            </div>
+          </article>
+          <article class="merch-product">
+            <div class="merch-card" data-merch-zoom role="button" tabindex="0" aria-label="Open larger image of Hot Girl Summer shirt">
+              <img src="hot-girl-summer-shirt.png?v=20260410a" alt="Hot Girl Summer shirt front and back view" />
+            </div>
+            <div class="merch-copy compact-copy">
+              <p class="eyebrow">New Merch Drop</p>
+              <h3>Hot Girl Summer Shirt</h3>
+              <p>Clean white pocket tee with the full back graphic from the Hot Girl Summer drop. Built as a standout seasonal piece that carries the Jonezie energy in a wearable format.</p>
+              <div class="merch-meta">
+                <span>Price: $45.00</span>
+                <span>Sizes: S, M, L, XL</span>
+              </div>
+              <div class="merch-purchase" data-merch-purchase data-merch-slug="hot-girl-summer-shirt" data-merch-name="Hot Girl Summer Shirt" data-merch-image="hot-girl-summer-shirt.png?v=20260410a" data-merch-price="45.00">
+                <div class="merch-purchase-row">
+                  <label>Size</label>
+                  <select data-merch-size>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                  </select>
+                </div>
+                <div class="merch-purchase-row">
+                  <label>Quantity</label>
+                  <div class="merch-qty-control">
+                    <button type="button" data-merch-qty-minus aria-label="Decrease quantity">-</button>
+                    <input data-merch-qty type="number" min="1" value="1" inputmode="numeric" />
+                    <button type="button" data-merch-qty-plus aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <button class="button primary merch-add-button" type="button" data-merch-add>Add To Cart</button>
+                <p class="merch-add-feedback" data-merch-feedback aria-live="polite"></p>
               </div>
             </div>
           </article>
@@ -252,14 +325,23 @@
     </footer>
   </div>
 
+  <div class="image-lightbox" data-image-lightbox hidden>
+    <button class="image-lightbox-backdrop" type="button" data-image-lightbox-close aria-label="Close image preview"></button>
+    <figure class="image-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Expanded merch image">
+      <button class="image-lightbox-close" type="button" data-image-lightbox-close aria-label="Close image preview">&times;</button>
+      <img data-image-lightbox-img src="" alt="" />
+      <figcaption data-image-lightbox-caption></figcaption>
+    </figure>
+  </div>
+
   <script src="catalog-data.js?v=20260410a"></script>
   <script src="catalog-sheet-sync.js?v=20260410b"></script>
   <script src="catalog-admin-config.js?v=20260410a"></script>
   <script src="catalog-admin.js?v=20260410a"></script>
-  <script src="catalog-image-overrides.js?v=20260410g"></script>
+  <script src="catalog-image-overrides.js?v=20260411a"></script>
   <script src="product-content.js?v=20260409n"></script>
   <script src="cart-nav.js?v=20260409j"></script>
   <script src="nav-search.js?v=20260409j"></script>
-  <script src="script.js?v=20260409j"></script>
+  <script src="script.js?v=20260410c"></script>
 </body>
 </html>
