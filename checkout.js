@@ -1,4 +1,6 @@
 const CART_KEY = 'jonezie_cart';
+const menuToggle = document.querySelector('.menu-toggle');
+const siteNav = document.querySelector('.site-nav');
 const cartRoot = document.querySelector('[data-checkout-cart]');
 const summaryItems = document.querySelector('[data-summary-items]');
 const summarySubtotal = document.querySelector('[data-summary-subtotal]');
@@ -11,6 +13,65 @@ const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const PROMO_CODES = {
   PEPDADDY: 0.2
 };
+
+if (menuToggle && siteNav) {
+  menuToggle.addEventListener('click', () => {
+    const isOpen = siteNav.classList.toggle('is-open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  siteNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      siteNav.classList.remove('is-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+function initBrandMenus() {
+  const menus = document.querySelectorAll('[data-brand-menu]');
+  if (!menus.length) return;
+
+  const closeMenu = (menu) => {
+    const trigger = menu.querySelector('.brand-menu-trigger');
+    const panel = menu.querySelector('.brand-menu-panel');
+    if (!trigger || !panel) return;
+    trigger.setAttribute('aria-expanded', 'false');
+    panel.hidden = true;
+  };
+
+  menus.forEach((menu) => {
+    const trigger = menu.querySelector('.brand-menu-trigger');
+    const panel = menu.querySelector('.brand-menu-panel');
+    if (!trigger || !panel) return;
+
+    trigger.addEventListener('click', () => {
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      menus.forEach((candidate) => closeMenu(candidate));
+      if (!isOpen) {
+        trigger.setAttribute('aria-expanded', 'true');
+        panel.hidden = false;
+      }
+    });
+
+    panel.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => closeMenu(menu));
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    menus.forEach((menu) => {
+      if (!menu.contains(event.target)) closeMenu(menu);
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    menus.forEach((menu) => closeMenu(menu));
+  });
+}
+
+initBrandMenus();
 
 function getCart() {
   try {
@@ -141,7 +202,7 @@ form?.addEventListener('submit', (event) => {
 
   const subject = encodeURIComponent(`Jonezie Order Request - ${name || 'Customer'}`);
   const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = `mailto:zvl1380@gmail.com?subject=${subject}&body=${body}`;
+  window.location.href = `mailto:lenny@jonezielabs.com?subject=${subject}&body=${body}`;
 });
 
 clearCartButton?.addEventListener('click', () => {
