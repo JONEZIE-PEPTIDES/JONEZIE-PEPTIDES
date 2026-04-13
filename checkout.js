@@ -170,6 +170,9 @@ form?.addEventListener('submit', (event) => {
   const name = formData.get('customerName') || '';
   const email = formData.get('customerEmail') || '';
   const phone = formData.get('customerPhone') || '';
+  const shippingAddress = formData.get('shippingAddress') || '';
+  const preferredPaymentService = formData.get('preferredPaymentService') || '';
+  const paymentHandle = formData.get('paymentHandle') || '';
   const promo = getPromoDetails();
   const notes = formData.get('customerNotes') || '';
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
@@ -184,6 +187,9 @@ form?.addEventListener('submit', (event) => {
     `Customer: ${name}`,
     `Email: ${email}`,
     `Phone: ${phone}`,
+    `Shipping Address: ${shippingAddress || 'Not provided'}`,
+    `Preferred Payment Service: ${preferredPaymentService || 'Not provided'}`,
+    `Payment Service Handle: ${paymentHandle || 'Not provided'}`,
     `Promo code: ${promo.isValid ? promo.code : 'None'}`,
     ``,
     `Order items:`
