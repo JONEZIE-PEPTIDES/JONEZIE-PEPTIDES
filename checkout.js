@@ -11,7 +11,7 @@ const clearCartButton = document.querySelector('[data-clear-cart]');
 const promoCodeInput = document.querySelector('[data-promo-code]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const PROMO_CODES = {
-  PEPDADDY: 0.2
+  PEPPERS: 0.25
 };
 
 if (menuToggle && siteNav) {

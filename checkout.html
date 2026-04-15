@@ -9,13 +9,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="brand-mark.svg" />
-  <link rel="stylesheet" href="styles.css?v=20260410m" />
+  <link rel="stylesheet" href="styles.css?v=20260415a" />
 </head>
 <body>
-  <div class="announcement-bar">
-    <div class="announcement-inner">
-      <span>Research-use checkout request for catalog items already selected.</span>
-      <strong>For laboratory research only.</strong>
+  <div class="announcement-bar promo-bar" role="region" aria-label="Promotions">
+    <div class="announcement-inner promo-ticker">
+      <div class="promo-track">
+        <span>Use code PEPPERS for 25% off</span>
+        <span aria-hidden="true">•</span>
+        <span>Use code PEPPERS for 25% off</span>
+        <span aria-hidden="true">•</span>
+        <span>Use code PEPPERS for 25% off</span>
+        <span aria-hidden="true">•</span>
+        <span>Use code PEPPERS for 25% off</span>
+      </div>
+      <div class="promo-track promo-track-alt" aria-hidden="true">
+        <span>Use code PEPPERS for 25% off</span>
+        <span aria-hidden="true">•</span>
+        <span>Use code PEPPERS for 25% off</span>
+        <span aria-hidden="true">•</span>
+        <span>Use code PEPPERS for 25% off</span>
+        <span aria-hidden="true">•</span>
+        <span>Use code PEPPERS for 25% off</span>
+      </div>
     </div>
   </div>
   <div class="page-shell">
@@ -88,6 +104,13 @@
           <div class="checkout-summary-card">
             <p class="eyebrow">Order Summary</p>
             <div class="checkout-summary-row"><span>Items</span><strong data-summary-items>0</strong></div>
+            <div class="checkout-summary-row"><span>Subtotal</span><strong data-summary-subtotal>$0.00</strong></div>
+            <div class="checkout-promo">
+              <label for="checkout-promo-code">Promo Code</label>
+              <input id="checkout-promo-code" type="text" data-promo-code placeholder="Enter promo code" />
+              <p>Active code: <strong>PEPPERS</strong> (25% off)</p>
+            </div>
+            <div class="checkout-summary-row"><span>Discount</span><strong data-summary-discount>$0.00</strong></div>
             <div class="checkout-summary-row"><span>Estimated Total</span><strong data-summary-total>$0.00</strong></div>
           </div>
 
@@ -143,6 +166,6 @@
   <script src="catalog-image-overrides.js?v=20260411b"></script>
   <script src="cart-nav.js?v=20260409j"></script>
   <script src="nav-search.js?v=20260409j"></script>
-  <script src="checkout.js?v=20260413b"></script>
+  <script src="checkout.js?v=20260415a"></script>
 </body>
 </html>
