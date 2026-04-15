@@ -84,19 +84,27 @@ img { display: block; max-width: 100%; }
 
 .promo-ticker {
   width: min(calc(100% - 20px), 1600px);
-  display: flex;
+  display: block;
+  position: relative;
   align-items: center;
-  gap: 0;
   overflow: hidden;
   padding: 9px 0;
 }
 
+.promo-loop {
+  display: flex;
+  width: max-content;
+  animation: promo-scroll-loop 24s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
 .promo-track {
   flex: 0 0 auto;
-  min-width: 100%;
+  min-width: max-content;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
   gap: 22px;
   white-space: nowrap;
   color: #d7f8ff;
@@ -105,20 +113,26 @@ img { display: block; max-width: 100%; }
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  animation: promo-scroll 24s linear infinite;
+}
+
+.promo-track > span {
+  flex: 0 0 auto;
+}
+
+.promo-track::after {
+  content: "\2022";
+  color: rgba(255, 123, 188, 0.9);
+  padding-left: 22px;
+  flex: 0 0 auto;
 }
 
 .promo-track span[aria-hidden="true"] {
   color: rgba(255, 123, 188, 0.9);
 }
 
-.promo-track-alt {
-  animation-delay: -12s;
-}
-
-@keyframes promo-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+@keyframes promo-scroll-loop {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
 }
 
 .page-shell {
@@ -1723,8 +1737,7 @@ body.lightbox-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .promo-track,
-  .promo-track-alt {
+  .promo-loop {
     animation: none;
   }
 }
