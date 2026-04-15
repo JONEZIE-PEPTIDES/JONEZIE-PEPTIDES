@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="brand-mark.svg" />
-  <link rel="stylesheet" href="styles.css?v=20260414a" />
+  <link rel="stylesheet" href="styles.css?v=20260415b" />
 </head>
 <body>
   <div class="announcement-bar promo-bar" role="region" aria-label="Promotions">
@@ -96,7 +96,7 @@
           <h1 data-product-title>Product</h1>
           <p class="hero-text" data-product-description>Catalog data is loading into this product page.</p>
           <div class="hero-actions">
-            <a class="button primary" data-product-checkout href="checkout.html">Checkout Now</a>
+            <button class="button primary" data-product-coa type="button">CoA</button>
             <a class="button secondary" href="index.html#full-catalog">Back To Catalog</a>
           </div>
         </div>
@@ -153,6 +153,15 @@
     </footer>
   </div>
 
+  <div class="image-lightbox" data-coa-lightbox hidden>
+    <button class="image-lightbox-backdrop" type="button" data-coa-lightbox-close aria-label="Close CoA preview"></button>
+    <figure class="image-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Certificate of Analysis">
+      <button class="image-lightbox-close" type="button" data-coa-lightbox-close aria-label="Close CoA preview">&times;</button>
+      <img data-coa-lightbox-img src="" alt="" />
+      <figcaption data-coa-lightbox-caption></figcaption>
+    </figure>
+  </div>
+
   <script src="catalog-data.js?v=20260410a"></script>
   <script src="catalog-sheet-sync.js?v=20260410b"></script>
   <script src="catalog-admin-config.js?v=20260410a"></script>
@@ -161,6 +170,6 @@
   <script src="product-content.js?v=20260409n"></script>
   <script src="cart-nav.js?v=20260409j"></script>
   <script src="nav-search.js?v=20260409j"></script>
-  <script src="product-page.js?v=20260410a"></script>
+  <script src="product-page.js?v=20260415c"></script>
 </body>
 </html>

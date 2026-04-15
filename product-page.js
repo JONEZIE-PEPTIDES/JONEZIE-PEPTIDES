@@ -3,6 +3,34 @@ const catalogData = window.JONEZIE_CATALOG || null;
 const contentData = window.JONEZIE_PRODUCT_CONTENT || null;
 const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
+const COA_ASSET_VERSION = '20260415b';
+const COA_IMAGE_BY_SLUG = {
+  'bpc-157': 'coa-bpc-157.png',
+  'cjc-1295-with-dac': 'coa-cjc-1295.png',
+  'cjc-1295-without-dac': 'coa-cjc-1295.png',
+  'cjc-1295-without-dac-plus-ipamorelin': 'coa-cjc-1295.png',
+  'cagrilintide': 'coa-cagrilintide.png',
+  'cagrilintide-2-5mg-plus-semaglutide-2-5mg': 'coa-cagrilintide.png',
+  'cagrilintide-5mg-plus-semaglutide-5mg': 'coa-cagrilintide.png',
+  'ghk-cu': 'coa-ghk-cu.png',
+  'ghk-cu-35mg-plus-tb-500-10mg-plus-bpc-157-5mg': 'coa-glow.png',
+  'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'coa-glow.png',
+  'ghk-cu-50mg-plus-kpv-10mg-plus-bpc-157-10mg': 'coa-klow.png',
+  'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg': 'coa-klow.png',
+  hcg: 'coa-hcg.png',
+  ipamorelin: 'coa-ipamorelin.png',
+  'mots-c': 'coa-mots-c.png',
+  nad: 'coa-nad.png',
+  'igf-1lr3': 'coa-igf-1lr3.png',
+  kpv: 'coa-kpv.png',
+  retatrutide: 'coa-retatrutide.png',
+  selank: 'coa-selank.png',
+  semaglutide: 'coa-semaglutide.png',
+  tb500: 'coa-tb500.png',
+  tesamorelin: 'coa-tesamorelin.png',
+  tirzepatide: 'coa-tirzepatide.png',
+  vip: 'coa-vip.png'
+};
 
 if (menuToggle && siteNav) {
   menuToggle.addEventListener('click', () => {
@@ -130,6 +158,10 @@ function formatMoney(value) {
   return `$${value.toFixed(2)}`;
 }
 
+function getCoaImageForSlug(slug) {
+  return COA_IMAGE_BY_SLUG[String(slug || '')] || null;
+}
+
 function getCart() {
   try {
     return JSON.parse(window.localStorage.getItem(CART_KEY) || '[]');
@@ -173,7 +205,11 @@ function renderProductPage() {
   const descriptionNode = document.querySelector('[data-product-description]');
   const optionsGrid = document.querySelector('[data-product-options]');
   const highlightsGrid = document.querySelector('[data-product-highlights]');
-  const checkoutLink = document.querySelector('[data-product-checkout]');
+  const coaButton = document.querySelector('[data-product-coa]');
+  const coaLightbox = document.querySelector('[data-coa-lightbox]');
+  const coaLightboxImage = document.querySelector('[data-coa-lightbox-img]');
+  const coaLightboxCaption = document.querySelector('[data-coa-lightbox-caption]');
+  const coaCloseButtons = document.querySelectorAll('[data-coa-lightbox-close]');
   const selectedTitle = document.querySelector('[data-selected-title]');
   const selectedSubtitle = document.querySelector('[data-selected-subtitle]');
   const packPicker = document.querySelector('[data-pack-picker]');
@@ -196,7 +232,44 @@ function renderProductPage() {
   if (titleNode) titleNode.textContent = product.name;
   if (eyebrowNode) eyebrowNode.textContent = product.category;
   if (descriptionNode) descriptionNode.textContent = researchSummary;
-  if (checkoutLink) checkoutLink.href = 'checkout.html';
+
+  function closeCoaLightbox() {
+    if (!coaLightbox || coaLightbox.hidden) return;
+    coaLightbox.hidden = true;
+    if (coaLightboxImage) {
+      coaLightboxImage.removeAttribute('src');
+      coaLightboxImage.removeAttribute('alt');
+    }
+    if (coaLightboxCaption) coaLightboxCaption.textContent = '';
+    document.body.classList.remove('lightbox-open');
+  }
+
+  function openCoaLightbox(imagePath) {
+    if (!coaLightbox || !coaLightboxImage) return;
+    coaLightboxImage.src = `${imagePath}?v=${COA_ASSET_VERSION}`;
+    coaLightboxImage.alt = `${product.name} certificate of analysis`;
+    if (coaLightboxCaption) coaLightboxCaption.textContent = `${product.name} Certificate of Analysis`;
+    coaLightbox.hidden = false;
+    document.body.classList.add('lightbox-open');
+  }
+
+  const coaImagePath = getCoaImageForSlug(product.slug);
+  if (coaButton) {
+    if (!coaImagePath || !coaLightbox || !coaLightboxImage) {
+      coaButton.textContent = 'CoA Soon';
+      coaButton.disabled = true;
+    } else {
+      coaButton.textContent = 'CoA';
+      coaButton.disabled = false;
+      coaButton.addEventListener('click', () => openCoaLightbox(coaImagePath));
+      coaCloseButtons.forEach((button) => {
+        button.addEventListener('click', closeCoaLightbox);
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeCoaLightbox();
+      });
+    }
+  }
 
   function getAvailablePacks(option) {
     return [
