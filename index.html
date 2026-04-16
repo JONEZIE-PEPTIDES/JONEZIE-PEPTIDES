@@ -10,6 +10,71 @@
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@700&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="brand-mark.svg" />
   <link rel="stylesheet" href="styles.css?v=20260415f" />
+  <style>
+    .disclaimer-panel { padding: 30px 34px; }
+    .disclaimer-copy { display: grid; gap: 16px; }
+    .disclaimer-copy p { margin: 0; color: rgba(244, 251, 255, 0.9); font-size: 1rem; line-height: 1.55; }
+    .vendor-grid { display: grid; grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr); gap: 22px; margin-top: 24px; }
+    .vendor-card { border: 1px solid rgba(98, 219, 240, 0.18); border-radius: 30px; box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34); }
+    .vendor-card-updates { padding: 30px; background: radial-gradient(circle at 20% 18%, rgba(40, 216, 239, 0.16), transparent 28%), linear-gradient(180deg, rgba(9, 20, 27, 0.98), rgba(5, 13, 18, 0.98)); }
+    .vendor-card-supplier { padding: 30px; background: radial-gradient(circle at top right, rgba(255, 95, 169, 0.14), transparent 24%), radial-gradient(circle at 22% 14%, rgba(40, 216, 239, 0.12), transparent 20%), linear-gradient(180deg, rgba(13, 27, 35, 0.98), rgba(7, 17, 23, 0.98)); }
+    .vendor-card-updates h2, .vendor-card-supplier h2 { margin: 0 0 20px; font-family: "Space Grotesk", sans-serif; font-size: clamp(1.5rem, 2.6vw, 2.15rem); line-height: 1.08; letter-spacing: -0.03em; text-wrap: balance; max-width: 100%; }
+    .vendor-card-updates h2 { max-width: 16ch; }
+    .vendor-card-supplier h2 { max-width: 18ch; margin-bottom: 18px; }
+    .vendor-form { display: grid; gap: 14px; }
+    .vendor-form label { display: grid; gap: 8px; }
+    .vendor-form span { color: #a6c6cf; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+    .vendor-form input { width: 100%; min-height: 56px; padding: 0 18px; border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; background: rgba(255,255,255,0.96); color: #20232b; font: inherit; font-size: 1rem; }
+    .vendor-form input::placeholder { color: #6d737d; }
+    .vendor-submit { width: 100%; margin-top: 6px; }
+    .vendor-checklist { display: grid; gap: 12px; margin-bottom: 22px; }
+    .vendor-checklist label { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 12px; align-items: start; padding: 14px 16px; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; background: rgba(255,255,255,0.04); }
+    .vendor-checklist input { margin-top: 3px; accent-color: #ff5fa9; }
+    .vendor-checklist span { color: rgba(244, 251, 255, 0.92); line-height: 1.5; }
+    .vendor-form-supplier { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .vendor-form-supplier label:first-child, .vendor-form-supplier label:nth-child(3) { grid-column: 1 / -1; }
+    .vendor-rfp-note { display: grid; gap: 14px; margin-top: 22px; padding: 18px 20px; border: 1px solid rgba(255, 95, 169, 0.18); border-radius: 22px; background: linear-gradient(180deg, rgba(28, 18, 28, 0.52), rgba(10, 20, 27, 0.3)); }
+    .vendor-rfp-note p { margin: 0; color: rgba(244, 251, 255, 0.92); }
+    .vendor-rfp-note a { color: #83f2ff; }
+    .vendor-rfp-note a:hover { color: #ff9bc6; }
+    .vendor-rfp-link { width: fit-content; }
+    .faq-shell { display: grid; gap: 28px; }
+    .faq-header-band { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr); gap: 22px; align-items: stretch; }
+    .faq-heading { margin: 0; padding: 34px; border: 1px solid rgba(98, 219, 240, 0.18); border-radius: 30px; background: radial-gradient(circle at top left, rgba(255, 95, 169, 0.16), transparent 30%), radial-gradient(circle at 82% 20%, rgba(40, 216, 239, 0.18), transparent 26%), linear-gradient(180deg, rgba(14, 28, 37, 0.98), rgba(8, 18, 24, 0.98)); box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34); display: grid; align-items: center; min-height: 240px; }
+    .faq-title-word { color: #ff5fa9; font-family: "Caveat", cursive; font-size: clamp(5rem, 12vw, 8rem); font-weight: 700; line-height: 0.9; letter-spacing: 0.01em; text-shadow: 0 0 2px rgba(255, 78, 165, 0.65), 0 0 18px rgba(255, 78, 165, 0.45), 0 0 42px rgba(255, 78, 165, 0.2); }
+    .faq-support-card { display: grid; align-content: start; gap: 14px; padding: 28px; border: 1px solid rgba(255, 95, 169, 0.22); border-radius: 30px; background: radial-gradient(circle at top right, rgba(255, 95, 169, 0.16), transparent 32%), linear-gradient(180deg, rgba(24, 18, 27, 0.96), rgba(10, 20, 27, 0.98)); box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34); }
+    .faq-support-label { display: inline-flex; align-items: center; width: fit-content; min-height: 32px; padding: 0 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.07); color: #ff9bc6; font-size: 0.76rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+    .faq-support-card strong { font-family: "Space Grotesk", sans-serif; font-size: 1.45rem; line-height: 1.15; }
+    .faq-support-card p { margin: 0; }
+    .faq-support-link { margin-top: 6px; }
+    .faq-list { display: grid; gap: 14px; }
+    .faq-list details { overflow: hidden; border-radius: 24px; border: 1px solid rgba(98, 219, 240, 0.18); background: linear-gradient(135deg, rgba(40, 216, 239, 0.06), transparent 32%), linear-gradient(180deg, rgba(13, 27, 35, 0.98), rgba(7, 17, 23, 0.98)); box-shadow: 0 18px 48px rgba(0, 0, 0, 0.24); transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+    .faq-list details[open] { border-color: rgba(255, 95, 169, 0.32); box-shadow: 0 22px 58px rgba(0, 0, 0, 0.28); }
+    .faq-list details:hover { transform: translateY(-2px); }
+    .faq-list summary { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 22px 24px; list-style: none; cursor: pointer; }
+    .faq-list summary::-webkit-details-marker { display: none; }
+    .faq-index { display: inline-flex; align-items: center; justify-content: center; min-width: 54px; min-height: 54px; border-radius: 18px; background: linear-gradient(135deg, #8fdfff, #ff79bc); color: #08151d; font-family: "Space Grotesk", sans-serif; font-size: 0.92rem; font-weight: 700; letter-spacing: 0.1em; box-shadow: 0 16px 30px rgba(255, 121, 188, 0.2); }
+    .faq-question-copy { display: grid; gap: 6px; }
+    .faq-question-copy strong { color: #f4fbff; font-family: "Space Grotesk", sans-serif; font-size: 1.18rem; line-height: 1.2; }
+    .faq-question-copy small { color: #a6c6cf; font-size: 0.92rem; line-height: 1.45; }
+    .faq-toggle { position: relative; width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.04); }
+    .faq-toggle::before, .faq-toggle::after { content: ""; position: absolute; top: 50%; left: 50%; width: 16px; height: 2px; border-radius: 999px; background: #83f2ff; transform: translate(-50%, -50%); transition: transform 180ms ease, opacity 180ms ease, background 180ms ease; }
+    .faq-toggle::after { transform: translate(-50%, -50%) rotate(90deg); }
+    .faq-list details[open] .faq-toggle::before { background: #ff9bc6; }
+    .faq-list details[open] .faq-toggle::after { opacity: 0; transform: translate(-50%, -50%) rotate(90deg) scaleX(0.2); }
+    .faq-list details p { margin: 0; padding: 0 24px 24px 96px; max-width: 78ch; }
+    .faq-list details a { color: #83f2ff; }
+    .faq-list details a:hover { color: #ff9bc6; }
+    @media (max-width: 980px) { .faq-header-band, .vendor-grid, .vendor-form-supplier { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) {
+      .faq-heading, .faq-support-card { padding: 24px; border-radius: 24px; }
+      .faq-list summary { grid-template-columns: 1fr auto; gap: 14px; padding: 18px; }
+      .faq-index { min-width: 46px; min-height: 46px; grid-column: 1 / 2; grid-row: 1 / 2; margin-bottom: 4px; }
+      .faq-question-copy { grid-column: 1 / 2; grid-row: 2 / 3; }
+      .faq-toggle { grid-column: 2 / 3; grid-row: 1 / span 2; align-self: center; }
+      .faq-list details p { padding: 0 18px 20px; }
+    }
+  </style>
 </head>
 <body>
   <div class="announcement-bar promo-bar" role="region" aria-label="Promotions">
@@ -158,38 +223,6 @@
         <div class="catalog-grid" data-catalog-grid></div>
       </section>
 
-      <section class="section-shell block-section faq-section" hidden>
-        <div class="section-heading centered compact">
-          <p class="eyebrow">Research Use Notice</p>
-          <h2>Catalog content is written for research buyers, not treatment claims.</h2>
-          <p>All compounds on this site are listed strictly for laboratory, analytical, and research use. Site copy summarizes published literature and research themes where available, but it is not medical advice and it is not written as a treatment claim.</p>
-        </div>
-      </section>
-
-      <section id="process" class="section-shell block-section" hidden>
-        <div class="section-heading centered compact">
-          <p class="eyebrow">How It Works</p>
-          <h2>A cleaner path from product discovery to checkout request.</h2>
-        </div>
-        <div class="steps-grid">
-          <article>
-            <span>01</span>
-            <h3>Browse the lineup</h3>
-            <p>Start with the featured compounds or jump straight to the full catalog if you already know the class or product you want.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3>Open the product page</h3>
-            <p>Review the available strengths, pack formats, and the short research summary for the compound you are comparing.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3>Request or place an order</h3>
-            <p>Select the format you want, add it to cart, and submit the order request through the current checkout flow.</p>
-          </article>
-        </div>
-      </section>
-
       <section id="merch" class="section-shell block-section merch-section">
         <div class="section-heading centered compact merch-heading">
           <img class="merch-title-image" src="merch-title-image-tight.png?v=20260410c" alt="Merch" />
@@ -298,51 +331,148 @@
       </section>
 
       <section id="faq" class="section-shell block-section faq-section">
-        <div class="section-heading centered compact">
-          <p class="eyebrow">FAQ</p>
-          <h2>Jonezie FAQ</h2>
-        </div>
-        <div class="faq-list">
-          <details>
-            <summary>Why Jonezie Labs?</summary>
-            <p>Jonezie is built around clear product pages, straightforward pricing, and fast support. The focus is making research ordering cleaner, more transparent, and easier to navigate without bloated filler content.</p>
-          </details>
-          <details>
-            <summary>Do you test your products and provide COAs?</summary>
-            <p>Yes. Jonezie prioritizes third-party testing and keeps documentation organized so researchers can review product verification details with confidence.</p>
-          </details>
-          <details>
-            <summary>What is your shipping policy?</summary>
-            <p>Orders are typically processed in 1-2 business days from our Midwest warehouse and shipped within the United States. Delivery windows depend on carrier speed and destination.</p>
-          </details>
-          <details>
-            <summary>How should products be stored?</summary>
-            <p>Store lyophilized vials in a cool, dry, light-protected environment. After reconstitution, refrigerate and follow standard laboratory handling protocols and timelines.</p>
-          </details>
-          <details>
-            <summary>What is your refund or replacement policy?</summary>
-            <p>If there is a fulfillment issue with your order, contact Jonezie support within 30 days so we can review and resolve it quickly with a replacement or approved refund path.</p>
-          </details>
-          <details>
-            <summary>What if I have more questions before ordering?</summary>
-            <p>Reach out to <a href="mailto:lenny@jonezielabs.com">lenny@jonezielabs.com</a>. We respond as fast as possible and can help with product navigation, order questions, and checkout support.</p>
-          </details>
+        <div class="faq-shell">
+          <div class="faq-header-band">
+            <div class="section-heading compact faq-heading">
+              <div class="faq-title-word">FAQ</div>
+            </div>
+            <aside class="faq-support-card">
+              <span class="faq-support-label">Fast Support</span>
+              <strong>Need a direct answer before checkout?</strong>
+              <p>Reach out and get help with product navigation, COA questions, order flow, or shipping details without the runaround.</p>
+              <a class="button secondary faq-support-link" href="mailto:customerservice@jonezielabs.com">Email Jonezie</a>
+            </aside>
+          </div>
+          <div class="faq-list">
+            <details open>
+              <summary>
+                <span class="faq-index">01</span>
+                <span class="faq-question-copy">
+                  <strong>Why Jonezie Labs?</strong>
+                  <small>What makes the brand feel different from a typical peptide storefront.</small>
+                </span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <p>Jonezie is built around clear product pages, straightforward pricing, and fast support. The focus is making research ordering cleaner, more transparent, and easier to navigate without bloated filler content.</p>
+            </details>
+            <details>
+              <summary>
+                <span class="faq-index">02</span>
+                <span class="faq-question-copy">
+                  <strong>Do you test your products and provide COAs?</strong>
+                  <small>How Jonezie approaches verification and documentation.</small>
+                </span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <p>Yes. Jonezie prioritizes third-party testing and keeps documentation organized so researchers can review product verification details with confidence.</p>
+            </details>
+            <details>
+              <summary>
+                <span class="faq-index">03</span>
+                <span class="faq-question-copy">
+                  <strong>What is your shipping policy?</strong>
+                  <small>What buyers should expect after placing an order request.</small>
+                </span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <p>Orders are typically processed in 1-2 business days from our Midwest warehouse and shipped within the United States. Delivery windows depend on carrier speed and destination.</p>
+            </details>
+            <details>
+              <summary>
+                <span class="faq-index">04</span>
+                <span class="faq-question-copy">
+                  <strong>How should products be stored?</strong>
+                  <small>Basic storage guidance for keeping materials handled correctly.</small>
+                </span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <p>Store lyophilized vials in a cool, dry, light-protected environment. After reconstitution, refrigerate and follow standard laboratory handling protocols and timelines.</p>
+            </details>
+            <details>
+              <summary>
+                <span class="faq-index">05</span>
+                <span class="faq-question-copy">
+                  <strong>What is your refund or replacement policy?</strong>
+                  <small>What happens if there is a fulfillment problem with the order.</small>
+                </span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <p>If there is a fulfillment issue with your order, contact Jonezie support within 30 days so we can review and resolve it quickly with a replacement or approved refund path.</p>
+            </details>
+            <details>
+              <summary>
+                <span class="faq-index">06</span>
+                <span class="faq-question-copy">
+                  <strong>What if I have more questions before ordering?</strong>
+                  <small>Where to go when you want a direct human answer.</small>
+                </span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <p>Reach out to <a href="mailto:customerservice@jonezielabs.com">customerservice@jonezielabs.com</a>. We respond as fast as possible and can help with product navigation, order questions, and checkout support.</p>
+            </details>
+          </div>
         </div>
       </section>
 
       <section id="contact" class="section-shell block-section contact-section">
-        <div class="cta-panel">
-          <div>
-            <p class="eyebrow">Get Started</p>
-            <h2>Jonezie should feel polished before it feels crowded.</h2>
-            <p>
-              The storefront is being shaped around cleaner product pages, stronger image coverage, and more usable catalog content so the buyer experience feels sharper from homepage to checkout.
-            </p>
+        <div class="cta-panel disclaimer-panel">
+          <div class="disclaimer-copy">
+            <p>The statements on this website have not been evaluated by the U.S. Food and Drug Administration. The products and information provided by Jonezie Labs are not intended to diagnose, treat, cure, or prevent any disease.</p>
+            <p>Jonezie Labs LLC is a research chemical supplier. We are not a compounding pharmacy or compounding facility as defined under Section 503A of the Federal Food, Drug, and Cosmetic Act, nor are we an outsourcing facility as defined under Section 503B.</p>
+            <p>All products are sold for research, laboratory, or analytical purposes only, and are NOT for human consumption. All sales are final. Customers are responsible for compliance with all applicable laws.</p>
           </div>
-          <div class="cta-actions">
-            <a class="button primary" href="mailto:lenny@jonezielabs.com">Email Jonezie</a>
-            <a class="button secondary" href="#full-catalog">View Full Catalog</a>
-          </div>
+        </div>
+        <div class="vendor-grid">
+          <article class="vendor-card vendor-card-updates">
+            <p class="eyebrow">Stay Connected</p>
+            <h2>Want to receive news and updates from us?</h2>
+            <form class="vendor-form vendor-form-updates">
+              <label>
+                <span>Email</span>
+                <input type="email" name="updatesEmail" placeholder="Email" />
+              </label>
+              <label>
+                <span>Phone Number</span>
+                <input type="text" name="updatesPhone" placeholder="Phone Number" />
+              </label>
+              <button class="button primary vendor-submit" type="button">Get Latest Updates</button>
+            </form>
+          </article>
+          <article class="vendor-card vendor-card-supplier">
+            <p class="eyebrow">Supplier Intake</p>
+            <h2>Want to be a Jonezie Labs supplier?</h2>
+            <div class="vendor-checklist">
+              <label><input type="checkbox" /> <span>Could you provide samples of the products you offer so we can conduct our own testing?</span></label>
+              <label><input type="checkbox" /> <span>Can you provide COAs from testing that you have conducted?</span></label>
+              <label><input type="checkbox" /> <span>Can you provide 3 references?</span></label>
+            </div>
+            <form class="vendor-form vendor-form-supplier">
+              <label>
+                <span>Company Name</span>
+                <input type="text" name="companyName" placeholder="Company Name" />
+              </label>
+              <label>
+                <span>Shipment Lead Time</span>
+                <input type="text" name="shipmentLeadTime" placeholder="Shipment Lead Time" />
+              </label>
+              <label>
+                <span>Max And Min Order Size</span>
+                <input type="text" name="orderSize" placeholder="Max And Min Order Size" />
+              </label>
+              <label>
+                <span>Email Contact</span>
+                <input type="email" name="supplierEmail" placeholder="Email Contact" />
+              </label>
+              <label>
+                <span>Phone Contact</span>
+                <input type="text" name="supplierPhone" placeholder="Phone Contact" />
+              </label>
+            </form>
+            <div class="vendor-rfp-note">
+              <p>Please email pricing catalog, COAs, terms, and company information to <a href="mailto:procurement@jonezielabs.com">procurement@jonezielabs.com</a> and request the current RFP packet.</p>
+              <a class="button secondary vendor-rfp-link" href="mailto:procurement@jonezielabs.com?subject=Jonezie%20Labs%20RFP%20Request">Email Procurement</a>
+            </div>
+          </article>
         </div>
       </section>
     </main>

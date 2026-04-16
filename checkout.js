@@ -208,7 +208,7 @@ form?.addEventListener('submit', (event) => {
 
   const subject = encodeURIComponent(`Jonezie Order Request - ${name || 'Customer'}`);
   const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = `mailto:lenny@jonezielabs.com?subject=${subject}&body=${body}`;
+  window.location.href = `mailto:customerservice@jonezielabs.com?subject=${subject}&body=${body}`;
 });
 
 clearCartButton?.addEventListener('click', () => {
