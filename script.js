@@ -156,14 +156,16 @@ function renderCatalog() {
     return `
       <a class="catalog-card card-link-shell" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
         <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
-        <div class="catalog-top">
-          <span class="catalog-tag">${escapeHtml(product.category)}</span>
-          <span class="catalog-price-rule">view pricing</span>
+        <div class="catalog-copy">
+          <div class="catalog-top">
+            <span class="catalog-tag">${escapeHtml(product.category)}</span>
+            <span class="catalog-price-rule">view pricing</span>
+          </div>
+          <h3>${escapeHtml(product.name)}</h3>
+          <span class="catalog-link">Open product page</span>
+          <p>${escapeHtml(description)}</p>
+          <div class="option-chips">${strengthChips}</div>
         </div>
-        <h3>${escapeHtml(product.name)}</h3>
-        <span class="catalog-link">Open product page</span>
-        <p>${escapeHtml(description)}</p>
-        <div class="option-chips">${strengthChips}</div>
       </a>`;
   }).join('');
 }

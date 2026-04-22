@@ -11,7 +11,8 @@ const clearCartButton = document.querySelector('[data-clear-cart]');
 const promoCodeInput = document.querySelector('[data-promo-code]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const PROMO_CODES = {
-  PEPPERS: 0.25
+  PEPPERS: 0.25,
+  MILKO: 0.60
 };
 
 if (menuToggle && siteNav) {
