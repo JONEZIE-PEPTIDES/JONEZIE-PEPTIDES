@@ -1,6 +1,7 @@
 (() => {
   const catalog = window.JONEZIE_CATALOG;
   if (!catalog) return;
+  const FEATURED_WITH_NEW_ART = ['mots-c', 'retatrutide', 'tesamorelin'];
 
   const IMAGE_OVERRIDES_BY_SLUG = {
     somatropin: 'somatropin-official.png',
@@ -16,10 +17,10 @@
     'cjc-1295-without-dac': 'cjc-1295-without-dac-official.png',
     hcg: 'hcg-official.png',
     aod: 'aod-official.png',
-    tesamorelin: 'tesamorelin-official.png',
+    tesamorelin: 'assets/products/TESA NEW PRODUCT HERO IMAGE.jpg',
     'bac-water': 'bac-water-official.png',
     'ghk-cu': 'ghk-cu-100mg-official.png',
-    'mots-c': 'mots-c-official.png',
+    'mots-c': 'assets/products/MOTS-C NEW PRODUCT HERO IMAGE.jpg',
     'cjc-1295-with-dac': 'cjc-1295-with-dac-official.png',
     'kisspeptin-10': 'kisspeptin-10-official.png',
     dermorphin: 'dermorphin-official.png',
@@ -67,6 +68,16 @@
       if (override) product.image = override;
     });
   }
+
+  const featuredLookup = new Map(
+    [...(catalog.featured || []), ...(catalog.products || [])]
+      .filter((product) => product?.slug)
+      .map((product) => [product.slug, product])
+  );
+
+  catalog.featured = FEATURED_WITH_NEW_ART
+    .map((slug) => featuredLookup.get(slug))
+    .filter(Boolean);
 
   applyOverrides(catalog.featured);
   applyOverrides(catalog.products);
