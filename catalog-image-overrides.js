@@ -44,7 +44,7 @@
     survodutide: 'survodutide-official.png',
     semaglutide: 'semaglutide-20mg-official.png',
     'tirzepatide': 'tirzepatide-15mg-official.png',
-    retatrutide: 'reta-20mg-official.png',
+    retatrutide: 'reta-new-hero-product-image.png',
     'mt-1': 'mt-1-10mg-official.png',
     mt1: 'mt-1-10mg-official.png',
     'melanotan-1': 'mt-1-10mg-official.png',

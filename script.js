@@ -126,7 +126,7 @@ function renderFeatured() {
     const imageSrc = getImageSrc(product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
-      <a class="product-card card-link-shell ${getAccent(product.category)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
+      <a class="product-card card-link-shell ${getAccent(product.category)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
         <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         <div class="product-copy">
           <div class="product-top">
@@ -154,7 +154,7 @@ function renderCatalog() {
     const imageSrc = getImageSrc(product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
-      <a class="catalog-card card-link-shell" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
+      <a class="catalog-card card-link-shell" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
         <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         <div class="catalog-copy">
           <div class="catalog-top">
