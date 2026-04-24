@@ -696,6 +696,15 @@ img { display: block; max-width: 100%; }
 .section-heading h2,
 .split-copy h2,
 .cta-panel h2 { font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 14px; }
+.featured-heading-delivery {
+  display: block;
+  margin-top: 0.44em;
+  font-size: 0.36em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.12;
+  opacity: 0.84;
+}
 .hero.hero-home .hero-text {
   color: var(--ink-soft);
 }

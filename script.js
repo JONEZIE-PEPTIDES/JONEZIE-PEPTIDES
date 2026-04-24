@@ -118,7 +118,7 @@ function renderFeatured() {
   const grid = document.querySelector('[data-featured-grid]');
   if (!grid || !catalogData) return;
 
-  const featured = (catalogData.featured || []).slice(0, 6);
+  const featured = (catalogData.featured || []).filter(Boolean);
   grid.innerHTML = featured.map((product) => {
     const productContent = getProductContent(product);
     const description = productContent?.shortDescription || product.description;
