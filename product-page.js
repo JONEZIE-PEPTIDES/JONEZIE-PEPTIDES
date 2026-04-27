@@ -4,6 +4,8 @@ const contentData = window.JONEZIE_PRODUCT_CONTENT || null;
 const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
 const COA_ASSET_VERSION = '20260415b';
+const PRODUCT_ASSET_VERSION = '20260427a';
+const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const COA_IMAGE_BY_SLUG = {
   'bpc-157': 'coa-bpc-157.png',
   'cjc-1295-with-dac': 'coa-cjc-1295.png',
@@ -102,6 +104,14 @@ function escapeHtml(value) {
 
 function getProductContent(product) {
   return contentData?.products?.[product.slug] || null;
+}
+
+function getProductImageSrc(path) {
+  const sanitized = String(path || '').replace('../', '').trim();
+  const fallback = `${PRODUCT_FALLBACK_IMAGE}?v=${PRODUCT_ASSET_VERSION}`;
+  if (!sanitized) return fallback;
+  if (sanitized.includes('?')) return sanitized;
+  return `${sanitized}?v=${PRODUCT_ASSET_VERSION}`;
 }
 
 function getProductHeaderSummary(product) {
@@ -203,6 +213,7 @@ function renderProductPage() {
   const titleNode = document.querySelector('[data-product-title]');
   const eyebrowNode = document.querySelector('[data-product-category]');
   const descriptionNode = document.querySelector('[data-product-description]');
+  const heroImageNode = document.querySelector('[data-product-hero-image]');
   const optionsGrid = document.querySelector('[data-product-options]');
   const highlightsGrid = document.querySelector('[data-product-highlights]');
   const coaButton = document.querySelector('[data-product-coa]');
@@ -232,6 +243,14 @@ function renderProductPage() {
   if (titleNode) titleNode.textContent = product.name;
   if (eyebrowNode) eyebrowNode.textContent = product.category;
   if (descriptionNode) descriptionNode.textContent = researchSummary;
+  if (heroImageNode) {
+    heroImageNode.src = getProductImageSrc(product.image);
+    heroImageNode.alt = `${product.name} product image`;
+    heroImageNode.onerror = () => {
+      heroImageNode.onerror = null;
+      heroImageNode.src = `${PRODUCT_FALLBACK_IMAGE}?v=${PRODUCT_ASSET_VERSION}`;
+    };
+  }
 
   function closeCoaLightbox() {
     if (!coaLightbox || coaLightbox.hidden) return;
