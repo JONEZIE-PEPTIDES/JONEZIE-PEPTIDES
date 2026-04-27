@@ -6,6 +6,7 @@ const siteNav = document.querySelector('.site-nav');
 const COA_ASSET_VERSION = '20260415b';
 const PRODUCT_ASSET_VERSION = '20260427a';
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
+const SITE_ORIGIN = 'https://jonezielabs.com';
 const COA_IMAGE_BY_SLUG = {
   'bpc-157': 'coa-bpc-157.png',
   'cjc-1295-with-dac': 'coa-cjc-1295.png',
@@ -112,6 +113,49 @@ function getProductImageSrc(path) {
   if (!sanitized) return fallback;
   if (sanitized.includes('?')) return sanitized;
   return `${sanitized}?v=${PRODUCT_ASSET_VERSION}`;
+}
+
+function getAbsoluteSiteUrl(path) {
+  const normalized = String(path || '').replace(/^\.\//, '');
+  return new URL(normalized, `${SITE_ORIGIN}/`).toString();
+}
+
+function upsertMeta(selector, attributes) {
+  let node = document.head.querySelector(selector);
+  if (!node) {
+    node = document.createElement('meta');
+    document.head.appendChild(node);
+  }
+  Object.entries(attributes).forEach(([key, value]) => {
+    node.setAttribute(key, value);
+  });
+  return node;
+}
+
+function upsertLink(selector, attributes) {
+  let node = document.head.querySelector(selector);
+  if (!node) {
+    node = document.createElement('link');
+    document.head.appendChild(node);
+  }
+  Object.entries(attributes).forEach(([key, value]) => {
+    node.setAttribute(key, value);
+  });
+  return node;
+}
+
+function setStructuredData(selector, data) {
+  let node = document.head.querySelector(selector);
+  if (!node) {
+    node = document.createElement('script');
+    node.type = 'application/ld+json';
+    if (selector.startsWith('script[')) {
+      const nameMatch = selector.match(/data-([a-z0-9-]+)/i);
+      if (nameMatch) node.setAttribute(`data-${nameMatch[1]}`, '');
+    }
+    document.head.appendChild(node);
+  }
+  node.textContent = JSON.stringify(data);
 }
 
 function getProductHeaderSummary(product) {
@@ -232,14 +276,74 @@ function renderProductPage() {
   const addToCartButton = document.querySelector('[data-add-to-cart]');
   const buyNowButton = document.querySelector('[data-buy-now]');
 
-  document.title = `${product.name} | Jonezie Peptides`;
+  document.title = `${product.name} | Jonezie Labs`;
   const meta = document.querySelector('meta[name="description"]');
   const productContent = getProductContent(product);
   const shortDescription = productContent?.shortDescription || product.description;
   const researchSummary = getProductHeaderSummary(product);
   const researchFindings = productContent?.researchFindings || [];
   const siteDisclaimer = contentData?.disclaimerLong || 'Products listed on this site are offered strictly for research use only and are not for human consumption.';
-  if (meta) meta.setAttribute('content', getProductHeaderSummary(product));
+  const canonicalUrl = `${SITE_ORIGIN}/product.html?slug=${encodeURIComponent(product.slug)}`;
+  const ogImageUrl = getAbsoluteSiteUrl(product.image || PRODUCT_FALLBACK_IMAGE);
+  const baseMetaDescription = `${shortDescription} View ${product.name} research use options, pricing, and documentation from Jonezie Labs.`;
+  upsertLink('link[rel="canonical"]', { rel: 'canonical', href: canonicalUrl });
+  upsertMeta('meta[name="robots"]', { name: 'robots', content: 'index,follow,max-image-preview:large' });
+
+  function updateProductSeo() {
+    const offerPrice = parsePrice(selectedOption?.[selectedPackKey] || selectedOption?.singleVialPrice || selectedOption?.eightVialPrice || selectedOption?.tenVialPrice);
+    const packMap = {
+      singleVialPrice: 'Single Vial',
+      eightVialPrice: '8-Vial Kit',
+      tenVialPrice: '10-Vial Pack'
+    };
+    const packLabel = packMap[selectedPackKey] || 'Research pricing';
+    const metaDescription = `${shortDescription} ${selectedOption ? `${selectedOption.mgOption} available with ${packLabel.toLowerCase()} pricing.` : ''} View ${product.name} research use options and documentation from Jonezie Labs.`.replace(/\s+/g, ' ').trim();
+    if (meta) meta.setAttribute('content', metaDescription);
+    upsertMeta('meta[property="og:type"]', { property: 'og:type', content: 'product' });
+    upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: 'Jonezie Labs' });
+    upsertMeta('meta[property="og:title"]', { property: 'og:title', content: `${product.name} | Jonezie Labs` });
+    upsertMeta('meta[property="og:description"]', { property: 'og:description', content: metaDescription });
+    upsertMeta('meta[property="og:url"]', { property: 'og:url', content: canonicalUrl });
+    upsertMeta('meta[property="og:image"]', { property: 'og:image', content: ogImageUrl });
+    upsertMeta('meta[name="twitter:card"]', { name: 'twitter:card', content: 'summary_large_image' });
+    upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: `${product.name} | Jonezie Labs` });
+    upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: metaDescription });
+    upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: ogImageUrl });
+
+    const productSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.name,
+      description: metaDescription,
+      category: product.category,
+      image: ogImageUrl,
+      sku: selectedOption?.code || product.slug,
+      brand: {
+        '@type': 'Brand',
+        name: 'Jonezie Labs'
+      },
+      url: canonicalUrl,
+      offers: offerPrice ? {
+        '@type': 'Offer',
+        priceCurrency: 'USD',
+        price: offerPrice.toFixed(2),
+        availability: getInventoryStatus(selectedOption) === 'sold_out' ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+        url: canonicalUrl,
+        seller: {
+          '@type': 'Organization',
+          name: 'Jonezie Labs'
+        }
+      } : undefined,
+      additionalProperty: product.options.map((option) => ({
+        '@type': 'PropertyValue',
+        name: 'MG Option',
+        value: option.mgOption
+      }))
+    };
+    setStructuredData('script[data-product-schema]', productSchema);
+  }
+
+  if (meta) meta.setAttribute('content', baseMetaDescription);
   if (titleNode) titleNode.textContent = product.name;
   if (eyebrowNode) eyebrowNode.textContent = product.category;
   if (descriptionNode) descriptionNode.textContent = researchSummary;
@@ -383,6 +487,7 @@ function renderProductPage() {
     const disabled = unitPrice === null || isSoldOut;
     if (addToCartButton) addToCartButton.disabled = disabled;
     if (buyNowButton) buyNowButton.disabled = disabled;
+    updateProductSeo();
   }
 
   function getSelectedCartItem() {
