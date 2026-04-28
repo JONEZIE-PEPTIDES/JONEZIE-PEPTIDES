@@ -5,15 +5,49 @@ const cartRoot = document.querySelector('[data-checkout-cart]');
 const summaryItems = document.querySelector('[data-summary-items]');
 const summarySubtotal = document.querySelector('[data-summary-subtotal]');
 const summaryDiscount = document.querySelector('[data-summary-discount]');
+const summaryShipping = document.querySelector('[data-summary-shipping]');
 const summaryTotal = document.querySelector('[data-summary-total]');
 const form = document.querySelector('[data-checkout-form]');
 const clearCartButton = document.querySelector('[data-clear-cart]');
 const promoCodeInput = document.querySelector('[data-promo-code]');
+const shippingMethodInput = document.querySelector('[data-shipping-method]');
+const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const PROMO_CODES = {
   PEPPERS: 0.10,
   MILKO: 0.60
 };
+const SHIPPING_OPTIONS = [
+  {
+    id: 'ground-advantage',
+    label: 'USPS Ground Advantage',
+    window: '2-5 business days',
+    price: 6.98,
+    note: 'Everyday shipping'
+  },
+  {
+    id: 'priority-mail',
+    label: 'USPS Priority Mail',
+    window: '1-3 business days',
+    price: 8.25,
+    note: 'Packages with tracking'
+  },
+  {
+    id: 'ups-2nd-day-air',
+    label: 'UPS 2nd Day Air',
+    window: '2 business days',
+    price: 15.00,
+    note: 'Faster delivery option'
+  },
+  {
+    id: 'backorder-fulfillment',
+    label: 'Backorder Fulfillment',
+    window: '10-15 business days',
+    price: 29.00,
+    note: 'For backorder items only',
+    backorderOnly: true
+  }
+];
 
 if (menuToggle && siteNav) {
   menuToggle.addEventListener('click', () => {
@@ -108,6 +142,55 @@ function getPromoDetails() {
   };
 }
 
+function getAvailableShippingOptions(cart) {
+  const hasBackorder = cart.some((item) => String(item.inventoryStatus || '').toLowerCase() === 'backorder');
+  return SHIPPING_OPTIONS.filter((option) => !option.backorderOnly || hasBackorder);
+}
+
+function getSelectedShipping(cart) {
+  const availableOptions = getAvailableShippingOptions(cart);
+  if (!availableOptions.length) return null;
+
+  const allBackorder = cart.length > 0 && cart.every((item) => String(item.inventoryStatus || '').toLowerCase() === 'backorder');
+  const preferredId = shippingMethodInput?.value;
+  const matched = availableOptions.find((option) => option.id === preferredId);
+  if (matched) return matched;
+
+  const defaultOption = allBackorder
+    ? availableOptions.find((option) => option.backorderOnly) || availableOptions[0]
+    : availableOptions[0];
+
+  if (shippingMethodInput) shippingMethodInput.value = defaultOption.id;
+  return defaultOption;
+}
+
+function renderShippingOptions(cart) {
+  if (!shippingMethodInput) return null;
+  const availableOptions = getAvailableShippingOptions(cart);
+  const previousValue = shippingMethodInput.value;
+
+  shippingMethodInput.innerHTML = availableOptions.map((option) => `
+    <option value="${option.id}">
+      ${option.label} - ${option.window} - ${formatMoney(option.price)}
+    </option>`).join('');
+
+  if (!availableOptions.length) {
+    shippingMethodInput.disabled = true;
+    if (shippingHelp) shippingHelp.textContent = 'Add products to your cart to choose a shipping option.';
+    return null;
+  }
+
+  shippingMethodInput.disabled = false;
+  if (previousValue && availableOptions.some((option) => option.id === previousValue)) {
+    shippingMethodInput.value = previousValue;
+  }
+  const selected = getSelectedShipping(cart);
+  if (shippingHelp && selected) {
+    shippingHelp.textContent = `${selected.note}. ${selected.window} delivery window.`;
+  }
+  return selected;
+}
+
 function renderCart() {
   const cart = getCart();
   if (!cartRoot) return;
@@ -122,18 +205,23 @@ function renderCart() {
     if (summaryItems) summaryItems.textContent = '0';
     if (summarySubtotal) summarySubtotal.textContent = '$0.00';
     if (summaryDiscount) summaryDiscount.textContent = '$0.00';
+    if (summaryShipping) summaryShipping.textContent = '$0.00';
     if (summaryTotal) summaryTotal.textContent = '$0.00';
+    renderShippingOptions(cart);
     return;
   }
 
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
   const promo = getPromoDetails();
+  const shippingOption = renderShippingOptions(cart);
+  const shippingCost = shippingOption?.price || 0;
   const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
-  const total = subtotal - discountAmount;
+  const total = subtotal - discountAmount + shippingCost;
   if (summaryItems) summaryItems.textContent = String(itemCount);
   if (summarySubtotal) summarySubtotal.textContent = formatMoney(subtotal);
   if (summaryDiscount) summaryDiscount.textContent = promo.isValid ? `- ${formatMoney(discountAmount)}` : '$0.00';
+  if (summaryShipping) summaryShipping.textContent = formatMoney(shippingCost);
   if (summaryTotal) summaryTotal.textContent = formatMoney(total);
 
   cartRoot.innerHTML = cart.map((item, index) => `
@@ -176,9 +264,11 @@ form?.addEventListener('submit', (event) => {
   const paymentHandle = formData.get('paymentHandle') || '';
   const promo = getPromoDetails();
   const notes = formData.get('customerNotes') || '';
+  const shippingOption = getSelectedShipping(cart);
+  const shippingCost = shippingOption?.price || 0;
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
   const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
-  const total = subtotal - discountAmount;
+  const total = subtotal - discountAmount + shippingCost;
 
   const lines = [
     `New Jonezie order request`,
@@ -189,6 +279,7 @@ form?.addEventListener('submit', (event) => {
     `Email: ${email}`,
     `Phone: ${phone}`,
     `Shipping Address: ${shippingAddress || 'Not provided'}`,
+    `Shipping Method: ${shippingOption ? `${shippingOption.label} | ${shippingOption.window} | ${formatMoney(shippingCost)}` : 'Not selected'}`,
     `Preferred Payment Service: ${preferredPaymentService || 'Not provided'}`,
     `Payment Service Handle: ${paymentHandle || 'Not provided'}`,
     `Promo code: ${promo.isValid ? promo.code : 'None'}`,
@@ -203,7 +294,10 @@ form?.addEventListener('submit', (event) => {
   lines.push('');
   lines.push(`Subtotal: ${formatMoney(subtotal)}`);
   lines.push(`Discount: ${promo.isValid ? `- ${formatMoney(discountAmount)} (${promo.code})` : '$0.00'}`);
+  lines.push(`Shipping: ${shippingOption ? `${formatMoney(shippingCost)} (${shippingOption.label})` : '$0.00'}`);
   lines.push(`Estimated total: ${formatMoney(total)}`);
+  lines.push('');
+  lines.push('Included with order: Free vial cap cover + Free Hot Girl Summer sticker');
   lines.push('');
   lines.push(`Notes: ${notes}`);
 
@@ -218,5 +312,6 @@ clearCartButton?.addEventListener('click', () => {
 });
 
 promoCodeInput?.addEventListener('input', renderCart);
+shippingMethodInput?.addEventListener('change', renderCart);
 
 renderCart();
