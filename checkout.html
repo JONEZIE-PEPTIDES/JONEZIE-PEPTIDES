@@ -118,12 +118,27 @@
             <p class="eyebrow">Order Summary</p>
             <div class="checkout-summary-row"><span>Items</span><strong data-summary-items>0</strong></div>
             <div class="checkout-summary-row"><span>Subtotal</span><strong data-summary-subtotal>$0.00</strong></div>
+            <div class="checkout-freebies">
+              <span class="checkout-freebies-label">Included With Every Order</span>
+              <ul class="checkout-freebies-list">
+                <li>Free vial cap cover</li>
+                <li>Free Hot Girl Summer sticker</li>
+              </ul>
+            </div>
             <div class="checkout-promo">
               <label for="checkout-promo-code">Promo Code</label>
               <input id="checkout-promo-code" type="text" data-promo-code placeholder="Enter promo code" />
               <p>Active code: <strong>PEPPERS</strong> (10% off)</p>
             </div>
+            <div class="checkout-shipping">
+              <label for="checkout-shipping-method">Shipping Method</label>
+              <div class="checkout-shipping-select-shell">
+                <select id="checkout-shipping-method" data-shipping-method></select>
+              </div>
+              <p data-shipping-help>Select a shipping option to update your estimated total.</p>
+            </div>
             <div class="checkout-summary-row"><span>Discount</span><strong data-summary-discount>$0.00</strong></div>
+            <div class="checkout-summary-row"><span>Shipping</span><strong data-summary-shipping>$0.00</strong></div>
             <div class="checkout-summary-row"><span>Estimated Total</span><strong data-summary-total>$0.00</strong></div>
           </div>
 
@@ -161,7 +176,7 @@
               <button class="button secondary purchase-button" type="button" data-clear-cart>Clear Cart</button>
             </div>
           </form>
-          <p class="purchase-note">Submitting this form opens a pre-filled order email to customerservice@jonezielabs.com. Product information is provided for research reference only and not for human consumption.</p>
+          <p class="purchase-note">Submitting this form opens a pre-filled order email to customerservice@jonezielabs.com. Every order also includes a free vial cap cover and free Hot Girl Summer sticker. Product information is provided for research reference only and not for human consumption.</p>
         </aside>
       </section>
     </main>
@@ -176,10 +191,10 @@
   <script src="catalog-sheet-sync.js?v=20260410b"></script>
   <script src="catalog-admin-config.js?v=20260410a"></script>
   <script src="catalog-admin.js?v=20260410a"></script>
-  <script src="catalog-image-overrides.js?v=20260424d"></script>
+  <script src="catalog-image-overrides.js?v=20260427d"></script>
   <script src="cart-nav.js?v=20260409j"></script>
   <script src="nav-search.js?v=20260409j"></script>
   <script src="age-gate.js?v=20260427c"></script>
-  <script src="checkout.js?v=20260427a"></script>
+  <script src="checkout.js?v=20260428a"></script>
 </body>
 </html>
