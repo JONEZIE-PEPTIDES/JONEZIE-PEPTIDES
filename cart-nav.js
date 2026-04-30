@@ -36,3 +36,157 @@
 
   renderCartBadge();
 })();
+
+(() => {
+  const WORKFLOW_SOURCE = 'https://raw.githubusercontent.com/JONEZIE-PEPTIDES/JONEZIE-PEPTIDES/main/.github/workflows/one-time-merch-sync.yml';
+  const STICKER_PATH = 'assets/Lables%20and%20stickers/beach_volleyball_showdown_with_lively_vials.webp';
+
+  function injectMerchStyles() {
+    if (document.getElementById('jonezie-merch-live-patch')) return;
+    const style = document.createElement('style');
+    style.id = 'jonezie-merch-live-patch';
+    style.textContent = `
+      .merch-product-wide { grid-column: 1 / -1; }
+      .sticker-art.is-missing-art { position: relative; min-height: 260px; }
+      .sticker-art.is-missing-art img { display: none; }
+      .sticker-art.is-missing-art::before {
+        content: "Sticker art loading";
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 16px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.24);
+        background: var(--ember-fill);
+        color: #1f1d28;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      @media (max-width: 980px) {
+        .merch-product-wide { grid-column: auto; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function setEyebrow(card, label) {
+    const eyebrow = card?.querySelector('.eyebrow');
+    if (eyebrow) eyebrow.textContent = label;
+  }
+
+  function removeDescription(card) {
+    card?.querySelectorAll('.merch-copy > p:not(.eyebrow)').forEach((node) => node.remove());
+  }
+
+  function setStickerPrice(card) {
+    card?.querySelectorAll('.merch-meta span').forEach((span) => {
+      if (/Price:/i.test(span.textContent)) span.textContent = 'Price: $3.00';
+    });
+    const purchase = card?.querySelector('[data-merch-purchase]');
+    if (purchase) purchase.dataset.merchPrice = '3.00';
+  }
+
+  async function loadStickerDataUri(img) {
+    if (!img) return;
+    try {
+      const response = await fetch(WORKFLOW_SOURCE, { cache: 'force-cache' });
+      if (!response.ok) throw new Error('Sticker source unavailable');
+      const text = await response.text();
+      const match = text.match(/asset_b64 = '''([\s\S]+?)'''/);
+      if (!match) throw new Error('Sticker payload missing');
+      img.src = `data:image/webp;base64,${match[1].replace(/\s+/g, '')}`;
+    } catch {
+      img.closest('.sticker-art')?.classList.add('is-missing-art');
+    }
+  }
+
+  function buildSummerStickerCard() {
+    const article = document.createElement('article');
+    article.className = 'merch-product merch-product-sticker';
+    article.innerHTML = `
+      <div class="sticker-art" data-merch-zoom role="button" tabindex="0" aria-label="Open larger image of Summer Stack Bros sticker">
+        <img src="${STICKER_PATH}" alt="Summer Stack Bros sticker" />
+      </div>
+      <div class="merch-copy compact-copy">
+        <p class="eyebrow">Sticker</p>
+        <h3>Summer Stack Bros</h3>
+        <div class="merch-meta">
+          <span>Price: $3.00</span>
+          <span>Sticker format</span>
+        </div>
+        <div class="merch-purchase" data-merch-purchase data-merch-slug="summer-stack-bros-sticker" data-merch-name="Summer Stack Bros Sticker" data-merch-image="${STICKER_PATH}" data-merch-price="3.00">
+          <div class="merch-purchase-row">
+            <label>Format</label>
+            <select data-merch-size>
+              <option value="Standard">Standard</option>
+            </select>
+          </div>
+          <div class="merch-purchase-row">
+            <label>Quantity</label>
+            <div class="merch-qty-control">
+              <button type="button" data-merch-qty-minus aria-label="Decrease quantity">-</button>
+              <input data-merch-qty type="number" min="1" value="1" inputmode="numeric" />
+              <button type="button" data-merch-qty-plus aria-label="Increase quantity">+</button>
+            </div>
+          </div>
+          <button class="button primary merch-add-button" type="button" data-merch-add>Add To Cart</button>
+          <p class="merch-add-feedback" data-merch-feedback aria-live="polite"></p>
+        </div>
+      </div>
+    `;
+    const img = article.querySelector('img');
+    img.addEventListener('error', () => {
+      img.closest('.sticker-art')?.classList.add('is-missing-art');
+      loadStickerDataUri(img);
+    }, { once: true });
+    return article;
+  }
+
+  function patchMerch() {
+    const shelf = document.querySelector('#merch .merch-shelf');
+    if (!shelf) return;
+    injectMerchStyles();
+
+    const cards = [...shelf.querySelectorAll('.merch-product')];
+    const hat = cards.find((card) => /Signature Hat/i.test(card.textContent));
+    const hotSticker = cards.find((card) => /Hot Girl Summer Sticker/i.test(card.textContent));
+    const shirt = cards.find((card) => /Hot Girl Summer Shirt/i.test(card.textContent));
+
+    if (hat) {
+      hat.classList.add('merch-product-wide');
+      setEyebrow(hat, 'Hat');
+      removeDescription(hat);
+    }
+
+    if (hotSticker) {
+      hotSticker.classList.add('merch-product-sticker');
+      setEyebrow(hotSticker, 'Sticker');
+      removeDescription(hotSticker);
+      setStickerPrice(hotSticker);
+      const img = hotSticker.querySelector('.sticker-art img');
+      img?.addEventListener('error', () => img.closest('.sticker-art')?.classList.add('is-missing-art'), { once: true });
+    }
+
+    if (!shelf.querySelector('[data-merch-slug="summer-stack-bros-sticker"]')) {
+      const summerCard = buildSummerStickerCard();
+      if (shirt) shelf.insertBefore(summerCard, shirt);
+      else shelf.appendChild(summerCard);
+    }
+
+    if (shirt) {
+      shirt.classList.add('merch-product-wide');
+      setEyebrow(shirt, 'Shirt');
+      removeDescription(shirt);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', patchMerch, { once: true });
+  } else {
+    patchMerch();
+  }
+})();
