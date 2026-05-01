@@ -38,7 +38,7 @@
 })();
 
 (() => {
-  const HOT_GIRL_STICKER_PATH = 'assets/Lables%20and%20stickers/hot_girl_summer_jonezie_sticker_black_background.webp?v=20260501a';
+  const HOT_GIRL_STICKER_PATH = 'assets/Lables%20and%20stickers/hot_girl_summer_jonezie_sticker_black_background.webp?v=20260501b';
   const SUMMER_STICKER_PATH = 'assets/Lables%20and%20stickers/beach_volleyball_showdown_with_lively_vials.webp';
 
   function injectMerchStyles() {
