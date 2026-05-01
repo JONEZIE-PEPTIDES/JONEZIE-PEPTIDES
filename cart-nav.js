@@ -38,8 +38,8 @@
 })();
 
 (() => {
-  const WORKFLOW_SOURCE = 'https://raw.githubusercontent.com/JONEZIE-PEPTIDES/JONEZIE-PEPTIDES/main/.github/workflows/one-time-merch-sync.yml';
-  const STICKER_PATH = 'assets/Lables%20and%20stickers/beach_volleyball_showdown_with_lively_vials.webp';
+  const HOT_GIRL_STICKER_PATH = 'assets/Lables%20and%20stickers/hot_girl_summer_jonezie_sticker_black_background.webp?v=20260501a';
+  const SUMMER_STICKER_PATH = 'assets/Lables%20and%20stickers/beach_volleyball_showdown_with_lively_vials.webp';
 
   function injectMerchStyles() {
     if (document.getElementById('jonezie-merch-live-patch')) return;
@@ -90,18 +90,15 @@
     if (purchase) purchase.dataset.merchPrice = '3.00';
   }
 
-  async function loadStickerDataUri(img) {
-    if (!img) return;
-    try {
-      const response = await fetch(WORKFLOW_SOURCE, { cache: 'force-cache' });
-      if (!response.ok) throw new Error('Sticker source unavailable');
-      const text = await response.text();
-      const match = text.match(/asset_b64 = '''([\s\S]+?)'''/);
-      if (!match) throw new Error('Sticker payload missing');
-      img.src = `data:image/webp;base64,${match[1].replace(/\s+/g, '')}`;
-    } catch {
-      img.closest('.sticker-art')?.classList.add('is-missing-art');
+  function setStickerImage(card, imagePath, altText) {
+    const img = card?.querySelector('.sticker-art img');
+    const purchase = card?.querySelector('[data-merch-purchase]');
+    if (img) {
+      img.src = imagePath;
+      img.alt = altText;
+      img.addEventListener('error', () => img.closest('.sticker-art')?.classList.add('is-missing-art'), { once: true });
     }
+    if (purchase) purchase.dataset.merchImage = imagePath;
   }
 
   function buildSummerStickerCard() {
@@ -109,7 +106,7 @@
     article.className = 'merch-product merch-product-sticker';
     article.innerHTML = `
       <div class="sticker-art" data-merch-zoom role="button" tabindex="0" aria-label="Open larger image of Summer Stack Bros sticker">
-        <img src="${STICKER_PATH}" alt="Summer Stack Bros sticker" />
+        <img src="${SUMMER_STICKER_PATH}" alt="Summer Stack Bros sticker" />
       </div>
       <div class="merch-copy compact-copy">
         <p class="eyebrow">Sticker</p>
@@ -118,7 +115,7 @@
           <span>Price: $3.00</span>
           <span>Sticker format</span>
         </div>
-        <div class="merch-purchase" data-merch-purchase data-merch-slug="summer-stack-bros-sticker" data-merch-name="Summer Stack Bros Sticker" data-merch-image="${STICKER_PATH}" data-merch-price="3.00">
+        <div class="merch-purchase" data-merch-purchase data-merch-slug="summer-stack-bros-sticker" data-merch-name="Summer Stack Bros Sticker" data-merch-image="${SUMMER_STICKER_PATH}" data-merch-price="3.00">
           <div class="merch-purchase-row">
             <label>Format</label>
             <select data-merch-size>
@@ -139,10 +136,7 @@
       </div>
     `;
     const img = article.querySelector('img');
-    img.addEventListener('error', () => {
-      img.closest('.sticker-art')?.classList.add('is-missing-art');
-      loadStickerDataUri(img);
-    }, { once: true });
+    img.addEventListener('error', () => img.closest('.sticker-art')?.classList.add('is-missing-art'), { once: true });
     return article;
   }
 
@@ -167,8 +161,7 @@
       setEyebrow(hotSticker, 'Sticker');
       removeDescription(hotSticker);
       setStickerPrice(hotSticker);
-      const img = hotSticker.querySelector('.sticker-art img');
-      img?.addEventListener('error', () => img.closest('.sticker-art')?.classList.add('is-missing-art'), { once: true });
+      setStickerImage(hotSticker, HOT_GIRL_STICKER_PATH, 'Hot Girl Summer sticker');
     }
 
     if (!shelf.querySelector('[data-merch-slug="summer-stack-bros-sticker"]')) {
