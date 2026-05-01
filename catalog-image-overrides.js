@@ -29,7 +29,7 @@
     'ss-31': 'ss-31-official.png',
     'cjc-1295-without-dac': 'cjc-1295-without-dac-official.png',
     hcg: 'hcg-official.png',
-    aod: 'aod-official.png',
+    aod: 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/AOD_5MG_3ML_Vial_Jonezie_Labs_.webp?v=20260501a',
     tesamorelin: 'tesa-new-new-hero-product-image.png',
     'bac-water': 'bac-water-official.png',
     'ghk-cu': 'ghk-cu-new-new-hero-product-image.webp',
