@@ -164,7 +164,7 @@ img { display: block; max-width: 100%; }
   position: relative;
   top: 0;
   margin: 22px 0 0;
-  padding: 12px 20px;
+  padding: 8px 20px;
   border: 1px solid var(--paper-line);
   border-radius: 24px;
   background:
@@ -173,6 +173,11 @@ img { display: block; max-width: 100%; }
     linear-gradient(180deg, rgba(255, 250, 244, 0.98), rgba(255, 248, 240, 0.96));
   backdrop-filter: blur(10px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.14);
+}
+
+.site-header-home.site-header-home-sticky {
+  position: sticky;
+  top: 14px;
 }
 
 .brand {
@@ -240,7 +245,7 @@ img { display: block; max-width: 100%; }
 
 .brand .brand-master-logo {
   display: block;
-  height: 58px;
+  height: 54px;
   width: auto;
   max-width: min(62vw, 520px);
   object-fit: contain;
@@ -250,7 +255,7 @@ img { display: block; max-width: 100%; }
   box-shadow: none;
   mix-blend-mode: normal;
   filter: none;
-  transform: scale(3.8);
+  transform: scale(3.45);
   transform-origin: left center;
 }
 
@@ -340,6 +345,10 @@ img { display: block; max-width: 100%; }
   display: flex;
   align-items: center;
   gap: 22px;
+}
+
+.site-nav-mobile-link {
+  display: none;
 }
 
 .site-header-home .site-nav a {
@@ -1735,7 +1744,11 @@ body.lightbox-open {
   .site-header-home {
     position: relative;
     justify-content: center;
-    padding: 14px 16px;
+    padding: 10px 16px;
+  }
+  .site-header-home.site-header-home-sticky {
+    position: sticky;
+    top: 14px;
   }
   .site-header-home .brand-dropdown {
     position: static;
@@ -1765,6 +1778,7 @@ body.lightbox-open {
   }
   .site-nav { position: absolute; top: calc(100% + 12px); right: 0; left: 0; display: none; flex-direction: column; align-items: stretch; gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: 24px; background: rgba(5,15,20,0.98); }
   .site-nav.is-open { display: flex; }
+  .site-nav-mobile-link { display: inline-flex; }
   .site-nav a {
     min-height: 46px;
     padding: 0 14px;
@@ -1791,6 +1805,7 @@ body.lightbox-open {
     min-height: 48px;
     justify-content: center;
   }
+  .site-nav .nav-products-pill { display: none; }
   .site-nav .nav-search { width: 100%; min-width: 0; }
   .site-nav .nav-search { min-height: 46px; }
   .site-nav .nav-cart {
@@ -1822,9 +1837,9 @@ body.lightbox-open {
     height: 48px;
   }
   .brand .brand-master-logo {
-    height: 48px;
+    height: 44px;
     max-width: min(72vw, 420px);
-    transform: scale(2.35);
+    transform: scale(2.15);
     transform-origin: center center;
   }
   .brand-menu-icon {

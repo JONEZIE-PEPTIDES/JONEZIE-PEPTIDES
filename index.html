@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@700&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="brand-mark.svg" />
-  <link rel="stylesheet" href="styles.css?v=20260427c" />
+  <link rel="stylesheet" href="styles.css?v=20260502a" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -212,7 +212,7 @@
     </div>
   </div>
   <div class="page-shell home-shell">
-    <header class="site-header site-header-home">
+    <header class="site-header site-header-home site-header-home-sticky">
       <div class="brand brand-home brand-dropdown" data-brand-menu>
         <button class="brand-menu-trigger" type="button" aria-expanded="false" aria-controls="brand-menu-home">
           <span class="brand-menu-icon" aria-hidden="true">
@@ -251,12 +251,13 @@
           <input id="nav-search-home" type="search" data-nav-search-input list="nav-search-list-home" placeholder="Search products" />
           <datalist id="nav-search-list-home"></datalist>
         </form>
-        <a href="#full-catalog">Full Products</a>
-        <a href="#featured">Popular Products</a>
-        <a href="#merch">Merch</a>
-        <a href="#faq">FAQ</a>
-        <a href="#mission">About Us</a>
-        <a href="#process">Ordering</a>
+        <a href="#full-catalog" class="site-nav-mobile-link">Full Products</a>
+        <a href="#featured" class="site-nav-mobile-link">Popular Products</a>
+        <a href="#merch" class="site-nav-mobile-link">Merch</a>
+        <a href="#faq" class="site-nav-mobile-link">FAQ</a>
+        <a href="#mission" class="site-nav-mobile-link">About Us</a>
+        <a href="#process" class="site-nav-mobile-link">Ordering</a>
+        <a href="#full-catalog" class="nav-products-pill">Products</a>
         <a href="checkout.html" class="nav-cart" data-cart-link aria-label="Open cart">
           <span class="nav-cart-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" role="presentation">
