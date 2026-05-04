@@ -94,4 +94,89 @@
 
   applyOverrides(catalog.featured);
   applyOverrides(catalog.products);
+
+  function syncMerchCards() {
+    const merchSection = document.querySelector('#merch');
+    if (!merchSection) return;
+
+    const removeDescription = (article) => {
+      article?.querySelectorAll('.merch-copy > p:not(.eyebrow)').forEach((node) => node.remove());
+    };
+
+    const setEyebrow = (article, label) => {
+      const eyebrow = article?.querySelector('.merch-copy .eyebrow');
+      if (eyebrow) eyebrow.textContent = label;
+    };
+
+    const setPrice = (article, price) => {
+      const priceNode = [...(article?.querySelectorAll('.merch-meta span') || [])]
+        .find((node) => node.textContent.trim().toLowerCase().startsWith('price:'));
+      if (priceNode) priceNode.textContent = `Price: $${price}`;
+      const purchase = article?.querySelector('[data-merch-purchase]');
+      if (purchase) purchase.setAttribute('data-merch-price', price);
+    };
+
+    const hotGirlPurchase = merchSection.querySelector('[data-merch-slug="hot-girl-summer-sticker"]');
+    const hotGirlArticle = hotGirlPurchase?.closest('.merch-product');
+    if (hotGirlArticle) {
+      const hotGirlImage = 'assets/Lables%20and%20stickers/hot_girl_summer_jonezie_sticker_black_background.webp?v=20260501b';
+      const image = hotGirlArticle.querySelector('.sticker-art img, .merch-card img');
+      if (image) {
+        image.src = hotGirlImage;
+        image.alt = 'Hot Girl Summer sticker';
+        image.onerror = () => image.closest('.sticker-art')?.classList.add('is-missing-art');
+      }
+      setEyebrow(hotGirlArticle, 'Sticker');
+      setPrice(hotGirlArticle, '3.00');
+      hotGirlPurchase.setAttribute('data-merch-image', hotGirlImage);
+      hotGirlPurchase.setAttribute('data-merch-name', 'Hot Girl Summer Sticker');
+      removeDescription(hotGirlArticle);
+    }
+
+    if (!merchSection.querySelector('[data-merch-slug="summer-stack-bros-sticker"]')) {
+      const summerStackCard = document.createElement('article');
+      summerStackCard.className = 'merch-product merch-product-sticker';
+      summerStackCard.innerHTML = `
+        <div class="sticker-art" data-merch-zoom role="button" tabindex="0" aria-label="Open larger image of Summer Stack Bros sticker">
+          <img src="assets/Lables%20and%20stickers/beach_volleyball_showdown_with_lively_vials.webp" alt="Summer Stack Bros sticker" onerror="this.closest('.sticker-art').classList.add('is-missing-art')" />
+        </div>
+        <div class="merch-copy compact-copy">
+          <p class="eyebrow">Sticker</p>
+          <h3>Summer Stack Bros</h3>
+          <div class="merch-meta">
+            <span>Price: $3.00</span>
+            <span>Sticker format</span>
+          </div>
+          <div class="merch-purchase" data-merch-purchase data-merch-slug="summer-stack-bros-sticker" data-merch-name="Summer Stack Bros Sticker" data-merch-image="assets/Lables%20and%20stickers/beach_volleyball_showdown_with_lively_vials.webp" data-merch-price="3.00">
+            <div class="merch-purchase-row">
+              <label>Format</label>
+              <select data-merch-size>
+                <option value="Standard">Standard</option>
+              </select>
+            </div>
+            <div class="merch-purchase-row">
+              <label>Quantity</label>
+              <div class="merch-qty-control">
+                <button type="button" data-merch-qty-minus aria-label="Decrease quantity">-</button>
+                <input data-merch-qty type="number" min="1" value="1" inputmode="numeric" />
+                <button type="button" data-merch-qty-plus aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+            <button class="button primary merch-add-button" type="button" data-merch-add>Add To Cart</button>
+            <p class="merch-add-feedback" data-merch-feedback aria-live="polite"></p>
+          </div>
+        </div>`;
+      hotGirlArticle?.after(summerStackCard);
+    }
+
+    const hatArticle = merchSection.querySelector('[data-merch-slug="jonezie-labs-signature-hat"]')?.closest('.merch-product');
+    setEyebrow(hatArticle, 'Hat');
+    removeDescription(hatArticle);
+
+    const shirtArticle = merchSection.querySelector('[data-merch-slug="hot-girl-summer-shirt"]')?.closest('.merch-product');
+    setEyebrow(shirtArticle, 'Shirt');
+    removeDescription(shirtArticle);
+  }
+
+  syncMerchCards();
 })();
