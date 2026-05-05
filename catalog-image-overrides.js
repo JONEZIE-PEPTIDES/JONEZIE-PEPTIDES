@@ -17,7 +17,7 @@
   ];
 
   const IMAGE_OVERRIDES_BY_SLUG = {
-    somatropin: 'somatropin-official.png',
+    somatropin: 'somatropin-new-hero-product-image.webp',
     'mt-2': 'mt-2-new-hero-product-image.webp',
     'pt-141': 'pt-141-new-hero-product-image.webp',
     'oxytocin-acetate': 'oxytocin-acetate-new-hero-product-image.webp',
@@ -26,7 +26,7 @@
     'bpc-5mg-plus-tb-5mg': 'wolverine-official.png',
     'bpc-10mg-plus-tb-10mg': 'wolverine-official.png',
     semax: 'semax-new-new-hero-product-image.webp',
-    'ss-31': 'ss-31-official.png',
+    'ss-31': 'ss-31-new-hero-product-image.webp',
     'cjc-1295-without-dac': 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/CJC_1295_10MG_3ML_Vial.webp?v=20260501h',
     hcg: 'hcg-new-hero-product-image.webp',
     aod: 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/AOD_5MG_3ML_Vial_Jonezie_Labs_.webp?v=20260501a',
@@ -45,7 +45,7 @@
     hmg: 'hmg-new-hero-product-image.webp',
     cerebrolysin: 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/CEREBROLYSIN_60MG_3ML_Vial.webp?v=20260501h',
     'ara-290': 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/ARA-290_10MG_3ML_Vial.webp?v=20260501a',
-    'snap-8': 'snap-8-official.png',
+    'snap-8': 'snap-8-new-hero-product-image.webp',
     pnc27: 'pnc27-new-hero-product-image.webp',
     tb500: 'tb500-new-new-hero-product-image.webp',
     'ghrp-6-acetate': 'ghrp-6-new-hero-product-image.webp',
@@ -55,14 +55,14 @@
     'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg': 'klow-new-hero-product-image.webp',
     'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'glow-new-new-hero-product-image.webp',
     nad: 'nad-new-new-hero-product-image.webp',
-    survodutide: 'survodutide-official.png',
+    survodutide: 'survodutide-new-hero-product-image.webp',
     semaglutide: 'semaglutide-new-hero-product-image.webp',
     'tirzepatide': 'tirzepatide-15mg-official.png',
     retatrutide: 'reta-new-new-hero-product-image.webp',
     'mt-1': 'mt-1-new-new-hero-product-image.webp',
     mt1: 'mt-1-new-new-hero-product-image.webp',
     'melanotan-1': 'mt-1-new-new-hero-product-image.webp',
-    'slu-pp-322': 'slu-pp-322-official.png',
+    'slu-pp-322': 'slu-pp-322-new-hero-product-image.webp',
     'lemon-bottle': 'lemon-bottle-new-hero-product-image.webp',
     'igf-1lr3': 'igf-1lr3-new-hero-product-image.webp',
     ipamorelin: 'ipamorelin-new-hero-product-image.webp',
@@ -70,6 +70,7 @@
     selank: 'selank-new-new-hero-product-image.webp',
     vip: 'vip-official.png',
     mazdutide: 'mazdutide-new-hero-product-image.webp',
+    thymalin: 'thymalin-new-hero-product-image.webp',
     'thymosin-alpha-1': 'thymosin-alpha-1-official.png',
     lc216: 'lc216-new-hero-product-image.webp'
   };
