@@ -23,8 +23,8 @@
     'oxytocin-acetate': 'oxytocin-acetate-new-hero-product-image.webp',
     epithalon: 'epithalon-new-hero-product-image.webp',
     'bpc-157': 'bpc-157-new-new-hero-product-image.webp',
-    'bpc-5mg-plus-tb-5mg': 'wolverine-official.png',
-    'bpc-10mg-plus-tb-10mg': 'wolverine-official.png',
+    'bpc-5mg-plus-tb-5mg': 'wolverine-new-hero-product-image.webp',
+    'bpc-10mg-plus-tb-10mg': 'wolverine-new-hero-product-image.webp',
     semax: 'semax-new-new-hero-product-image.webp',
     'ss-31': 'ss-31-new-hero-product-image.webp',
     'cjc-1295-without-dac': 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/CJC_1295_10MG_3ML_Vial.webp?v=20260501h',
@@ -57,7 +57,7 @@
     nad: 'nad-new-new-hero-product-image.webp',
     survodutide: 'survodutide-new-hero-product-image.webp',
     semaglutide: 'semaglutide-new-hero-product-image.webp',
-    'tirzepatide': 'tirzepatide-15mg-official.png',
+    'tirzepatide': 'tirzepatide-new-hero-product-image.webp',
     retatrutide: 'reta-new-new-hero-product-image.webp',
     'mt-1': 'mt-1-new-new-hero-product-image.webp',
     mt1: 'mt-1-new-new-hero-product-image.webp',
@@ -68,10 +68,10 @@
     ipamorelin: 'ipamorelin-new-hero-product-image.webp',
     pinealon: 'pinealon-new-hero-product-image.webp',
     selank: 'selank-new-new-hero-product-image.webp',
-    vip: 'vip-official.png',
+    vip: 'vip-new-hero-product-image.webp',
     mazdutide: 'mazdutide-new-hero-product-image.webp',
     thymalin: 'thymalin-new-hero-product-image.webp',
-    'thymosin-alpha-1': 'thymosin-alpha-1-official.png',
+    'thymosin-alpha-1': 'thymosin-alpha-1-new-hero-product-image.webp',
     lc216: 'lc216-new-hero-product-image.webp'
   };
 
