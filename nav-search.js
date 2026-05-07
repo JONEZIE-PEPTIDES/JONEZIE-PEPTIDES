@@ -24,28 +24,47 @@
     }
 
     input.addEventListener('input', () => input.setCustomValidity(''));
+    input.addEventListener('change', () => {
+      navigateToProduct(input);
+    });
+    input.addEventListener('search', () => {
+      navigateToProduct(input, { reportMissing: true });
+    });
+    input.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      navigateToProduct(input, { reportMissing: true });
+    });
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      const query = input.value.trim().toLowerCase();
-      if (!query || !products.length) return;
-
-      const exactMatch = products.find((product) => {
-        return product.name.toLowerCase() === query || product.slug.toLowerCase() === query;
-      });
-      const partialMatch = products.find((product) => {
-        return product.name.toLowerCase().includes(query) || product.slug.toLowerCase().includes(query);
-      });
-      const match = exactMatch || partialMatch;
-
-      if (match) {
-        window.location.href = `product.html?slug=${encodeURIComponent(match.slug)}`;
-        return;
-      }
-
-      input.setCustomValidity('No matching product found.');
-      input.reportValidity();
+      navigateToProduct(input, { reportMissing: true });
     });
   });
+
+  function navigateToProduct(input, { reportMissing = false } = {}) {
+    const query = input.value.trim().toLowerCase();
+    if (!query || !products.length) return false;
+
+    const exactMatch = products.find((product) => {
+      return product.name.toLowerCase() === query || product.slug.toLowerCase() === query;
+    });
+    const partialMatch = products.find((product) => {
+      return product.name.toLowerCase().includes(query) || product.slug.toLowerCase().includes(query);
+    });
+    const match = exactMatch || partialMatch;
+
+    if (match) {
+      window.location.href = `product.html?slug=${encodeURIComponent(match.slug)}`;
+      return true;
+    }
+
+    if (reportMissing) {
+      input.setCustomValidity('No matching product found.');
+      input.reportValidity();
+    }
+
+    return false;
+  }
 
   function escapeHtml(value) {
     return String(value)
