@@ -334,7 +334,7 @@
 
   function updateMeta() {
     const canonicalUrl = `${library.getSiteOrigin()}/research-tools.html`;
-    const metaDescription = 'Research tools for concentration reference, storage notes, mixing guidance, and compound comparison at Jonezie Labs.';
+    const metaDescription = 'Practical Jonezie Labs research tools for concentration reference, storage notes, mixing guidance, quick comparison prep, and RUO-safe product review.';
     document.title = 'Research Tools | Jonezie Labs';
     upsertMeta('meta[name="description"]', { name: 'description', content: metaDescription });
     upsertMeta('meta[property="og:title"]', { property: 'og:title', content: document.title });

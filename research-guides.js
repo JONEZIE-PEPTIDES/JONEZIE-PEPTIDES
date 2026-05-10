@@ -218,8 +218,8 @@
 
   function updateMeta() {
     const canonicalUrl = `${library.getSiteOrigin()}/research-guides.html`;
-    const metaDescription = 'Research guides for product lanes, handling context, direct comparisons, and RUO reference notes at Jonezie Labs.';
-    document.title = 'Research Guides | Jonezie Labs';
+    const metaDescription = 'Crawlable Jonezie Labs research guides covering reconstitution, storage and handling, COA basics, product labels, comparison flow, cold chain, and lyophilized vial reference notes.';
+    document.title = 'Research Guides & Handling References | Jonezie Labs';
     upsertMeta('meta[name="description"]', { name: 'description', content: metaDescription });
     upsertMeta('meta[property="og:title"]', { property: 'og:title', content: document.title });
     upsertMeta('meta[property="og:description"]', { property: 'og:description', content: metaDescription });

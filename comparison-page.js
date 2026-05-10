@@ -601,8 +601,8 @@
 
   function updateMeta(leftProduct, rightProduct) {
     const metaDescription = !leftProduct || !rightProduct
-      ? 'Compare Jonezie Labs compounds by class, form, research context, storage, and handling notes inside cleaner side-by-side reads.'
-      : `Compare ${leftProduct.name} vs ${rightProduct.name} on Jonezie Labs by compound class, form, research context, storage, and handling notes.`;
+      ? 'Crawlable Jonezie Labs research comparisons with quick-take summaries, compound class notes, storage references, handling context, related products, and guide links.'
+      : `Compare ${leftProduct.name} vs ${rightProduct.name} on Jonezie Labs by compound class, form, research context, storage, handling notes, and related product links.`;
     const canonicalUrl = !leftProduct || !rightProduct
       ? `${SITE_ORIGIN}/comparison.html`
       : `${SITE_ORIGIN}/${library.getComparisonUrl(leftProduct.slug, rightProduct.slug)}`;
