@@ -119,15 +119,17 @@ function renderFeatured() {
   if (!grid || !catalogData) return;
 
   const featured = (catalogData.featured || []).filter(Boolean);
-  grid.innerHTML = featured.map((product) => {
+  grid.innerHTML = featured.map((product, index) => {
     const productContent = getProductContent(product);
     const description = productContent?.shortDescription || product.description;
     const strengthChips = renderStrengthChips(product.options);
     const imageSrc = getImageSrc(product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
+    const loadingMode = index < 3 ? 'eager' : 'lazy';
+    const fetchPriority = index < 3 ? 'high' : 'low';
     return `
       <a class="product-card card-link-shell ${getAccent(product.category)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
-        <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
+        <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" loading="${loadingMode}" decoding="async" fetchpriority="${fetchPriority}" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         <div class="product-copy">
           <div class="product-top">
             <div class="product-badge">${escapeHtml(product.category)}</div>
@@ -155,7 +157,7 @@ function renderCatalog() {
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
       <a class="catalog-card card-link-shell" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
-        <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
+        <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         <div class="catalog-copy">
           <div class="catalog-top">
             <span class="catalog-tag">${escapeHtml(product.category)}</span>

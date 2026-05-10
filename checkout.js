@@ -14,8 +14,18 @@ const shippingMethodInput = document.querySelector('[data-shipping-method]');
 const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const PROMO_CODES = {
-  PEPPERS: 0.10,
-  MILKO: 0.60
+  PEPPERS: {
+    rate: 0.10,
+    freeShipping: false
+  },
+  LOCAL15: {
+    rate: 0.15,
+    freeShipping: true
+  },
+  MILKO: {
+    rate: 0.60,
+    freeShipping: false
+  }
 };
 const SHIPPING_OPTIONS = [
   {
@@ -134,11 +144,12 @@ function getInventoryLabel(status) {
 
 function getPromoDetails() {
   const rawCode = String(promoCodeInput?.value || '').trim().toUpperCase();
-  const rate = PROMO_CODES[rawCode] || 0;
+  const promo = PROMO_CODES[rawCode] || null;
   return {
     code: rawCode,
-    rate,
-    isValid: rate > 0
+    rate: promo?.rate || 0,
+    freeShipping: Boolean(promo?.freeShipping),
+    isValid: Boolean(promo)
   };
 }
 
@@ -164,14 +175,19 @@ function getSelectedShipping(cart) {
   return defaultOption;
 }
 
-function renderShippingOptions(cart) {
+function getEffectiveShippingCost(shippingOption, promo) {
+  if (!shippingOption) return 0;
+  return promo?.freeShipping ? 0 : (shippingOption.price || 0);
+}
+
+function renderShippingOptions(cart, promo = null) {
   if (!shippingMethodInput) return null;
   const availableOptions = getAvailableShippingOptions(cart);
   const previousValue = shippingMethodInput.value;
 
   shippingMethodInput.innerHTML = availableOptions.map((option) => `
     <option value="${option.id}">
-      ${option.label} - ${option.window} - ${formatMoney(option.price)}
+      ${option.label} - ${option.window} - ${promo?.freeShipping ? 'FREE' : formatMoney(option.price)}
     </option>`).join('');
 
   if (!availableOptions.length) {
@@ -186,7 +202,9 @@ function renderShippingOptions(cart) {
   }
   const selected = getSelectedShipping(cart);
   if (shippingHelp && selected) {
-    shippingHelp.textContent = `${selected.note}. ${selected.window} delivery window.`;
+    shippingHelp.textContent = promo?.freeShipping
+      ? `Free shipping applied with ${promo.code}. ${selected.window} delivery window.`
+      : `${selected.note}. ${selected.window} delivery window.`;
   }
   return selected;
 }
@@ -207,21 +225,21 @@ function renderCart() {
     if (summaryDiscount) summaryDiscount.textContent = '$0.00';
     if (summaryShipping) summaryShipping.textContent = '$0.00';
     if (summaryTotal) summaryTotal.textContent = '$0.00';
-    renderShippingOptions(cart);
+    renderShippingOptions(cart, getPromoDetails());
     return;
   }
 
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
   const promo = getPromoDetails();
-  const shippingOption = renderShippingOptions(cart);
-  const shippingCost = shippingOption?.price || 0;
+  const shippingOption = renderShippingOptions(cart, promo);
+  const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
   const total = subtotal - discountAmount + shippingCost;
   if (summaryItems) summaryItems.textContent = String(itemCount);
   if (summarySubtotal) summarySubtotal.textContent = formatMoney(subtotal);
   if (summaryDiscount) summaryDiscount.textContent = promo.isValid ? `- ${formatMoney(discountAmount)}` : '$0.00';
-  if (summaryShipping) summaryShipping.textContent = formatMoney(shippingCost);
+  if (summaryShipping) summaryShipping.textContent = promo.freeShipping && shippingOption ? 'FREE' : formatMoney(shippingCost);
   if (summaryTotal) summaryTotal.textContent = formatMoney(total);
 
   cartRoot.innerHTML = cart.map((item, index) => `
@@ -265,7 +283,7 @@ form?.addEventListener('submit', (event) => {
   const promo = getPromoDetails();
   const notes = formData.get('customerNotes') || '';
   const shippingOption = getSelectedShipping(cart);
-  const shippingCost = shippingOption?.price || 0;
+  const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
   const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
   const total = subtotal - discountAmount + shippingCost;
@@ -279,7 +297,7 @@ form?.addEventListener('submit', (event) => {
     `Email: ${email}`,
     `Phone: ${phone}`,
     `Shipping Address: ${shippingAddress || 'Not provided'}`,
-    `Shipping Method: ${shippingOption ? `${shippingOption.label} | ${shippingOption.window} | ${formatMoney(shippingCost)}` : 'Not selected'}`,
+    `Shipping Method: ${shippingOption ? `${shippingOption.label} | ${shippingOption.window} | ${promo.freeShipping ? 'FREE' : formatMoney(shippingCost)}` : 'Not selected'}`,
     `Preferred Payment Service: ${preferredPaymentService || 'Not provided'}`,
     `Payment Service Handle: ${paymentHandle || 'Not provided'}`,
     `Promo code: ${promo.isValid ? promo.code : 'None'}`,
@@ -294,7 +312,7 @@ form?.addEventListener('submit', (event) => {
   lines.push('');
   lines.push(`Subtotal: ${formatMoney(subtotal)}`);
   lines.push(`Discount: ${promo.isValid ? `- ${formatMoney(discountAmount)} (${promo.code})` : '$0.00'}`);
-  lines.push(`Shipping: ${shippingOption ? `${formatMoney(shippingCost)} (${shippingOption.label})` : '$0.00'}`);
+  lines.push(`Shipping: ${shippingOption ? `${promo.freeShipping ? 'FREE' : formatMoney(shippingCost)} (${shippingOption.label})` : '$0.00'}`);
   lines.push(`Estimated total: ${formatMoney(total)}`);
   lines.push('');
   lines.push('Included with order: Free vial cap cover + Free Hot Girl Summer sticker');
