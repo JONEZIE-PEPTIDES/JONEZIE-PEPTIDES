@@ -5,18 +5,26 @@
   const pathname = window.location.pathname || '';
   const isCheckout = pathname.endsWith('/checkout.html') || pathname.endsWith('checkout.html');
   if (isCheckout) return;
+  const searchParams = new URLSearchParams(window.location.search);
+  const forcePreview = searchParams.get('showLeadCapture') === '1';
 
   const STORAGE_KEY = 'jonezie_lead_capture_state';
-  const MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7;
+  const DAILY_EXPOSURE_MS = 1000 * 60 * 60 * 24;
   const existingState = getState();
-  const hasRecentDismissal = existingState.dismissedAt && (Date.now() - existingState.dismissedAt) < MAX_AGE_MS;
+  const lastExposureAt = existingState.lastShownAt || existingState.dismissedAt || 0;
+  const hasRecentExposure = lastExposureAt && (Date.now() - lastExposureAt) < DAILY_EXPOSURE_MS;
   const hasSignup = Boolean(existingState.email);
 
   bindInlineForms();
-  if (hasSignup || hasRecentDismissal) return;
+  if (!forcePreview && (hasSignup || hasRecentExposure)) return;
 
   const modal = injectModal();
   if (!modal) return;
+  if (forcePreview) {
+    modal.hidden = false;
+    modal.dataset.trigger = 'Preview override';
+    document.body.classList.add('lead-capture-open');
+  }
   bindTriggers(modal);
 
   function bindInlineForms() {
@@ -63,42 +71,28 @@
     wrapper.hidden = true;
     wrapper.innerHTML = `
       <div class="lead-capture-backdrop" data-lead-close></div>
-      <div class="lead-capture-dialog" role="dialog" aria-modal="true" aria-label="Jonezie Labs research updates">
+      <div class="lead-capture-dialog" role="dialog" aria-modal="true" aria-label="Jonezie Labs insider access">
         <button class="lead-capture-close" type="button" data-lead-close aria-label="Close sign-up prompt">&times;</button>
-        <p class="eyebrow">Stay Connected</p>
-        <h2>Get the RUO quick reference and future Jonezie updates.</h2>
-        <p>We will keep this simple: one signup path, one fast download, and direct internal links back into the catalog, guides, and tools.</p>
+        <div class="lead-capture-brand">
+          <img class="lead-capture-logo" src="jonezie-logo-white-text-transparent.webp" alt="Jonezie Labs" />
+        </div>
+        <p class="eyebrow">Jonezie Labs</p>
+        <h2>Stay Connected</h2>
+        <p>New drops. Clean references. Major sales.</p>
         <form class="lead-capture-form" data-lead-modal-form>
           <label>
-            <span>Email</span>
-            <input type="email" name="email" placeholder="Email" required />
+            <span class="sr-only">Email</span>
+            <input type="email" name="email" placeholder="Email" aria-label="Email" required />
           </label>
-          <label>
-            <span>Research focus</span>
-            <select name="interest">
-              <option value="Metabolic">Metabolic</option>
-              <option value="Recovery">Recovery</option>
-              <option value="Aesthetics">Aesthetics</option>
-              <option value="Growth">Growth</option>
-              <option value="Cognitive">Cognitive</option>
-              <option value="Cellular">Cellular</option>
-              <option value="Support">Support / specialty</option>
-            </select>
-          </label>
-          <button class="button primary lead-capture-submit" type="submit">Get Quick Reference</button>
+          <button class="button primary lead-capture-submit" type="submit">Get Access</button>
           <p class="lead-capture-feedback" data-lead-feedback aria-live="polite"></p>
-          <div class="resource-links-inline lead-capture-downloads" data-lead-downloads hidden>
-            <a class="button secondary comparison-inline-link" href="${library.RESOURCE_DOWNLOAD.pageHref}">Open Quick Reference</a>
-            <a class="button secondary comparison-inline-link" href="${library.RESOURCE_DOWNLOAD.fileHref}" download>Download Text Version</a>
-          </div>
+          <p class="lead-capture-note">No spam. Research reference only.</p>
         </form>
       </div>`;
     document.body.appendChild(wrapper);
-    library.enhanceCustomSelects(wrapper);
 
     const form = wrapper.querySelector('[data-lead-modal-form]');
     const feedback = wrapper.querySelector('[data-lead-feedback]');
-    const downloads = wrapper.querySelector('[data-lead-downloads]');
     form?.addEventListener('submit', (event) => {
       event.preventDefault();
       const formData = new FormData(form);
@@ -110,17 +104,14 @@
 
       const state = {
         email,
-        interest: String(formData.get('interest') || '').trim(),
         source: 'Lead capture modal',
         trigger: wrapper.dataset.trigger || 'Manual',
         subscribedAt: Date.now()
       };
       persistState(state);
-      feedback.textContent = 'Signup captured. Open the resource below and check your email draft to keep the handoff organized.';
-      if (downloads) downloads.hidden = false;
+      feedback.textContent = 'You are in. Your access email is ready.';
       window.location.href = library.getLeadMagnetMailto({
         email: state.email,
-        interest: state.interest,
         source: state.source,
         trigger: state.trigger,
         page: window.location.href
@@ -147,6 +138,8 @@
       modal.hidden = false;
       modal.dataset.trigger = trigger;
       document.body.classList.add('lead-capture-open');
+      const state = getState();
+      persistState({ ...state, lastShownAt: Date.now() });
     };
 
     const onScroll = () => {
