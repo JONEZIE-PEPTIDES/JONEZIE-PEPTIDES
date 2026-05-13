@@ -11,13 +11,12 @@
   library.initShellMenus();
 
   const allProducts = library.getCatalogProducts(catalog);
-  const comparisonProducts = allProducts.filter((product) => library.isComparisonEligible(product));
   const productMap = library.getProductMap(catalog);
   const params = new URLSearchParams(window.location.search);
   const initialLeft = productMap.get(params.get('left') || '');
   const initialRight = productMap.get(params.get('right') || '');
   const hasRequestedPair = Boolean(params.get('left') && params.get('right'));
-  const hasValidPair = initialLeft && initialRight && library.areProductsComparable(initialLeft, initialRight);
+  const hasValidPair = Boolean(initialLeft && initialRight && initialLeft.slug !== initialRight.slug);
 
   const titleNode = document.querySelector('[data-comparison-title]');
   const descriptionNode = document.querySelector('[data-comparison-description]');
@@ -43,24 +42,24 @@
     if (summaryNode) {
       summaryNode.innerHTML = `
         <div class="section-heading compact">
-          <p class="eyebrow">${hasRequestedPair ? 'Choose A Better Match' : 'Start A Comparison'}</p>
-          <h2>${hasRequestedPair ? 'Choose two compounds from the same research lane.' : 'Start with two compounds that belong in the same lane.'}</h2>
+          <p class="eyebrow">${hasRequestedPair ? 'Choose Two Products' : 'Start A Comparison'}</p>
+          <h2>${hasRequestedPair ? 'Choose two different products to compare side by side.' : 'Start with any two products you want to review side by side.'}</h2>
           <p>${hasRequestedPair
-            ? 'The strongest side-by-side reads happen when class, product form, and handling context already overlap.'
-            : 'Open a cleaner comparison by starting with compounds that share a closer research lane, structure profile, or product context.'}</p>
+            ? 'Use the selector to compare any two products directly. The example reads below stay tighter by lane so they remain cleaner to browse.'
+            : 'The selector is open to the full product lineup. The example reads below stay tighter by lane so the browse experience stays cleaner.'}</p>
         </div>
         <div class="comparison-overview-grid">
           <article class="comparison-overview-card">
-            <strong>Class and structure</strong>
-            <p>Start with compounds that live in the same lane so class notes and structure differences stay meaningful.</p>
+            <strong>Direct side-by-side</strong>
+            <p>Compare class notes, listed form, current strengths, and related context in one place without jumping across the catalog.</p>
           </article>
           <article class="comparison-overview-card">
             <strong>Product context</strong>
-            <p>Compare current strengths, form, and related compounds once the broader research lane is already aligned.</p>
+            <p>Use the selector when you want a broad side-by-side read, even if the two products do not live in the exact same lane.</p>
           </article>
           <article class="comparison-overview-card">
-            <strong>Storage and handling</strong>
-            <p>Keep cold-chain and preparation notes close, especially when two compounds could both fit the same reference set.</p>
+            <strong>Cleaner examples</strong>
+            <p>The featured comparison cards below stay tighter by lane so the browse examples remain more useful and less random.</p>
           </article>
         </div>`;
     }
@@ -70,8 +69,8 @@
         <article class="comparison-table-card">
           <div class="section-heading compact">
             <p class="eyebrow">How To Use This Page</p>
-            <h2>Choose the lane first, then compare the product details.</h2>
-            <p>Once the research lane is clear, move into class notes, listed strengths, storage, handling, and nearby compounds.</p>
+            <h2>Search two products, then open the side-by-side.</h2>
+            <p>Use the typed selector for any direct product-versus-product read. The featured examples below stay more tightly grouped by lane.</p>
           </div>
         </article>`;
     }
@@ -81,8 +80,8 @@
         <div class="resource-strip">
           <article class="resource-strip-card">
             <p class="eyebrow">Research Guides</p>
-            <h2>Start with the right guide.</h2>
-            <p>Use the guide library to narrow the lane before opening a direct product-versus-product read.</p>
+            <h2>Want more product context first?</h2>
+            <p>Use the guide library for lane-level context, then come back here for the direct product-versus-product read.</p>
             <a class="button secondary" href="research-guides.html">View Research Guides</a>
           </article>
           <article class="resource-strip-card">
@@ -113,7 +112,7 @@
             ${renderFaqDetails([
               {
                 question: 'What belongs in a direct comparison?',
-                answer: 'The cleanest comparisons start with compounds that already share a research lane, product class, or a close product context.'
+                answer: 'Use the selector for any product-versus-product read you want to review. The example cards below stay tighter by lane so the browsing flow remains cleaner.'
               },
               {
                 question: 'What should I review first on a comparison page?',
@@ -144,7 +143,11 @@
       .filter((pair) => {
         const slugs = [pair.left?.slug, pair.right?.slug];
         if (slugs.includes(leftProduct.slug) || slugs.includes(rightProduct.slug)) return false;
-        return library.areProductsComparable(leftProduct, pair.left) || library.areProductsComparable(rightProduct, pair.right);
+        const leftMatch = library.isComparisonEligible(leftProduct)
+          && (library.areProductsComparable(leftProduct, pair.left) || library.areProductsComparable(leftProduct, pair.right));
+        const rightMatch = library.isComparisonEligible(rightProduct)
+          && (library.areProductsComparable(rightProduct, pair.left) || library.areProductsComparable(rightProduct, pair.right));
+        return leftMatch || rightMatch;
       })
       .slice(0, 6);
     const combinedTools = uniqueTools([...leftProfile.relatedTools, ...rightProfile.relatedTools]).slice(0, 4);
@@ -288,100 +291,56 @@
   function renderSelector(selectedLeft, selectedRight) {
     if (!selectorNode) return;
 
-    const optionsMarkup = buildOptionsMarkup(comparisonProducts);
+    const optionsMarkup = buildDatalistOptions(allProducts);
 
     selectorNode.innerHTML = `
       <p class="eyebrow">Choose Compounds</p>
-      <h2>Select two compounds from the same research lane.</h2>
+      <h2>Type any two products and compare them side by side.</h2>
       <form class="comparison-select-form" data-comparison-select-form>
         <label>
-          <span>First compound</span>
-          <select name="leftSlug" required>
-            <option value="">Select a compound</option>
+          <span>First product</span>
+          <input type="search" name="leftProduct" list="comparison-product-list-left" placeholder="Search the catalog" autocomplete="off" required />
+          <datalist id="comparison-product-list-left">
             ${optionsMarkup}
-          </select>
+          </datalist>
         </label>
         <label>
-          <span>Second compound</span>
-          <select name="rightSlug" required>
-            <option value="">Select a compound</option>
+          <span>Second product</span>
+          <input type="search" name="rightProduct" list="comparison-product-list-right" placeholder="Search the catalog" autocomplete="off" required />
+          <datalist id="comparison-product-list-right">
             ${optionsMarkup}
-          </select>
+          </datalist>
         </label>
         <button class="button primary comparison-select-submit" type="submit">Compare Compounds</button>
       </form>
       <div class="comparison-selector-note">
-        <strong>Keep the read tight</strong>
-        <p>Start with one compound and the second list narrows to the closest lane match.</p>
-        <small data-comparison-selector-feedback>Choose two compounds that share a closer research lane, class, or product context.</small>
+        <strong>Full catalog selector</strong>
+        <p>Type any two products to open a direct side-by-side. The featured comparison examples below still stay tighter by lane.</p>
+        <small data-comparison-selector-feedback>Start typing the product names, then choose from the list.</small>
       </div>`;
 
     const form = selectorNode.querySelector('[data-comparison-select-form]');
-    const leftSelect = form?.querySelector('select[name="leftSlug"]');
-    const rightSelect = form?.querySelector('select[name="rightSlug"]');
+    const leftInput = form?.querySelector('input[name="leftProduct"]');
+    const rightInput = form?.querySelector('input[name="rightProduct"]');
     const feedbackNode = selectorNode.querySelector('[data-comparison-selector-feedback]');
 
-    if (leftSelect && selectedLeft && library.isComparisonEligible(selectedLeft)) leftSelect.value = selectedLeft.slug;
-    if (rightSelect && selectedRight && library.isComparisonEligible(selectedRight)) rightSelect.value = selectedRight.slug;
-
-    syncSelectorOptions();
-    library.enhanceCustomSelects(selectorNode);
-
-    leftSelect?.addEventListener('change', () => syncSelectorOptions('left'));
-    rightSelect?.addEventListener('change', () => syncSelectorOptions('right'));
+    if (leftInput && selectedLeft) leftInput.value = selectedLeft.name;
+    if (rightInput && selectedRight) rightInput.value = selectedRight.name;
 
     form?.addEventListener('submit', (event) => {
       event.preventDefault();
-      const leftSlug = leftSelect?.value;
-      const rightSlug = rightSelect?.value;
-      if (!leftSlug || !rightSlug || leftSlug === rightSlug) {
-        if (feedbackNode) feedbackNode.textContent = 'Select two different compounds from the same research lane.';
+      const leftProduct = resolveProductSelection(leftInput?.value || '');
+      const rightProduct = resolveProductSelection(rightInput?.value || '');
+      if (!leftProduct || !rightProduct) {
+        if (feedbackNode) feedbackNode.textContent = 'Choose both products from the list before opening the comparison.';
         return;
       }
-      window.location.href = library.getComparisonUrl(leftSlug, rightSlug);
+      if (leftProduct.slug === rightProduct.slug) {
+        if (feedbackNode) feedbackNode.textContent = 'Choose two different products to compare side by side.';
+        return;
+      }
+      window.location.href = library.getComparisonUrl(leftProduct.slug, rightProduct.slug);
     });
-
-    function syncSelectorOptions(changedSide = '') {
-      const currentLeft = productMap.get(leftSelect?.value || '');
-      const currentRight = productMap.get(rightSelect?.value || '');
-
-      const leftPool = comparisonProducts.filter((product) => {
-        if (currentRight && !library.areProductsComparable(product, currentRight)) return false;
-        if (currentRight?.slug && product.slug === currentRight.slug) return false;
-        return true;
-      });
-
-      const rightPool = comparisonProducts.filter((product) => {
-        if (currentLeft && !library.areProductsComparable(currentLeft, product)) return false;
-        if (currentLeft?.slug && product.slug === currentLeft.slug) return false;
-        return true;
-      });
-
-      const nextLeftValue = leftPool.some((product) => product.slug === leftSelect?.value) ? leftSelect?.value || '' : '';
-      const nextRightValue = rightPool.some((product) => product.slug === rightSelect?.value) ? rightSelect?.value || '' : '';
-
-      if (leftSelect) {
-        leftSelect.innerHTML = `<option value="">Select a compound</option>${buildOptionsMarkup(leftPool)}`;
-        leftSelect.value = nextLeftValue;
-      }
-
-      if (rightSelect) {
-        rightSelect.innerHTML = `<option value="">Select a compound</option>${buildOptionsMarkup(rightPool)}`;
-        rightSelect.value = nextRightValue;
-      }
-
-      library.enhanceCustomSelects(form);
-
-      if (!feedbackNode) return;
-      const anchorProduct = currentLeft || currentRight;
-      if (!anchorProduct) {
-        feedbackNode.textContent = 'Choose two compounds that share a closer research lane, class, or product context.';
-        return;
-      }
-
-      const availableCount = changedSide === 'right' ? leftPool.length : rightPool.length;
-      feedbackNode.textContent = `Showing ${library.getComparisonThemeLabel(anchorProduct).toLowerCase()} only. ${availableCount} closely matched option${availableCount === 1 ? '' : 's'} available from here.`;
-    }
   }
 
   function renderHub(selectedLeft, selectedRight) {
@@ -393,8 +352,8 @@
     hubNode.innerHTML = `
       <div class="section-heading compact">
         <p class="eyebrow">Comparison Library</p>
-        <h2>${selectedLeft && selectedRight ? 'More side-by-side reads in the same lane' : 'Browse comparisons with a real overlap'}</h2>
-        <p>Each comparison is narrowed to compounds that already share a stronger lane match, product context, or structure relationship.</p>
+        <h2>${selectedLeft && selectedRight ? 'More example comparisons with a tighter overlap' : 'Browse example comparisons with a tighter overlap'}</h2>
+        <p>The selector above can compare any two products. The cards here stay more tightly grouped by lane, structure, and product context so the examples remain useful to browse.</p>
       </div>
       <div class="resource-grid">${pairCards}</div>`;
   }
@@ -539,20 +498,36 @@
     return content?.products?.[product.slug] || null;
   }
 
-  function buildOptionsMarkup(products) {
+  function buildDatalistOptions(products) {
     return products
       .slice()
       .sort((left, right) => left.name.localeCompare(right.name))
-      .map((product) => `<option value="${escapeHtml(product.slug)}">${escapeHtml(product.name)}</option>`)
+      .map((product) => `<option value="${escapeHtml(product.name)}" label="${escapeHtml(product.category)}"></option>`)
       .join('');
   }
 
   function getComparisonHeadline(leftProduct, rightProduct) {
-    return `${leftProduct.name} and ${rightProduct.name}, read side by side inside the same research lane.`;
+    return `${leftProduct.name} and ${rightProduct.name}, read side by side in one direct reference.`;
   }
 
   function getComparisonSummary(leftProduct, rightProduct) {
+    if (leftProduct.category !== rightProduct.category) {
+      return `A direct catalog comparison across ${leftProduct.category.toLowerCase()} and ${rightProduct.category.toLowerCase()} products, with class, form, storage, and handling details kept in one cleaner read.`;
+    }
     return `${library.getComparisonThemeLabel(leftProduct)} with product class, form, storage, and handling details kept in one cleaner read.`;
+  }
+
+  function resolveProductSelection(value) {
+    const normalized = normalizeSelectionKey(value);
+    if (!normalized) return null;
+    return allProducts.find((product) => (
+      normalizeSelectionKey(product.name) === normalized
+      || normalizeSelectionKey(product.slug) === normalized
+    )) || null;
+  }
+
+  function normalizeSelectionKey(value) {
+    return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
   }
 
   function buildClassDistinction(leftProfile, rightProfile) {
