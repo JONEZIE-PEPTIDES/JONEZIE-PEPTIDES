@@ -100,6 +100,7 @@
   ];
 
   const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide'];
+  const PRODUCT_PRICE_MULTIPLIER = 1.17;
 
   const NAME_OVERRIDES = {
     bpc157: 'BPC-157',
@@ -210,7 +211,14 @@
 
   function formatMoney(value) {
     const number = Number(value || 0);
-    return `$${number.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const fixed = number.toFixed(2);
+    const [whole, decimal] = fixed.split('.');
+    const withCommas = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return `$${withCommas}.${decimal}`;
+  }
+
+  function applyProductPriceMultiplier(value) {
+    return Number(value || 0) * PRODUCT_PRICE_MULTIPLIER;
   }
 
   function slugify(value) {
@@ -308,9 +316,9 @@
       code: optionCode,
       specification,
       mgOption: displayStrength,
-      singleVialPrice: formatMoney(single),
-      eightVialPrice: formatMoney(eightPack),
-      tenVialPrice: formatMoney(tenPack)
+      singleVialPrice: formatMoney(applyProductPriceMultiplier(single)),
+      eightVialPrice: formatMoney(applyProductPriceMultiplier(eightPack)),
+      tenVialPrice: formatMoney(applyProductPriceMultiplier(tenPack))
     });
   });
 
