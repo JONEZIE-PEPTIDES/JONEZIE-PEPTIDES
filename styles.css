@@ -3028,11 +3028,17 @@ body.lead-capture-open {
   padding: 18px;
   overflow-y: auto;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 220ms ease;
+}
+
+.checkout-update-modal[hidden] {
+  display: none !important;
 }
 
 .checkout-update-modal.is-visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .checkout-update-backdrop {
