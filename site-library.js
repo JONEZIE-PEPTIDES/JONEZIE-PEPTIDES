@@ -6,6 +6,9 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     title: 'RUO Quick Reference',
     description: 'A fast reference covering cold-chain storage, concentration math, and mixing reminders for RUO compounds.'
   };
+  const LEAD_CAPTURE = {
+    endpoint: String(window.JONEZIE_LEAD_CAPTURE_CONFIG?.endpoint || '').trim()
+  };
   const RUO_COPY = {
     short: 'For laboratory research reference only. Not for human or veterinary use.',
     full: 'All product information is provided for research, laboratory, or analytical reference only. Products are not for human or veterinary use.'
@@ -486,7 +489,21 @@ window.JONEZIE_SITE_LIBRARY = (() => {
   }
 
   function getProductUrl(slug) {
-    return `product.html?slug=${encodeURIComponent(slug)}`;
+    return `products/${encodeURIComponent(slug)}.html`;
+  }
+
+  function getProductCanonicalUrl(slug) {
+    return `${SITE_ORIGIN}/${getProductUrl(slug)}`;
+  }
+
+  function getProductSeoTypeLabel(product) {
+    if (!product) return 'Research Product';
+    return product.category === 'Support' ? 'Research Support' : 'Research Peptide';
+  }
+
+  function getProductPageTitle(product) {
+    if (!product?.name) return 'Research Product | Jonezie Labs';
+    return `${product.name} ${getProductSeoTypeLabel(product)} | Jonezie Labs`;
   }
 
   function getSortedPair(leftSlug, rightSlug) {
@@ -602,6 +619,16 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     const themeLabel = getComparisonThemeLabel(product);
     const context = getProductResearchContext(product, productContent);
     return `${themeLabel} with handling and pricing details kept close for faster side-by-side review. ${context}`;
+  }
+
+  function getProductMetaDescription(product, productContent = null) {
+    if (!product?.name) {
+      return 'Browse Jonezie Labs research-use-only product pages for current strengths, pricing, storage notes, and related comparisons.';
+    }
+    const summary = getProductResearchContext(product, productContent);
+    return `${product.name} from Jonezie Labs. ${summary} View listed strengths, pricing, storage notes, handling context, and related comparisons for laboratory reference only.`
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
   function getRelatedToolSet(product) {
@@ -880,6 +907,55 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     return `mailto:customerservice@jonezielabs.com?subject=${encodeURIComponent('Jonezie Labs lead capture signup')}&body=${encodeURIComponent(payload)}`;
   }
 
+  function getLeadCaptureEndpoint() {
+    return LEAD_CAPTURE.endpoint;
+  }
+
+  function isLocalPreview() {
+    const host = window.location.hostname || '';
+    return host === '127.0.0.1' || host === 'localhost';
+  }
+
+  async function submitLeadCapture(details) {
+    const endpoint = getLeadCaptureEndpoint();
+    if (!endpoint) {
+      return isLocalPreview()
+        ? { ok: true, mode: 'local-preview' }
+        : { ok: false, reason: 'missing-endpoint' };
+    }
+
+    const payload = {
+      capturedAt: new Date().toISOString(),
+      email: String(details.email || '').trim(),
+      phone: String(details.phone || '').trim(),
+      source: String(details.source || 'Site capture').trim(),
+      trigger: String(details.trigger || 'Manual').trim(),
+      page: String(details.page || window.location.href).trim(),
+      referrer: String(document.referrer || '').trim(),
+      timezone: String(Intl.DateTimeFormat().resolvedOptions().timeZone || '').trim(),
+      locale: String(navigator.language || '').trim(),
+      userAgent: String(navigator.userAgent || '').trim()
+    };
+
+    try {
+      await fetch(endpoint, {
+        method: 'POST',
+        mode: 'no-cors',
+        cache: 'no-store',
+        credentials: 'omit',
+        keepalive: true,
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(payload)
+      });
+      return { ok: true, mode: 'remote' };
+    } catch (error) {
+      console.error('Lead capture submission failed.', error);
+      return { ok: false, reason: 'network-error' };
+    }
+  }
+
   function enhanceCustomSelects(root = document) {
     if (!root?.querySelectorAll) return;
     bindCustomSelectEvents();
@@ -1135,6 +1211,9 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     getProductMap,
     getProductBySlug,
     getProductUrl,
+    getProductCanonicalUrl,
+    getProductPageTitle,
+    getProductMetaDescription,
     getComparisonUrl,
     getGuideForCategory,
     getGuideForProduct,
@@ -1162,6 +1241,8 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     getComparisonPairs,
     getProductFaqs,
     getComparisonFaqs,
+    getLeadCaptureEndpoint,
+    submitLeadCapture,
     getLeadMagnetMailto,
     enhanceCustomSelects,
     initShellMenus

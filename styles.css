@@ -3021,6 +3021,91 @@ body.lead-capture-open {
   overflow: hidden;
 }
 
+.checkout-update-modal {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  padding: 18px;
+  overflow-y: auto;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.checkout-update-modal.is-visible {
+  opacity: 1;
+}
+
+.checkout-update-backdrop {
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.checkout-update-modal.is-visible .checkout-update-backdrop {
+  opacity: 1;
+}
+
+.checkout-update-dialog {
+  width: min(calc(100% - 24px), 564px);
+  margin: 0 auto;
+  padding: 28px;
+  gap: 14px;
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  transform: translateY(10px) scale(0.975);
+  opacity: 0;
+  transition: transform 220ms ease, opacity 220ms ease;
+  z-index: 1;
+}
+
+.checkout-update-modal.is-visible .checkout-update-dialog {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.checkout-update-brand {
+  padding-right: 48px;
+}
+
+.checkout-update-logo {
+  width: min(234px, 76%);
+}
+
+.checkout-update-dialog h2 {
+  margin: 0;
+  font-size: clamp(1.95rem, 5vw, 2.4rem);
+  line-height: 1;
+}
+
+.checkout-update-copy {
+  display: grid;
+  gap: 12px;
+}
+
+.checkout-update-copy p {
+  margin: 0;
+  max-width: 54ch;
+  color: rgba(226, 239, 245, 0.88);
+  font-size: 1rem;
+  line-height: 1.58;
+}
+
+.checkout-update-signoff {
+  color: rgba(248, 252, 255, 0.96);
+  font-weight: 700;
+}
+
+.checkout-update-cta {
+  min-width: min(100%, 228px);
+  justify-self: start;
+}
+
+body.checkout-update-open {
+  overflow: hidden;
+}
+
 @media (max-width: 1120px) {
   .hero,
   .featured-grid,
@@ -3228,6 +3313,21 @@ body.lead-capture-open {
     width: min(calc(100% - 18px), 468px);
     margin-top: 18px;
     padding: 22px;
+  }
+  .checkout-update-dialog {
+    width: min(calc(100% - 18px), 564px);
+    margin: 0 auto;
+    padding: 22px;
+    gap: 12px;
+    max-height: calc(100vh - 24px);
+  }
+  .checkout-update-copy p {
+    font-size: 0.97rem;
+    line-height: 1.52;
+  }
+  .checkout-update-cta {
+    width: 100%;
+    justify-self: stretch;
   }
   .merch-purchase {
     display: grid;

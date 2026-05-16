@@ -13,6 +13,9 @@ const promoCodeInput = document.querySelector('[data-promo-code]');
 const shippingMethodInput = document.querySelector('[data-shipping-method]');
 const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
+const CHECKOUT_UPDATE_SESSION_KEY = 'jonezie_checkout_update_seen';
+const checkoutSearchParams = new URLSearchParams(window.location.search);
+const forceCheckoutUpdatePreview = checkoutSearchParams.get('showCheckoutUpdate') === '1';
 const PROMO_CODES = {
   PEPPERS: {
     rate: 0.10,
@@ -117,6 +120,7 @@ function initBrandMenus() {
 }
 
 initBrandMenus();
+initCheckoutUpdateModal();
 
 function getCart() {
   try {
@@ -133,6 +137,103 @@ function setCart(cart) {
 
 function formatMoney(value) {
   return `$${Number(value || 0).toFixed(2)}`;
+}
+
+function initCheckoutUpdateModal() {
+  if (!form) return;
+  if (!forceCheckoutUpdatePreview && hasSeenCheckoutUpdate()) return;
+
+  const modal = injectCheckoutUpdateModal();
+  if (!modal) return;
+
+  if (forceCheckoutUpdatePreview) {
+    openCheckoutUpdateModal(modal, 'Preview override');
+    return;
+  }
+
+  const triggerOpen = (event) => {
+    if (!isCheckoutDataField(event.target)) return;
+    openCheckoutUpdateModal(modal, 'Checkout form started');
+    form.removeEventListener('input', triggerOpen, true);
+    form.removeEventListener('change', triggerOpen, true);
+  };
+
+  form.addEventListener('input', triggerOpen, true);
+  form.addEventListener('change', triggerOpen, true);
+}
+
+function injectCheckoutUpdateModal() {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'lead-capture-modal checkout-update-modal';
+  wrapper.hidden = true;
+  wrapper.innerHTML = `
+    <div class="lead-capture-backdrop checkout-update-backdrop" data-checkout-update-close></div>
+    <div class="lead-capture-dialog checkout-update-dialog" role="dialog" aria-modal="true" aria-labelledby="checkout-update-title">
+      <button class="lead-capture-close checkout-update-close" type="button" data-checkout-update-close aria-label="Close checkout update">&times;</button>
+      <div class="lead-capture-brand checkout-update-brand">
+        <img class="lead-capture-logo checkout-update-logo" src="jonezie-logo-white-text-transparent.webp" alt="Jonezie Labs" />
+      </div>
+      <h2 id="checkout-update-title">Important Checkout Update</h2>
+      <div class="checkout-update-copy">
+        <p>Jonezie Labs is currently implementing a new payment processor that will soon support all major credit cards and Apple Pay.</p>
+        <p>In the meantime, please continue filling out your checkout information as normal. Once your order is submitted, a member of our team will personally email you shortly after order confirmation to finalize payment using whichever method you feel most comfortable with.</p>
+        <p>You will also receive a picture of your shipping label next to your ordered products once your order is packed and ready to ship, along with open communication from our team through delivery.</p>
+        <p>Thank you for choosing Jonezie Labs.</p>
+        <p class="checkout-update-signoff">xoxo,<br />Lenny</p>
+      </div>
+      <button class="button primary lead-capture-submit checkout-update-cta" type="button" data-checkout-update-close>Continue Checkout</button>
+    </div>`;
+
+  document.body.appendChild(wrapper);
+
+  wrapper.querySelectorAll('[data-checkout-update-close]').forEach((element) => {
+    element.addEventListener('click', () => closeCheckoutUpdateModal(wrapper));
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !wrapper.hidden) closeCheckoutUpdateModal(wrapper);
+  });
+
+  return wrapper;
+}
+
+function openCheckoutUpdateModal(modal, trigger) {
+  if (!modal || (!forceCheckoutUpdatePreview && hasSeenCheckoutUpdate())) return;
+  modal.hidden = false;
+  modal.dataset.trigger = trigger;
+  markCheckoutUpdateSeen();
+  document.body.classList.add('checkout-update-open');
+  window.requestAnimationFrame(() => {
+    modal.classList.add('is-visible');
+  });
+}
+
+function closeCheckoutUpdateModal(modal) {
+  if (!modal) return;
+  modal.classList.remove('is-visible');
+  document.body.classList.remove('checkout-update-open');
+  window.setTimeout(() => {
+    modal.hidden = true;
+  }, 220);
+}
+
+function hasSeenCheckoutUpdate() {
+  try {
+    return window.sessionStorage.getItem(CHECKOUT_UPDATE_SESSION_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function markCheckoutUpdateSeen() {
+  try {
+    window.sessionStorage.setItem(CHECKOUT_UPDATE_SESSION_KEY, '1');
+  } catch {}
+}
+
+function isCheckoutDataField(target) {
+  return target instanceof HTMLElement
+    && target.matches('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), textarea, select');
 }
 
 function getInventoryLabel(status) {

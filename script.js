@@ -2,6 +2,7 @@ const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
 const catalogData = window.JONEZIE_CATALOG || null;
 const contentData = window.JONEZIE_PRODUCT_CONTENT || null;
+const siteLibrary = window.JONEZIE_SITE_LIBRARY || null;
 const CART_KEY = 'jonezie_cart';
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const IMAGE_ASSET_VERSION = '20260409e';
@@ -81,7 +82,7 @@ function getAccent(category) {
 }
 
 function getProductUrl(slug) {
-  return `product.html?slug=${encodeURIComponent(slug)}`;
+  return siteLibrary?.getProductUrl ? siteLibrary.getProductUrl(slug) : `products/${encodeURIComponent(slug)}.html`;
 }
 
 function withFallbackImage(path) {

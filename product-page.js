@@ -182,6 +182,8 @@ function getProductHeaderSummary(product) {
 }
 
 function getSlugFromPath() {
+  const bodySlug = document.body?.dataset?.productSlug;
+  if (bodySlug) return bodySlug;
   const params = new URLSearchParams(window.location.search);
   const querySlug = params.get('slug');
   if (querySlug) return querySlug;
@@ -189,6 +191,11 @@ function getSlugFromPath() {
   const parts = path.split('/');
   const file = parts[parts.length - 1] || '';
   return file.replace(/\.html$/i, '');
+}
+
+function isStaticProductRoute() {
+  if (document.body?.dataset?.productSlug) return true;
+  return /\/products\/[^/]+\.html$/i.test(window.location.pathname || '');
 }
 
 function parsePrice(value) {
@@ -284,7 +291,7 @@ function renderProductPage() {
   const addToCartButton = document.querySelector('[data-add-to-cart]');
   const buyNowButton = document.querySelector('[data-buy-now]');
 
-  document.title = `${product.name} | Jonezie Labs`;
+  document.title = siteLibrary?.getProductPageTitle ? siteLibrary.getProductPageTitle(product) : `${product.name} | Jonezie Labs`;
   const meta = document.querySelector('meta[name="description"]');
   const productContent = getProductContent(product);
   const shortDescription = productContent?.shortDescription || product.description;
@@ -302,11 +309,16 @@ function renderProductPage() {
   const categoryGuide = siteLibrary?.getGuideForProduct(product) || null;
   const relatedTools = productProfile?.relatedTools || siteLibrary?.TOOL_LIBRARY?.slice(0, 4) || [];
   const siteDisclaimer = siteLibrary?.RUO_COPY?.full || contentData?.disclaimerLong || 'All product information is provided for research, laboratory, or analytical reference only. Products are not for human or veterinary use.';
-  const canonicalUrl = `${SITE_ORIGIN}/product.html?slug=${encodeURIComponent(product.slug)}`;
+  const canonicalUrl = siteLibrary?.getProductCanonicalUrl ? siteLibrary.getProductCanonicalUrl(product.slug) : `${SITE_ORIGIN}/products/${encodeURIComponent(product.slug)}.html`;
   const ogImageUrl = getAbsoluteSiteUrl(product.image || PRODUCT_FALLBACK_IMAGE);
-  const baseMetaDescription = `${product.name} from Jonezie Labs. ${(productProfile?.researchContext || shortDescription)} View listed strengths, pricing, and research reference information.`;
+  const baseMetaDescription = siteLibrary?.getProductMetaDescription
+    ? siteLibrary.getProductMetaDescription(product, productContent)
+    : `${product.name} from Jonezie Labs. ${(productProfile?.researchContext || shortDescription)} View listed strengths, pricing, storage notes, handling context, and related comparisons for laboratory reference only.`;
   upsertLink('link[rel="canonical"]', { rel: 'canonical', href: canonicalUrl });
-  upsertMeta('meta[name="robots"]', { name: 'robots', content: 'index,follow,max-image-preview:large' });
+  upsertMeta('meta[name="robots"]', {
+    name: 'robots',
+    content: `${isStaticProductRoute() ? 'index' : 'noindex'},follow,max-image-preview:large`
+  });
 
   function updateProductSeo() {
     const offerPrice = parsePrice(selectedOption?.[selectedPackKey] || selectedOption?.singleVialPrice || selectedOption?.eightVialPrice || selectedOption?.tenVialPrice);
@@ -320,12 +332,12 @@ function renderProductPage() {
     if (meta) meta.setAttribute('content', metaDescription);
     upsertMeta('meta[property="og:type"]', { property: 'og:type', content: 'product' });
     upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: 'Jonezie Labs' });
-    upsertMeta('meta[property="og:title"]', { property: 'og:title', content: `${product.name} | Jonezie Labs` });
+    upsertMeta('meta[property="og:title"]', { property: 'og:title', content: siteLibrary?.getProductPageTitle ? siteLibrary.getProductPageTitle(product) : `${product.name} | Jonezie Labs` });
     upsertMeta('meta[property="og:description"]', { property: 'og:description', content: metaDescription });
     upsertMeta('meta[property="og:url"]', { property: 'og:url', content: canonicalUrl });
     upsertMeta('meta[property="og:image"]', { property: 'og:image', content: ogImageUrl });
     upsertMeta('meta[name="twitter:card"]', { name: 'twitter:card', content: 'summary_large_image' });
-    upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: `${product.name} | Jonezie Labs` });
+    upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: siteLibrary?.getProductPageTitle ? siteLibrary.getProductPageTitle(product) : `${product.name} | Jonezie Labs` });
     upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: metaDescription });
     upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: ogImageUrl });
 

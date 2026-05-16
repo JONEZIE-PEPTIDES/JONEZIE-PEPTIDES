@@ -1,5 +1,6 @@
 (() => {
   const catalog = window.JONEZIE_CATALOG || null;
+  const library = window.JONEZIE_SITE_LIBRARY || null;
   const forms = document.querySelectorAll('[data-nav-search-form]');
   if (!forms.length) return;
 
@@ -54,7 +55,7 @@
     const match = exactMatch || partialMatch;
 
     if (match) {
-      window.location.href = `product.html?slug=${encodeURIComponent(match.slug)}`;
+      window.location.href = library?.getProductUrl ? library.getProductUrl(match.slug) : `products/${encodeURIComponent(match.slug)}.html`;
       return true;
     }
 
