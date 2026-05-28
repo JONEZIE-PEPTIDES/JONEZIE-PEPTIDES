@@ -8,18 +8,28 @@ const summaryDiscount = document.querySelector('[data-summary-discount]');
 const summaryShipping = document.querySelector('[data-summary-shipping]');
 const summaryTotal = document.querySelector('[data-summary-total]');
 const form = document.querySelector('[data-checkout-form]');
+const phoneInput = form?.querySelector('input[name="customerPhone"]') || null;
+const submitButton = form?.querySelector('button[type="submit"]') || null;
+const formFeedback = document.querySelector('[data-checkout-feedback]');
+const successCard = document.querySelector('[data-checkout-success]');
 const clearCartButton = document.querySelector('[data-clear-cart]');
 const promoCodeInput = document.querySelector('[data-promo-code]');
 const shippingMethodInput = document.querySelector('[data-shipping-method]');
 const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
-const CHECKOUT_UPDATE_SESSION_KEY = 'jonezie_checkout_update_seen';
-const checkoutSearchParams = new URLSearchParams(window.location.search);
-const forceCheckoutUpdatePreview = checkoutSearchParams.get('showCheckoutUpdate') === '1';
+const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
+const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
+const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We’ll review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
 const PROMO_CODES = {
   PEPPERS: {
     rate: 0.10,
     freeShipping: false
+  },
+  MD25: {
+    rate: 0.25,
+    freeShipping: false,
+    startsAt: '2026-05-22T00:00:00-04:00',
+    endsAt: '2026-05-26T00:00:00-04:00'
   },
   LOCAL15: {
     rate: 0.15,
@@ -61,6 +71,9 @@ const SHIPPING_OPTIONS = [
     backorderOnly: true
   }
 ];
+
+let isSubmittingOrderRequest = false;
+let submittedOrderSnapshot = null;
 
 if (menuToggle && siteNav) {
   menuToggle.addEventListener('click', () => {
@@ -120,7 +133,33 @@ function initBrandMenus() {
 }
 
 initBrandMenus();
-initCheckoutUpdateModal();
+initCheckoutForm();
+
+function initCheckoutForm() {
+  if (!form) return;
+
+  if (phoneInput) {
+    phoneInput.maxLength = 14;
+    phoneInput.addEventListener('input', () => {
+      phoneInput.value = formatPhoneDisplay(phoneInput.value);
+      syncPhoneValidity();
+      if (formFeedback?.dataset.state === 'error') clearFeedback();
+    });
+
+    phoneInput.addEventListener('blur', () => {
+      phoneInput.value = formatPhoneDisplay(phoneInput.value);
+      syncPhoneValidity();
+    });
+
+    syncPhoneValidity();
+  }
+
+  form.addEventListener('input', (event) => {
+    if (event.target !== phoneInput && formFeedback?.dataset.state === 'error') {
+      clearFeedback();
+    }
+  });
+}
 
 function getCart() {
   try {
@@ -135,105 +174,89 @@ function setCart(cart) {
   window.dispatchEvent(new CustomEvent('jonezie:cart-updated'));
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function formatMoney(value) {
   return `$${Number(value || 0).toFixed(2)}`;
 }
 
-function initCheckoutUpdateModal() {
-  if (!form) return;
-  if (!forceCheckoutUpdatePreview && hasSeenCheckoutUpdate()) return;
-
-  const modal = injectCheckoutUpdateModal();
-  if (!modal) return;
-
-  if (forceCheckoutUpdatePreview) {
-    openCheckoutUpdateModal(modal, 'Preview override');
-    return;
-  }
-
-  const triggerOpen = (event) => {
-    if (!isCheckoutDataField(event.target)) return;
-    openCheckoutUpdateModal(modal, 'Checkout form started');
-    form.removeEventListener('input', triggerOpen, true);
-    form.removeEventListener('change', triggerOpen, true);
-  };
-
-  form.addEventListener('input', triggerOpen, true);
-  form.addEventListener('change', triggerOpen, true);
+function isPromoCurrentlyActive(promo) {
+  if (!promo?.startsAt || !promo?.endsAt) return true;
+  const startsAt = Date.parse(promo.startsAt);
+  const endsAt = Date.parse(promo.endsAt);
+  if (!Number.isFinite(startsAt) || !Number.isFinite(endsAt)) return false;
+  const now = Date.now();
+  return now >= startsAt && now < endsAt;
 }
 
-function injectCheckoutUpdateModal() {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'lead-capture-modal checkout-update-modal';
-  wrapper.hidden = true;
-  wrapper.innerHTML = `
-    <div class="lead-capture-backdrop checkout-update-backdrop" data-checkout-update-close></div>
-    <div class="lead-capture-dialog checkout-update-dialog" role="dialog" aria-modal="true" aria-labelledby="checkout-update-title">
-      <button class="lead-capture-close checkout-update-close" type="button" data-checkout-update-close aria-label="Close checkout update">&times;</button>
-      <div class="lead-capture-brand checkout-update-brand">
-        <img class="lead-capture-logo checkout-update-logo" src="jonezie-logo-white-text-transparent.webp" alt="Jonezie Labs" />
-      </div>
-      <h2 id="checkout-update-title">Important Checkout Update</h2>
-      <div class="checkout-update-copy">
-        <p>Jonezie Labs is currently implementing a new payment processor that will soon support all major credit cards and Apple Pay.</p>
-        <p>In the meantime, please continue filling out your checkout information as normal. Once your order is submitted, a member of our team will personally email you shortly after order confirmation to finalize payment using whichever method you feel most comfortable with.</p>
-        <p>You will also receive a picture of your shipping label next to your ordered products once your order is packed and ready to ship, along with open communication from our team through delivery.</p>
-        <p>Thank you for choosing Jonezie Labs.</p>
-        <p class="checkout-update-signoff">xoxo,<br />Lenny</p>
-      </div>
-      <button class="button primary lead-capture-submit checkout-update-cta" type="button" data-checkout-update-close>Continue Checkout</button>
-    </div>`;
-
-  document.body.appendChild(wrapper);
-
-  wrapper.querySelectorAll('[data-checkout-update-close]').forEach((element) => {
-    element.addEventListener('click', () => closeCheckoutUpdateModal(wrapper));
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !wrapper.hidden) closeCheckoutUpdateModal(wrapper);
-  });
-
-  return wrapper;
+function getPhoneDigits(value) {
+  return String(value || '').replace(/\D/g, '');
 }
 
-function openCheckoutUpdateModal(modal, trigger) {
-  if (!modal || (!forceCheckoutUpdatePreview && hasSeenCheckoutUpdate())) return;
-  modal.hidden = false;
-  modal.dataset.trigger = trigger;
-  markCheckoutUpdateSeen();
-  document.body.classList.add('checkout-update-open');
-  window.requestAnimationFrame(() => {
-    modal.classList.add('is-visible');
-  });
+function normalizePhoneDigits(value) {
+  const digits = getPhoneDigits(value);
+  if (digits.length === 11 && digits.startsWith('1')) return digits.slice(1);
+  return digits.slice(0, 10);
 }
 
-function closeCheckoutUpdateModal(modal) {
-  if (!modal) return;
-  modal.classList.remove('is-visible');
-  document.body.classList.remove('checkout-update-open');
-  window.setTimeout(() => {
-    modal.hidden = true;
-  }, 220);
+function formatPhoneDisplay(value) {
+  const digits = normalizePhoneDigits(value);
+  if (!digits) return '';
+  if (digits.length < 4) return `(${digits}`;
+  if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
 }
 
-function hasSeenCheckoutUpdate() {
-  try {
-    return window.sessionStorage.getItem(CHECKOUT_UPDATE_SESSION_KEY) === '1';
-  } catch {
+function syncPhoneValidity() {
+  if (!phoneInput) return true;
+  const normalizedDigits = normalizePhoneDigits(phoneInput.value);
+
+  if (!phoneInput.value.trim()) {
+    phoneInput.setCustomValidity('Phone number is required.');
     return false;
   }
+
+  if (normalizedDigits.length !== 10) {
+    phoneInput.setCustomValidity('Enter a valid 10-digit phone number.');
+    return false;
+  }
+
+  phoneInput.setCustomValidity('');
+  return true;
 }
 
-function markCheckoutUpdateSeen() {
-  try {
-    window.sessionStorage.setItem(CHECKOUT_UPDATE_SESSION_KEY, '1');
-  } catch {}
+function setFeedback(message, state = '') {
+  if (!formFeedback) return;
+  formFeedback.textContent = message;
+  formFeedback.dataset.state = state;
+  formFeedback.className = 'checkout-form-feedback';
+  if (state) formFeedback.classList.add(`is-${state}`);
 }
 
-function isCheckoutDataField(target) {
-  return target instanceof HTMLElement
-    && target.matches('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), textarea, select');
+function clearFeedback() {
+  setFeedback('');
+}
+
+function isLocalPreview() {
+  const host = window.location.hostname || '';
+  return !host || host === 'localhost' || host === '127.0.0.1' || host === '[::1]';
+}
+
+function getOrderRequestEndpoint() {
+  return String(ORDER_REQUEST_CONFIG.endpoint || '').trim();
+}
+
+function createOrderId() {
+  const timestamp = new Date().toISOString().replace(/\D/g, '').slice(0, 14);
+  const suffix = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return `JL-${timestamp}-${suffix}`;
 }
 
 function getInventoryLabel(status) {
@@ -246,11 +269,12 @@ function getInventoryLabel(status) {
 function getPromoDetails() {
   const rawCode = String(promoCodeInput?.value || '').trim().toUpperCase();
   const promo = PROMO_CODES[rawCode] || null;
+  const isValid = Boolean(promo) && isPromoCurrentlyActive(promo);
   return {
     code: rawCode,
-    rate: promo?.rate || 0,
-    freeShipping: Boolean(promo?.freeShipping),
-    isValid: Boolean(promo)
+    rate: isValid ? (promo?.rate || 0) : 0,
+    freeShipping: isValid ? Boolean(promo?.freeShipping) : false,
+    isValid
   };
 }
 
@@ -310,9 +334,65 @@ function renderShippingOptions(cart, promo = null) {
   return selected;
 }
 
+function buildShippingAddressDisplay(streetAddress, city, state, zipCode) {
+  const street = String(streetAddress || '').trim();
+  const locality = [String(city || '').trim(), String(state || '').trim()]
+    .filter(Boolean)
+    .join(', ');
+  const localityWithZip = [locality, String(zipCode || '').trim()]
+    .filter(Boolean)
+    .join(' ');
+
+  return [street, localityWithZip].filter(Boolean).join(', ');
+}
+
+function renderSummaryValues({ itemCount, subtotal, discountAmount, shippingCost, total, isFreeShipping = false }) {
+  if (summaryItems) summaryItems.textContent = String(itemCount || 0);
+  if (summarySubtotal) summarySubtotal.textContent = formatMoney(subtotal || 0);
+  if (summaryDiscount) summaryDiscount.textContent = discountAmount ? `- ${formatMoney(discountAmount)}` : '$0.00';
+  if (summaryShipping) summaryShipping.textContent = isFreeShipping && itemCount ? 'FREE' : formatMoney(shippingCost || 0);
+  if (summaryTotal) summaryTotal.textContent = formatMoney(total || 0);
+}
+
+function buildSubmittedOrderSnapshot(payload) {
+  return {
+    customerName: payload.customer.name || 'Customer',
+    itemCount: payload.totals.itemCount,
+    subtotal: payload.totals.subtotal,
+    discountAmount: payload.totals.discount,
+    shippingCost: payload.totals.shipping,
+    total: payload.totals.estimatedTotal,
+    isFreeShipping: payload.totals.shippingDisplay === 'FREE',
+    shippingLabel: payload.shippingMethod
+      ? `${payload.shippingMethod.label} | ${payload.shippingMethod.window}`
+      : 'Shipping pending',
+    items: payload.items
+  };
+}
+
+function renderSubmittedOrder() {
+  if (!cartRoot || !submittedOrderSnapshot) return;
+
+  renderSummaryValues(submittedOrderSnapshot);
+  cartRoot.innerHTML = `
+    <div class="empty-cart-card checkout-complete-card">
+      <h2>Order request received.</h2>
+      <p>We’re reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure Stripe invoice by email shortly.</p>
+      <p class="checkout-complete-meta">${escapeHtml(submittedOrderSnapshot.shippingLabel)}</p>
+      <ul class="checkout-complete-list">
+        ${submittedOrderSnapshot.items.map((item) => `<li>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity} | ${escapeHtml(item.lineTotalDisplay)}</li>`).join('')}
+      </ul>
+    </div>`;
+}
+
 function renderCart() {
-  const cart = getCart();
   if (!cartRoot) return;
+  if (submittedOrderSnapshot) {
+    renderSubmittedOrder();
+    return;
+  }
+
+  const cart = getCart();
 
   if (!cart.length) {
     cartRoot.innerHTML = `
@@ -321,11 +401,13 @@ function renderCart() {
         <p>Go back to the catalog, choose a product option, and add it to cart to begin checkout.</p>
         <a class="button primary" href="index.html#full-catalog">Browse Catalog</a>
       </div>`;
-    if (summaryItems) summaryItems.textContent = '0';
-    if (summarySubtotal) summarySubtotal.textContent = '$0.00';
-    if (summaryDiscount) summaryDiscount.textContent = '$0.00';
-    if (summaryShipping) summaryShipping.textContent = '$0.00';
-    if (summaryTotal) summaryTotal.textContent = '$0.00';
+    renderSummaryValues({
+      itemCount: 0,
+      subtotal: 0,
+      discountAmount: 0,
+      shippingCost: 0,
+      total: 0
+    });
     renderShippingOptions(cart, getPromoDetails());
     return;
   }
@@ -337,21 +419,25 @@ function renderCart() {
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
   const total = subtotal - discountAmount + shippingCost;
-  if (summaryItems) summaryItems.textContent = String(itemCount);
-  if (summarySubtotal) summarySubtotal.textContent = formatMoney(subtotal);
-  if (summaryDiscount) summaryDiscount.textContent = promo.isValid ? `- ${formatMoney(discountAmount)}` : '$0.00';
-  if (summaryShipping) summaryShipping.textContent = promo.freeShipping && shippingOption ? 'FREE' : formatMoney(shippingCost);
-  if (summaryTotal) summaryTotal.textContent = formatMoney(total);
+
+  renderSummaryValues({
+    itemCount,
+    subtotal,
+    discountAmount,
+    shippingCost,
+    total,
+    isFreeShipping: promo.freeShipping && Boolean(shippingOption)
+  });
 
   cartRoot.innerHTML = cart.map((item, index) => `
     <article class="checkout-item-card">
-      <img src="${String(item.image || '').replace('../', '')}" alt="${item.name} product image" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
+      <img src="${String(item.image || '').replace('../', '')}" alt="${escapeHtml(item.name)} product image" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
       <div class="checkout-item-copy">
-        <h2>${item.name}</h2>
-        <p>${item.mgOption} | ${item.packLabel}</p>
+        <h2>${escapeHtml(item.name)}</h2>
+        <p>${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)}</p>
         <div class="checkout-item-meta">
-          <span>Availability: ${getInventoryLabel(item.inventoryStatus)}</span>
-          <span>Unit price: ${item.unitPriceDisplay}</span>
+          <span>Availability: ${escapeHtml(getInventoryLabel(item.inventoryStatus))}</span>
+          <span>Unit price: ${escapeHtml(item.unitPriceDisplay)}</span>
           <span>Quantity: ${item.quantity}</span>
           <span>Line total: ${formatMoney(item.unitPrice * item.quantity)}</span>
         </div>
@@ -369,68 +455,285 @@ function renderCart() {
   });
 }
 
-form?.addEventListener('submit', (event) => {
+function buildOrderRequestPayload({
+  cart,
+  firstName,
+  lastName,
+  email,
+  phone,
+  streetAddress,
+  city,
+  state,
+  zipCode,
+  notes,
+  promo,
+  shippingOption,
+  shippingCost,
+  subtotal,
+  discountAmount,
+  total
+}) {
+  const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const orderId = createOrderId();
+  const requestedAt = new Date().toISOString();
+  const formattedPhone = formatPhoneDisplay(phone);
+  const normalizedFirstName = String(firstName || '').trim();
+  const normalizedLastName = String(lastName || '').trim();
+  const shippingAddress = buildShippingAddressDisplay(streetAddress, city, state, zipCode);
+
+  return {
+    orderId,
+    requestedAt,
+    invoiceFlow: 'Review and confirm order, then email a secure Stripe invoice.',
+    paymentNotice: 'All invoices must be paid before an order is shipped. Orders with unpaid invoices for more than 48 hours may be automatically canceled.',
+    researchUseNotice: 'Items requested below are for laboratory research only.',
+    customer: {
+      firstName: normalizedFirstName,
+      lastName: normalizedLastName,
+      name: `${normalizedFirstName} ${normalizedLastName}`.trim(),
+      email: String(email || '').trim(),
+      phone: formattedPhone,
+      phoneDigits: normalizePhoneDigits(phone),
+      shippingStreetAddress: String(streetAddress || '').trim(),
+      shippingCity: String(city || '').trim(),
+      shippingState: String(state || '').trim().toUpperCase(),
+      shippingZip: String(zipCode || '').trim(),
+      shippingAddress
+    },
+    promoCode: promo.isValid ? promo.code : '',
+    notes: String(notes || '').trim(),
+    shippingMethod: shippingOption ? {
+      id: shippingOption.id,
+      label: shippingOption.label,
+      window: shippingOption.window,
+      note: shippingOption.note,
+      cost: shippingCost,
+      costDisplay: promo.freeShipping ? 'FREE' : formatMoney(shippingCost)
+    } : null,
+    totals: {
+      itemCount,
+      subtotal,
+      subtotalDisplay: formatMoney(subtotal),
+      discount: discountAmount,
+      discountDisplay: promo.isValid ? `- ${formatMoney(discountAmount)}` : '$0.00',
+      shipping: shippingCost,
+      shippingDisplay: shippingOption ? (promo.freeShipping ? 'FREE' : formatMoney(shippingCost)) : '$0.00',
+      estimatedTotal: total,
+      estimatedTotalDisplay: formatMoney(total)
+    },
+    items: cart.map((item) => ({
+      slug: item.slug,
+      name: item.name,
+      code: item.code,
+      mgOption: item.mgOption,
+      packLabel: item.packLabel,
+      quantity: item.quantity,
+      inventoryStatus: getInventoryLabel(item.inventoryStatus),
+      unitPrice: item.unitPrice,
+      unitPriceDisplay: item.unitPriceDisplay,
+      lineTotal: item.unitPrice * item.quantity,
+      lineTotalDisplay: formatMoney(item.unitPrice * item.quantity)
+    })),
+    includedWithOrder: [
+      'Free vial cap cover',
+      'Free Hot Girl Summer sticker'
+    ],
+    pageUrl: window.location.href,
+    timezone: String(Intl.DateTimeFormat().resolvedOptions().timeZone || '').trim(),
+    locale: String(navigator.language || '').trim(),
+    userAgent: String(navigator.userAgent || '').trim()
+  };
+}
+
+function buildOrderRequestLines(payload) {
+  const shippingLine = payload.shippingMethod
+    ? `${payload.shippingMethod.label} | ${payload.shippingMethod.window} | ${payload.shippingMethod.costDisplay}`
+    : 'Not selected';
+
+  const lines = [
+    'New Jonezie order request',
+    '',
+    `Order ID: ${payload.orderId}`,
+    `Submitted At: ${payload.requestedAt}`,
+    `Invoice Flow: ${payload.invoiceFlow}`,
+    `Payment Notice: ${payload.paymentNotice}`,
+    '',
+    `Research-use notice: ${payload.researchUseNotice}`,
+    '',
+    `Customer: ${payload.customer.name || 'Not provided'}`,
+    `First Name: ${payload.customer.firstName || 'Not provided'}`,
+    `Last Name: ${payload.customer.lastName || 'Not provided'}`,
+    `Email: ${payload.customer.email || 'Not provided'}`,
+    `Phone: ${payload.customer.phone || 'Not provided'}`,
+    `Street Address: ${payload.customer.shippingStreetAddress || 'Not provided'}`,
+    `City: ${payload.customer.shippingCity || 'Not provided'}`,
+    `State: ${payload.customer.shippingState || 'Not provided'}`,
+    `ZIP Code: ${payload.customer.shippingZip || 'Not provided'}`,
+    `Shipping Address: ${payload.customer.shippingAddress || 'Not provided'}`,
+    `Shipping Method: ${shippingLine}`,
+    `Promo code: ${payload.promoCode || 'None'}`,
+    '',
+    'Order items:'
+  ];
+
+  payload.items.forEach((item) => {
+    lines.push(`- ${item.name} | ${item.mgOption} | ${item.packLabel} | ${item.inventoryStatus} | Qty ${item.quantity} | ${item.unitPriceDisplay} each | ${item.lineTotalDisplay} total`);
+  });
+
+  lines.push('');
+  lines.push(`Subtotal: ${payload.totals.subtotalDisplay}`);
+  lines.push(`Discount: ${payload.promoCode ? `${payload.totals.discountDisplay} (${payload.promoCode})` : '$0.00'}`);
+  lines.push(`Shipping: ${payload.shippingMethod ? `${payload.totals.shippingDisplay} (${payload.shippingMethod.label})` : '$0.00'}`);
+  lines.push(`Estimated Total: ${payload.totals.estimatedTotalDisplay}`);
+  lines.push('');
+  lines.push(`Included with order: ${payload.includedWithOrder.join(' + ')}`);
+  lines.push('');
+  lines.push(`Notes: ${payload.notes || 'None'}`);
+
+  return lines;
+}
+
+function openOrderRequestMailto(payload) {
+  const subject = encodeURIComponent(`Jonezie Order Request - ${payload.customer.name || 'Customer'} - ${payload.orderId}`);
+  const body = encodeURIComponent(buildOrderRequestLines(payload).join('\n'));
+  window.location.href = `mailto:${ORDER_REQUEST_FALLBACK_EMAIL}?subject=${subject}&body=${body}`;
+}
+
+async function submitOrderRequest(payload) {
+  const endpoint = getOrderRequestEndpoint();
+  if (!endpoint) {
+    if (isLocalPreview()) {
+      return { ok: true, mode: 'local-preview' };
+    }
+
+    openOrderRequestMailto(payload);
+    return { ok: true, mode: 'mailto-fallback' };
+  }
+
+  try {
+    await fetch(endpoint, {
+      method: 'POST',
+      mode: 'no-cors',
+      cache: 'no-store',
+      credentials: 'omit',
+      keepalive: true,
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify(payload)
+    });
+    return { ok: true, mode: 'remote' };
+  } catch (error) {
+    console.error('Order request submission failed.', error);
+    return { ok: false, reason: 'network-error' };
+  }
+}
+
+form?.addEventListener('submit', async (event) => {
   event.preventDefault();
+  if (isSubmittingOrderRequest) return;
+
   const cart = getCart();
-  if (!cart.length) return;
+  if (!cart.length) {
+    setFeedback('Your cart is empty. Add products before submitting an order request.', 'error');
+    return;
+  }
+
+  const phoneIsValid = syncPhoneValidity();
+  if (!form.reportValidity() || !phoneIsValid) {
+    phoneInput?.reportValidity();
+    return;
+  }
+
+  isSubmittingOrderRequest = true;
+  setFeedback('Submitting order request...', 'pending');
+  if (submitButton) submitButton.disabled = true;
+  if (clearCartButton) clearCartButton.disabled = true;
 
   const formData = new FormData(form);
-  const name = formData.get('customerName') || '';
+  const firstName = formData.get('customerFirstName') || '';
+  const lastName = formData.get('customerLastName') || '';
   const email = formData.get('customerEmail') || '';
   const phone = formData.get('customerPhone') || '';
-  const shippingAddress = formData.get('shippingAddress') || '';
-  const preferredPaymentService = formData.get('preferredPaymentService') || '';
-  const paymentHandle = formData.get('paymentHandle') || '';
-  const promo = getPromoDetails();
+  const streetAddress = formData.get('shippingStreetAddress') || '';
+  const city = formData.get('shippingCity') || '';
+  const state = formData.get('shippingState') || '';
+  const zipCode = formData.get('shippingZip') || '';
   const notes = formData.get('customerNotes') || '';
+  const promo = getPromoDetails();
   const shippingOption = getSelectedShipping(cart);
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
   const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
   const total = subtotal - discountAmount + shippingCost;
 
-  const lines = [
-    `New Jonezie order request`,
-    ``,
-    `Research-use notice: items requested below are for laboratory research only.`,
-    ``,
-    `Customer: ${name}`,
-    `Email: ${email}`,
-    `Phone: ${phone}`,
-    `Shipping Address: ${shippingAddress || 'Not provided'}`,
-    `Shipping Method: ${shippingOption ? `${shippingOption.label} | ${shippingOption.window} | ${promo.freeShipping ? 'FREE' : formatMoney(shippingCost)}` : 'Not selected'}`,
-    `Preferred Payment Service: ${preferredPaymentService || 'Not provided'}`,
-    `Payment Service Handle: ${paymentHandle || 'Not provided'}`,
-    `Promo code: ${promo.isValid ? promo.code : 'None'}`,
-    ``,
-    `Order items:`
-  ];
-
-  cart.forEach((item) => {
-    lines.push(`- ${item.name} | ${item.mgOption} | ${item.packLabel} | ${getInventoryLabel(item.inventoryStatus)} | Qty ${item.quantity} | ${item.unitPriceDisplay} each | ${formatMoney(item.unitPrice * item.quantity)} total`);
+  const payload = buildOrderRequestPayload({
+    cart,
+    firstName,
+    lastName,
+    email,
+    phone,
+    streetAddress,
+    city,
+    state,
+    zipCode,
+    notes,
+    promo,
+    shippingOption,
+    shippingCost,
+    subtotal,
+    discountAmount,
+    total
   });
 
-  lines.push('');
-  lines.push(`Subtotal: ${formatMoney(subtotal)}`);
-  lines.push(`Discount: ${promo.isValid ? `- ${formatMoney(discountAmount)} (${promo.code})` : '$0.00'}`);
-  lines.push(`Shipping: ${shippingOption ? `${promo.freeShipping ? 'FREE' : formatMoney(shippingCost)} (${shippingOption.label})` : '$0.00'}`);
-  lines.push(`Estimated total: ${formatMoney(total)}`);
-  lines.push('');
-  lines.push('Included with order: Free vial cap cover + Free Hot Girl Summer sticker');
-  lines.push('');
-  lines.push(`Notes: ${notes}`);
+  const submission = await submitOrderRequest(payload);
 
-  const subject = encodeURIComponent(`Jonezie Order Request - ${name || 'Customer'}`);
-  const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = `mailto:customerservice@jonezielabs.com?subject=${subject}&body=${body}`;
+  isSubmittingOrderRequest = false;
+  if (submitButton) submitButton.disabled = false;
+  if (clearCartButton) clearCartButton.disabled = false;
+
+  if (!submission.ok) {
+    setFeedback('We couldn’t submit your order request. Please try again or email orders@jonezielabs.com for help.', 'error');
+    return;
+  }
+
+  if (submission.mode === 'mailto-fallback') {
+    setFeedback('Direct order submission is not configured yet, so we opened a pre-filled order request email for you to send. Once sent, we’ll review the order and invoice you by email.', 'info');
+    return;
+  }
+
+  submittedOrderSnapshot = buildSubmittedOrderSnapshot(payload);
+  if (successCard) {
+    successCard.hidden = false;
+    const copy = successCard.querySelector('p');
+    if (copy) copy.textContent = ORDER_REQUEST_SUCCESS_MESSAGE;
+  }
+  if (form) form.hidden = true;
+
+  clearFeedback();
+  setCart([]);
+  renderCart();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 clearCartButton?.addEventListener('click', () => {
+  if (isSubmittingOrderRequest) return;
+  submittedOrderSnapshot = null;
+  if (successCard) successCard.hidden = true;
+  if (form) form.hidden = false;
+  clearFeedback();
   setCart([]);
   renderCart();
 });
 
-promoCodeInput?.addEventListener('input', renderCart);
-shippingMethodInput?.addEventListener('change', renderCart);
+promoCodeInput?.addEventListener('input', () => {
+  if (submittedOrderSnapshot) return;
+  renderCart();
+});
+
+shippingMethodInput?.addEventListener('change', () => {
+  if (submittedOrderSnapshot) return;
+  renderCart();
+});
 
 renderCart();

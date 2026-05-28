@@ -13,14 +13,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Checkout | Jonezie Peptides</title>
-  <meta name="description" content="Secure checkout review page for Jonezie Labs research use product orders." />
+  <meta name="description" content="Submit a Jonezie Labs order request and receive a secure Stripe invoice by email after review." />
   <meta name="robots" content="noindex,nofollow,noarchive" />
   <link rel="canonical" href="https://www.jonezielabs.com/checkout.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="brand-mark.svg" />
-  <link rel="stylesheet" href="styles.css?v=20260516c" />
+  <link rel="stylesheet" href="styles.css?v=20260527c" />
 </head>
 <body>
   <div class="announcement-bar promo-bar" role="region" aria-label="Promotions">
@@ -115,8 +115,8 @@
         <div>
           <div class="section-heading compact">
             <p class="eyebrow">Checkout</p>
-            <h1 class="checkout-title">Review your cart and place the order request.</h1>
-            <p>Use this page to review the research items in your cart, confirm pack sizes, and send an order request by email. All listings remain for laboratory and analytical research use only.</p>
+            <h1 class="checkout-title">Review your cart and submit your order request.</h1>
+            <p>Submit your order request below. Once your order is reviewed and confirmed, Jonezie Labs will email you a secure Stripe invoice to complete payment. Please make sure your email address and phone number are correct so we can contact you regarding your order and invoice.</p>
           </div>
           <div class="checkout-cart" data-checkout-cart></div>
         </div>
@@ -136,7 +136,7 @@
             <div class="checkout-promo">
               <label for="checkout-promo-code">Promo Code</label>
               <input id="checkout-promo-code" type="text" data-promo-code placeholder="Enter promo code" />
-              <p>Active code: <strong>PEPPERS</strong> (10% off)</p>
+              <p data-active-promo-copy>Active code: <strong>PEPPERS</strong> (10% off)</p>
             </div>
             <div class="checkout-shipping">
               <label for="checkout-shipping-method">Shipping Method</label>
@@ -150,41 +150,62 @@
             <div class="checkout-summary-row"><span>Estimated Total</span><strong data-summary-total>$0.00</strong></div>
           </div>
 
+          <div class="checkout-invoice-card">
+            <p>All invoices must be paid before an order is shipped. Orders with unpaid invoices for more than 48 hours may be automatically canceled.</p>
+          </div>
+
           <form class="checkout-form" data-checkout-form>
+            <div class="checkout-form-row">
+              <label>
+                First Name
+                <input type="text" name="customerFirstName" placeholder="First name" autocomplete="given-name" required />
+              </label>
+              <label>
+                Last Name
+                <input type="text" name="customerLastName" placeholder="Last name" autocomplete="family-name" required />
+              </label>
+            </div>
             <label>
-              Full Name
-              <input type="text" name="customerName" placeholder="Name" required />
+              Email Address
+              <input type="email" name="customerEmail" placeholder="Email address" autocomplete="email" required />
             </label>
             <label>
-              Email
-              <input type="email" name="customerEmail" placeholder="Email" required />
+              Phone Number
+              <input type="tel" name="customerPhone" placeholder="(555) 123-4567" inputmode="tel" autocomplete="tel" maxlength="14" required />
+              <span class="checkout-field-help">Required for order confirmation and invoice delivery updates.</span>
             </label>
             <label>
-              Phone
-              <input type="text" name="customerPhone" placeholder="Phone" />
+              Street Address
+              <input type="text" name="shippingStreetAddress" placeholder="123 Lab Street" autocomplete="address-line1" required />
             </label>
+            <div class="checkout-form-row checkout-form-row-address">
+              <label>
+                City
+                <input type="text" name="shippingCity" placeholder="Detroit" autocomplete="address-level2" required />
+              </label>
+              <label>
+                State
+                <input type="text" name="shippingState" placeholder="MI" autocomplete="address-level1" maxlength="2" required />
+              </label>
+              <label>
+                ZIP Code
+                <input type="text" name="shippingZip" placeholder="48201" autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" required />
+              </label>
+            </div>
             <label>
-              Shipping Address
-              <textarea name="shippingAddress" rows="3" placeholder="Street, city, state, ZIP"></textarea>
-            </label>
-            <label>
-              Preferred Payment Service
-              <input type="text" name="preferredPaymentService" placeholder="Cash App, Venmo, Zelle, etc." />
-            </label>
-            <label>
-              Payment Service Handle
-              <input type="text" name="paymentHandle" placeholder="@handle or account email/username" />
-            </label>
-            <label>
-              Notes
-              <textarea name="customerNotes" rows="5" placeholder="Any order notes, shipping details, or questions"></textarea>
+              Order Notes (Optional)
+              <textarea name="customerNotes" rows="5" placeholder="can i pay by venmo"></textarea>
             </label>
             <div class="purchase-actions checkout-actions">
-              <button class="button primary purchase-button" type="submit">Send Order Email</button>
+              <button class="button primary purchase-button" type="submit">Submit Order Request</button>
               <button class="button secondary purchase-button" type="button" data-clear-cart>Clear Cart</button>
             </div>
+            <p class="checkout-form-feedback" data-checkout-feedback aria-live="polite"></p>
           </form>
-          <p class="purchase-note">Submitting this form opens a pre-filled order email to customerservice@jonezielabs.com. Every order also includes a free vial cap cover and free Hot Girl Summer sticker. Product information is provided for research reference only and not for human consumption.</p>
+          <div class="checkout-success-card" data-checkout-success hidden>
+            <p>Thank you for your order request. We’ll review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.</p>
+          </div>
+          <p class="purchase-note">Every order also includes a free vial cap cover and free Hot Girl Summer sticker. Product information is provided for research reference only and not for human consumption.</p>
         </aside>
       </section>
     </main>
@@ -200,9 +221,11 @@
   <script src="catalog-admin-config.js?v=20260410a"></script>
   <script src="catalog-admin.js?v=20260410a"></script>
   <script src="catalog-image-overrides.js?v=20260505b"></script>
+  <script src="promo-banner.js?v=20260522a"></script>
   <script src="cart-nav.js?v=20260409j"></script>
   <script src="nav-search.js?v=20260516a"></script>
   <script src="age-gate.js?v=20260427c"></script>
-  <script src="checkout.js?v=20260516a"></script>
+  <script src="order-request-config.js?v=20260527a"></script>
+  <script src="checkout.js?v=20260527b"></script>
 </body>
 </html>
