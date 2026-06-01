@@ -146,8 +146,8 @@
     resourceGrid.insertAdjacentHTML('afterbegin', `
       <a class="resource-card resource-card-featured" href="why-jonezie.html">
         <p class="eyebrow">Why Jonezie</p>
-        <h3>The buyer-first story behind the lab.</h3>
-        <p>Read the sourcing philosophy, pricing stance, and premium research-use standards that shape the Jonezie experience.</p>
+        <h3>A cleaner way to shop peptides.</h3>
+        <p>See how Jonezie keeps the catalog clear, pricing straightforward, checkout simple, and support easy to reach.</p>
         <span class="catalog-link">Open Why Jonezie</span>
       </a>
     `);
