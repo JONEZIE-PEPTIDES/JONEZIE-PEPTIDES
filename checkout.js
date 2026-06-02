@@ -19,7 +19,7 @@ const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
 const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
-const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We’ll review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
+const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. Weâ€™ll review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
 const PROMO_CODES = {
   PEPPERS: {
     rate: 0.10,
@@ -133,6 +133,7 @@ function initBrandMenus() {
 }
 
 initBrandMenus();
+installManualFallbackStyles();
 initCheckoutForm();
 
 function initCheckoutForm() {
@@ -242,6 +243,41 @@ function setFeedback(message, state = '') {
 
 function clearFeedback() {
   setFeedback('');
+}
+
+function installManualFallbackStyles() {
+  if (document.getElementById('checkout-manual-fallback-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'checkout-manual-fallback-styles';
+  style.textContent = `
+    .checkout-success-card h2 {
+      margin: 0 0 10px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.35rem;
+      line-height: 1.15;
+    }
+    .checkout-manual-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .checkout-manual-actions .button {
+      margin: 0;
+    }
+    .checkout-manual-order-text {
+      width: 100%;
+      min-height: 240px;
+      padding: 16px;
+      border: 1px solid rgba(98, 219, 240, 0.18);
+      border-radius: 18px;
+      background: rgba(3, 10, 14, 0.88);
+      color: #f4fbff;
+      font: 0.86rem/1.5 "Manrope", sans-serif;
+      resize: vertical;
+    }
+  `;
+  document.head.appendChild(style);
 }
 
 function isLocalPreview() {
@@ -377,7 +413,7 @@ function renderSubmittedOrder() {
   cartRoot.innerHTML = `
     <div class="empty-cart-card checkout-complete-card">
       <h2>Order request received.</h2>
-      <p>We’re reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure Stripe invoice by email shortly.</p>
+      <p>Weâ€™re reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure Stripe invoice by email shortly.</p>
       <p class="checkout-complete-meta">${escapeHtml(submittedOrderSnapshot.shippingLabel)}</p>
       <ul class="checkout-complete-list">
         ${submittedOrderSnapshot.items.map((item) => `<li>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity} | ${escapeHtml(item.lineTotalDisplay)}</li>`).join('')}
@@ -593,21 +629,54 @@ function buildOrderRequestLines(payload) {
   return lines;
 }
 
-function openOrderRequestMailto(payload) {
+function buildOrderRequestMailtoUrl(payload) {
   const subject = encodeURIComponent(`Jonezie Order Request - ${payload.customer.name || 'Customer'} - ${payload.orderId}`);
   const body = encodeURIComponent(buildOrderRequestLines(payload).join('\n'));
-  window.location.href = `mailto:${ORDER_REQUEST_FALLBACK_EMAIL}?subject=${subject}&body=${body}`;
+  return `mailto:${ORDER_REQUEST_FALLBACK_EMAIL}?subject=${subject}&body=${body}`;
+}
+
+function openOrderRequestMailto(payload) {
+  window.location.href = buildOrderRequestMailtoUrl(payload);
+}
+
+function renderManualOrderFallback(payload) {
+  if (!successCard) return;
+
+  const orderText = buildOrderRequestLines(payload).join('\n');
+  const mailtoUrl = buildOrderRequestMailtoUrl(payload);
+  successCard.hidden = false;
+  successCard.innerHTML = `
+    <h2>Finish this order request by email.</h2>
+    <p>Your desktop may not have an email app connected, so we built the order request below. Send it to <strong>${escapeHtml(ORDER_REQUEST_FALLBACK_EMAIL)}</strong> and we will review it for invoice follow-up.</p>
+    <div class="checkout-manual-actions">
+      <a class="button primary" href="${escapeHtml(mailtoUrl)}">Open Email Draft</a>
+      <button class="button secondary" type="button" data-copy-order-request>Copy Order Request</button>
+    </div>
+    <textarea class="checkout-manual-order-text" readonly rows="12">${escapeHtml(orderText)}</textarea>
+  `;
+
+  const copyButton = successCard.querySelector('[data-copy-order-request]');
+  copyButton?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(orderText);
+      setFeedback('Order request copied. Paste it into an email to orders@jonezielabs.com.', 'success');
+    } catch {
+      const textArea = successCard.querySelector('.checkout-manual-order-text');
+      textArea?.focus();
+      textArea?.select();
+      setFeedback('Select and copy the order request text, then email it to orders@jonezielabs.com.', 'info');
+    }
+  });
 }
 
 async function submitOrderRequest(payload) {
   const endpoint = getOrderRequestEndpoint();
   if (!endpoint) {
     if (isLocalPreview()) {
-      return { ok: true, mode: 'local-preview' };
+      return { ok: true, mode: 'manual-email' };
     }
 
-    openOrderRequestMailto(payload);
-    return { ok: true, mode: 'mailto-fallback' };
+    return { ok: true, mode: 'manual-email' };
   }
 
   try {
@@ -693,12 +762,15 @@ form?.addEventListener('submit', async (event) => {
   if (clearCartButton) clearCartButton.disabled = false;
 
   if (!submission.ok) {
-    setFeedback('We couldn’t submit your order request. Please try again or email orders@jonezielabs.com for help.', 'error');
+    setFeedback('We couldnâ€™t submit your order request. Please try again or email orders@jonezielabs.com for help.', 'error');
     return;
   }
 
-  if (submission.mode === 'mailto-fallback') {
-    setFeedback('Direct order submission is not configured yet, so we opened a pre-filled order request email for you to send. Once sent, we’ll review the order and invoice you by email.', 'info');
+  if (submission.mode === 'manual-email') {
+    renderManualOrderFallback(payload);
+    openOrderRequestMailto(payload);
+    setFeedback('Email draft opened if your desktop has a mail app. If nothing opened, use the copy button below and email the order request to orders@jonezielabs.com.', 'info');
+    successCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
 
