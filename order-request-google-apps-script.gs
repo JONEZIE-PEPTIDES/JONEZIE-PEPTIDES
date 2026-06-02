@@ -2,6 +2,20 @@ const ADMIN_EMAIL = 'orders@jonezielabs.com';
 const BACKUP_ADMIN_EMAIL = 'jonezielabs@gmail.com';
 const FROM_NAME = 'Jonezie Labs';
 const REPLY_TO_EMAIL = 'orders@jonezielabs.com';
+const LEAD_SHEET_NAME = 'Jonezie Lead Capture Log';
+const LEAD_SHEET_PROPERTY = 'JONEZIE_LEAD_CAPTURE_SHEET_ID';
+const LEAD_SHEET_HEADERS = [
+  'Captured At',
+  'Email',
+  'Phone',
+  'Source',
+  'Trigger',
+  'Page',
+  'Referrer',
+  'Timezone',
+  'Locale',
+  'User Agent'
+];
 
 function doGet() {
   return ContentService
@@ -70,11 +84,21 @@ function handleLeadCapture(payload) {
   const email = String(payload.email || '').trim();
   const source = String(payload.source || 'Site capture').trim();
   const trigger = String(payload.trigger || 'Manual').trim();
+  let sheetLog = null;
+
+  try {
+    sheetLog = appendLeadCaptureRow(payload);
+  } catch (error) {
+    sheetLog = {
+      ok: false,
+      error: error && error.stack ? error.stack : String(error)
+    };
+  }
 
   MailApp.sendEmail({
     to: `${ADMIN_EMAIL},${BACKUP_ADMIN_EMAIL}`,
     subject: `New Jonezie email signup - ${email}`,
-    body: buildLeadCaptureAdminEmail(payload),
+    body: buildLeadCaptureAdminEmail(payload, sheetLog),
     name: FROM_NAME,
     replyTo: email || REPLY_TO_EMAIL
   });
@@ -84,11 +108,67 @@ function handleLeadCapture(payload) {
     type: 'lead-capture',
     email,
     source,
-    trigger
+    trigger,
+    sheetLog: sheetLog && sheetLog.ok ? 'saved' : 'not-saved'
   });
 }
 
-function buildLeadCaptureAdminEmail(payload) {
+function appendLeadCaptureRow(payload) {
+  const spreadsheet = getLeadCaptureSpreadsheet();
+  const sheet = getOrCreateLeadCaptureSheet(spreadsheet);
+  ensureLeadCaptureHeaders(sheet);
+  sheet.appendRow([
+    payload.capturedAt || new Date().toISOString(),
+    payload.email || '',
+    payload.phone || '',
+    payload.source || 'Site capture',
+    payload.trigger || 'Manual',
+    payload.page || '',
+    payload.referrer || '',
+    payload.timezone || '',
+    payload.locale || '',
+    payload.userAgent || ''
+  ]);
+
+  return {
+    ok: true,
+    spreadsheetId: spreadsheet.getId(),
+    url: spreadsheet.getUrl()
+  };
+}
+
+function getLeadCaptureSpreadsheet() {
+  const properties = PropertiesService.getScriptProperties();
+  const existingId = properties.getProperty(LEAD_SHEET_PROPERTY);
+  if (existingId) {
+    try {
+      return SpreadsheetApp.openById(existingId);
+    } catch (error) {
+      properties.deleteProperty(LEAD_SHEET_PROPERTY);
+    }
+  }
+
+  const spreadsheet = SpreadsheetApp.create(LEAD_SHEET_NAME);
+  properties.setProperty(LEAD_SHEET_PROPERTY, spreadsheet.getId());
+  return spreadsheet;
+}
+
+function getOrCreateLeadCaptureSheet(spreadsheet) {
+  return spreadsheet.getSheetByName('Signups') || spreadsheet.insertSheet('Signups');
+}
+
+function ensureLeadCaptureHeaders(sheet) {
+  const currentHeaders = sheet
+    .getRange(1, 1, 1, LEAD_SHEET_HEADERS.length)
+    .getValues()[0];
+  const hasHeaders = currentHeaders.some((value) => String(value || '').trim());
+  if (!hasHeaders) {
+    sheet.getRange(1, 1, 1, LEAD_SHEET_HEADERS.length).setValues([LEAD_SHEET_HEADERS]);
+    sheet.setFrozenRows(1);
+  }
+}
+
+function buildLeadCaptureAdminEmail(payload, sheetLog) {
   const lines = [
     'New Jonezie email signup',
     '',
@@ -101,6 +181,9 @@ function buildLeadCaptureAdminEmail(payload) {
     `Captured At: ${payload.capturedAt || new Date().toISOString()}`,
     `Timezone: ${payload.timezone || 'Not provided'}`,
     `Locale: ${payload.locale || 'Not provided'}`,
+    '',
+    `Sheet Log: ${sheetLog && sheetLog.ok ? `Saved to ${sheetLog.url}` : 'Not saved'}`,
+    ...(sheetLog && !sheetLog.ok ? [`Sheet Log Error: ${sheetLog.error}`] : []),
     '',
     'RAW LEAD PAYLOAD',
     JSON.stringify(payload, null, 2)
