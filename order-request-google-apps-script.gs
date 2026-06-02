@@ -12,6 +12,10 @@ function doGet() {
 function doPost(event) {
   try {
     const payload = JSON.parse((event.postData && event.postData.contents) || '{}');
+    if (isLeadCapturePayload(payload)) {
+      return handleLeadCapture(payload);
+    }
+
     const customerEmail = getValue(payload, ['customer', 'email']);
     const orderId = payload.orderId || 'Order request';
     const customerName = getValue(payload, ['customer', 'name']) || 'Customer';
@@ -55,19 +59,88 @@ function doPost(event) {
   }
 }
 
+function isLeadCapturePayload(payload) {
+  return Boolean(payload)
+    && Boolean(payload.email)
+    && !Array.isArray(payload.items)
+    && !payload.customer;
+}
+
+function handleLeadCapture(payload) {
+  const email = String(payload.email || '').trim();
+  const source = String(payload.source || 'Site capture').trim();
+  const trigger = String(payload.trigger || 'Manual').trim();
+
+  MailApp.sendEmail({
+    to: `${ADMIN_EMAIL},${BACKUP_ADMIN_EMAIL}`,
+    subject: `New Jonezie email signup - ${email}`,
+    body: buildLeadCaptureAdminEmail(payload),
+    name: FROM_NAME,
+    replyTo: email || REPLY_TO_EMAIL
+  });
+
+  return jsonResponse({
+    ok: true,
+    type: 'lead-capture',
+    email,
+    source,
+    trigger
+  });
+}
+
+function buildLeadCaptureAdminEmail(payload) {
+  const lines = [
+    'New Jonezie email signup',
+    '',
+    `Email: ${payload.email || 'Not provided'}`,
+    `Phone: ${payload.phone || 'Not provided'}`,
+    `Source: ${payload.source || 'Site capture'}`,
+    `Trigger: ${payload.trigger || 'Manual'}`,
+    `Page: ${payload.page || 'Not provided'}`,
+    `Referrer: ${payload.referrer || 'None'}`,
+    `Captured At: ${payload.capturedAt || new Date().toISOString()}`,
+    `Timezone: ${payload.timezone || 'Not provided'}`,
+    `Locale: ${payload.locale || 'Not provided'}`,
+    '',
+    'RAW LEAD PAYLOAD',
+    JSON.stringify(payload, null, 2)
+  ];
+
+  return lines.join('\n');
+}
+
 function buildAdminEmail(payload) {
   const customer = payload.customer || {};
   const totals = payload.totals || {};
   const shippingMethod = payload.shippingMethod || null;
   const items = Array.isArray(payload.items) ? payload.items : [];
   const included = Array.isArray(payload.includedWithOrder) ? payload.includedWithOrder : [];
+  const customerName = customer.name || [customer.firstName, customer.lastName].filter(Boolean).join(' ') || 'Not provided';
+  const shippingAddress = customer.shippingAddress || [
+    customer.shippingStreetAddress,
+    [customer.shippingCity, customer.shippingState].filter(Boolean).join(', '),
+    customer.shippingZip
+  ].filter(Boolean).join(' ') || 'Not provided';
   const lines = [
     'New Jonezie order request',
     '',
     `Order ID: ${payload.orderId || 'Not provided'}`,
     `Submitted At: ${payload.requestedAt || new Date().toISOString()}`,
     '',
-    `Customer: ${customer.name || 'Not provided'}`,
+    'CUSTOMER INFO',
+    `Name: ${customerName}`,
+    `Email: ${customer.email || 'Not provided'}`,
+    `Phone: ${customer.phone || customer.phoneDigits || 'Not provided'}`,
+    '',
+    'SHIP TO',
+    `Street Address: ${customer.shippingStreetAddress || 'Not provided'}`,
+    `City: ${customer.shippingCity || 'Not provided'}`,
+    `State: ${customer.shippingState || 'Not provided'}`,
+    `ZIP Code: ${customer.shippingZip || 'Not provided'}`,
+    `Full Shipping Address: ${shippingAddress}`,
+    '',
+    'ORDER DETAILS',
+    `Customer: ${customerName}`,
     `Email: ${customer.email || 'Not provided'}`,
     `Phone: ${customer.phone || 'Not provided'}`,
     '',
@@ -103,6 +176,9 @@ function buildAdminEmail(payload) {
   lines.push(`Notes: ${payload.notes || 'None'}`);
   lines.push('');
   lines.push('Invoice note: Review the order, then email a secure Stripe invoice. Payment must be completed before shipment.');
+  lines.push('');
+  lines.push('RAW CHECKOUT PAYLOAD');
+  lines.push(JSON.stringify(payload, null, 2));
 
   return lines.join('\n');
 }
