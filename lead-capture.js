@@ -38,7 +38,7 @@
       const phoneInput = form.querySelector('input[name="updatesPhone"], input[name="phone"]');
       const feedback = ensureInlineFeedback(form);
 
-      trigger?.addEventListener('click', () => {
+      trigger?.addEventListener('click', async () => {
         const email = String(emailInput?.value || '').trim();
         if (!isValidEmail(email)) {
           feedback.textContent = 'Enter a valid email to get the quick reference.';
@@ -52,15 +52,16 @@
           trigger: 'Inline form',
           subscribedAt: Date.now()
         };
+        trigger.disabled = true;
+        feedback.textContent = 'Saving your signup...';
+        const submission = await submitLeadSignup(state);
+        trigger.disabled = false;
+        if (!submission.ok) {
+          feedback.textContent = 'We could not save that signup. Email customerservice@jonezielabs.com and we will get you added.';
+          return;
+        }
         persistState(state);
         feedback.innerHTML = `You are set. <a href="${library.RESOURCE_DOWNLOAD.pageHref}">Open the quick reference</a> or <a href="${library.RESOURCE_DOWNLOAD.fileHref}" download>download the text version</a>.`;
-        window.location.href = library.getLeadMagnetMailto({
-          email: state.email,
-          phone: state.phone,
-          source: state.source,
-          trigger: state.trigger,
-          page: window.location.href
-        });
       });
     });
   }
@@ -93,7 +94,7 @@
 
     const form = wrapper.querySelector('[data-lead-modal-form]');
     const feedback = wrapper.querySelector('[data-lead-feedback]');
-    form?.addEventListener('submit', (event) => {
+    form?.addEventListener('submit', async (event) => {
       event.preventDefault();
       const formData = new FormData(form);
       const email = String(formData.get('email') || '').trim();
@@ -108,14 +109,18 @@
         trigger: wrapper.dataset.trigger || 'Manual',
         subscribedAt: Date.now()
       };
+      const submitButton = form.querySelector('button[type="submit"]');
+      if (submitButton) submitButton.disabled = true;
+      feedback.textContent = 'Saving your signup...';
+      const submission = await submitLeadSignup(state);
+      if (submitButton) submitButton.disabled = false;
+      if (!submission.ok) {
+        feedback.textContent = 'We could not save that signup. Email customerservice@jonezielabs.com and we will get you added.';
+        return;
+      }
       persistState(state);
-      feedback.textContent = 'You are in. Your access email is ready.';
-      window.location.href = library.getLeadMagnetMailto({
-        email: state.email,
-        source: state.source,
-        trigger: state.trigger,
-        page: window.location.href
-      });
+      feedback.textContent = 'You are in. Watch your inbox for drops, updates, and sales.';
+      window.setTimeout(() => dismiss(wrapper), 1200);
     });
 
     wrapper.querySelectorAll('[data-lead-close]').forEach((button) => {
@@ -195,5 +200,19 @@
 
   function persistState(state) {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  async function submitLeadSignup(state) {
+    if (typeof library.submitLeadCapture !== 'function') {
+      return { ok: false, reason: 'missing-submit-handler' };
+    }
+
+    return library.submitLeadCapture({
+      email: state.email,
+      phone: state.phone,
+      source: state.source,
+      trigger: state.trigger,
+      page: window.location.href
+    });
   }
 })();
