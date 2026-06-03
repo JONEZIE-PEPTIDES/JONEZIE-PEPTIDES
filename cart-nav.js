@@ -38,6 +38,18 @@
 })();
 
 (() => {
+  const hasFooter = document.querySelector('script[src*="site-footer.js"]');
+  if (hasFooter || window.JONEZIE_FOOTER_LOADER_ADDED) return;
+  window.JONEZIE_FOOTER_LOADER_ADDED = true;
+
+  const root = location.pathname.includes('/products/') ? '../' : '';
+  const script = document.createElement('script');
+  script.src = `${root}site-footer.js?v=20260603f`;
+  script.defer = true;
+  document.head.appendChild(script);
+})();
+
+(() => {
   const HOT_GIRL_STICKER_PATH = 'assets/Lables%20and%20stickers/hot_girl_summer_jonezie_sticker_black_background.webp?v=20260501b';
   const SUMMER_STICKER_PATH = 'assets/Lables%20and%20stickers/beach_volleyball_showdown_with_lively_vials.webp';
 

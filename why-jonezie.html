@@ -29,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@700&family=Inter:wght@400;500;600;700;800;900&family=Sora:wght@600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260601a" />
+  <link rel="stylesheet" href="styles.css?v=20260603k" />
   <link rel="icon" type="image/svg+xml" href="brand-mark.svg" />
   <script type="application/ld+json">
   {
@@ -306,29 +306,44 @@
     }
     .why-founder {
       display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.55fr);
-      gap: clamp(28px, 5vw, 60px);
+      grid-template-columns: minmax(0, 1.3fr) minmax(220px, 0.48fr);
+      gap: clamp(20px, 4vw, 54px);
       align-items: center;
-      min-height: 360px;
-      padding: clamp(42px, 6vw, 66px);
+      min-height: 300px;
+      padding: clamp(26px, 3.4vw, 42px) clamp(28px, 4.8vw, 56px);
       border-color: rgba(255, 95, 169, 0.2);
       background:
-        radial-gradient(circle at 72% 42%, rgba(98, 219, 240, 0.2), transparent 12%),
-        radial-gradient(circle at 96% 8%, rgba(255, 95, 169, 0.24), transparent 32%),
-        linear-gradient(180deg, rgba(9, 24, 32, 0.95), rgba(5, 17, 24, 0.98));
+        radial-gradient(circle at 62% 45%, rgba(98, 219, 240, 0.28), transparent 9%),
+        radial-gradient(circle at 90% 38%, rgba(255, 95, 169, 0.28), transparent 32%),
+        linear-gradient(115deg, rgba(5, 17, 24, 0.98) 0%, rgba(8, 20, 30, 0.96) 54%, rgba(20, 18, 34, 0.96) 100%);
+    }
+    .why-founder::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 82px;
+      background:
+        radial-gradient(ellipse at 72% 100%, rgba(255, 255, 255, 0.14), transparent 38%),
+        linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.24));
+      pointer-events: none;
     }
     .why-founder h2 {
-      max-width: 22ch;
-      font-size: clamp(2rem, 3.3vw, 3.3rem);
+      max-width: 25ch;
+      font-size: clamp(1.35rem, 2.1vw, 2.05rem);
+      line-height: 1.08;
     }
     .why-founder-copy {
       display: grid;
-      gap: 18px;
-      max-width: 850px;
+      gap: 14px;
+      max-width: 740px;
+      position: relative;
+      z-index: 1;
     }
     .why-founder-copy p {
       margin: 0;
-      font-size: clamp(1rem, 1.24vw, 1.13rem);
+      max-width: 74ch;
+      font-size: clamp(0.9rem, 1.02vw, 1.02rem);
+      line-height: 1.62;
     }
     .why-signoff {
       color: #ff73b8;
@@ -338,15 +353,19 @@
     .why-vial-frame {
       display: grid;
       place-items: center;
-      min-height: 300px;
+      align-self: stretch;
+      min-height: 236px;
+      position: relative;
+      z-index: 1;
     }
     .why-vial-frame img {
-      width: min(100%, 340px);
-      aspect-ratio: 4 / 5;
-      object-fit: cover;
+      width: auto;
+      max-width: min(100%, 254px);
+      height: 280px;
+      max-height: 280px;
+      object-fit: contain;
       object-position: center;
-      border-radius: 22px;
-      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.34);
+      filter: drop-shadow(0 24px 44px rgba(0, 0, 0, 0.42));
     }
     .why-page-footer {
       display: flex;
@@ -414,8 +433,28 @@
       .why-founder {
         padding: 28px 22px;
       }
+      .why-founder {
+        gap: 22px;
+        min-height: 0;
+      }
+      .why-founder h2 {
+        font-size: clamp(1.45rem, 8vw, 2rem);
+      }
+      .why-founder-copy p {
+        font-size: 0.96rem;
+      }
+      .why-vial-frame {
+        min-height: 220px;
+      }
+      .why-vial-frame img {
+        max-width: min(100%, 230px);
+        height: 260px;
+        max-height: 260px;
+      }
       .why-hero h1 {
-        font-size: clamp(2.9rem, 15vw, 4.4rem);
+        max-width: 100%;
+        font-size: clamp(2.35rem, 10vw, 3.3rem);
+        text-wrap: balance;
       }
       .why-hero-actions .button {
         width: 100%;
@@ -656,7 +695,7 @@
           <p class="why-signoff">- Lenny</p>
         </div>
         <div class="why-vial-frame" aria-hidden="true">
-          <img src="reta-new-new-hero-product-image.webp?v=20260602a" alt="" loading="lazy" decoding="async" />
+          <img src="reta-founder-vial-transparent.webp?v=20260603b" alt="" loading="eager" decoding="async" />
         </div>
       </section>
     </main>
@@ -678,8 +717,10 @@
   <script src="lead-capture-config.js?v=20260513a"></script>
   <script src="site-library.js?v=20260516a"></script>
   <script src="cart-nav.js?v=20260409j"></script>
-  <script src="nav-search.js?v=20260601a"></script>
+  <script src="nav-search.js?v=20260603b"></script>
   <script src="age-gate.js?v=20260427c"></script>
+  <script src="site-footer.js?v=20260603f"></script>
   <script src="lead-capture.js?v=20260513b"></script>
 </body>
 </html>
+

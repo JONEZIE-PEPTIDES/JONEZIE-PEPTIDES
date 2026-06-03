@@ -20,8 +20,86 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="brand-mark.svg" />
-  <link rel="stylesheet" href="styles.css?v=20260601a" />
-  <link rel="stylesheet" href="checkout-success-polish.css?v=20260602a" />
+  <link rel="stylesheet" href="styles.css?v=20260603k" />
+  <style>
+    .checkout-complete-card {
+      padding: 28px;
+      border: 1px solid rgba(98, 219, 240, 0.18);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 10% 12%, rgba(40, 216, 239, 0.12), transparent 30%),
+        radial-gradient(circle at 88% 8%, rgba(255, 95, 169, 0.10), transparent 26%),
+        linear-gradient(180deg, rgba(12, 28, 37, 0.96), rgba(7, 18, 25, 0.98));
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    }
+    .checkout-complete-hero { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 18px; align-items: start; }
+    .checkout-complete-icon {
+      display: grid; place-items: center; width: 56px; height: 56px;
+      border: 2px solid rgba(98, 219, 240, 0.85); border-radius: 999px;
+      color: var(--text); font-size: 2rem; font-weight: 800; line-height: 1;
+      box-shadow: 0 0 30px rgba(40, 216, 239, 0.16);
+    }
+    .checkout-complete-card h2,
+    .checkout-complete-card h3 { margin: 0; font-family: "Space Grotesk", sans-serif; }
+    .checkout-complete-card h2 { font-size: clamp(1.8rem, 3vw, 2.45rem); }
+    .checkout-complete-card h3 { margin-top: 24px; font-size: 1.25rem; }
+    .checkout-complete-card p { margin: 12px 0 0; color: rgba(244, 251, 255, 0.86); line-height: 1.75; }
+    .checkout-complete-thanks { color: var(--cyan-soft) !important; font-family: "Space Grotesk", sans-serif; font-size: 1.15rem; font-weight: 800; }
+    .checkout-invoice-alert {
+      display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 16px; align-items: center;
+      margin-top: 24px; padding: 16px; border: 1px solid rgba(98, 219, 240, 0.16);
+      border-radius: 18px; background: rgba(255, 255, 255, 0.035);
+    }
+    .checkout-invoice-alert span {
+      display: grid; place-items: center; min-height: 52px; border: 1px solid rgba(255, 95, 169, 0.42);
+      border-radius: 16px; color: var(--pink-soft); font-family: "Space Grotesk", sans-serif;
+      font-weight: 900; letter-spacing: 0.04em; background: rgba(255, 95, 169, 0.08);
+    }
+    .checkout-invoice-alert strong,
+    .checkout-complete-request strong { display: block; color: var(--text); font-family: "Space Grotesk", sans-serif; font-size: 1.08rem; }
+    .checkout-invoice-alert p { margin-top: 4px; }
+    .checkout-complete-request,
+    .checkout-next-grid,
+    .checkout-complete-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 20px; }
+    .checkout-complete-request > div,
+    .checkout-complete-order,
+    .checkout-next-grid article {
+      border: 1px solid rgba(255, 255, 255, 0.11); border-radius: 18px;
+      background: rgba(255, 255, 255, 0.035); padding: 16px;
+    }
+    .checkout-complete-label {
+      display: inline-block; margin-bottom: 8px; color: var(--pink-soft); font-size: 0.76rem;
+      font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .checkout-complete-order { margin-top: 18px; }
+    .checkout-complete-list { margin: 4px 0 0; padding: 0; display: grid; gap: 10px; list-style: none; }
+    .checkout-complete-list li {
+      display: flex; justify-content: space-between; gap: 14px; padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08); color: var(--muted);
+    }
+    .checkout-complete-list li:first-child { border-top: 0; padding-top: 0; }
+    .checkout-complete-list strong { color: var(--text); white-space: nowrap; }
+    .checkout-next-grid article { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 12px; align-items: center; }
+    .checkout-next-grid article span {
+      display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(98, 219, 240, 0.72);
+      border-radius: 999px; color: var(--text); font-family: "Space Grotesk", sans-serif; font-weight: 900; grid-row: span 2;
+    }
+    .checkout-next-grid article strong { color: var(--pink-soft); font-family: "Space Grotesk", sans-serif; font-size: 1.04rem; }
+    .checkout-next-grid article p { margin-top: 2px; }
+    .checkout-complete-actions .button { width: 100%; justify-content: center; }
+    .checkout-success-card h2 { margin: 0 0 8px; font-family: "Space Grotesk", sans-serif; font-size: 1.15rem; }
+    @media (max-width: 720px) {
+      .checkout-complete-card { padding: 20px; }
+      .checkout-complete-hero,
+      .checkout-invoice-alert,
+      .checkout-complete-request,
+      .checkout-next-grid,
+      .checkout-complete-actions { grid-template-columns: 1fr; }
+      .checkout-complete-icon { width: 52px; height: 52px; }
+      .checkout-next-grid article { grid-template-columns: 42px minmax(0, 1fr); }
+      .checkout-complete-list li { display: grid; }
+    }
+  </style>
 </head>
 <body>
   <div class="announcement-bar promo-bar" role="region" aria-label="Promotions">
@@ -74,6 +152,7 @@
           <a href="index.html#merch">Merch</a>
           <a href="index.html#faq">FAQ</a>
           <a href="index.html#process">Ordering</a>
+        
         </div>
       </div>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -102,6 +181,8 @@
         <a href="index.html#merch" class="site-nav-mobile-link">Merch</a>
         <a href="index.html#faq" class="site-nav-mobile-link">FAQ</a>
         <a href="index.html#process" class="site-nav-mobile-link">Ordering</a>
+
+
         <a href="index.html#full-catalog" class="nav-products-pill">Products</a>
         <a href="checkout.html" class="nav-cart" data-cart-link aria-label="Open cart">
           <span class="nav-cart-icon" aria-hidden="true">
@@ -210,7 +291,7 @@
             <p class="checkout-form-feedback" data-checkout-feedback aria-live="polite"></p>
           </form>
           <div class="checkout-success-card" data-checkout-success hidden>
-            <p>Thank you for your order request. We will review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.</p>
+            <p>Thank you for your order request. Weâ€™ll review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.</p>
           </div>
           <p class="purchase-note">Every order also includes a free vial cap cover and free Hot Girl Summer sticker. Product information is provided for research reference only and not for human consumption.</p>
         </aside>
@@ -230,10 +311,97 @@
   <script src="catalog-image-overrides.js?v=20260505b"></script>
   <script src="promo-banner.js?v=20260522a"></script>
   <script src="cart-nav.js?v=20260409j"></script>
-  <script src="nav-search.js?v=20260601a"></script>
+  <script src="nav-search.js?v=20260603b"></script>
   <script src="age-gate.js?v=20260427c"></script>
   <script src="order-request-config.js?v=20260527a"></script>
-  <script src="checkout.js?v=20260602a"></script>
-  <script src="checkout-success-polish.js?v=20260602a"></script>
+  <script src="checkout.js?v=20260603a"></script>
+  <script>
+    (function polishCheckoutSuccess() {
+      if (typeof renderSubmittedOrder !== 'function') return;
+
+      renderSubmittedOrder = function renderSubmittedOrder() {
+        if (!cartRoot || !submittedOrderSnapshot) return;
+
+        renderSummaryValues(submittedOrderSnapshot);
+        const customerName = submittedOrderSnapshot.customerName || 'there';
+        const firstName = customerName.split(' ').filter(Boolean)[0] || customerName;
+        const shippingParts = String(submittedOrderSnapshot.shippingLabel || 'Shipping pending')
+          .split('|')
+          .map((part) => part.trim())
+          .filter(Boolean);
+        const shippingMethod = shippingParts[0] || 'Shipping pending';
+        const shippingWindow = shippingParts[1] || 'Invoice follow-up pending';
+        const orderLines = submittedOrderSnapshot.items.map((item) => `
+          <li>
+            <span>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
+            <strong>${escapeHtml(item.lineTotalDisplay)}</strong>
+          </li>`).join('');
+
+        cartRoot.innerHTML = `
+          <div class="checkout-complete-card">
+            <div class="checkout-complete-hero">
+              <div class="checkout-complete-icon" aria-hidden="true">&#10003;</div>
+              <div>
+                <h2>Order request received.</h2>
+                <p class="checkout-complete-thanks">Thanks, ${escapeHtml(firstName)} - we're reviewing your order now.</p>
+                <p>No payment was collected on this page. Once your order is reviewed and confirmed, Jonezie Labs will email a secure Stripe invoice to the email address on your order. Please check your inbox and spam folder.</p>
+              </div>
+            </div>
+
+            <div class="checkout-invoice-alert">
+              <span>48 HR</span>
+              <div>
+                <strong>Invoice must be paid before your order ships.</strong>
+                <p>Unpaid order requests automatically cancel after 48 hours.</p>
+              </div>
+            </div>
+
+            <div class="checkout-complete-request">
+              <div>
+                <span class="checkout-complete-label">Shipping</span>
+                <strong>${escapeHtml(shippingMethod)}</strong>
+                <p>${escapeHtml(shippingWindow)}</p>
+              </div>
+              <div>
+                <span class="checkout-complete-label">Estimated Total</span>
+                <strong>${escapeHtml(formatMoney(submittedOrderSnapshot.total))}</strong>
+                <p>Final confirmation arrives by email.</p>
+              </div>
+            </div>
+
+            <div class="checkout-complete-order">
+              <span class="checkout-complete-label">Your Request</span>
+              <ul class="checkout-complete-list">${orderLines}</ul>
+            </div>
+
+            <h3>What happens next</h3>
+            <div class="checkout-next-grid">
+              <article><span>1</span><strong>Review</strong><p>We confirm your order request.</p></article>
+              <article><span>2</span><strong>Invoice</strong><p>We email your Stripe invoice link.</p></article>
+              <article><span>3</span><strong>Payment</strong><p>You pay the secure invoice.</p></article>
+              <article><span>4</span><strong>Ship</strong><p>Tracking is sent after label creation.</p></article>
+            </div>
+
+            <div class="checkout-complete-actions">
+              <a class="button primary" href="index.html#full-catalog">Continue Shopping</a>
+              <a class="button secondary" href="mailto:orders@jonezielabs.com?subject=Order%20request%20help">Need Help?</a>
+            </div>
+          </div>`;
+      };
+
+      if (successCard) {
+        const observer = new MutationObserver(() => {
+          if (!submittedOrderSnapshot || successCard.dataset.polishedSuccess === 'true') return;
+          successCard.dataset.polishedSuccess = 'true';
+          successCard.innerHTML = '<h2>Reminder</h2><p>Please check your inbox and spam folder for your Stripe invoice. No payment was collected at checkout.</p>';
+        });
+        observer.observe(successCard, { childList: true, subtree: true });
+      }
+    })();
+  </script>
+  <script src="site-footer.js?v=20260603f"></script>
 </body>
 </html>
+
+
+

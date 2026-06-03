@@ -36,7 +36,8 @@ const COA_IMAGE_BY_SLUG = {
   vip: 'coa-vip.png'
 };
 
-if (menuToggle && siteNav) {
+if (menuToggle && siteNav && !menuToggle.dataset.menuBound) {
+  menuToggle.dataset.menuBound = 'true';
   menuToggle.addEventListener('click', () => {
     const isOpen = siteNav.classList.toggle('is-open');
     menuToggle.setAttribute('aria-expanded', String(isOpen));
@@ -65,7 +66,8 @@ function initBrandMenus() {
   menus.forEach((menu) => {
     const trigger = menu.querySelector('.brand-menu-trigger');
     const panel = menu.querySelector('.brand-menu-panel');
-    if (!trigger || !panel) return;
+    if (!trigger || !panel || trigger.dataset.menuBound) return;
+    trigger.dataset.menuBound = 'true';
 
     trigger.addEventListener('click', () => {
       const isOpen = trigger.getAttribute('aria-expanded') === 'true';

@@ -19,7 +19,7 @@ const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
 const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
-const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. Weâ€™ll review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
+const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
 const PROMO_CODES = {
   PEPPERS: {
     rate: 0.10,
@@ -75,7 +75,8 @@ const SHIPPING_OPTIONS = [
 let isSubmittingOrderRequest = false;
 let submittedOrderSnapshot = null;
 
-if (menuToggle && siteNav) {
+if (menuToggle && siteNav && !menuToggle.dataset.menuBound) {
+  menuToggle.dataset.menuBound = 'true';
   menuToggle.addEventListener('click', () => {
     const isOpen = siteNav.classList.toggle('is-open');
     menuToggle.setAttribute('aria-expanded', String(isOpen));
@@ -104,7 +105,8 @@ function initBrandMenus() {
   menus.forEach((menu) => {
     const trigger = menu.querySelector('.brand-menu-trigger');
     const panel = menu.querySelector('.brand-menu-panel');
-    if (!trigger || !panel) return;
+    if (!trigger || !panel || trigger.dataset.menuBound) return;
+    trigger.dataset.menuBound = 'true';
 
     trigger.addEventListener('click', () => {
       const isOpen = trigger.getAttribute('aria-expanded') === 'true';
@@ -392,6 +394,8 @@ function renderSummaryValues({ itemCount, subtotal, discountAmount, shippingCost
 
 function buildSubmittedOrderSnapshot(payload) {
   return {
+    orderId: payload.orderId,
+    customerFirstName: payload.customer.firstName || payload.customer.name || 'there',
     customerName: payload.customer.name || 'Customer',
     itemCount: payload.totals.itemCount,
     subtotal: payload.totals.subtotal,
@@ -402,6 +406,8 @@ function buildSubmittedOrderSnapshot(payload) {
     shippingLabel: payload.shippingMethod
       ? `${payload.shippingMethod.label} | ${payload.shippingMethod.window}`
       : 'Shipping pending',
+    shippingMethodName: payload.shippingMethod?.label || 'Shipping pending',
+    shippingWindow: payload.shippingMethod?.window || 'Invoice follow-up pending',
     items: payload.items
   };
 }
@@ -410,10 +416,15 @@ function renderSubmittedOrder() {
   if (!cartRoot || !submittedOrderSnapshot) return;
 
   renderSummaryValues(submittedOrderSnapshot);
+  const orderLines = submittedOrderSnapshot.items.map((item) => `
+    <li>
+      <span>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
+      <strong>${escapeHtml(item.lineTotalDisplay)}</strong>
+    </li>`).join('');
   cartRoot.innerHTML = `
     <div class="empty-cart-card checkout-complete-card">
       <h2>Order request received.</h2>
-      <p>Weâ€™re reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure Stripe invoice by email shortly.</p>
+      <p>We are reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure Stripe invoice by email shortly.</p>
       <p class="checkout-complete-meta">${escapeHtml(submittedOrderSnapshot.shippingLabel)}</p>
       <ul class="checkout-complete-list">
         ${submittedOrderSnapshot.items.map((item) => `<li>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity} | ${escapeHtml(item.lineTotalDisplay)}</li>`).join('')}
@@ -421,10 +432,72 @@ function renderSubmittedOrder() {
     </div>`;
 }
 
+function renderSubmittedOrderPremium() {
+  if (!cartRoot || !submittedOrderSnapshot) return;
+
+  renderSummaryValues(submittedOrderSnapshot);
+  const orderLines = submittedOrderSnapshot.items.map((item) => `
+    <li>
+      <span>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
+      <strong>${escapeHtml(item.lineTotalDisplay)}</strong>
+    </li>`).join('');
+
+  cartRoot.innerHTML = `
+    <div class="checkout-complete-card">
+      <div class="checkout-complete-hero">
+        <div class="checkout-complete-icon" aria-hidden="true">&#10003;</div>
+        <div>
+          <h2>Order request received.</h2>
+          <p class="checkout-complete-thanks">Thanks, ${escapeHtml(submittedOrderSnapshot.customerFirstName)} - we're reviewing your order now.</p>
+          <p>No payment was collected on this page. Once your order is reviewed and confirmed, Jonezie Labs will email a secure Stripe invoice to the email address on your order. Please check your inbox and spam folder.</p>
+        </div>
+      </div>
+
+      <div class="checkout-invoice-alert">
+        <span>48 HR</span>
+        <div>
+          <strong>Invoice must be paid before your order ships.</strong>
+          <p>Unpaid order requests automatically cancel after 48 hours.</p>
+        </div>
+      </div>
+
+      <div class="checkout-complete-request">
+        <div>
+          <span class="checkout-complete-label">Shipping</span>
+          <strong>${escapeHtml(submittedOrderSnapshot.shippingMethodName)}</strong>
+          <p>${escapeHtml(submittedOrderSnapshot.shippingWindow)}</p>
+        </div>
+        <div>
+          <span class="checkout-complete-label">Estimated Total</span>
+          <strong>${escapeHtml(formatMoney(submittedOrderSnapshot.total))}</strong>
+          <p>Final confirmation arrives by email.</p>
+        </div>
+      </div>
+
+      <div class="checkout-complete-order">
+        <span class="checkout-complete-label">Your Request</span>
+        <ul class="checkout-complete-list">${orderLines}</ul>
+      </div>
+
+      <h3>What happens next</h3>
+      <div class="checkout-next-grid">
+        <article><span>1</span><strong>Review</strong><p>We confirm your order request.</p></article>
+        <article><span>2</span><strong>Invoice</strong><p>We email your Stripe invoice link.</p></article>
+        <article><span>3</span><strong>Payment</strong><p>You pay the secure invoice.</p></article>
+        <article><span>4</span><strong>Ship</strong><p>Tracking is sent after label creation.</p></article>
+      </div>
+
+      <div class="checkout-complete-actions">
+        <a class="button primary" href="index.html#full-catalog">Continue Shopping</a>
+        <a class="button secondary" href="mailto:orders@jonezielabs.com?subject=Order%20request%20help%20-%20${encodeURIComponent(submittedOrderSnapshot.orderId || 'Jonezie')}">Need Help?</a>
+      </div>
+    </div>`;
+}
+
 function renderCart() {
   if (!cartRoot) return;
   if (submittedOrderSnapshot) {
-    renderSubmittedOrder();
+    renderSubmittedOrderPremium();
     return;
   }
 
@@ -762,7 +835,7 @@ form?.addEventListener('submit', async (event) => {
   if (clearCartButton) clearCartButton.disabled = false;
 
   if (!submission.ok) {
-    setFeedback('We couldnâ€™t submit your order request. Please try again or email orders@jonezielabs.com for help.', 'error');
+    setFeedback('We could not submit your order request. Please try again or email orders@jonezielabs.com for help.', 'error');
     return;
   }
 
@@ -777,8 +850,10 @@ form?.addEventListener('submit', async (event) => {
   submittedOrderSnapshot = buildSubmittedOrderSnapshot(payload);
   if (successCard) {
     successCard.hidden = false;
-    const copy = successCard.querySelector('p');
-    if (copy) copy.textContent = ORDER_REQUEST_SUCCESS_MESSAGE;
+    successCard.innerHTML = `
+      <h2>Reminder</h2>
+      <p>Please check your inbox and spam folder for your Stripe invoice. No payment was collected at checkout.</p>
+    `;
   }
   if (form) form.hidden = true;
 
