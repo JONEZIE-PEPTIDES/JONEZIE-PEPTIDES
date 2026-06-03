@@ -1,23 +1,7 @@
 (() => {
   const ROOT = location.pathname.includes('/products/') ? '../' : '';
   const FOOTER_STYLE_ID = 'jonezie-site-footer-styles';
-  const FOOTER_CSS = `
-    .site-footer{width:min(100%,1440px);margin:44px auto 0;padding:0 0 28px;color:rgba(232,243,248,.78)}
-    .site-footer-main,.site-footer-legal{border:1px solid rgba(98,219,240,.22);background:radial-gradient(circle at 98% 8%,rgba(255,95,169,.15),transparent 26%),linear-gradient(180deg,rgba(5,16,24,.96),rgba(4,12,19,.98));box-shadow:0 28px 80px rgba(0,0,0,.34)}
-    .site-footer-main{display:grid;grid-template-columns:minmax(230px,.95fr) minmax(175px,.62fr) minmax(220px,.72fr) minmax(300px,.9fr);gap:clamp(24px,3.2vw,54px);align-items:start;padding:clamp(30px,4vw,56px);border-radius:24px}
-    .site-footer-logo{display:inline-flex;align-items:center;max-width:286px;margin-bottom:24px}.site-footer-logo img{display:block;width:min(100%,286px);height:auto;object-fit:contain}
-    .site-footer-brand h2{margin:0;color:#fff;font-family:"Space Grotesk",sans-serif;font-size:clamp(1.72rem,2.25vw,2.55rem);line-height:1.25;letter-spacing:0}.site-footer-brand h2 span{color:#ff5fa9}
-    .site-footer-brand p,.site-footer-help p,.site-footer-legal p{margin:18px 0 0;color:rgba(232,243,248,.78);font-size:clamp(.95rem,1vw,1.02rem);line-height:1.55}
-    .site-footer-brand p{max-width:330px}.site-footer-socials{display:flex;gap:16px;margin-top:28px}.site-footer-socials a,.site-footer-legal-icon{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.03);color:#62dbf0}.site-footer-socials a{width:54px;height:54px}.site-footer-socials a:nth-child(2),.site-footer-socials a:nth-child(3){color:#ff5fa9}.site-footer svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-    .site-footer-links{display:grid;gap:0}.site-footer-links h3{margin:0 0 22px;color:#31d8df;font-family:"Space Grotesk",sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.site-footer-links h3:after{content:"";display:block;width:40px;height:3px;margin-top:16px;border-radius:999px;background:#31d8df}.site-footer-links-support h3{color:#ff5fa9}.site-footer-links-support h3:after{background:#ff5fa9}
-    .site-footer-links a{display:grid;grid-template-columns:minmax(0,1fr) 18px;gap:12px;align-items:center;min-height:54px;border-bottom:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.88);font-size:.97rem;text-decoration:none}.site-footer-links a svg{width:18px;height:18px;color:#31d8df}.site-footer-links-support a svg{color:#ff5fa9}
-    .site-footer-help{align-self:stretch;padding:28px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:radial-gradient(circle at 96% 4%,rgba(255,95,169,.22),transparent 34%),linear-gradient(180deg,rgba(15,29,40,.92),rgba(7,17,26,.96))}
-    .site-footer-help h3{margin:0;color:#fff;font-family:"Space Grotesk",sans-serif;font-size:clamp(1.35rem,1.8vw,1.85rem);line-height:1.15}.site-footer-contact-button{display:inline-flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:56px;margin-top:24px;padding:12px 18px;border-radius:999px;background:linear-gradient(135deg,#f23891,#31cfff);color:#fff;font-weight:900;text-decoration:none}.site-footer-contact-button svg{width:24px;height:24px}
-    .site-footer-email,.site-footer-supplier a{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.86);font-size:clamp(.76rem,.88vw,.92rem);line-height:1.3;text-decoration:none;overflow-wrap:anywhere}.site-footer-email{margin-top:20px}.site-footer-email svg,.site-footer-supplier a svg{width:20px;height:20px;flex:0 0 20px;color:#31d8df}.site-footer-supplier{display:grid;gap:10px;margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1)}.site-footer-supplier>span{color:rgba(232,243,248,.66);font-weight:800}
-    .site-footer-legal{display:grid;grid-template-columns:64px minmax(0,1fr) auto minmax(180px,.28fr);gap:24px;align-items:center;margin-top:26px;padding:24px 40px;border-radius:20px}.site-footer-legal p{margin:0}.site-footer-legal-icon{width:54px;height:54px;color:#31d8df}.site-footer-dot{width:7px;height:7px;border-radius:50%;background:#ff5fa9}.site-footer-copyright{text-align:left}
-    @media (max-width:1080px){.site-footer-main{grid-template-columns:1fr 1fr}.site-footer-help{grid-column:1 / -1}.site-footer-legal{grid-template-columns:54px 1fr;gap:18px}.site-footer-dot{display:none}.site-footer-copyright{text-align:left}}
-    @media (max-width:860px){.site-footer{margin-top:32px}.site-footer-main{grid-template-columns:1fr;padding:26px;border-radius:20px}.site-footer-brand h2{font-size:1.75rem}.site-footer-logo img{width:min(100%,240px)}.site-footer-socials a{width:50px;height:50px}.site-footer-links h3{font-size:1rem}.site-footer-links a{min-height:50px}.site-footer-help{padding:22px}.site-footer-contact-button{min-height:52px}.site-footer-legal{grid-template-columns:1fr;padding:22px}.site-footer-legal-icon{width:48px;height:48px}}
-  `;
+  const FOOTER_CSS = ``;
   const FOOTER_HTML = `
     <div class="site-footer-main">
       <section class="site-footer-brand" aria-label="Jonezie Labs">
@@ -88,7 +72,9 @@
 
   function renderFooter() {
     injectFooterStyles();
-    const existingFooter = document.querySelector('footer.site-footer, footer.why-page-footer');
+    const existingFooters = Array.from(document.querySelectorAll('footer.site-footer, footer.why-page-footer'));
+    const existingFooter = existingFooters[0];
+    existingFooters.slice(1).forEach((duplicateFooter) => duplicateFooter.remove());
     const footer = existingFooter || document.createElement('footer');
     footer.className = 'site-footer';
     footer.setAttribute('aria-label', 'Jonezie Labs footer');
@@ -101,6 +87,10 @@
   }
 
   function injectFooterStyles() {
+    if (!FOOTER_CSS.trim()) {
+      document.getElementById(FOOTER_STYLE_ID)?.remove();
+      return;
+    }
     if (document.getElementById(FOOTER_STYLE_ID)) return;
     const style = document.createElement('style');
     style.id = FOOTER_STYLE_ID;
