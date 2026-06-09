@@ -3,7 +3,13 @@
     code: 'PEPPERS',
     rate: 0.10,
     freeShipping: false,
-    message: 'Use code PEPPERS for 10% off'
+    message: 'Use code PEPPERS for 10% off',
+    temporaryRate: {
+      rate: 0.20,
+      message: 'Use code PEPPERS for 20% off',
+      startsAt: '2026-06-09T00:00:00-04:00',
+      endsAt: '2026-06-15T00:00:00-04:00'
+    }
   };
 
   const MEMORIAL_DAY_PROMO = {
@@ -24,7 +30,8 @@
   }
 
   function getActivePromo(now = Date.now()) {
-    return isPromoActive(MEMORIAL_DAY_PROMO, now) ? MEMORIAL_DAY_PROMO : DEFAULT_PROMO;
+    if (isPromoActive(MEMORIAL_DAY_PROMO, now)) return MEMORIAL_DAY_PROMO;
+    return applyTemporaryRate(DEFAULT_PROMO, now);
   }
 
   function getPromoByCode(code, now = Date.now()) {
@@ -33,8 +40,22 @@
     if (normalized === MEMORIAL_DAY_PROMO.code) {
       return isPromoActive(MEMORIAL_DAY_PROMO, now) ? MEMORIAL_DAY_PROMO : null;
     }
-    if (normalized === DEFAULT_PROMO.code) return DEFAULT_PROMO;
+    if (normalized === DEFAULT_PROMO.code) return applyTemporaryRate(DEFAULT_PROMO, now);
     return null;
+  }
+
+  function applyTemporaryRate(promo, now = Date.now()) {
+    const temporaryRate = promo?.temporaryRate;
+    if (!temporaryRate) return promo;
+    const startsAt = Date.parse(temporaryRate.startsAt);
+    const endsAt = Date.parse(temporaryRate.endsAt);
+    const isTemporaryActive = Number.isFinite(startsAt) && Number.isFinite(endsAt) && now >= startsAt && now < endsAt;
+    if (!isTemporaryActive) return promo;
+    return {
+      ...promo,
+      rate: Number(temporaryRate.rate || promo.rate || 0),
+      message: temporaryRate.message || promo.message
+    };
   }
 
   function renderPromoCopy() {
@@ -56,7 +77,8 @@
     MEMORIAL_DAY_PROMO,
     getActivePromo,
     getPromoByCode,
-    isPromoActive
+    isPromoActive,
+    applyTemporaryRate
   };
 
   if (document.readyState === 'loading') {

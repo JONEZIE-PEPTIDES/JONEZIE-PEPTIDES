@@ -23,6 +23,35 @@ const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will
 const PROMO_CODES = {
   PEPPERS: {
     rate: 0.10,
+    freeShipping: false,
+    temporaryRate: {
+      rate: 0.20,
+      startsAt: '2026-06-09T00:00:00-04:00',
+      endsAt: '2026-06-15T00:00:00-04:00'
+    }
+  },
+  FOUNDER50: {
+    rate: 0.50,
+    freeShipping: false
+  },
+  LENNY04: {
+    rate: 0.40,
+    freeShipping: false
+  },
+  'FRIEND&FAM35': {
+    rate: 0.35,
+    freeShipping: false
+  },
+  LENNYSFRIEND30: {
+    rate: 0.30,
+    freeShipping: false
+  },
+  GOODGUY25: {
+    rate: 0.25,
+    freeShipping: false
+  },
+  BIGDOG20: {
+    rate: 0.20,
     freeShipping: false
   },
   MD25: {
@@ -199,6 +228,20 @@ function isPromoCurrentlyActive(promo) {
   return now >= startsAt && now < endsAt;
 }
 
+function getPromoRate(promo, now = Date.now()) {
+  if (!promo) return 0;
+  const temporaryRate = promo.temporaryRate;
+  if (temporaryRate) {
+    const startsAt = Date.parse(temporaryRate.startsAt);
+    const endsAt = Date.parse(temporaryRate.endsAt);
+    const hasValidWindow = Number.isFinite(startsAt) && Number.isFinite(endsAt);
+    if (hasValidWindow && now >= startsAt && now < endsAt) {
+      return Number(temporaryRate.rate || promo.rate || 0);
+    }
+  }
+  return Number(promo.rate || 0);
+}
+
 function getPhoneDigits(value) {
   return String(value || '').replace(/\D/g, '');
 }
@@ -310,7 +353,7 @@ function getPromoDetails() {
   const isValid = Boolean(promo) && isPromoCurrentlyActive(promo);
   return {
     code: rawCode,
-    rate: isValid ? (promo?.rate || 0) : 0,
+    rate: isValid ? getPromoRate(promo) : 0,
     freeShipping: isValid ? Boolean(promo?.freeShipping) : false,
     isValid
   };
