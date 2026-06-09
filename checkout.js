@@ -42,6 +42,10 @@ const PROMO_CODES = {
     rate: 0.35,
     freeShipping: false
   },
+  'FRIEND&FAM25': {
+    rate: 0.25,
+    freeShipping: false
+  },
   LENNYSFRIEND30: {
     rate: 0.30,
     freeShipping: false
