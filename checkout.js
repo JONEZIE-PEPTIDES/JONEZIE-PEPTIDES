@@ -107,6 +107,9 @@ const SHIPPING_OPTIONS = [
 
 let isSubmittingOrderRequest = false;
 let submittedOrderSnapshot = null;
+let hasTrackedBeginCheckout = false;
+let lastTrackedPromoCode = '';
+let lastTrackedShippingId = '';
 
 if (menuToggle && siteNav && !menuToggle.dataset.menuBound) {
   menuToggle.dataset.menuBound = 'true';
@@ -363,6 +366,33 @@ function getPromoDetails() {
   };
 }
 
+function trackBeginCheckoutOnce(cart, promo, shippingOption) {
+  if (hasTrackedBeginCheckout || !cart.length) return;
+  hasTrackedBeginCheckout = true;
+  window.JONEZIE_ANALYTICS?.beginCheckout(cart, {
+    coupon: promo?.isValid ? promo.code : '',
+    shipping_tier: shippingOption?.label || ''
+  });
+}
+
+function trackPromoIfValid(promo, subtotal) {
+  if (!promo?.isValid || !promo.code || promo.code === lastTrackedPromoCode) return;
+  lastTrackedPromoCode = promo.code;
+  window.JONEZIE_ANALYTICS?.applyPromoCode(promo.code, {
+    discount_rate: promo.rate,
+    discount_value: subtotal * promo.rate
+  });
+}
+
+function trackShippingIfChanged(cart, shippingOption, promo) {
+  if (!shippingOption || shippingOption.id === lastTrackedShippingId) return;
+  lastTrackedShippingId = shippingOption.id;
+  window.JONEZIE_ANALYTICS?.addShippingInfo(cart, shippingOption, {
+    coupon: promo?.isValid ? promo.code : '',
+    shipping_cost: getEffectiveShippingCost(shippingOption, promo)
+  });
+}
+
 function getAvailableShippingOptions(cart) {
   const hasBackorder = cart.some((item) => String(item.inventoryStatus || '').toLowerCase() === 'backorder');
   return SHIPPING_OPTIONS.filter((option) => !option.backorderOnly || hasBackorder);
@@ -575,6 +605,7 @@ function renderCart() {
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
   const total = subtotal - discountAmount + shippingCost;
+  trackBeginCheckoutOnce(cart, promo, shippingOption);
 
   renderSummaryValues({
     itemCount,
@@ -604,7 +635,8 @@ function renderCart() {
   cartRoot.querySelectorAll('[data-remove-index]').forEach((button) => {
     button.addEventListener('click', () => {
       const nextCart = getCart();
-      nextCart.splice(Number(button.getAttribute('data-remove-index')), 1);
+      const removed = nextCart.splice(Number(button.getAttribute('data-remove-index')), 1)[0];
+      if (removed) window.JONEZIE_ANALYTICS?.removeFromCart(removed);
       setCart(nextCart);
       renderCart();
     });
@@ -887,6 +919,7 @@ form?.addEventListener('submit', async (event) => {
   }
 
   if (submission.mode === 'manual-email') {
+    window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
     renderManualOrderFallback(payload);
     openOrderRequestMailto(payload);
     setFeedback('Email draft opened if your desktop has a mail app. If nothing opened, use the copy button below and email the order request to orders@jonezielabs.com.', 'info');
@@ -894,6 +927,7 @@ form?.addEventListener('submit', async (event) => {
     return;
   }
 
+  window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
   submittedOrderSnapshot = buildSubmittedOrderSnapshot(payload);
   if (successCard) {
     successCard.hidden = false;
@@ -922,11 +956,16 @@ clearCartButton?.addEventListener('click', () => {
 
 promoCodeInput?.addEventListener('input', () => {
   if (submittedOrderSnapshot) return;
+  const cart = getCart();
+  const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
+  trackPromoIfValid(getPromoDetails(), subtotal);
   renderCart();
 });
 
 shippingMethodInput?.addEventListener('change', () => {
   if (submittedOrderSnapshot) return;
+  const cart = getCart();
+  trackShippingIfChanged(cart, getSelectedShipping(cart), getPromoDetails());
   renderCart();
 });
 

@@ -61,6 +61,9 @@
           return;
         }
         persistState(state);
+        window.JONEZIE_ANALYTICS?.generateLead('inline_signup', {
+          lead_source: state.source
+        });
         feedback.innerHTML = `You are set. <a href="${library.RESOURCE_DOWNLOAD.pageHref}">Open the quick reference</a> or <a href="${library.RESOURCE_DOWNLOAD.fileHref}" download>download the text version</a>.`;
       });
     });
@@ -119,6 +122,10 @@
         return;
       }
       persistState(state);
+      window.JONEZIE_ANALYTICS?.generateLead('lead_capture_modal', {
+        lead_source: state.source,
+        lead_trigger: state.trigger
+      });
       feedback.textContent = 'You are in. Watch your inbox for drops, updates, and sales.';
       window.setTimeout(() => dismiss(wrapper), 1200);
     });

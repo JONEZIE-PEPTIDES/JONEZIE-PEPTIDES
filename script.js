@@ -265,6 +265,13 @@ function sanitizeCode(value) {
     .replace(/^_+|_+$/g, '');
 }
 
+function parsePrice(value) {
+  if (!value) return 0;
+  const cleaned = String(value).replace(/[^0-9.]/g, '');
+  const numeric = Number.parseFloat(cleaned);
+  return Number.isFinite(numeric) ? numeric : 0;
+}
+
 function initMerchPurchases() {
   const cards = document.querySelectorAll('[data-merch-purchase]');
   if (!cards.length) return;
@@ -319,6 +326,16 @@ function initMerchPurchases() {
         unitPriceDisplay: priceDisplay,
         inventoryStatus: 'in_stock'
       });
+      window.JONEZIE_ANALYTICS?.addToCart({
+        slug,
+        code: `MERCH_${sanitizeCode(slug)}_${optionCode}`,
+        packLabel: 'Merch',
+        name,
+        category: 'Merch',
+        mgOption: `Size ${size}`,
+        quantity,
+        unitPrice: Number.isFinite(unitPrice) ? unitPrice : 0
+      });
 
       if (feedback) feedback.textContent = `${name} (${size}) added to cart.`;
       if (addButton) {
@@ -332,8 +349,30 @@ function initMerchPurchases() {
   });
 }
 
+function initProductClickTracking() {
+  if (!catalogData) return;
+  const allProducts = [...(catalogData.featured || []), ...(catalogData.products || [])];
+  const bySlug = new Map(allProducts.map((product) => [product.slug, product]));
+  document.querySelectorAll('[data-product-slug]').forEach((link) => {
+    if (link.dataset.analyticsBound) return;
+    link.dataset.analyticsBound = 'true';
+    link.addEventListener('click', () => {
+      const product = bySlug.get(link.getAttribute('data-product-slug'));
+      if (!product) return;
+      window.JONEZIE_ANALYTICS?.selectItem({
+        slug: product.slug,
+        name: product.name,
+        category: product.category,
+        unitPrice: parsePrice(product.startingPriceSingle),
+        itemListName: link.closest('[data-featured-grid]') ? 'Featured products' : 'Catalog'
+      });
+    });
+  });
+}
+
 renderCounts();
 renderFeatured();
 renderCatalog();
+initProductClickTracking();
 initMerchImageLightbox();
 initMerchPurchases();

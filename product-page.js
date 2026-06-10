@@ -409,6 +409,14 @@ function renderProductPage() {
   }
 
   if (meta) meta.setAttribute('content', baseMetaDescription);
+  window.JONEZIE_ANALYTICS?.viewItem({
+    slug: product.slug,
+    name: product.name,
+    category: product.category,
+    code: selectedOption?.code,
+    mgOption: selectedOption?.mgOption,
+    unitPrice: parsePrice(selectedOption?.[selectedPackKey] || product.startingPriceSingle)
+  });
   if (titleNode) titleNode.textContent = product.name;
   if (eyebrowNode) eyebrowNode.textContent = product.category;
   if (descriptionNode) descriptionNode.textContent = researchSummary;
@@ -599,6 +607,7 @@ function renderProductPage() {
     const item = getSelectedCartItem();
     if (!item) return;
     addItemToCart(item);
+    window.JONEZIE_ANALYTICS?.addToCart(item);
     addToCartButton.textContent = 'Added To Cart';
     window.setTimeout(() => {
       addToCartButton.textContent = 'Add To Cart';
@@ -609,6 +618,8 @@ function renderProductPage() {
     const item = getSelectedCartItem();
     if (!item) return;
     setCart([item]);
+    window.JONEZIE_ANALYTICS?.addToCart(item);
+    window.JONEZIE_ANALYTICS?.beginCheckout([item]);
     window.location.href = 'checkout.html';
   });
 

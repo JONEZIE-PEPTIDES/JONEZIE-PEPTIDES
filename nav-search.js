@@ -173,9 +173,18 @@
     const match = exactMatch || partialMatch;
 
     if (match) {
+      window.JONEZIE_ANALYTICS?.search(input.value.trim(), {
+        search_result: match.name,
+        search_result_slug: match.slug,
+        matched: true
+      });
       navigateToSlug(match.slug);
       return true;
     }
+
+    window.JONEZIE_ANALYTICS?.search(input.value.trim(), {
+      matched: false
+    });
 
     if (reportMissing) {
       input.setCustomValidity('No matching product found.');
