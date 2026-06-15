@@ -22,13 +22,8 @@ const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail |
 const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
 const PROMO_CODES = {
   PEPPERS: {
-    rate: 0.10,
-    freeShipping: false,
-    temporaryRate: {
-      rate: 0.20,
-      startsAt: '2026-06-09T00:00:00-04:00',
-      endsAt: '2026-06-15T00:00:00-04:00'
-    }
+    rate: 0.20,
+    freeShipping: false
   },
   FOUNDER50: {
     rate: 0.50,

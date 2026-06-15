@@ -1,15 +1,9 @@
 (() => {
   const DEFAULT_PROMO = {
     code: 'PEPPERS',
-    rate: 0.10,
+    rate: 0.20,
     freeShipping: false,
-    message: 'Use code PEPPERS for 10% off',
-    temporaryRate: {
-      rate: 0.20,
-      message: 'Use code PEPPERS for 20% off',
-      startsAt: '2026-06-09T00:00:00-04:00',
-      endsAt: '2026-06-15T00:00:00-04:00'
-    }
+    message: 'Use code PEPPERS for 20% off'
   };
 
   const MEMORIAL_DAY_PROMO = {
