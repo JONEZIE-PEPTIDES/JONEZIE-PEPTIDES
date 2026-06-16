@@ -292,6 +292,21 @@ function renderProductPage() {
   const selectedTotal = document.querySelector('[data-selected-total]');
   const addToCartButton = document.querySelector('[data-add-to-cart]');
   const buyNowButton = document.querySelector('[data-buy-now]');
+  const purchaseActions = document.querySelector('.purchase-actions');
+  let keepShoppingButton = document.querySelector('[data-keep-shopping]');
+  const featuredProductsHref = window.location.pathname.includes('/products/') ? '../index.html#featured' : 'index.html#featured';
+
+  if (purchaseActions && buyNowButton && !keepShoppingButton) {
+    keepShoppingButton = document.createElement('a');
+    keepShoppingButton.className = 'button secondary purchase-button purchase-keep-shopping';
+    keepShoppingButton.href = featuredProductsHref;
+    keepShoppingButton.textContent = 'Keep Shopping';
+    keepShoppingButton.setAttribute('data-keep-shopping', '');
+    keepShoppingButton.hidden = true;
+    buyNowButton.insertAdjacentElement('afterend', keepShoppingButton);
+  } else if (keepShoppingButton) {
+    keepShoppingButton.href = featuredProductsHref;
+  }
 
   document.title = siteLibrary?.getProductPageTitle ? siteLibrary.getProductPageTitle(product) : `${product.name} | Jonezie Labs`;
   const meta = document.querySelector('meta[name="description"]');
@@ -608,6 +623,8 @@ function renderProductPage() {
     if (!item) return;
     addItemToCart(item);
     window.JONEZIE_ANALYTICS?.addToCart(item);
+    buyNowButton?.classList.add('purchase-button-pink');
+    if (keepShoppingButton) keepShoppingButton.hidden = false;
     addToCartButton.textContent = 'Added To Cart';
     window.setTimeout(() => {
       addToCartButton.textContent = 'Add To Cart';
