@@ -34,6 +34,10 @@ const PROMO_CODES = {
     rate: 0.40,
     freeShipping: false
   },
+  FATHER40: {
+    rate: 0.40,
+    freeShipping: false
+  },
   'FRIEND&FAM35': {
     rate: 0.35,
     freeShipping: false
