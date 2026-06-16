@@ -924,13 +924,17 @@ window.JONEZIE_SITE_LIBRARY = (() => {
         : { ok: false, reason: 'missing-endpoint' };
     }
 
-    const payload = {
-      capturedAt: new Date().toISOString(),
-      email: String(details.email || '').trim(),
-      phone: String(details.phone || '').trim(),
-      source: String(details.source || 'Site capture').trim(),
-      trigger: String(details.trigger || 'Manual').trim(),
-      page: String(details.page || window.location.href).trim(),
+      const payload = {
+        capturedAt: new Date().toISOString(),
+        name: String(details.name || '').trim(),
+        email: String(details.email || '').trim(),
+        phone: String(details.phone || '').trim(),
+        source: String(details.source || 'Site capture').trim(),
+        trigger: String(details.trigger || 'Manual').trim(),
+        welcomeCode: String(details.welcomeCode || '').trim(),
+        welcomeDiscountRate: details.welcomeDiscountRate || '',
+        welcomeCodeStatus: String(details.welcomeCodeStatus || '').trim(),
+        page: String(details.page || window.location.href).trim(),
       referrer: String(document.referrer || '').trim(),
       timezone: String(Intl.DateTimeFormat().resolvedOptions().timeZone || '').trim(),
       locale: String(navigator.language || '').trim(),

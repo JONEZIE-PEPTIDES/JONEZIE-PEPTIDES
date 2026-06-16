@@ -20,6 +20,7 @@ const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
 const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
 const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
+const WELCOME_CODE_REDEMPTIONS_KEY = 'jonezie_welcome7_redeemed_emails';
 const PROMO_CODES = {
   PEPPERS: {
     rate: 0.20,
@@ -66,6 +67,11 @@ const PROMO_CODES = {
   MILKO: {
     rate: 0.60,
     freeShipping: false
+  },
+  WELCOME7: {
+    rate: 0.40,
+    freeShipping: false,
+    firstOrderOnly: true
   }
 };
 const SHIPPING_OPTIONS = [
@@ -357,8 +363,38 @@ function getPromoDetails() {
     code: rawCode,
     rate: isValid ? getPromoRate(promo) : 0,
     freeShipping: isValid ? Boolean(promo?.freeShipping) : false,
+    firstOrderOnly: isValid ? Boolean(promo?.firstOrderOnly) : false,
     isValid
   };
+}
+
+function normalizePromoEmail(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function getWelcomeRedemptions() {
+  try {
+    const redemptions = JSON.parse(window.localStorage.getItem(WELCOME_CODE_REDEMPTIONS_KEY) || '{}');
+    return redemptions && typeof redemptions === 'object' ? redemptions : {};
+  } catch {
+    return {};
+  }
+}
+
+function hasRedeemedWelcomeCode(email) {
+  const emailKey = normalizePromoEmail(email);
+  return Boolean(emailKey && getWelcomeRedemptions()[emailKey]);
+}
+
+function markWelcomeCodeRedeemed(email) {
+  const emailKey = normalizePromoEmail(email);
+  if (!emailKey) return;
+  const redemptions = getWelcomeRedemptions();
+  redemptions[emailKey] = {
+    code: 'WELCOME7',
+    redeemedAt: Date.now()
+  };
+  window.localStorage.setItem(WELCOME_CODE_REDEMPTIONS_KEY, JSON.stringify(redemptions));
 }
 
 function trackBeginCheckoutOnce(cart, promo, shippingOption) {
@@ -877,6 +913,10 @@ form?.addEventListener('submit', async (event) => {
   const zipCode = formData.get('shippingZip') || '';
   const notes = formData.get('customerNotes') || '';
   const promo = getPromoDetails();
+  if (promo.isValid && promo.code === 'WELCOME7' && hasRedeemedWelcomeCode(email)) {
+    setFeedback('WELCOME7 has already been used with this email address.', 'error');
+    return;
+  }
   const shippingOption = getSelectedShipping(cart);
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
@@ -915,6 +955,7 @@ form?.addEventListener('submit', async (event) => {
 
   if (submission.mode === 'manual-email') {
     window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
+    if (promo.isValid && promo.code === 'WELCOME7') markWelcomeCodeRedeemed(email);
     renderManualOrderFallback(payload);
     openOrderRequestMailto(payload);
     setFeedback('Email draft opened if your desktop has a mail app. If nothing opened, use the copy button below and email the order request to orders@jonezielabs.com.', 'info');
@@ -923,6 +964,7 @@ form?.addEventListener('submit', async (event) => {
   }
 
   window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
+  if (promo.isValid && promo.code === 'WELCOME7') markWelcomeCodeRedeemed(email);
   submittedOrderSnapshot = buildSubmittedOrderSnapshot(payload);
   if (successCard) {
     successCard.hidden = false;
