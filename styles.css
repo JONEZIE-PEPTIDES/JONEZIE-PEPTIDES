@@ -457,6 +457,14 @@ img { display: block; max-width: 100%; }
   color: rgba(255, 123, 188, 0.9);
 }
 
+.promo-bar-home {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 130;
+}
+
 @keyframes promo-scroll-loop {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }
@@ -509,7 +517,7 @@ img { display: block; max-width: 100%; }
 
 .home-shell > .site-header-home.site-header-home-sticky {
   position: fixed !important;
-  top: 14px !important;
+  top: 52px !important;
   left: 50%;
   width: min(calc(100% - 32px), 1600px);
   margin: 0;
@@ -518,7 +526,7 @@ img { display: block; max-width: 100%; }
 }
 
 .home-shell > main {
-  padding-top: 96px;
+  padding-top: 134px;
 }
 
 .brand {
@@ -3865,11 +3873,11 @@ body.lightbox-open {
   }
   .home-shell > .site-header-home.site-header-home-sticky {
     position: fixed !important;
-    top: 10px !important;
+    top: 44px !important;
     width: min(calc(100% - 20px), 1600px);
   }
   .home-shell > main {
-    padding-top: 86px;
+    padding-top: 118px;
   }
   .site-header-home .brand-dropdown {
     position: static;
