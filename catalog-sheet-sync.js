@@ -114,6 +114,7 @@
     'cagrilintide5mg+semaglutide5mg': 'Cagrilintide 5mg + Semaglutide 5mg',
     'kisspeptin-10': 'Kisspeptin-10',
     cerebrolysin: 'Cerebrolysin',
+    'klow (ghk-cu50+tb10+bc10+kpv10)': 'KLOW',
     'glow stack (bpc 157 10mg+ghk-cu 50mg+tb500 10mg)': 'GLOW Stack (BPC 157 10mg + GHK-CU 50mg + TB500 10mg)'
   };
 
