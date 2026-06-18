@@ -9,6 +9,7 @@
     'mt-1',
     'tb500',
     'glutathione',
+    'hcg',
     'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg',
     'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg',
     'tirzepatide',
@@ -77,6 +78,38 @@
     lc216: 'lc216-new-hero-product-image.webp'
   };
 
+  const FEATURED_FALLBACK_PRODUCTS = {
+    hcg: {
+      name: 'HCG',
+      sourceName: 'HCG',
+      slug: 'hcg',
+      category: 'Growth',
+      description: 'A growth-axis research compound used in endocrine, recovery, and body-composition signaling studies.',
+      startingPriceSingle: '$50.46',
+      startingPrice8: '$352.40',
+      startingPrice10: '$417.69',
+      image: 'hcg-new-hero-product-image.webp',
+      options: [
+        {
+          code: 'HCG5KIU',
+          specification: '5000iu*10vials',
+          mgOption: '5000iu',
+          singleVialPrice: '$50.46',
+          eightVialPrice: '$352.40',
+          tenVialPrice: '$417.69'
+        },
+        {
+          code: 'HCG10KIU',
+          specification: '10000iu/10vials',
+          mgOption: '10000iu',
+          singleVialPrice: '$90.82',
+          eightVialPrice: '$634.33',
+          tenVialPrice: '$751.84'
+        }
+      ]
+    }
+  };
+
   function applyOverrides(list) {
     if (!Array.isArray(list)) return;
     list.forEach((product) => {
@@ -86,7 +119,7 @@
   }
 
   const featuredLookup = new Map(
-    [...(catalog.featured || []), ...(catalog.products || [])]
+    [...(catalog.featured || []), ...(catalog.products || []), ...Object.values(FEATURED_FALLBACK_PRODUCTS)]
       .filter((product) => product?.slug)
       .map((product) => [product.slug, product])
   );
