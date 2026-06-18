@@ -659,6 +659,7 @@ function renderCart() {
         <p>${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)}</p>
         <div class="checkout-item-meta">
           <span>Availability: ${escapeHtml(getInventoryLabel(item.inventoryStatus))}</span>
+          ${item.backorderNote ? `<span>${escapeHtml(item.backorderNote)}</span>` : ''}
           <span>Unit price: ${escapeHtml(item.unitPriceDisplay)}</span>
           <span>Quantity: ${item.quantity}</span>
           <span>Line total: ${formatMoney(item.unitPrice * item.quantity)}</span>
@@ -752,6 +753,7 @@ function buildOrderRequestPayload({
       packLabel: item.packLabel,
       quantity: item.quantity,
       inventoryStatus: getInventoryLabel(item.inventoryStatus),
+      backorderNote: String(item.backorderNote || '').trim(),
       unitPrice: item.unitPrice,
       unitPriceDisplay: item.unitPriceDisplay,
       lineTotal: item.unitPrice * item.quantity,
@@ -801,6 +803,7 @@ function buildOrderRequestLines(payload) {
 
   payload.items.forEach((item) => {
     lines.push(`- ${item.name} | ${item.mgOption} | ${item.packLabel} | ${item.inventoryStatus} | Qty ${item.quantity} | ${item.unitPriceDisplay} each | ${item.lineTotalDisplay} total`);
+    if (item.backorderNote) lines.push(`  Backorder note: ${item.backorderNote}`);
   });
 
   lines.push('');

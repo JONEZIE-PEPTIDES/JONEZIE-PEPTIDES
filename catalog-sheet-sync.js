@@ -99,7 +99,10 @@
     ['LC216', '10mg', 31.625, 220.88, 261.8]
   ];
 
-  const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide'];
+  const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide'];
+  const BACKORDER_NOTES = {
+    tirzepatide: 'Backorder: order now. Tirzepatide orders ship starting 6/28/26.'
+  };
   const PRODUCT_PRICE_MULTIPLIER = 1.17;
 
   const NAME_OVERRIDES = {
@@ -328,10 +331,19 @@
       if (diff !== 0) return diff;
       return String(a.mgOption).localeCompare(String(b.mgOption));
     });
-    const first = sortedOptions[0] || { singleVialPrice: '$0.00', eightVialPrice: '$0.00', tenVialPrice: '$0.00' };
+    const backorderNote = BACKORDER_NOTES[product.slug] || '';
+    const options = backorderNote
+      ? sortedOptions.map((option) => ({
+          ...option,
+          inventoryStatus: 'backorder',
+          backorderNote
+        }))
+      : sortedOptions;
+    const first = options[0] || { singleVialPrice: '$0.00', eightVialPrice: '$0.00', tenVialPrice: '$0.00' };
     return {
       ...product,
-      options: sortedOptions,
+      ...(backorderNote ? { inventoryStatus: 'backorder', backorderNote } : {}),
+      options,
       startingPriceSingle: first.singleVialPrice,
       startingPrice8: first.eightVialPrice,
       startingPrice10: first.tenVialPrice

@@ -222,6 +222,10 @@ function getInventoryLabel(status) {
   return labels[status] || labels.in_stock;
 }
 
+function getBackorderNote(product, option) {
+  return option?.backorderNote || product?.backorderNote || `${option?.code || 'This item'} is currently on backorder.`;
+}
+
 function formatMoney(value) {
   if (!Number.isFinite(value)) return 'Pending';
   return `$${value.toFixed(2)}`;
@@ -377,7 +381,9 @@ function renderProductPage() {
             '@type': 'Offer',
             priceCurrency: 'USD',
             price: offerPrice.toFixed(2),
-            availability: getInventoryStatus(selectedOption) === 'sold_out' ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+            availability: getInventoryStatus(selectedOption) === 'sold_out'
+              ? 'https://schema.org/OutOfStock'
+              : (getInventoryStatus(selectedOption) === 'backorder' ? 'https://schema.org/BackOrder' : 'https://schema.org/InStock'),
             url: canonicalUrl,
             seller: {
               '@type': 'Organization',
@@ -565,7 +571,7 @@ function renderProductPage() {
     if (selectedTitle) selectedTitle.textContent = `${product.name} ${selectedOption.mgOption}`;
     if (selectedSubtitle) {
       if (selectedStatus === 'backorder') {
-        selectedSubtitle.textContent = `${selectedOption.code} is currently on backorder.`;
+        selectedSubtitle.textContent = getBackorderNote(product, selectedOption);
       } else if (isSoldOut) {
         selectedSubtitle.textContent = `${selectedOption.code} is currently sold out.`;
       } else {
@@ -604,7 +610,8 @@ function renderProductPage() {
       unitPriceDisplay: selectedOption[selectedPackKey],
       quantity,
       image: product.image,
-      inventoryStatus: selectedStatus
+      inventoryStatus: selectedStatus,
+      backorderNote: selectedStatus === 'backorder' ? getBackorderNote(product, selectedOption) : ''
     };
   }
 
