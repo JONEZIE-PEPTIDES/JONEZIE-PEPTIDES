@@ -9,9 +9,9 @@
   const forcePreview = searchParams.get('showLeadCapture') === '1';
 
   const STORAGE_KEY = 'jonezie_lead_capture_state';
-  const WELCOME_CODE = 'WELCOME7';
-  const WELCOME_DISCOUNT_RATE = 0.40;
-  const WELCOME_CLAIMS_KEY = 'jonezie_welcome7_claimed_emails';
+  const WELCOME_CODE = 'TRIBE';
+  const WELCOME_DISCOUNT_RATE = 0.30;
+  const WELCOME_CLAIMS_KEY = 'jonezie_tribe_claimed_emails';
   const DAILY_EXPOSURE_MS = 1000 * 60 * 60 * 24;
   const existingState = getState();
   const lastExposureAt = existingState.lastShownAt || existingState.dismissedAt || 0;
@@ -86,7 +86,7 @@
         <p class="eyebrow">Jonezie Labs</p>
         <h2>Stay Connected</h2>
         <p>New drops. Clean references. Major sales.</p>
-        <p class="lead-capture-offer">Sign up and receive 40% off your first order.</p>
+        <p class="lead-capture-offer">Sign up and receive 30% off your first order.</p>
         <form class="lead-capture-form" data-lead-modal-form>
           <label>
             <span class="sr-only">Name</span>
@@ -266,7 +266,7 @@
       </div>
       <p class="eyebrow">Jonezie Labs</p>
       <h2>Welcome to the tribe!</h2>
-      <p>Here is your 40% off code for your first order.</p>
+      <p>Here is your 30% off code for your first order.</p>
       <div class="lead-capture-code-box" aria-label="Welcome discount code">
         <span>${WELCOME_CODE}</span>
         <button class="lead-capture-copy" type="button" data-lead-copy-code>Copy Code</button>
@@ -279,7 +279,7 @@
     copyButton?.addEventListener('click', async () => {
       const copied = await copyText(WELCOME_CODE);
       copyButton.textContent = copied ? 'Copied!' : 'Copy failed';
-      if (feedback) feedback.textContent = copied ? 'Code copied. Paste WELCOME7 at checkout.' : 'Select and copy WELCOME7 manually.';
+      if (feedback) feedback.textContent = copied ? `Code copied. Paste ${WELCOME_CODE} at checkout.` : `Select and copy ${WELCOME_CODE} manually.`;
       window.setTimeout(() => {
         copyButton.textContent = 'Copy Code';
       }, 1600);

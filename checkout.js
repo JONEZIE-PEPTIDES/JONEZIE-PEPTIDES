@@ -20,7 +20,8 @@ const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
 const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
 const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
-const WELCOME_CODE_REDEMPTIONS_KEY = 'jonezie_welcome7_redeemed_emails';
+const FIRST_ORDER_CODE_REDEMPTIONS_KEY = 'jonezie_first_order_code_redeemed_emails';
+const LEGACY_WELCOME_CODE_REDEMPTIONS_KEY = 'jonezie_welcome7_redeemed_emails';
 const PROMO_CODES = {
   PEPPERS: {
     rate: 0.20,
@@ -74,6 +75,11 @@ const PROMO_CODES = {
   },
   WELCOME7: {
     rate: 0.40,
+    freeShipping: false,
+    firstOrderOnly: true
+  },
+  TRIBE: {
+    rate: 0.30,
     freeShipping: false,
     firstOrderOnly: true
   }
@@ -376,29 +382,48 @@ function normalizePromoEmail(value) {
   return String(value || '').trim().toLowerCase();
 }
 
-function getWelcomeRedemptions() {
+function getFirstOrderCodeRedemptions() {
   try {
-    const redemptions = JSON.parse(window.localStorage.getItem(WELCOME_CODE_REDEMPTIONS_KEY) || '{}');
+    const redemptions = JSON.parse(window.localStorage.getItem(FIRST_ORDER_CODE_REDEMPTIONS_KEY) || '{}');
     return redemptions && typeof redemptions === 'object' ? redemptions : {};
   } catch {
     return {};
   }
 }
 
-function hasRedeemedWelcomeCode(email) {
-  const emailKey = normalizePromoEmail(email);
-  return Boolean(emailKey && getWelcomeRedemptions()[emailKey]);
+function getLegacyWelcomeRedemptions() {
+  try {
+    const redemptions = JSON.parse(window.localStorage.getItem(LEGACY_WELCOME_CODE_REDEMPTIONS_KEY) || '{}');
+    return redemptions && typeof redemptions === 'object' ? redemptions : {};
+  } catch {
+    return {};
+  }
 }
 
-function markWelcomeCodeRedeemed(email) {
+function hasRedeemedFirstOrderCode(email, code) {
   const emailKey = normalizePromoEmail(email);
-  if (!emailKey) return;
-  const redemptions = getWelcomeRedemptions();
+  const promoCode = String(code || '').trim().toUpperCase();
+  if (!emailKey || !promoCode) return false;
+  const redemptions = getFirstOrderCodeRedemptions();
+  const record = redemptions[emailKey];
+  if (record?.[promoCode]) return true;
+  return promoCode === 'WELCOME7' && Boolean(getLegacyWelcomeRedemptions()[emailKey]);
+}
+
+function markFirstOrderCodeRedeemed(email, code) {
+  const emailKey = normalizePromoEmail(email);
+  const promoCode = String(code || '').trim().toUpperCase();
+  if (!emailKey || !promoCode) return;
+  const redemptions = getFirstOrderCodeRedemptions();
   redemptions[emailKey] = {
-    code: 'WELCOME7',
+    ...(redemptions[emailKey] || {}),
+    [promoCode]: {
+      code: promoCode,
+      redeemedAt: Date.now()
+    },
     redeemedAt: Date.now()
   };
-  window.localStorage.setItem(WELCOME_CODE_REDEMPTIONS_KEY, JSON.stringify(redemptions));
+  window.localStorage.setItem(FIRST_ORDER_CODE_REDEMPTIONS_KEY, JSON.stringify(redemptions));
 }
 
 function trackBeginCheckoutOnce(cart, promo, shippingOption) {
@@ -920,8 +945,8 @@ form?.addEventListener('submit', async (event) => {
   const zipCode = formData.get('shippingZip') || '';
   const notes = formData.get('customerNotes') || '';
   const promo = getPromoDetails();
-  if (promo.isValid && promo.code === 'WELCOME7' && hasRedeemedWelcomeCode(email)) {
-    setFeedback('WELCOME7 has already been used with this email address.', 'error');
+  if (promo.isValid && promo.firstOrderOnly && hasRedeemedFirstOrderCode(email, promo.code)) {
+    setFeedback(`${promo.code} has already been used with this email address.`, 'error');
     return;
   }
   const shippingOption = getSelectedShipping(cart);
@@ -962,7 +987,7 @@ form?.addEventListener('submit', async (event) => {
 
   if (submission.mode === 'manual-email') {
     window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
-    if (promo.isValid && promo.code === 'WELCOME7') markWelcomeCodeRedeemed(email);
+    if (promo.isValid && promo.firstOrderOnly) markFirstOrderCodeRedeemed(email, promo.code);
     renderManualOrderFallback(payload);
     openOrderRequestMailto(payload);
     setFeedback('Email draft opened if your desktop has a mail app. If nothing opened, use the copy button below and email the order request to orders@jonezielabs.com.', 'info');
@@ -971,7 +996,7 @@ form?.addEventListener('submit', async (event) => {
   }
 
   window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
-  if (promo.isValid && promo.code === 'WELCOME7') markWelcomeCodeRedeemed(email);
+  if (promo.isValid && promo.firstOrderOnly) markFirstOrderCodeRedeemed(email, promo.code);
   submittedOrderSnapshot = buildSubmittedOrderSnapshot(payload);
   if (successCard) {
     successCard.hidden = false;
