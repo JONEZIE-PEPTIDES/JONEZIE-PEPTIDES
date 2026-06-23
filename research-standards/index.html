@@ -29,6 +29,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="../brand-mark.svg" />
+  <script src="landing-config.js?v=20260623a"></script>
+  <script>
+    if (window.JONEZIE_RESEARCH_STANDARDS_CONFIG?.showMainSiteEntrances === false) {
+      document.documentElement.classList.add('rs-hide-main-site-entrances');
+    }
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -91,7 +97,7 @@
         "name": "Where can I find additional information?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Visit the main Jonezie Labs website for FAQ, support, and company information."
+          "text": "Contact customer support and our team will point you in the right direction."
         }
       }
     ]
@@ -117,6 +123,10 @@
 
     * {
       box-sizing: border-box;
+    }
+
+    html.rs-hide-main-site-entrances [data-main-site-entry] {
+      display: none !important;
     }
 
     body {
@@ -164,14 +174,14 @@
     .standards-logo {
       display: inline-flex;
       align-items: center;
-      width: 154px;
-      min-width: 132px;
+      width: 188px;
+      min-width: 158px;
     }
 
     .standards-logo img {
       display: block;
       width: auto;
-      height: 46px;
+      height: 58px;
       max-width: 100%;
       object-fit: contain;
       object-position: left center;
@@ -305,6 +315,12 @@
       background: rgba(255, 255, 255, 0.78);
       border-color: rgba(7, 19, 34, 0.14);
       box-shadow: none;
+    }
+
+    .standards-enter-button {
+      min-height: 52px;
+      padding: 0 28px;
+      font-size: 0.96rem;
     }
 
     .standards-visual {
@@ -674,12 +690,12 @@
       }
 
       .standards-logo {
-        width: 128px;
-        min-width: 108px;
+        width: 152px;
+        min-width: 130px;
       }
 
       .standards-logo img {
-        height: 38px;
+        height: 46px;
       }
 
       .standards-explore {
@@ -752,16 +768,16 @@
   <div class="standards-page">
     <div class="standards-header-wrap">
       <header class="standards-header standards-shell" aria-label="Jonezie Labs ad landing page navigation">
-        <a class="standards-logo" href="../index.html" aria-label="Jonezie Labs home">
-          <img src="../jonezie-labs-master-logo.png?v=20260410c" alt="Jonezie Labs" width="320" height="120" />
+        <a class="standards-logo" href="./" aria-label="Jonezie Labs research standards home">
+          <img src="../jonezie-labs-master-logo.png?v=20260623a" alt="Jonezie Labs" width="320" height="120" />
         </a>
         <nav class="standards-nav" aria-label="Primary navigation">
-          <a href="../index.html">Home</a>
-          <a href="../why-jonezie.html">About</a>
-          <a href="../index.html#faq">FAQ</a>
-          <a href="mailto:customerservice@jonezielabs.com?subject=Jonezie%20Labs%20Support">Contact</a>
+          <a href="about/">About</a>
+          <a href="standards/">Standards</a>
+          <a href="faq/">FAQ</a>
+          <a href="contact/">Contact</a>
         </nav>
-        <a class="standards-explore" href="../index.html">Explore Jonezie Labs</a>
+        <a class="standards-explore" href="../index.html" data-main-site-entry>Explore Jonezie Labs</a>
       </header>
     </div>
 
@@ -773,7 +789,7 @@
           <p>Jonezie Labs provides carefully packed research-use-only materials with a focus on transparency, responsive support, and reliable fulfillment.</p>
           <div class="standards-actions" aria-label="Landing page actions">
             <a class="standards-button" href="#standards">Learn More <span aria-hidden="true">+</span></a>
-            <a class="standards-button standards-button-secondary" href="../index.html">Enter</a>
+            <a class="standards-button standards-button-secondary standards-enter-button" href="../index.html" data-main-site-entry>Enter Jonezie Labs</a>
           </div>
         </div>
         <div class="standards-visual" aria-hidden="true">
@@ -921,7 +937,7 @@
           <article class="standards-faq-item">
             <h3>Where can I find additional information?</h3>
             <span class="standards-plus" aria-hidden="true">+</span>
-            <p>Use the main Jonezie Labs website for FAQ, support, and company information.</p>
+            <p>Contact customer support and our team will point you in the right direction.</p>
           </article>
         </div>
 
@@ -933,7 +949,7 @@
             <div>
               <h2>Need Help?</h2>
               <p>Have a question about an order, shipping, or availability? Our support team is here to help.</p>
-              <a class="standards-button" href="mailto:customerservice@jonezielabs.com?subject=Jonezie%20Labs%20Support">Contact Us</a>
+              <a class="standards-button" href="contact/">Contact Us</a>
             </div>
           </article>
           <article class="standards-support-card explore">
@@ -943,7 +959,7 @@
             <div>
               <h2>Learn More About Jonezie Labs</h2>
               <p>Explore products, research tools, support information, and current site updates.</p>
-              <a class="standards-button" href="../index.html">Explore Jonezie Labs</a>
+              <a class="standards-button" href="../index.html" data-main-site-entry>Explore Jonezie Labs</a>
             </div>
           </article>
         </div>
@@ -953,27 +969,27 @@
     <footer class="standards-footer standards-shell" aria-label="Jonezie Labs footer navigation">
       <div class="standards-footer-grid">
         <div>
-          <a class="standards-logo" href="../index.html" aria-label="Jonezie Labs home">
-            <img src="../jonezie-labs-master-logo.png?v=20260410c" alt="Jonezie Labs" width="320" height="120" />
+          <a class="standards-logo" href="./" aria-label="Jonezie Labs research standards home">
+            <img src="../jonezie-labs-master-logo.png?v=20260623a" alt="Jonezie Labs" width="320" height="120" />
           </a>
           <h2>Quality supply. Clear support. <span>Careful fulfillment.</span></h2>
         </div>
         <nav class="standards-footer-nav" aria-label="Footer site links">
-          <a href="../index.html"><span>Home</span>+</a>
-          <a href="../why-jonezie.html"><span>About</span>+</a>
-          <a href="../index.html#faq"><span>FAQ</span>+</a>
+          <a href="./"><span>Home</span>+</a>
+          <a href="about/"><span>About</span>+</a>
+          <a href="standards/"><span>Standards</span>+</a>
         </nav>
         <nav class="standards-footer-nav" aria-label="Footer support links">
-          <a href="mailto:customerservice@jonezielabs.com?subject=Jonezie%20Labs%20Support"><span>Contact</span>+</a>
-          <a href="../research-tools.html"><span>Research Tools</span>+</a>
-          <a href="../index.html#full-catalog"><span>Explore</span>+</a>
+          <a href="faq/"><span>FAQ</span>+</a>
+          <a href="contact/"><span>Contact</span>+</a>
+          <a href="../index.html" data-main-site-entry><span>Explore Jonezie Labs</span>+</a>
         </nav>
         <div>
           <p>Questions about orders, shipping, or availability can be sent to support.</p>
-          <a class="standards-button" href="mailto:customerservice@jonezielabs.com?subject=Jonezie%20Labs%20Support">Contact Us</a>
+          <a class="standards-button" href="contact/">Contact Us</a>
         </div>
       </div>
-      <p class="standards-footer-disclaimer">Jonezie Labs supplies research-use-only materials. Products are not intended for human or animal consumption, medical use, diagnosis, treatment, or prevention of disease.</p>
+      <p class="standards-footer-disclaimer">Jonezie Labs supplies research-use-only materials.</p>
       <div class="standards-footer-bottom">
         <span>customerservice@jonezielabs.com</span>
         <span>&copy; 2026 Jonezie Labs LLC. All rights reserved.</span>
