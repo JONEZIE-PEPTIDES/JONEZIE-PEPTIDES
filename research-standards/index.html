@@ -280,8 +280,10 @@
 
     .standards-hero-logo-art {
       display: block;
-      width: min(100%, 420px);
-      height: auto;
+      width: min(100%, 460px);
+      height: clamp(300px, 34vw, 390px);
+      object-fit: cover;
+      object-position: center 40%;
       border-radius: 22px;
       box-shadow: 0 24px 58px rgba(7, 19, 34, 0.18);
     }
@@ -726,7 +728,8 @@
       }
 
       .standards-hero-logo-art {
-        width: min(100%, 330px);
+        width: min(100%, 340px);
+        height: 300px;
         border-radius: 18px;
       }
 
