@@ -39,6 +39,12 @@ const PROMO_CODES = {
     rate: 0.40,
     freeShipping: false
   },
+  USA250: {
+    rate: 0.35,
+    freeShipping: false,
+    startsAt: '2026-06-29T00:00:00-04:00',
+    endsAt: '2026-07-06T00:00:00-04:00'
+  },
   'FRIEND&FAM35': {
     rate: 0.35,
     freeShipping: false
