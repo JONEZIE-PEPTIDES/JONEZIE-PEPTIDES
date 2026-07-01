@@ -100,9 +100,7 @@
   ];
 
   const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide'];
-  const BACKORDER_NOTES = {
-    tirzepatide: 'Backorder: order now. Tirzepatide orders ship starting 6/28/26.'
-  };
+  const BACKORDER_NOTES = {};
   const PRODUCT_PRICE_MULTIPLIER = 1.17;
 
   const NAME_OVERRIDES = {
