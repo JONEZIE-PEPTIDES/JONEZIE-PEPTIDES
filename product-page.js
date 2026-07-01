@@ -226,36 +226,6 @@ function getBackorderNote(product, option) {
   return option?.backorderNote || product?.backorderNote || `${option?.code || 'This item'} is currently on backorder.`;
 }
 
-const TIRZEPATIDE_BACKORDER_NOTE = 'Backorder: order now. Tirzepatide orders ship starting 6/28/26.';
-
-function isTirzepatideSlug(slug) {
-  return String(slug || '').toLowerCase() === 'tirzepatide';
-}
-
-function forceTirzepatideBackorder(product) {
-  if (!product || !isTirzepatideSlug(product.slug)) return product;
-  product.inventoryStatus = 'backorder';
-  product.backorderNote = TIRZEPATIDE_BACKORDER_NOTE;
-  product.options = (product.options || []).map((option) => ({
-    ...option,
-    inventoryStatus: 'backorder',
-    backorderNote: TIRZEPATIDE_BACKORDER_NOTE
-  }));
-  return product;
-}
-
-function applyTirzepatideBackorderDomFallback() {
-  if (!isTirzepatideSlug(getSlugFromPath())) return;
-  document.querySelectorAll('[data-product-options] .spec-card').forEach((card) => {
-    const pill = card.querySelector('.inventory-pill');
-    if (!pill) return;
-    pill.className = 'inventory-pill inventory-backorder';
-    pill.textContent = 'Backorder';
-  });
-  const selectedSubtitle = document.querySelector('[data-selected-subtitle]');
-  if (selectedSubtitle) selectedSubtitle.textContent = TIRZEPATIDE_BACKORDER_NOTE;
-}
-
 function formatMoney(value) {
   if (!Number.isFinite(value)) return 'Pending';
   return `$${value.toFixed(2)}`;
@@ -291,15 +261,10 @@ function addItemToCart(item) {
 
 function renderProductPage() {
   const slug = getSlugFromPath();
-  if (!catalogData) {
-    applyTirzepatideBackorderDomFallback();
-    return;
-  }
+  if (!catalogData) return;
   const product = (catalogData.products || []).find((item) => item.slug === slug)
     || (catalogData.featured || []).find((item) => item.slug === slug);
   if (!product) return;
-  forceTirzepatideBackorder(product);
-
   const firstAvailableOption = product.options.find((option) => getInventoryStatus(option) !== 'sold_out');
   let selectedOption = firstAvailableOption || product.options[0] || null;
   let selectedPackKey = selectedOption && selectedOption.singleVialPrice ? 'singleVialPrice' : 'eightVialPrice';
