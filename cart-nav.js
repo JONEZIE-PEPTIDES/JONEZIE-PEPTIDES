@@ -209,7 +209,7 @@
       setEyebrow(hotSticker, 'Sticker');
       removeDescription(hotSticker);
       setStickerPrice(hotSticker);
-      setStickerImage(hotSticker, HOT_GIRL_STICKER_PATH, 'Hot Girl Summer sticker');
+      setStickerImage(hotSticker, HOT_GIRL_STICKER_PATH, 'Sticker');
     }
 
     if (!shelf.querySelector('[data-merch-slug="summer-stack-bros-sticker"]')) {
