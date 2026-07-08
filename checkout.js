@@ -14,6 +14,7 @@ const formFeedback = document.querySelector('[data-checkout-feedback]');
 const successCard = document.querySelector('[data-checkout-success]');
 const clearCartButton = document.querySelector('[data-clear-cart]');
 const promoCodeInput = document.querySelector('[data-promo-code]');
+const activePromoCopy = document.querySelector('[data-active-promo-copy]');
 const shippingMethodInput = document.querySelector('[data-shipping-method]');
 const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
@@ -461,6 +462,25 @@ function getPromoDiscountAmount(cart, subtotal, promo) {
   return subtotal * promo.rate;
 }
 
+function renderPromoStatus(promo, discountAmount = 0) {
+  if (!activePromoCopy) return;
+  if (!promo?.code) {
+    activePromoCopy.textContent = 'Enter a promo code to update your total.';
+    return;
+  }
+  if (!promo.isValid) {
+    activePromoCopy.textContent = `${promo.code} is not active.`;
+    return;
+  }
+  if (promo.bundleDeal) {
+    activePromoCopy.innerHTML = discountAmount > 0
+      ? `Active code: <strong>${escapeHtml(promo.code)}</strong> (${formatMoney(discountAmount)} off)`
+      : `Active code: <strong>${escapeHtml(promo.code)}</strong> (add the matching bundle to apply)`;
+    return;
+  }
+  activePromoCopy.innerHTML = `Active code: <strong>${escapeHtml(promo.code)}</strong> (${Math.round((promo.rate || 0) * 100)}% off)`;
+}
+
 function normalizePromoEmail(value) {
   return String(value || '').trim().toLowerCase();
 }
@@ -730,6 +750,7 @@ function renderCart() {
         <p>Go back to the catalog, choose a product option, and add it to cart to begin checkout.</p>
         <a class="button primary" href="index.html#full-catalog">Browse Catalog</a>
       </div>`;
+    renderPromoStatus(getPromoDetails(), 0);
     renderSummaryValues({
       itemCount: 0,
       subtotal: 0,
@@ -748,6 +769,7 @@ function renderCart() {
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const discountAmount = getPromoDiscountAmount(cart, subtotal, promo);
   const total = subtotal - discountAmount + shippingCost;
+  renderPromoStatus(promo, discountAmount);
   trackBeginCheckoutOnce(cart, promo, shippingOption);
 
   renderSummaryValues({
