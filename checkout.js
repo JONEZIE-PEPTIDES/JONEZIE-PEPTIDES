@@ -45,6 +45,45 @@ const PROMO_CODES = {
     startsAt: '2026-06-29T00:00:00-04:00',
     endsAt: '2026-07-06T00:00:00-04:00'
   },
+  RETA125: {
+    rate: 0,
+    freeShipping: false,
+    startsAt: '2026-07-08T13:34:00-04:00',
+    endsAt: '2026-07-09T13:34:00-04:00',
+    bundleDeal: {
+      slug: 'retatrutide',
+      mgOption: '10mg',
+      packKey: 'singleVialPrice',
+      quantity: 4,
+      bundlePrice: 125
+    }
+  },
+  TESA125: {
+    rate: 0,
+    freeShipping: false,
+    startsAt: '2026-07-08T13:34:00-04:00',
+    endsAt: '2026-07-09T13:34:00-04:00',
+    bundleDeal: {
+      slug: 'tesamorelin',
+      mgOption: '5mg',
+      packKey: 'singleVialPrice',
+      quantity: 4,
+      bundlePrice: 125
+    }
+  },
+  TIRZ125: {
+    rate: 0,
+    freeShipping: false,
+    startsAt: '2026-07-08T13:34:00-04:00',
+    endsAt: '2026-07-09T13:34:00-04:00',
+    bundleDeal: {
+      slug: 'tirzepatide',
+      mgOption: '15mg',
+      packKey: 'singleVialPrice',
+      quantity: 5,
+      bundlePrice: 125
+    }
+  },
   'FRIEND&FAM35': {
     rate: 0.35,
     freeShipping: false
@@ -380,8 +419,46 @@ function getPromoDetails() {
     rate: isValid ? getPromoRate(promo) : 0,
     freeShipping: isValid ? Boolean(promo?.freeShipping) : false,
     firstOrderOnly: isValid ? Boolean(promo?.firstOrderOnly) : false,
+    bundleDeal: isValid ? promo?.bundleDeal || null : null,
     isValid
   };
+}
+
+function normalizeBundleValue(value) {
+  return String(value || '').trim().toLowerCase().replace(/\s+/g, '');
+}
+
+function getBundlePromoDiscount(cart, bundleDeal) {
+  if (!bundleDeal) return 0;
+  const requiredQuantity = Math.max(1, Number(bundleDeal.quantity) || 0);
+  const bundlePrice = Number(bundleDeal.bundlePrice);
+  if (!requiredQuantity || !Number.isFinite(bundlePrice)) return 0;
+
+  const matchingItems = cart.filter((item) => (
+    String(item.slug || '') === bundleDeal.slug
+    && normalizeBundleValue(item.mgOption) === normalizeBundleValue(bundleDeal.mgOption)
+    && String(item.packKey || '') === String(bundleDeal.packKey || '')
+  ));
+  const matchedQuantity = matchingItems.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+  const bundleCount = Math.floor(matchedQuantity / requiredQuantity);
+  if (!bundleCount) return 0;
+
+  let remainingUnits = bundleCount * requiredQuantity;
+  let regularBundleTotal = 0;
+  matchingItems.forEach((item) => {
+    if (remainingUnits <= 0) return;
+    const units = Math.min(remainingUnits, Number(item.quantity) || 0);
+    regularBundleTotal += (Number(item.unitPrice) || 0) * units;
+    remainingUnits -= units;
+  });
+
+  return Math.max(0, regularBundleTotal - (bundlePrice * bundleCount));
+}
+
+function getPromoDiscountAmount(cart, subtotal, promo) {
+  if (!promo?.isValid) return 0;
+  if (promo.bundleDeal) return getBundlePromoDiscount(cart, promo.bundleDeal);
+  return subtotal * promo.rate;
 }
 
 function normalizePromoEmail(value) {
@@ -446,7 +523,7 @@ function trackPromoIfValid(promo, subtotal) {
   lastTrackedPromoCode = promo.code;
   window.JONEZIE_ANALYTICS?.applyPromoCode(promo.code, {
     discount_rate: promo.rate,
-    discount_value: subtotal * promo.rate
+    discount_value: getPromoDiscountAmount(getCart(), subtotal, promo)
   });
 }
 
@@ -669,7 +746,7 @@ function renderCart() {
   const promo = getPromoDetails();
   const shippingOption = renderShippingOptions(cart, promo);
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
-  const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
+  const discountAmount = getPromoDiscountAmount(cart, subtotal, promo);
   const total = subtotal - discountAmount + shippingCost;
   trackBeginCheckoutOnce(cart, promo, shippingOption);
 
@@ -958,7 +1035,7 @@ form?.addEventListener('submit', async (event) => {
   const shippingOption = getSelectedShipping(cart);
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
-  const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
+  const discountAmount = getPromoDiscountAmount(cart, subtotal, promo);
   const total = subtotal - discountAmount + shippingCost;
 
   const payload = buildOrderRequestPayload({
