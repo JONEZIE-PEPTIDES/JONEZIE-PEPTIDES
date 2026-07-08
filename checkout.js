@@ -891,7 +891,7 @@ function buildOrderRequestPayload({
     })),
     includedWithOrder: [
       'Free vial cap cover',
-      'Free Hot Girl Summer sticker'
+      'Sticker'
     ],
     pageUrl: window.location.href,
     timezone: String(Intl.DateTimeFormat().resolvedOptions().timeZone || '').trim(),
