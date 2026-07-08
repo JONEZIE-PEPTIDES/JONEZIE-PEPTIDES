@@ -4227,3 +4227,65 @@ body.lightbox-open {
   .product-card img { height: 240px; }
   .site-footer { flex-direction: column; }
 }
+
+/* Checkout summary breathing room without changing the page layout. */
+.checkout-panel,
+.checkout-summary-card,
+.checkout-freebies,
+.checkout-promo input,
+.checkout-shipping-select-shell,
+.checkout-shipping select {
+  box-sizing: border-box;
+}
+.checkout-summary-card {
+  width: 100%;
+  max-width: 100%;
+  padding: 18px 20px 20px;
+  overflow: hidden;
+}
+.checkout-summary-card > .eyebrow {
+  display: block;
+  margin-bottom: 12px;
+}
+.checkout-summary-row {
+  align-items: baseline;
+  min-width: 0;
+}
+.checkout-summary-row span {
+  min-width: 0;
+}
+.checkout-summary-row strong {
+  flex: 0 0 auto;
+  text-align: right;
+}
+.checkout-freebies,
+.checkout-promo,
+.checkout-shipping {
+  min-width: 0;
+}
+.checkout-shipping-select-shell::after {
+  right: 16px;
+}
+.checkout-shipping select {
+  min-width: 0;
+  padding-right: 54px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  .checkout-panel {
+    padding: 16px;
+  }
+  .checkout-summary-card {
+    padding: 16px;
+  }
+  .checkout-freebies {
+    padding: 13px 14px;
+  }
+  .checkout-shipping select {
+    font-size: 0.94rem;
+    padding-left: 14px;
+    padding-right: 50px;
+  }
+}
