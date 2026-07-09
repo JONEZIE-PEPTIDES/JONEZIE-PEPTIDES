@@ -28,6 +28,10 @@ const PROMO_CODES = {
     rate: 0.20,
     freeShipping: false
   },
+  SUMMER: {
+    rate: 0.30,
+    freeShipping: false
+  },
   FOUNDER50: {
     rate: 0.50,
     freeShipping: false
