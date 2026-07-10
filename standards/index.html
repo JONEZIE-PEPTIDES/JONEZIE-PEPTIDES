@@ -350,12 +350,20 @@
 
     .standards-enter-button {
       min-height: 52px;
+      flex-direction: column;
+      gap: 2px;
       padding: 0 28px;
       font-size: 0.96rem;
+      line-height: 1.06;
+      text-align: center;
       color: var(--ad-ink);
       background: linear-gradient(135deg, #66f3df 0%, #a8fff0 34%, #ff82a9 100%);
       border-color: rgba(7, 19, 34, 0.16);
       box-shadow: 0 16px 36px rgba(33, 207, 199, 0.18), 0 10px 26px rgba(242, 47, 146, 0.16);
+    }
+
+    .standards-enter-button span {
+      display: block;
     }
 
     .standards-visual {
@@ -834,7 +842,7 @@
           <p>Jonezie Labs provides carefully packed research-use-only materials with a focus on transparency, responsive support, and reliable fulfillment.</p>
           <div class="standards-actions" aria-label="Landing page actions">
             <a class="standards-button standards-learn-more-button" href="#standards">Learn More</a>
-            <a class="standards-button standards-button-secondary standards-enter-button" href="../index.html" data-main-site-entry>Enter Jonezie Labs</a>
+            <a class="standards-button standards-button-secondary standards-enter-button" href="../index.html" data-main-site-entry><span>Enter</span><span>Jonezie Labs</span></a>
           </div>
         </div>
         <div class="standards-visual" aria-hidden="true">
@@ -1043,5 +1051,6 @@
   </div>
 </body>
 </html>
+
 
 
