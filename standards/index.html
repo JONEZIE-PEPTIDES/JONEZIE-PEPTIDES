@@ -256,6 +256,18 @@
       text-transform: uppercase;
     }
 
+    .standards-sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     .standards-hero h1,
     .standards-section h2,
     .standards-card h3,
@@ -276,6 +288,14 @@
 
     .standards-hero h1 span {
       color: var(--ad-pink);
+    }
+
+    .standards-hero-sticker {
+      display: block;
+      width: min(100%, 360px);
+      height: auto;
+      margin: -4px 0 0;
+      filter: drop-shadow(0 22px 30px rgba(7, 19, 34, 0.18));
     }
 
     .standards-hero-logo-art {
@@ -724,6 +744,11 @@
         max-width: 11ch;
       }
 
+      .standards-hero-sticker {
+        width: min(100%, 250px);
+        margin-top: -2px;
+      }
+
       .standards-hero-logo-art {
         width: min(100%, 250px);
       }
@@ -800,7 +825,8 @@
       <section class="standards-hero standards-shell">
         <div class="standards-hero-copy">
           <p class="standards-kicker">Research Supply</p>
-          <h1>Research Supply, <span>Packaged With Care.</span></h1>
+          <h1 class="standards-sr-only">Research Supply, Packaged With Care.</h1>
+          <img class="standards-hero-sticker" src="research-happens-here-sticker.png?v=20260710a" alt="Research happens here" width="740" height="611" />
           <p>Jonezie Labs provides carefully packed research-use-only materials with a focus on transparency, responsive support, and reliable fulfillment.</p>
           <div class="standards-actions" aria-label="Landing page actions">
             <a class="standards-button" href="#standards">Learn More</a>
@@ -1013,3 +1039,4 @@
   </div>
 </body>
 </html>
+
