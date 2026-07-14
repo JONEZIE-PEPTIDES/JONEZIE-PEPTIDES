@@ -99,7 +99,11 @@
   ];
 
   const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide'];
-  const BACKORDER_NOTES = {};
+  const BACKORDER_NOTES = {
+    aod: 'Backorder - available to order. Ships when restocked.',
+    'snap-8': 'Backorder - available to order. Ships when restocked.',
+    'igf-1lr3': 'Backorder - available to order. Ships when restocked.'
+  };
   const PRODUCT_PRICE_MULTIPLIER = 1.17;
 
   const NAME_OVERRIDES = {
