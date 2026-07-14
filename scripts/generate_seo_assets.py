@@ -20,7 +20,7 @@ COMPARISON_THEME_RULES = [
     {"key": "recovery-repair", "category": "Recovery", "fragments": ("bpc", "tb", "ara-290", "wolverine", "thymosin-alpha-1")},
     {"key": "aesthetics-skin", "category": "Aesthetics", "fragments": ("ghk-cu", "glow", "klow")},
     {"key": "aesthetics-pigmentation", "category": "Aesthetics", "fragments": ("mt-1", "mt-2")},
-    {"key": "aesthetics-cosmetic", "category": "Aesthetics", "fragments": ("snap-8", "lemon-bottle", "b12-blend")},
+    {"key": "aesthetics-cosmetic", "category": "Aesthetics", "fragments": ("snap-8", "b12-blend")},
     {"key": "growth-secretagogue", "category": "Growth", "fragments": ("tesamorelin", "cjc", "ipamorelin", "ghrp-6")},
     {"key": "growth-factor", "category": "Growth", "fragments": ("somatropin", "igf-1lr3")},
     {"key": "growth-fertility", "category": "Growth", "fragments": ("hcg", "hmg", "kisspeptin")},
@@ -138,7 +138,7 @@ def infer_category(raw_name: str) -> str:
     name = str(raw_name or "").lower()
     if any(token in name for token in ("semaglutide", "tirzepatide", "retatrutide", "cagrilintide", "survodutide", "mazdutide", "aod", "slu-pp")):
         return "Metabolic"
-    if any(token in name for token in ("ghk", "snap", "lemon bottle", "mt-1", "mt-2")):
+    if any(token in name for token in ("ghk", "snap", "mt-1", "mt-2")):
         return "Aesthetics"
     if any(token in name for token in ("tb500", "bpc", "tesamorelin", "thymosin alpha")):
         return "Recovery"
