@@ -83,7 +83,6 @@
     ['GLOW STACK (BPC 157 10mg+GHK-CU 50mg+TB500 10mg)', '70mg', 86.25, 602.4, 714],
     ['Survodutide', '10mg', 135.125, 943.76, 1118.6],
     ['SLU-PP-322', '5mg', 57.5, 401.6, 476],
-    ['Lemon Bottle', '10mg', 34.5, 240.96, 285.6],
     ['IGF-1LR3', '0.1mg', 20.125, 140.56, 166.6],
     ['IGF-1LR3', '1mg', 97.75, 682.72, 809.2],
     ['VIP', '5mg', 40.25, 281.12, 333.2],
@@ -176,7 +175,6 @@
     'glow stack (bpc 157 10mg+ghk-cu 50mg+tb500 10mg)': 'Aesthetics',
     survodutide: 'Metabolic',
     'slu-pp-322': 'Metabolic',
-    'lemon bottle': 'Aesthetics',
     'igf-1lr3': 'Growth',
     vip: 'Cognitive',
     'ghrp-6 acetate': 'Growth',
@@ -234,7 +232,7 @@
   function inferCategory(rawName) {
     const name = String(rawName || '').toLowerCase();
     if (name.includes('semaglutide') || name.includes('tirzepatide') || name.includes('retatrutide') || name.includes('cagrilintide') || name.includes('survodutide') || name.includes('mazdutide') || name.includes('aod') || name.includes('slu-pp')) return 'Metabolic';
-    if (name.includes('ghk') || name.includes('snap') || name.includes('lemon bottle') || name.includes('mt-1') || name.includes('mt-2')) return 'Aesthetics';
+    if (name.includes('ghk') || name.includes('snap') || name.includes('mt-1') || name.includes('mt-2')) return 'Aesthetics';
     if (name.includes('tb500') || name.includes('bpc') || name.includes('tesamorelin') || name.includes('thymosin alpha')) return 'Recovery';
     if (name.includes('ghrp') || name.includes('hcg') || name.includes('hmg') || name.includes('ipamorelin') || name.includes('somatropin') || name.includes('igf') || name.includes('cjc')) return 'Growth';
     if (name.includes('semax') || name.includes('selank') || name.includes('dsip') || name.includes('pinealon') || name.includes('vip') || name.includes('cerebrolysin') || name.includes('oxytocin')) return 'Cognitive';
