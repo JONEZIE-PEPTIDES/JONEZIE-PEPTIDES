@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="brand-mark.svg" />
-  <link rel="stylesheet" href="styles.css?v=20260616c" />
+  <link rel="stylesheet" href="styles.css?v=tools-live-20260714a" />
   <script type="application/ld+json" data-tools-schema>
     {
       "@context": "https://schema.org",
@@ -173,21 +173,65 @@
       </nav>
     </header>
 
-    <main>
-      <section class="hero section-shell product-hero block-section">
-        <div class="hero-copy">
+    <main class="tools-redesign">
+      <section class="tools-hero-shell section-shell block-section">
+        <div class="tools-hero-copy">
           <p class="eyebrow">Research Tools</p>
-          <h1>Research Tools</h1>
-          <p class="hero-text">Practical utilities for concentration, storage, and compound comparison.</p>
-          <div class="hero-actions">
-            <a class="button primary" href="#reconstitution-calculator">Use Calculator</a>
-            <a class="button secondary" href="comparison.html">View Comparison Guides</a>
+          <h1><span class="tools-headline-base">Tools for</span> <span>Better Research</span></h1>
+          <p class="hero-text">Practical calculators, storage guides, and reference tools to help you prep with confidence and compare with clarity.</p>
+          <div class="tools-hero-actions">
+            <a class="button primary" href="#reconstitution-calculator">
+              <span class="tool-button-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" role="presentation"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 8h8M8 12h2M12 12h2M16 12h.01M8 16h2M12 16h2M16 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </span>
+              Open Calculator
+            </a>
+            <a class="button secondary" href="#supporting-references">
+              <span class="tool-button-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" role="presentation"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H20v16H7.5A2.5 2.5 0 0 0 5 21.5v-16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 5.5A2.5 2.5 0 0 0 2.5 3H2v16h.5A2.5 2.5 0 0 1 5 21.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              </span>
+              View All Guides
+            </a>
           </div>
-          <p class="hero-support-note">All product information is provided for research, laboratory, or analytical reference only. Products are not for human or veterinary use.</p>
+          <div class="tools-ruo-pill">
+            <span class="tools-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" role="presentation"><path d="M9 2h6M10 2v6l-5.8 9.6A3 3 0 0 0 6.8 22h10.4a3 3 0 0 0 2.6-4.4L14 8V2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 17h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <div>
+              <strong>For research use only.</strong>
+              <span>Not for human or veterinary use.</span>
+            </div>
+          </div>
         </div>
-        <div class="comparison-hero-panel">
-          <div class="guide-stat-stack" data-tools-hero-stats></div>
+        <div class="tools-hero-visual" aria-hidden="true">
+          <div class="tools-vial-glow"></div>
+          <img src="jonezie_reta_vial_true_transparent.png" alt="" />
         </div>
+      </section>
+
+      <section class="tools-start-strip section-shell block-section">
+        <div class="tools-start-copy">
+          <h2>Start with the right tool</h2>
+          <p>Everything you need to calculate, compare, and prep with confidence.</p>
+        </div>
+        <a class="tools-start-card" href="#reconstitution-calculator">
+          <span class="tools-line-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" role="presentation"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 7h8M8 11h2M12 11h2M16 11h.01M8 15h2M12 15h2M16 15h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </span>
+          <div><strong>Calculate</strong><p>Convert vial strength and volume into mg-per-mL in seconds.</p><em>Open Calculator</em></div>
+        </a>
+        <a class="tools-start-card" href="#storage-guide-tool">
+          <span class="tools-line-icon purple" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" role="presentation"><path d="M4 6.5h16M4 12h16M4 17.5h11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M7 4v5M17 9v6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </span>
+          <div><strong>Store</strong><p>Find storage and handling notes for any compound.</p><em>View Storage Guide</em></div>
+        </a>
+        <a class="tools-start-card" href="#mixing-guide-tool">
+          <span class="tools-line-icon pink" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" role="presentation"><path d="M8 3v6.5L5.2 17a3 3 0 0 0 2.8 4h0a3 3 0 0 0 2.8-4L8 9.5M16 3v6.5L13.2 17a3 3 0 0 0 2.8 4h0a3 3 0 0 0 2.8-4L16 9.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div><strong>Prepare</strong><p>Review mixing and handling best practices before you start.</p><em>View Mixing Guide</em></div>
+        </a>
       </section>
 
       <section class="section-shell block-section tools-shell">
@@ -216,13 +260,14 @@
               </div>
             </form>
             <div class="tool-result" data-reconstitution-result>
-              <strong>Enter a listed strength and dilution volume to generate the reference.</strong>
+              <span class="tool-result-label">Ready</span>
+              <strong>Your result will appear here.</strong>
+              <p>Use for research-reference only.</p>
             </div>
-            <p class="tool-card-note">For laboratory research reference only. Not dosing guidance.</p>
           </article>
 
           <article class="tool-card" id="storage-guide-tool">
-            <p class="eyebrow">Handling</p>
+            <p class="eyebrow">Storage</p>
             <h2>Storage Guide</h2>
             <p>Select a compound to view storage and handling notes tied to its research lane.</p>
             <form class="tool-form" data-storage-form>
@@ -236,9 +281,9 @@
               </div>
             </form>
             <div class="tool-result rich-result" data-storage-result>
-              <strong>Select a compound to view storage notes.</strong>
+              <span class="tool-result-label">Ready</span>
+              <strong>Select a compound to view storage and handling notes.</strong>
             </div>
-            <p class="tool-card-note">For laboratory research reference only. Not human or veterinary use.</p>
           </article>
 
           <article class="tool-card" id="mixing-guide-tool">
@@ -256,92 +301,104 @@
               </div>
             </form>
             <div class="tool-result rich-result" data-mixing-result>
-              <strong>Select a compound to view preparation notes.</strong>
+              <span class="tool-result-label">Ready</span>
+              <strong>Select a compound to view preparation and handling notes.</strong>
             </div>
-            <p class="tool-card-note">For laboratory research reference only. Preparation notes are not usage instructions.</p>
           </article>
         </div>
       </section>
 
-      <section class="section-shell block-section resource-note-shell">
-        <div class="section-heading compact">
-          <p class="eyebrow">Reference Notes</p>
-          <h2>Keep the lab-side basics easy to scan.</h2>
-          <p>Use these tools to keep concentration, cold-chain handling, and comparison work organized before opening a product page or side-by-side read.</p>
-        </div>
-        <div class="resource-grid">
-          <article class="resource-card">
-            <p class="eyebrow">RUO</p>
-            <h3>Research reference only</h3>
-            <p>All tool outputs are intended for laboratory, analytical, and catalog-reference work only.</p>
-          </article>
-          <article class="resource-card">
-            <p class="eyebrow">Storage</p>
-            <h3>Keep cold-chain notes close</h3>
-            <p>Use the storage and mixing tools before opening related comparisons, guides, or repeat-order product pages.</p>
-          </article>
-          <article class="resource-card">
-            <p class="eyebrow">Scan</p>
-            <h3>Faster review flow</h3>
-            <p>Each result panel is meant to surface the next detail fast: concentration, handling notes, or the next compound worth comparing.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section-shell block-section comparison-link-shell" data-tools-resource-links>
+      <section class="section-shell block-section comparison-link-shell" id="supporting-references">
         <div class="resource-strip">
           <article class="resource-strip-card">
-            <p class="eyebrow">Related Pages</p>
-            <h2>Keep the next reference close.</h2>
+            <p class="eyebrow">Next Pages</p>
+            <h2>Keep references close.</h2>
             <div class="mini-link-grid">
               <a class="mini-link-card" href="research-guides.html">
+                <span class="tools-link-icon cyan" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" role="presentation"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22.5v-17Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22.5v-17Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+                </span>
                 <strong>Research Guides</strong>
-                <span>Open handling, label, and lane-specific guide pages without leaving the current Jonezie flow.</span>
+                <span>Read product lanes, storage context, and nearby compounds before narrowing into a direct comparison.</span>
+                <em>Browse Guides</em>
               </a>
               <a class="mini-link-card" href="comparison.html">
-                <strong>Research Comparisons</strong>
-                <span>Move into side-by-side product reads for class notes, storage context, and related compounds.</span>
+                <span class="tools-link-icon pink" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" role="presentation"><path d="M12 4v16M6 7h12M8 7l-4 7h8L8 7Zm8 0-4 7h8l-4-7Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <strong>Comparison Guides</strong>
+                <span>Open side-by-side product reads for class, structure notes, handling context, and related options.</span>
+                <em>Browse Comparisons</em>
               </a>
               <a class="mini-link-card" href="index.html#full-catalog">
+                <span class="tools-link-icon cyan" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" role="presentation"><path d="M9 3h6M10 3v5.5L5.2 18A2 2 0 0 0 7 21h10a2 2 0 0 0 1.8-3L14 8.5V3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 16h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                </span>
                 <strong>Full Products</strong>
-                <span>Return to the active catalog for product cards, current pricing, and the full listing view.</span>
+                <span>Return to the live catalog for product cards, current pricing, and the active image lineup.</span>
+                <em>View Catalog</em>
               </a>
               <a class="mini-link-card" href="index.html#faq">
+                <span class="tools-link-icon purple" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" role="presentation"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><path d="M9.7 9.5A2.4 2.4 0 0 1 12 8c1.5 0 2.6.9 2.6 2.2 0 1.6-1.4 2.1-2.2 2.8-.5.4-.6.8-.6 1.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M12 17.2h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+                </span>
                 <strong>FAQ</strong>
-                <span>Review ordering, catalog-reference, and RUO-safe support answers in the main site shell.</span>
+                <span>Review ordering, research-use, and site-reference answers without leaving the main flow.</span>
+                <em>Open FAQ</em>
               </a>
             </div>
           </article>
           <article class="resource-strip-card">
-            <p class="eyebrow">Popular Comparison Reads</p>
-            <h2>Start with product pairs that already share a lane.</h2>
+            <p class="eyebrow">Popular Reads</p>
+            <h2>Popular comparison reads.</h2>
             <div class="mini-link-grid">
-              <a class="mini-link-card" href="comparison.html?left=semaglutide&amp;right=tirzepatide">
-                <strong>Semaglutide vs Tirzepatide</strong>
-                <span>Compare appetite-signaling listings with storage notes, form, and related product links already connected.</span>
+              <a class="mini-link-card" href="comparison.html?left=cerebrolysin&amp;right=semax">
+                <span class="tools-link-icon pink" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" role="presentation"><path d="M8.5 8.5c-2 0-3.5 1.5-3.5 3.6 0 2.2 1.6 3.9 3.8 3.9h1v-8h-1.3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M15.5 8.5c2 0 3.5 1.5 3.5 3.6 0 2.2-1.6 3.9-3.8 3.9h-1v-8h1.3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M10 7c0-1.2.9-2 2-2s2 .8 2 2v10c0 1.2-.9 2-2 2s-2-.8-2-2V7Z" stroke="currentColor" stroke-width="1.7"/><path d="M8 12h8M12 9v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+                <strong>Cerebrolysin vs Semax</strong>
+                <span>Compare structure notes, storage context, option depth, and related compounds.</span>
+                <em>Open Read</em>
               </a>
-              <a class="mini-link-card" href="comparison.html?left=bpc-157&amp;right=tb500">
-                <strong>BPC-157 vs TB500</strong>
-                <span>Open a repair-pathway side-by-side read after checking concentration and preparation notes.</span>
+              <a class="mini-link-card" href="comparison.html?left=ghrp-6-acetate&amp;right=ipamorelin">
+                <span class="tools-link-icon cyan" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" role="presentation"><circle cx="6" cy="7" r="2.2" stroke="currentColor" stroke-width="1.7"/><circle cx="17" cy="5.5" r="2.2" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="16.5" r="2.2" stroke="currentColor" stroke-width="1.7"/><circle cx="7" cy="18" r="2.2" stroke="currentColor" stroke-width="1.7"/><path d="M8 8.4l7-2M16.7 7.7l1 6.5M15.9 16.9l-6.7.8M8 16.3l7.4-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </span>
+                <strong>GHRP-6 Acetate vs Ipamorelin</strong>
+                <span>Compare structure notes, storage context, option depth, and related compounds.</span>
+                <em>Open Read</em>
               </a>
-              <a class="mini-link-card" href="comparison.html?left=selank&amp;right=semax">
-                <strong>Semax vs Selank</strong>
-                <span>Use a cognitive lane comparison when product context matters more than one isolated listing.</span>
+              <a class="mini-link-card" href="comparison.html?left=cerebrolysin&amp;right=selank">
+                <span class="tools-link-icon pink" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" role="presentation"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                </span>
+                <strong>Cerebrolysin vs Selank</strong>
+                <span>Compare structure notes, storage context, option depth, and related compounds.</span>
+                <em>Open Read</em>
               </a>
-              <a class="mini-link-card" href="comparison.html?left=mots-c&amp;right=nad">
-                <strong>MOTS-c vs NAD</strong>
-                <span>Keep the cellular lane close when handling, storage, and product context need to stay in one read.</span>
+              <a class="mini-link-card" href="comparison.html?left=dsip&amp;right=oxytocin-acetate">
+                <span class="tools-link-icon purple" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" role="presentation"><path d="M15.8 4.2 19.8 8.2M14 6l4 4-8.7 8.7H5.3v-4L14 6Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 15.5 8.5 17M12.5 7.5l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                </span>
+                <strong>DSIP vs Oxytocin Acetate</strong>
+                <span>Compare structure notes, storage context, option depth, and related compounds.</span>
+                <em>Open Read</em>
               </a>
             </div>
           </article>
         </div>
+      </section>
+
+      <section class="tools-bottom-note section-shell" aria-label="Research-use reminder">
+        <span class="tools-line-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" role="presentation"><path d="M9 2h6M10 2v6l-5.8 9.6A3 3 0 0 0 6.8 22h10.4a3 3 0 0 0 2.6-4.4L14 8V2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <p>Research-use content. Not for human or veterinary use.</p>
+        <span aria-hidden="true">-</span>
+        <p>Use responsibly and follow your lab's SOP.</p>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <p>Jonezie Peptides</p>
-      <span>Research Use Only. Not for human or veterinary use.</span>
-    </footer>
   </div>
 
   <script src="catalog-data.js?v=20260410a"></script>
@@ -361,6 +418,10 @@
   <script src="lead-capture.js?v=20260622a"></script>
 </body>
 </html>
+
+
+
+
 
 
 
