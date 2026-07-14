@@ -66,7 +66,6 @@
     mt1: 'mt-1-new-new-hero-product-image.webp',
     'melanotan-1': 'mt-1-new-new-hero-product-image.webp',
     'slu-pp-322': 'slu-pp-322-new-hero-product-image.webp',
-    'lemon-bottle': 'lemon-bottle-new-hero-product-image.webp',
     'igf-1lr3': 'igf-1lr3-new-hero-product-image.webp',
     ipamorelin: 'ipamorelin-new-hero-product-image.webp',
     pinealon: 'pinealon-new-hero-product-image.webp',
