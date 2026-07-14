@@ -92,7 +92,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       summary: 'A centralized guide for collagen, skin-remodeling, pigmentation, and appearance-focused research products.',
       intro: 'Aesthetics compounds usually sit at the intersection of collagen signaling, skin support, pigmentation models, and cosmetic-pathway research.',
       bullets: [
-        'Use it to connect GHK-CU, Glow, KLOW, MT-1, MT-2, SNAP-8, Lemon Bottle, and similar appearance-focused products.',
+        'Use it to connect GHK-CU, Glow, KLOW, MT-1, MT-2, SNAP-8, and similar appearance-focused products.',
         'Keep language focused on collagen, skin support, pigmentation, remodeling, or cosmetic-pathway research.',
         'Surface related comparison pages when the question is GHK-CU versus Glow, singles versus blends, or pigmentation support versus broader cosmetic-pathway coverage.'
       ],
@@ -386,7 +386,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'aesthetics-cosmetic',
       label: 'Cosmetic-support compounds',
       category: 'Aesthetics',
-      fragments: ['snap-8', 'lemon-bottle', 'b12-blend']
+      fragments: ['snap-8', 'b12-blend']
     },
     {
       key: 'growth-secretagogue',
