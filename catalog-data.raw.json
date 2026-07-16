@@ -760,14 +760,6 @@
         "PriceP":  "$160.00"
     },
     {
-        "CatNo":  "KPV10",
-        "ProductName":  "Lysine-Proline-Valine",
-        "Specification":  "10mg*10vials",
-        "OriginalUnitPrice":  "",
-        "Markup":  "",
-        "PriceP":  "$200.00"
-    },
-    {
         "CatNo":  "???",
         "ProductName":  "Lemon Bottle",
         "Specification":  "10mg*10vials",
@@ -910,5 +902,13 @@
         "OriginalUnitPrice":  "",
         "Markup":  "",
         "PriceP":  "$440.00"
+    },
+    {
+        "CatNo":  "KPV10",
+        "ProductName":  "KPV",
+        "Specification":  "10mg*10vials",
+        "OriginalUnitPrice":  "",
+        "Markup":  "",
+        "PriceP":  "$220.00"
     }
 ]

@@ -30,6 +30,7 @@
     'bpc-5mg-plus-tb-5mg': 'wolverine-new-hero-product-image.webp',
     'bpc-10mg-plus-tb-10mg': 'wolverine-new-hero-product-image.webp',
     semax: 'semax-new-new-hero-product-image.webp',
+    kpv: 'kpv-new-hero-product-image.webp?v=20260716a',
     'ss-31': 'ss-31-new-hero-product-image.webp',
     'cjc-1295-without-dac': 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/CJC_1295_10MG_3ML_Vial.webp?v=20260501h',
     hcg: 'hcg-new-hero-product-image.webp',

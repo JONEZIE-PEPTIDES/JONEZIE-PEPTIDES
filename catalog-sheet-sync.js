@@ -41,6 +41,7 @@
     ['KissPeptin-10', '5mg', 28.75, 200.8, 238],
     ['KissPeptin-10', '10mg', 46, 321.28, 380.8],
     ['MOTS-c', '10mg', 31.625, 220.88, 261.8],
+    ['KPV', '10mg', 31.625, 220.88, 261.8],
     ['MOTS-c', '40mg', 86.25, 602.4, 714],
     ['Retatrutide', '10mg', 48.875, 341.36, 404.6],
     ['Retatrutide', '15mg', 66.125, 461.84, 547.4],
@@ -150,6 +151,7 @@
     aod: 'Metabolic',
     tesamorelin: 'Growth',
     'ghk-cu': 'Aesthetics',
+    'kpv': 'Aesthetics',
     'kisspeptin-10': 'Performance',
     'mots-c': 'Cellular',
     retatrutide: 'Metabolic',
@@ -230,7 +232,7 @@
   function inferCategory(rawName) {
     const name = String(rawName || '').toLowerCase();
     if (name.includes('semaglutide') || name.includes('tirzepatide') || name.includes('retatrutide') || name.includes('cagrilintide') || name.includes('survodutide') || name.includes('mazdutide') || name.includes('aod') || name.includes('slu-pp')) return 'Metabolic';
-    if (name.includes('ghk') || name.includes('snap') || name.includes('lemon bottle') || name.includes('mt-1') || name.includes('mt-2')) return 'Aesthetics';
+    if (name.includes('ghk') || name.includes('snap') || name.includes('lemon bottle') || name.includes('kpv') || name.includes('mt-1') || name.includes('mt-2')) return 'Aesthetics';
     if (name.includes('tb500') || name.includes('bpc') || name.includes('tesamorelin') || name.includes('thymosin alpha')) return 'Recovery';
     if (name.includes('ghrp') || name.includes('hcg') || name.includes('hmg') || name.includes('ipamorelin') || name.includes('igf') || name.includes('cjc')) return 'Growth';
     if (name.includes('semax') || name.includes('selank') || name.includes('dsip') || name.includes('pinealon') || name.includes('vip') || name.includes('cerebrolysin') || name.includes('oxytocin')) return 'Cognitive';

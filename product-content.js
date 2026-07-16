@@ -200,6 +200,15 @@ window.JONEZIE_PRODUCT_CONTENT = {
         'BPC-157 adds a familiar tissue-repair angle, making the blend useful for aesthetics-meets-recovery positioning.'
       ]
     },
+    kpv: {
+      shortDescription: 'KPV is the Lys-Pro-Val tripeptide fragment commonly discussed in alpha-MSH and melanocortin-pathway research. Published work often centers on inflammatory signaling, epithelial barrier models, immune-cell response, and antimicrobial assay context.',
+      researchSummary: 'KPV is commonly referenced in research involving inflammatory-pathway signaling, epithelial and skin-barrier models, immune-cell response, and antimicrobial activity assays.',
+      researchFindings: [
+        'KPV is a short tripeptide fragment associated with alpha-MSH research rather than a broad hormone-style listing.',
+        'Research literature often frames KPV around inflammatory signaling, epithelial transport, barrier integrity, and immune-cell models.',
+        'The strongest customer-facing positioning is skin, barrier, and inflammatory-pathway research without implying treatment or personal-use outcomes.'
+      ]
+    },
     'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg': {
       shortDescription: 'This four-part blend is a full-spectrum aesthetics and recovery stack. It is best framed around collagen support, skin recovery, tissue remodeling, and inflammatory-pathway research.',
       researchSummary: 'The component literature covers skin-remodeling, tissue repair, angiogenesis, and inflammatory-signaling research across several preclinical models.',

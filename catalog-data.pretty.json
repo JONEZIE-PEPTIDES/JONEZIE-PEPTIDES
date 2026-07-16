@@ -1,7 +1,7 @@
 {
-    "generatedAt":  "2026-04-08 17:33:03",
-    "totalProducts":  63,
-    "totalConfigurations":  114,
+    "generatedAt":  "2026-04-07 18:24:48",
+    "totalProducts":  64,
+    "totalConfigurations":  149,
     "featured":  [
                      {
                          "name":  "BPC-157",
@@ -96,11 +96,19 @@
                          "slug":  "retatrutide",
                          "category":  "Metabolic",
                          "description":  "A high-interest metabolic flagship positioned for advanced appetite, energy-balance, and next-wave GLP research conversations.",
-                         "startingPriceSingle":  "$48.88",
-                         "startingPrice8":  "$221.00",
-                         "startingPrice10":  "$340.00",
-                         "image":  "../assets/products/reta-10mg.png",
+                         "startingPriceSingle":  "$28.75",
+                         "startingPrice8":  "$130.00",
+                         "startingPrice10":  "$200.00",
+                         "image":  "product-placeholder.svg",
                          "options":  [
+                                         {
+                                             "code":  "RT5",
+                                             "specification":  "5mg*10vials",
+                                             "mgOption":  "5mg",
+                                             "singleVialPrice":  "$28.75",
+                                             "eightVialPrice":  "$130.00",
+                                             "tenVialPrice":  "$200.00"
+                                         },
                                          {
                                              "code":  "RT10",
                                              "specification":  "10mg*10vials",
@@ -126,6 +134,14 @@
                                              "tenVialPrice":  "$580.00"
                                          },
                                          {
+                                             "code":  "RT24",
+                                             "specification":  "24mg*10vials",
+                                             "mgOption":  "24mg",
+                                             "singleVialPrice":  "$97.75",
+                                             "eightVialPrice":  "$442.00",
+                                             "tenVialPrice":  "$680.00"
+                                         },
+                                         {
                                              "code":  "RT30",
                                              "specification":  "30mg*10vials",
                                              "mgOption":  "30mg",
@@ -134,12 +150,36 @@
                                              "tenVialPrice":  "$800.00"
                                          },
                                          {
+                                             "code":  "RT36",
+                                             "specification":  "36mg*10vials",
+                                             "mgOption":  "36mg",
+                                             "singleVialPrice":  "$135.13",
+                                             "eightVialPrice":  "$611.00",
+                                             "tenVialPrice":  "$940.00"
+                                         },
+                                         {
                                              "code":  "RT40",
                                              "specification":  "40mg*10vials",
                                              "mgOption":  "40mg",
                                              "singleVialPrice":  "$143.75",
                                              "eightVialPrice":  "$650.00",
                                              "tenVialPrice":  "$1,000.00"
+                                         },
+                                         {
+                                             "code":  "RT50",
+                                             "specification":  "50mg*10vials",
+                                             "mgOption":  "50mg",
+                                             "singleVialPrice":  "$172.50",
+                                             "eightVialPrice":  "$780.00",
+                                             "tenVialPrice":  "$1,200.00"
+                                         },
+                                         {
+                                             "code":  "RT60",
+                                             "specification":  "60mg*10vials",
+                                             "mgOption":  "60mg",
+                                             "singleVialPrice":  "$201.25",
+                                             "eightVialPrice":  "$910.00",
+                                             "tenVialPrice":  "$1,400.00"
                                          }
                                      ]
                      },
@@ -278,6 +318,77 @@
                                              "singleVialPrice":  "$94.88",
                                              "eightVialPrice":  "$429.00",
                                              "tenVialPrice":  "$660.00"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "Wolverine 10mg",
+                         "sourceName":  "BPC 10mg + TB 10mg",
+                         "slug":  "bpc-10mg-plus-tb-10mg",
+                         "category":  "Recovery",
+                         "description":  "Wolverine 10mg is the BPC 10mg + TB 10mg research blend, featured for recovery-focused comparison and ordering.",
+                         "startingPriceSingle":  "$77.63",
+                         "startingPrice8":  "$351.00",
+                         "startingPrice10":  "$540.00",
+                         "image":  "product-placeholder.svg",
+                         "options":  [
+                                         {
+                                             "code":  "BB20",
+                                             "specification":  "20mg*10vials",
+                                             "mgOption":  "20mg",
+                                             "singleVialPrice":  "$77.63",
+                                             "eightVialPrice":  "$351.00",
+                                             "tenVialPrice":  "$540.00"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "Cerebrolysin 60mg",
+                         "sourceName":  "cerebrolysin",
+                         "slug":  "cerebrolysin",
+                         "category":  "Cognitive",
+                         "description":  "A cognitive-facing product that adds neuro, focus, and restoration angles to the Jonezie lineup.",
+                         "startingPriceSingle":  "$14.38",
+                         "startingPrice8":  "$65.00",
+                         "startingPrice10":  "$100.00",
+                         "image":  "product-placeholder.svg",
+                         "options":  [
+                                         {
+                                             "code":  "CBL60",
+                                             "specification":  "60mg*6vials",
+                                             "mgOption":  "60mg*6vials",
+                                             "singleVialPrice":  "$14.38",
+                                             "eightVialPrice":  "$65.00",
+                                             "tenVialPrice":  "$100.00"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "BAC Water",
+                         "sourceName":  "BAC Water",
+                         "slug":  "bac-water",
+                         "category":  "Support",
+                         "description":  "An essential support item for cleaner reconstitution workflows and more complete storefront utility.",
+                         "startingPriceSingle":  "$5.75",
+                         "startingPrice8":  "$26.00",
+                         "startingPrice10":  "$40.00",
+                         "image":  "product-placeholder.svg",
+                         "options":  [
+                                         {
+                                             "code":  "WA3",
+                                             "specification":  "3ml/10vials",
+                                             "mgOption":  "3ml/10vials",
+                                             "singleVialPrice":  "$5.75",
+                                             "eightVialPrice":  "$26.00",
+                                             "tenVialPrice":  "$40.00"
+                                         },
+                                         {
+                                             "code":  "WA10",
+                                             "specification":  "10ml/10vials",
+                                             "mgOption":  "10ml/10vials",
+                                             "singleVialPrice":  "$8.63",
+                                             "eightVialPrice":  "$39.00",
+                                             "tenVialPrice":  "$60.00"
                                          }
                                      ]
                      }
@@ -681,11 +792,11 @@
                                      ]
                      },
                      {
-                         "name":  "KLOW",
+                         "name":  "GHK-CU 50mg + KPV 10mg + BPC-157 10mg",
                          "sourceName":  "CU50+KPV10+BPC10",
                          "slug":  "ghk-cu-50mg-plus-kpv-10mg-plus-bpc-157-10mg",
                          "category":  "Aesthetics",
-                         "description":  "A signature peptide stack featuring GHK-CU 50mg + KPV 10mg + BPC-157 10mg in one vial for recovery and aesthetics-focused research.",
+                         "description":  "An aesthetics-forward product that helps round out the catalog with cosmetic, skin, and visual-support research interest.",
                          "startingPriceSingle":  "$63.25",
                          "startingPrice8":  "$286.00",
                          "startingPrice10":  "$440.00",
@@ -1076,6 +1187,27 @@
                                      ]
                      },
                      {
+                         "name":  "KPV",
+                         "sourceName":  "KPV",
+                         "slug":  "kpv",
+                         "category":  "Aesthetics",
+                         "description":  "A skin-barrier and inflammatory-signaling research peptide commonly referenced in alpha-MSH fragment, epithelial, and antimicrobial assay literature.",
+                         "startingPriceSingle":  "$31.63",
+                         "startingPrice8":  "$143.00",
+                         "startingPrice10":  "$220.00",
+                         "image":  "product-placeholder.svg",
+                         "options":  [
+                                         {
+                                             "code":  "KPV10",
+                                             "specification":  "10mg*10vials",
+                                             "mgOption":  "10mg",
+                                             "singleVialPrice":  "$31.63",
+                                             "eightVialPrice":  "$143.00",
+                                             "tenVialPrice":  "$220.00"
+                                         }
+                                     ]
+                     },
+                     {
                          "name":  "LC120",
                          "sourceName":  "LC120",
                          "slug":  "lc120",
@@ -1431,11 +1563,19 @@
                          "slug":  "retatrutide",
                          "category":  "Metabolic",
                          "description":  "A high-interest metabolic flagship positioned for advanced appetite, energy-balance, and next-wave GLP research conversations.",
-                         "startingPriceSingle":  "$48.88",
-                         "startingPrice8":  "$221.00",
-                         "startingPrice10":  "$340.00",
-                         "image":  "../assets/products/reta-10mg.png",
+                         "startingPriceSingle":  "$28.75",
+                         "startingPrice8":  "$130.00",
+                         "startingPrice10":  "$200.00",
+                         "image":  "product-placeholder.svg",
                          "options":  [
+                                         {
+                                             "code":  "RT5",
+                                             "specification":  "5mg*10vials",
+                                             "mgOption":  "5mg",
+                                             "singleVialPrice":  "$28.75",
+                                             "eightVialPrice":  "$130.00",
+                                             "tenVialPrice":  "$200.00"
+                                         },
                                          {
                                              "code":  "RT10",
                                              "specification":  "10mg*10vials",
@@ -1461,6 +1601,14 @@
                                              "tenVialPrice":  "$580.00"
                                          },
                                          {
+                                             "code":  "RT24",
+                                             "specification":  "24mg*10vials",
+                                             "mgOption":  "24mg",
+                                             "singleVialPrice":  "$97.75",
+                                             "eightVialPrice":  "$442.00",
+                                             "tenVialPrice":  "$680.00"
+                                         },
+                                         {
                                              "code":  "RT30",
                                              "specification":  "30mg*10vials",
                                              "mgOption":  "30mg",
@@ -1469,12 +1617,36 @@
                                              "tenVialPrice":  "$800.00"
                                          },
                                          {
+                                             "code":  "RT36",
+                                             "specification":  "36mg*10vials",
+                                             "mgOption":  "36mg",
+                                             "singleVialPrice":  "$135.13",
+                                             "eightVialPrice":  "$611.00",
+                                             "tenVialPrice":  "$940.00"
+                                         },
+                                         {
                                              "code":  "RT40",
                                              "specification":  "40mg*10vials",
                                              "mgOption":  "40mg",
                                              "singleVialPrice":  "$143.75",
                                              "eightVialPrice":  "$650.00",
                                              "tenVialPrice":  "$1,000.00"
+                                         },
+                                         {
+                                             "code":  "RT50",
+                                             "specification":  "50mg*10vials",
+                                             "mgOption":  "50mg",
+                                             "singleVialPrice":  "$172.50",
+                                             "eightVialPrice":  "$780.00",
+                                             "tenVialPrice":  "$1,200.00"
+                                         },
+                                         {
+                                             "code":  "RT60",
+                                             "specification":  "60mg*10vials",
+                                             "mgOption":  "60mg",
+                                             "singleVialPrice":  "$201.25",
+                                             "eightVialPrice":  "$910.00",
+                                             "tenVialPrice":  "$1,400.00"
                                          }
                                      ]
                      },
