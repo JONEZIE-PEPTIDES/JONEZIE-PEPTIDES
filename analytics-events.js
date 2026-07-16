@@ -28,6 +28,25 @@ window.JONEZIE_ANALYTICS = (() => {
     };
   }
 
+  function readableCartFields(items = []) {
+    const names = items.map((item) => item.item_name).filter(Boolean);
+    const ids = items.map((item) => item.item_id).filter(Boolean);
+    const variants = items.map((item) => item.item_variant).filter(Boolean);
+    const totalQuantity = items.reduce((sum, item) => sum + toNumber(item.quantity), 0);
+    const first = items[0] || {};
+
+    return {
+      product_name: String(first.item_name || '').slice(0, 120),
+      product_id: String(first.item_id || '').slice(0, 120),
+      product_variant: String(first.item_variant || '').slice(0, 100),
+      cart_product_names: names.join(', ').slice(0, 500),
+      cart_product_ids: ids.join(', ').slice(0, 500),
+      cart_product_variants: variants.join(', ').slice(0, 500),
+      cart_unique_items: items.length,
+      cart_total_items: totalQuantity
+    };
+  }
+
   function buildCartPayload(cart = [], extra = {}) {
     const items = cart.map(buildItem);
     const value = items.reduce((sum, item) => sum + (toNumber(item.price) * toNumber(item.quantity)), 0);
@@ -35,6 +54,7 @@ window.JONEZIE_ANALYTICS = (() => {
       currency: CURRENCY,
       value,
       items,
+      ...readableCartFields(items),
       ...extra
     };
   }
