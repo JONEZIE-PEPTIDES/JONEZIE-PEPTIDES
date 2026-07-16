@@ -92,7 +92,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       summary: 'A centralized guide for collagen, skin-remodeling, pigmentation, and appearance-focused research products.',
       intro: 'Aesthetics compounds usually sit at the intersection of collagen signaling, skin support, pigmentation models, and cosmetic-pathway research.',
       bullets: [
-        'Use it to connect GHK-CU, Glow, KLOW, MT-1, MT-2, SNAP-8, and similar appearance-focused products.',
+        'Use it to connect GHK-CU, Glow, KLOW, MT-1, MT-2, SNAP-8, Lemon Bottle, and similar appearance-focused products.',
         'Keep language focused on collagen, skin support, pigmentation, remodeling, or cosmetic-pathway research.',
         'Surface related comparison pages when the question is GHK-CU versus Glow, singles versus blends, or pigmentation support versus broader cosmetic-pathway coverage.'
       ],
@@ -114,7 +114,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       summary: 'A guide for GH-axis, secretagogue, endocrine, and body-composition research products.',
       intro: 'Growth compounds on Jonezie are usually compared across GH-axis coverage, endocrine signaling, and body-composition research.',
       bullets: [
-        'Use it to compare Somatropin, CJC-1295 variants, Ipamorelin, IGF-1LR3, HCG, HMG, and related growth-axis compounds.',
+        'Use it to compare CJC-1295 variants, Ipamorelin, IGF-1LR3, HCG, HMG, and related growth-axis compounds.',
         'Strength comparison is especially important here because multiple GH-pathway products have multi-tiered option sets.',
         'Related comparison links help researchers move between direct GH products, secretagogues, and paired stacks.'
       ],
@@ -386,7 +386,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'aesthetics-cosmetic',
       label: 'Cosmetic-support compounds',
       category: 'Aesthetics',
-      fragments: ['snap-8', 'b12-blend']
+      fragments: ['snap-8', 'lemon-bottle', 'b12-blend']
     },
     {
       key: 'growth-secretagogue',
@@ -398,7 +398,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'growth-factor',
       label: 'Direct growth-signaling compounds',
       category: 'Growth',
-      fragments: ['somatropin', 'igf-1lr3']
+      fragments: ['igf-1lr3', 'cjc-1295-without-dac']
     },
     {
       key: 'growth-fertility',

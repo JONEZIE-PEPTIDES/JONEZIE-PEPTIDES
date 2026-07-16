@@ -22,7 +22,6 @@
   ];
 
   const IMAGE_OVERRIDES_BY_SLUG = {
-    somatropin: 'somatropin-new-hero-product-image.webp',
     'mt-2': 'mt-2-new-hero-product-image.webp',
     'pt-141': 'pt-141-new-hero-product-image.webp',
     'oxytocin-acetate': 'oxytocin-acetate-new-hero-product-image.webp',

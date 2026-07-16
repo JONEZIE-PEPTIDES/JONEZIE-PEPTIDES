@@ -1,10 +1,5 @@
 (() => {
   const PRODUCT_ROWS = [
-    ['Somatropin', '10iu', 34.5, 240.96, 285.6],
-    ['Somatropin', '12iu', 40.25, 281.12, 333.2],
-    ['Somatropin', '15iu', 46, 321.28, 380.8],
-    ['Somatropin', '24iu', 69, 481.92, 571.2],
-    ['Somatropin', '36iu', 97.75, 682.72, 809.2],
     ['MT-1', '5mg', 25.875, 180.72, 214.2],
     ['MT-2 (Melanotan 2 Acetate)', '10mg', 25.875, 180.72, 214.2],
     ['PT-141', '10mg', 28.75, 200.8, 238],
@@ -83,6 +78,7 @@
     ['GLOW STACK (BPC 157 10mg+GHK-CU 50mg+TB500 10mg)', '70mg', 86.25, 602.4, 714],
     ['Survodutide', '10mg', 135.125, 943.76, 1118.6],
     ['SLU-PP-322', '5mg', 57.5, 401.6, 476],
+    ['Lemon Bottle', '10mg', 34.5, 240.96, 285.6],
     ['IGF-1LR3', '0.1mg', 20.125, 140.56, 166.6],
     ['IGF-1LR3', '1mg', 97.75, 682.72, 809.2],
     ['VIP', '5mg', 40.25, 281.12, 333.2],
@@ -100,9 +96,7 @@
 
   const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide'];
   const BACKORDER_NOTES = {
-    aod: 'Backorder - available to order. Ships when restocked.',
-    'snap-8': 'Backorder - available to order. Ships when restocked.',
-    'igf-1lr3': 'Backorder - available to order. Ships when restocked.'
+    tirzepatide: 'Backorder: order now. Tirzepatide orders ship starting 6/28/26.'
   };
   const PRODUCT_PRICE_MULTIPLIER = 1.17;
 
@@ -138,7 +132,6 @@
   };
 
   const CATEGORY_OVERRIDES = {
-    somatropin: 'Growth',
     'mt-1': 'Aesthetics',
     'mt-2 (melanotan 2 acetate)': 'Aesthetics',
     'pt-141': 'Performance',
@@ -179,6 +172,7 @@
     'glow stack (bpc 157 10mg+ghk-cu 50mg+tb500 10mg)': 'Aesthetics',
     survodutide: 'Metabolic',
     'slu-pp-322': 'Metabolic',
+    'lemon bottle': 'Aesthetics',
     'igf-1lr3': 'Growth',
     vip: 'Cognitive',
     'ghrp-6 acetate': 'Growth',
@@ -236,9 +230,9 @@
   function inferCategory(rawName) {
     const name = String(rawName || '').toLowerCase();
     if (name.includes('semaglutide') || name.includes('tirzepatide') || name.includes('retatrutide') || name.includes('cagrilintide') || name.includes('survodutide') || name.includes('mazdutide') || name.includes('aod') || name.includes('slu-pp')) return 'Metabolic';
-    if (name.includes('ghk') || name.includes('snap') || name.includes('mt-1') || name.includes('mt-2')) return 'Aesthetics';
+    if (name.includes('ghk') || name.includes('snap') || name.includes('lemon bottle') || name.includes('mt-1') || name.includes('mt-2')) return 'Aesthetics';
     if (name.includes('tb500') || name.includes('bpc') || name.includes('tesamorelin') || name.includes('thymosin alpha')) return 'Recovery';
-    if (name.includes('ghrp') || name.includes('hcg') || name.includes('hmg') || name.includes('ipamorelin') || name.includes('somatropin') || name.includes('igf') || name.includes('cjc')) return 'Growth';
+    if (name.includes('ghrp') || name.includes('hcg') || name.includes('hmg') || name.includes('ipamorelin') || name.includes('igf') || name.includes('cjc')) return 'Growth';
     if (name.includes('semax') || name.includes('selank') || name.includes('dsip') || name.includes('pinealon') || name.includes('vip') || name.includes('cerebrolysin') || name.includes('oxytocin')) return 'Cognitive';
     if (name.includes('nad') || name.includes('ss-31') || name.includes('mots') || name.includes('epithalon') || name.includes('thymalin') || name.includes('pnc')) return 'Cellular';
     return 'Support';
