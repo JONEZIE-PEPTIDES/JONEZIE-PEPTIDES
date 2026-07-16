@@ -7,7 +7,9 @@
     'tesamorelin',
     'semax',
     'mt-1',
-    'tb500',
+    'bpc-10mg-plus-tb-10mg',
+    'cerebrolysin',
+    'bac-water',
     'glutathione',
     'hcg',
     'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg',
@@ -66,6 +68,7 @@
     mt1: 'mt-1-new-new-hero-product-image.webp',
     'melanotan-1': 'mt-1-new-new-hero-product-image.webp',
     'slu-pp-322': 'slu-pp-322-new-hero-product-image.webp',
+    'lemon-bottle': 'lemon-bottle-new-hero-product-image.webp',
     'igf-1lr3': 'igf-1lr3-new-hero-product-image.webp',
     ipamorelin: 'ipamorelin-new-hero-product-image.webp',
     pinealon: 'pinealon-new-hero-product-image.webp',
@@ -75,6 +78,11 @@
     thymalin: 'thymalin-new-hero-product-image.webp',
     'thymosin-alpha-1': 'thymosin-alpha-1-new-hero-product-image.webp',
     lc216: 'lc216-new-hero-product-image.webp'
+  };
+
+  const FEATURED_NAME_OVERRIDES = {
+    'bpc-10mg-plus-tb-10mg': 'Wolverine 10mg',
+    cerebrolysin: 'Cerebrolysin 60mg'
   };
 
   const FEATURED_FALLBACK_PRODUCTS = {
@@ -124,8 +132,17 @@
   );
 
   catalog.featured = FEATURED_WITH_NEW_ART
-    .map((slug) => featuredLookup.get(slug))
+    .map((slug) => {
+      const product = featuredLookup.get(slug);
+      if (!product) return null;
+      return { ...product };
+    })
     .filter(Boolean);
+
+  catalog.featured.forEach((product) => {
+    const displayName = FEATURED_NAME_OVERRIDES[product.slug];
+    if (displayName) product.name = displayName;
+  });
 
   applyOverrides(catalog.featured);
   applyOverrides(catalog.products);
