@@ -14,7 +14,6 @@ const formFeedback = document.querySelector('[data-checkout-feedback]');
 const successCard = document.querySelector('[data-checkout-success]');
 const clearCartButton = document.querySelector('[data-clear-cart]');
 const promoCodeInput = document.querySelector('[data-promo-code]');
-const activePromoCopy = document.querySelector('[data-active-promo-copy]');
 const shippingMethodInput = document.querySelector('[data-shipping-method]');
 const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
@@ -28,10 +27,6 @@ const PROMO_CODES = {
     rate: 0.20,
     freeShipping: false
   },
-  SUMMER: {
-    rate: 0.30,
-    freeShipping: false
-  },
   FOUNDER50: {
     rate: 0.50,
     freeShipping: false
@@ -43,51 +38,6 @@ const PROMO_CODES = {
   FATHER40: {
     rate: 0.40,
     freeShipping: false
-  },
-  USA250: {
-    rate: 0.35,
-    freeShipping: false,
-    startsAt: '2026-06-29T00:00:00-04:00',
-    endsAt: '2026-07-06T00:00:00-04:00'
-  },
-  RETA125: {
-    rate: 0,
-    freeShipping: false,
-    startsAt: '2026-07-08T13:34:00-04:00',
-    endsAt: '2026-07-09T13:34:00-04:00',
-    bundleDeal: {
-      slug: 'retatrutide',
-      mgOption: '10mg',
-      packKey: 'singleVialPrice',
-      quantity: 4,
-      bundlePrice: 125
-    }
-  },
-  TESA125: {
-    rate: 0,
-    freeShipping: false,
-    startsAt: '2026-07-08T13:34:00-04:00',
-    endsAt: '2026-07-09T13:34:00-04:00',
-    bundleDeal: {
-      slug: 'tesamorelin',
-      mgOption: '5mg',
-      packKey: 'singleVialPrice',
-      quantity: 4,
-      bundlePrice: 125
-    }
-  },
-  TIRZ125: {
-    rate: 0,
-    freeShipping: false,
-    startsAt: '2026-07-08T13:34:00-04:00',
-    endsAt: '2026-07-09T13:34:00-04:00',
-    bundleDeal: {
-      slug: 'tirzepatide',
-      mgOption: '15mg',
-      packKey: 'singleVialPrice',
-      quantity: 5,
-      bundlePrice: 125
-    }
   },
   'FRIEND&FAM35': {
     rate: 0.35,
@@ -139,21 +89,21 @@ const SHIPPING_OPTIONS = [
     id: 'ground-advantage',
     label: 'USPS Ground Advantage',
     window: '2-5 business days',
-    price: 6.98,
+    price: 8.00,
     note: 'Everyday shipping'
   },
   {
     id: 'priority-mail',
     label: 'USPS Priority Mail',
     window: '1-3 business days',
-    price: 8.25,
+    price: 12.25,
     note: 'Packages with tracking'
   },
   {
     id: 'ups-2nd-day-air',
     label: 'UPS 2nd Day Air',
     window: '2 business days',
-    price: 15.00,
+    price: 25.00,
     note: 'Faster delivery option'
   },
   {
@@ -424,65 +374,8 @@ function getPromoDetails() {
     rate: isValid ? getPromoRate(promo) : 0,
     freeShipping: isValid ? Boolean(promo?.freeShipping) : false,
     firstOrderOnly: isValid ? Boolean(promo?.firstOrderOnly) : false,
-    bundleDeal: isValid ? promo?.bundleDeal || null : null,
     isValid
   };
-}
-
-function normalizeBundleValue(value) {
-  return String(value || '').trim().toLowerCase().replace(/\s+/g, '');
-}
-
-function getBundlePromoDiscount(cart, bundleDeal) {
-  if (!bundleDeal) return 0;
-  const requiredQuantity = Math.max(1, Number(bundleDeal.quantity) || 0);
-  const bundlePrice = Number(bundleDeal.bundlePrice);
-  if (!requiredQuantity || !Number.isFinite(bundlePrice)) return 0;
-
-  const matchingItems = cart.filter((item) => (
-    String(item.slug || '') === bundleDeal.slug
-    && normalizeBundleValue(item.mgOption) === normalizeBundleValue(bundleDeal.mgOption)
-    && String(item.packKey || '') === String(bundleDeal.packKey || '')
-  ));
-  const matchedQuantity = matchingItems.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
-  const bundleCount = Math.floor(matchedQuantity / requiredQuantity);
-  if (!bundleCount) return 0;
-
-  let remainingUnits = bundleCount * requiredQuantity;
-  let regularBundleTotal = 0;
-  matchingItems.forEach((item) => {
-    if (remainingUnits <= 0) return;
-    const units = Math.min(remainingUnits, Number(item.quantity) || 0);
-    regularBundleTotal += (Number(item.unitPrice) || 0) * units;
-    remainingUnits -= units;
-  });
-
-  return Math.max(0, regularBundleTotal - (bundlePrice * bundleCount));
-}
-
-function getPromoDiscountAmount(cart, subtotal, promo) {
-  if (!promo?.isValid) return 0;
-  if (promo.bundleDeal) return getBundlePromoDiscount(cart, promo.bundleDeal);
-  return subtotal * promo.rate;
-}
-
-function renderPromoStatus(promo, discountAmount = 0) {
-  if (!activePromoCopy) return;
-  if (!promo?.code) {
-    activePromoCopy.textContent = 'Enter a promo code to update your total.';
-    return;
-  }
-  if (!promo.isValid) {
-    activePromoCopy.textContent = `${promo.code} is not active.`;
-    return;
-  }
-  if (promo.bundleDeal) {
-    activePromoCopy.innerHTML = discountAmount > 0
-      ? `Active code: <strong>${escapeHtml(promo.code)}</strong> (${formatMoney(discountAmount)} off)`
-      : `Active code: <strong>${escapeHtml(promo.code)}</strong> (add the matching bundle to apply)`;
-    return;
-  }
-  activePromoCopy.innerHTML = `Active code: <strong>${escapeHtml(promo.code)}</strong> (${Math.round((promo.rate || 0) * 100)}% off)`;
 }
 
 function normalizePromoEmail(value) {
@@ -547,7 +440,7 @@ function trackPromoIfValid(promo, subtotal) {
   lastTrackedPromoCode = promo.code;
   window.JONEZIE_ANALYTICS?.applyPromoCode(promo.code, {
     discount_rate: promo.rate,
-    discount_value: getPromoDiscountAmount(getCart(), subtotal, promo)
+    discount_value: subtotal * promo.rate
   });
 }
 
@@ -754,7 +647,6 @@ function renderCart() {
         <p>Go back to the catalog, choose a product option, and add it to cart to begin checkout.</p>
         <a class="button primary" href="index.html#full-catalog">Browse Catalog</a>
       </div>`;
-    renderPromoStatus(getPromoDetails(), 0);
     renderSummaryValues({
       itemCount: 0,
       subtotal: 0,
@@ -771,9 +663,8 @@ function renderCart() {
   const promo = getPromoDetails();
   const shippingOption = renderShippingOptions(cart, promo);
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
-  const discountAmount = getPromoDiscountAmount(cart, subtotal, promo);
+  const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
   const total = subtotal - discountAmount + shippingCost;
-  renderPromoStatus(promo, discountAmount);
   trackBeginCheckoutOnce(cart, promo, shippingOption);
 
   renderSummaryValues({
@@ -895,7 +786,7 @@ function buildOrderRequestPayload({
     })),
     includedWithOrder: [
       'Free vial cap cover',
-      'Sticker'
+      'Free Hot Girl Summer sticker'
     ],
     pageUrl: window.location.href,
     timezone: String(Intl.DateTimeFormat().resolvedOptions().timeZone || '').trim(),
@@ -1061,7 +952,7 @@ form?.addEventListener('submit', async (event) => {
   const shippingOption = getSelectedShipping(cart);
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
-  const discountAmount = getPromoDiscountAmount(cart, subtotal, promo);
+  const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
   const total = subtotal - discountAmount + shippingCost;
 
   const payload = buildOrderRequestPayload({
