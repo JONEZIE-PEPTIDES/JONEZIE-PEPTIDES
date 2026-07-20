@@ -275,7 +275,7 @@ function buildCustomerEmail(payload) {
   const lines = [
     `Hi ${firstName},`,
     '',
-    'We received your Jonezie Labs order request and will review it shortly. If everything looks good, a secure Stripe invoice will be emailed for payment.',
+    'We received your Jonezie Labs order request and will review it shortly. If everything looks good, your next email will include a secure Square, Inc. invoice link for payment.',
     '',
     `Order ID: ${payload.orderId || 'Not provided'}`,
     `Estimated Total: ${totals.estimatedTotalDisplay || '$0.00'}`,
@@ -296,6 +296,12 @@ function buildCustomerEmail(payload) {
   lines.push(`Included with order: ${included.length ? included.join(' + ') : 'None listed'}`);
   lines.push('');
   lines.push('This is an order request confirmation, not a payment receipt. Your order is not confirmed for shipment until the invoice is paid.');
+  lines.push('');
+  lines.push('Please check your inbox and spam folder for the next two follow-up emails:');
+  lines.push('1. Your invoice email with the Square, Inc. payment link.');
+  lines.push('2. After payment, your order photo and USPS or UPS tracking link.');
+  lines.push('');
+  lines.push('Because those emails contain payment and tracking links, they can sometimes land in spam.');
   lines.push('');
   lines.push('Jonezie Labs');
 
