@@ -39,6 +39,12 @@ const PROMO_CODES = {
     rate: 0.40,
     freeShipping: false
   },
+  LENNY41: {
+    rate: 0.41,
+    freeShipping: false,
+    startsAt: '2026-07-27T00:00:00-04:00',
+    endsAt: '2026-07-29T00:00:00-04:00'
+  },
   FATHER40: {
     rate: 0.40,
     freeShipping: false
