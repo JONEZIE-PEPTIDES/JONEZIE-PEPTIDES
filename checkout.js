@@ -14,6 +14,7 @@ const formFeedback = document.querySelector('[data-checkout-feedback]');
 const successCard = document.querySelector('[data-checkout-success]');
 const clearCartButton = document.querySelector('[data-clear-cart]');
 const promoCodeInput = document.querySelector('[data-promo-code]');
+const activePromoCopy = document.querySelector('[data-active-promo-copy]');
 const shippingMethodInput = document.querySelector('[data-shipping-method]');
 const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
@@ -386,6 +387,22 @@ function getPromoDetails() {
   };
 }
 
+function renderPromoStatus(promo) {
+  if (!activePromoCopy) return;
+  if (!promo.code) {
+    activePromoCopy.innerHTML = 'Active code: <strong>SUMMER</strong> (30% off)';
+    activePromoCopy.dataset.state = 'default';
+    return;
+  }
+  if (promo.isValid) {
+    activePromoCopy.innerHTML = `Active code: <strong>${escapeHtml(promo.code)}</strong> (${Math.round(promo.rate * 100)}% off)`;
+    activePromoCopy.dataset.state = 'valid';
+    return;
+  }
+  activePromoCopy.innerHTML = `Code <strong>${escapeHtml(promo.code)}</strong> is not active.`;
+  activePromoCopy.dataset.state = 'invalid';
+}
+
 function normalizePromoEmail(value) {
   return String(value || '').trim().toLowerCase();
 }
@@ -649,6 +666,7 @@ function renderCart() {
   const cart = getCart();
 
   if (!cart.length) {
+    renderPromoStatus(getPromoDetails());
     cartRoot.innerHTML = `
       <div class="empty-cart-card">
         <h2>Your cart is empty.</h2>
@@ -669,6 +687,7 @@ function renderCart() {
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
   const promo = getPromoDetails();
+  renderPromoStatus(promo);
   const shippingOption = renderShippingOptions(cart, promo);
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
