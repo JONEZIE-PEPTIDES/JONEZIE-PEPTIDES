@@ -117,8 +117,39 @@ function initAgeGate() {
   });
 }
 
+function bindCheckoutAgeGate() {
+  if (window.localStorage.getItem(AGE_GATE_KEY) === 'true') return;
+
+  const pathname = window.location.pathname || '';
+  const isCheckout = pathname.endsWith('/checkout.html') || pathname.endsWith('checkout.html');
+  if (!isCheckout) return;
+
+  const form = document.querySelector('[data-checkout-form]');
+  if (!form || form.dataset.ageGateBound === 'true') return;
+  form.dataset.ageGateBound = 'true';
+
+  let gateShown = false;
+  const showGate = (event) => {
+    if (window.localStorage.getItem(AGE_GATE_KEY) === 'true') return;
+    if (gateShown) return;
+    gateShown = true;
+    if (event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+    initAgeGate();
+  };
+
+  form.addEventListener('submit', showGate, true);
+  form.querySelectorAll('input, select, textarea').forEach((field) => {
+    field.addEventListener('focus', showGate, { once: true });
+    field.addEventListener('input', showGate, { once: true });
+    field.addEventListener('change', showGate, { once: true });
+  });
+}
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initAgeGate);
+  document.addEventListener('DOMContentLoaded', bindCheckoutAgeGate);
 } else {
-  initAgeGate();
+  bindCheckoutAgeGate();
 }
