@@ -162,6 +162,7 @@
 
   function bindTriggers(modal) {
     let shown = false;
+    let scrollTimerStarted = false;
 
     const open = (trigger) => {
       if (shown || getState().email) return;
@@ -173,25 +174,14 @@
       persistState({ ...state, lastShownAt: Date.now() });
     };
 
-    const onScroll = () => {
-      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-      if (scrollable <= 0) return;
-      const depth = window.scrollY / scrollable;
-      if (depth >= 0.55) {
-        window.removeEventListener('scroll', onScroll);
-        open('Scroll depth');
-      }
+    const onFirstScroll = () => {
+      if (scrollTimerStarted) return;
+      scrollTimerStarted = true;
+      window.removeEventListener('scroll', onFirstScroll);
+      window.setTimeout(() => open('25 seconds after first scroll'), 25000);
     };
 
-    const onMouseOut = (event) => {
-      if (event.clientY > 18) return;
-      document.removeEventListener('mouseout', onMouseOut);
-      open('Exit intent');
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    document.addEventListener('mouseout', onMouseOut);
-    window.setTimeout(() => open('Time on page'), 30000);
+    window.addEventListener('scroll', onFirstScroll, { passive: true, once: true });
   }
 
   function dismiss(modal) {
