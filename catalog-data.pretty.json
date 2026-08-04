@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-04-07 18:24:48",
-  "totalProducts": 64,
-  "totalConfigurations": 143,
+  "totalProducts": 63,
+  "totalConfigurations": 111,
   "featured": [
     {
       "name": "BPC-157",
@@ -1222,27 +1222,6 @@
           "singleVialPrice": "$31.63",
           "eightVialPrice": "$143.00",
           "tenVialPrice": "$220.00"
-        }
-      ]
-    },
-    {
-      "name": "Lemon Bottle",
-      "sourceName": "Lemon Bottle",
-      "slug": "lemon-bottle",
-      "category": "Metabolic",
-      "description": "A strong metabolic research SKU positioned around body-composition, appetite, and energy-use conversations.",
-      "startingPriceSingle": null,
-      "startingPrice8": null,
-      "startingPrice10": "$240.00",
-      "image": "product-placeholder.svg",
-      "options": [
-        {
-          "code": "???",
-          "specification": "10mg*10vials",
-          "mgOption": "10mg",
-          "singleVialPrice": null,
-          "eightVialPrice": null,
-          "tenVialPrice": "$240.00"
         }
       ]
     },
