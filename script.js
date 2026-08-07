@@ -175,6 +175,15 @@ function renderCatalog() {
   }).join('');
 }
 
+let hasRenderedCatalog = false;
+
+function ensureCatalogRendered() {
+  if (hasRenderedCatalog) return;
+  renderCatalog();
+  bindProductClickTracking(document.querySelector('[data-catalog-grid]'));
+  hasRenderedCatalog = true;
+}
+
 function renderCounts() {
   if (!catalogData) return;
   document.querySelectorAll('[data-total-products]').forEach((node) => {
@@ -349,11 +358,11 @@ function initMerchPurchases() {
   });
 }
 
-function initProductClickTracking() {
+function bindProductClickTracking(scope = document) {
   if (!catalogData) return;
   const allProducts = [...(catalogData.featured || []), ...(catalogData.products || [])];
   const bySlug = new Map(allProducts.map((product) => [product.slug, product]));
-  document.querySelectorAll('[data-product-slug]').forEach((link) => {
+  scope.querySelectorAll('[data-product-slug]').forEach((link) => {
     if (link.dataset.analyticsBound) return;
     link.dataset.analyticsBound = 'true';
     link.addEventListener('click', () => {
@@ -370,9 +379,45 @@ function initProductClickTracking() {
   });
 }
 
+function initDeferredCatalogRender() {
+  const section = document.querySelector('#full-catalog');
+  const grid = document.querySelector('[data-catalog-grid]');
+  if (!section || !grid || !catalogData) return;
+
+  if (window.location.hash === '#full-catalog') {
+    ensureCatalogRendered();
+    return;
+  }
+
+  const renderOnDemand = () => {
+    ensureCatalogRendered();
+    window.removeEventListener('hashchange', handleHashChange);
+  };
+
+  const handleHashChange = () => {
+    if (window.location.hash === '#full-catalog') {
+      renderOnDemand();
+    }
+  };
+
+  window.addEventListener('hashchange', handleHashChange);
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      observer.disconnect();
+      renderOnDemand();
+    }, { rootMargin: '320px 0px' });
+    observer.observe(section);
+    return;
+  }
+
+  window.setTimeout(renderOnDemand, 1200);
+}
+
 renderCounts();
 renderFeatured();
-renderCatalog();
-initProductClickTracking();
+bindProductClickTracking(document.querySelector('[data-featured-grid]'));
+initDeferredCatalogRender();
 initMerchImageLightbox();
 initMerchPurchases();
