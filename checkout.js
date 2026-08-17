@@ -1,4 +1,4 @@
-const CART_KEY = 'jonezie_cart';
+﻿const CART_KEY = 'jonezie_cart';
 const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
 const cartRoot = document.querySelector('[data-checkout-cart]');
@@ -813,7 +813,6 @@ function buildOrderRequestPayload({
     })),
     includedWithOrder: [
       'Free vial cap cover',
-      'Free Hot Girl Summer sticker'
     ],
     pageUrl: window.location.href,
     timezone: String(Intl.DateTimeFormat().resolvedOptions().timeZone || '').trim(),
