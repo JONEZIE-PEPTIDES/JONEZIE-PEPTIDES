@@ -197,7 +197,9 @@ function buildAdminEmail(payload) {
   const totals = payload.totals || {};
   const shippingMethod = payload.shippingMethod || null;
   const items = Array.isArray(payload.items) ? payload.items : [];
-  const included = Array.isArray(payload.includedWithOrder) ? payload.includedWithOrder : [];
+  const included = Array.isArray(payload.includedWithOrder)
+    ? payload.includedWithOrder.filter((item) => !/hot girl summer sticker/i.test(String(item || '')))
+    : [];
   const customerName = customer.name || [customer.firstName, customer.lastName].filter(Boolean).join(' ') || 'Not provided';
   const shippingAddress = customer.shippingAddress || [
     customer.shippingStreetAddress,
@@ -270,7 +272,9 @@ function buildCustomerEmail(payload) {
   const customer = payload.customer || {};
   const totals = payload.totals || {};
   const items = Array.isArray(payload.items) ? payload.items : [];
-  const included = Array.isArray(payload.includedWithOrder) ? payload.includedWithOrder : [];
+  const included = Array.isArray(payload.includedWithOrder)
+    ? payload.includedWithOrder.filter((item) => !/hot girl summer sticker/i.test(String(item || '')))
+    : [];
   const firstName = customer.firstName || customer.name || 'there';
   const lines = [
     `Hi ${firstName},`,
