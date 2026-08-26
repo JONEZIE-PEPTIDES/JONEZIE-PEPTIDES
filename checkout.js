@@ -79,7 +79,7 @@ const PROMO_CODES = {
     freeShipping: true
   },
   MILKO: {
-    rate: 0.60,
+    rate: 0.50,
     freeShipping: false
   },
   WELCOME7: {
