@@ -120,14 +120,29 @@ window.JONEZIE_ANALYTICS = (() => {
 
   function orderRequestSubmit(payload = {}) {
     const cart = Array.isArray(payload.cart) ? payload.cart : (Array.isArray(payload.items) ? payload.items : []);
-    event('order_request_submit', buildCartPayload(cart, {
-      value: toNumber(payload.total || payload.totals?.estimatedTotal),
+    const orderValue = toNumber(payload.total || payload.totals?.estimatedTotal);
+    const orderId = String(payload.orderId || '').slice(0, 80);
+    const coupon = String(payload.promoCode || '').slice(0, 80);
+    const shippingTier = String(payload.shipping?.label || payload.shippingMethod?.label || '').slice(0, 80);
+    const shippingCost = toNumber(payload.shipping?.cost || payload.shippingMethod?.cost || payload.totals?.shipping);
+    const discount = toNumber(payload.totals?.discount);
+    const orderPayload = buildCartPayload(cart, {
+      value: orderValue,
       order_id: String(payload.orderId || '').slice(0, 80),
-      coupon: String(payload.promoCode || '').slice(0, 80),
-      shipping_tier: String(payload.shipping?.label || payload.shippingMethod?.label || '').slice(0, 80),
-      shipping_cost: toNumber(payload.shipping?.cost || payload.shippingMethod?.cost),
-      discount: toNumber(payload.totals?.discount)
-    }));
+      coupon,
+      shipping_tier: shippingTier,
+      shipping_cost: shippingCost,
+      discount
+    });
+
+    event('order_request_submit', orderPayload);
+    event('purchase', {
+      ...orderPayload,
+      transaction_id: orderId || `order-request-${Date.now()}`,
+      shipping: shippingCost,
+      tax: 0,
+      order_request_status: 'invoice_pending'
+    });
   }
 
   return {
