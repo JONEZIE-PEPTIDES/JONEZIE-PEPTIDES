@@ -31,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@700&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260728a" />
-  <link rel="stylesheet" href="styles.css?v=20260903d" />
+  <link rel="stylesheet" href="styles.css?v=20260903e" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -306,11 +306,32 @@
       </section>
 
       <section id="featured" class="section-shell block-section">
-        <div class="section-heading centered">
-          <p class="eyebrow">Featured Products</p>
-          <h2 class="featured-shipping-countdown" data-shipping-countdown>
-            Place order before 10 PM Eastern for tomorrow shipment.
-          </h2>
+        <div class="section-heading centered featured-countdown-heading">
+          <div class="featured-countdown-card" data-shipping-countdown aria-label="Shipping cutoff countdown">
+            <p class="featured-countdown-eyebrow">Featured Products</p>
+            <div class="featured-countdown-kicker">
+              <span></span>
+              <p>Order in the next</p>
+              <span></span>
+            </div>
+            <div class="featured-countdown-units" aria-live="polite">
+              <div class="featured-countdown-unit">
+                <strong data-countdown-hours>00</strong>
+                <span>Hrs</span>
+              </div>
+              <div class="featured-countdown-separator">:</div>
+              <div class="featured-countdown-unit">
+                <strong data-countdown-minutes>00</strong>
+                <span>Min</span>
+              </div>
+              <div class="featured-countdown-separator">:</div>
+              <div class="featured-countdown-unit">
+                <strong data-countdown-seconds>00</strong>
+                <span>Sec</span>
+              </div>
+            </div>
+            <p class="featured-countdown-message" data-countdown-message>Ships Tomorrow</p>
+          </div>
         </div>
         <div class="featured-grid" data-featured-grid></div>
       </section>
@@ -653,6 +674,10 @@
     (() => {
       const countdown = document.querySelector('[data-shipping-countdown]');
       if (!countdown) return;
+      const hoursNode = countdown.querySelector('[data-countdown-hours]');
+      const minutesNode = countdown.querySelector('[data-countdown-minutes]');
+      const secondsNode = countdown.querySelector('[data-countdown-seconds]');
+      const messageNode = countdown.querySelector('[data-countdown-message]');
 
       const timeZone = 'America/New_York';
       const formatter = new Intl.DateTimeFormat('en-US', {
@@ -690,13 +715,6 @@
         return { year: next.year, month: next.month, day: next.day };
       }
 
-      function formatDuration(milliseconds) {
-        const totalMinutes = Math.max(0, Math.ceil(milliseconds / 60000));
-        const hours = Math.floor(totalMinutes / 60);
-        const minutes = totalMinutes % 60;
-        return `${hours} hr ${minutes} min`;
-      }
-
       function updateCountdown() {
         const now = new Date();
         const easternNow = getZoneParts(now);
@@ -711,15 +729,21 @@
         const cutoff = beforeTodayCutoff
           ? todayCutoff
           : zonedDateToUtc({ ...addEasternDays(easternNow, 1), hour: 22, minute: 0 });
-        const remaining = formatDuration(cutoff.getTime() - now.getTime());
+        const totalSeconds = Math.max(0, Math.floor((cutoff.getTime() - now.getTime()) / 1000));
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
 
-        countdown.textContent = beforeTodayCutoff
-          ? `Place order in the next ${remaining} to have your package shipped out tomorrow.`
-          : `Today's 10 PM Eastern cutoff has passed. Place order in the next ${remaining} for the next shipment window.`;
+        if (hoursNode) hoursNode.textContent = String(hours).padStart(2, '0');
+        if (minutesNode) minutesNode.textContent = String(minutes).padStart(2, '0');
+        if (secondsNode) secondsNode.textContent = String(seconds).padStart(2, '0');
+        if (messageNode) {
+          messageNode.textContent = beforeTodayCutoff ? 'Ships Tomorrow' : 'Next Shipment Window';
+        }
       }
 
       updateCountdown();
-      window.setInterval(updateCountdown, 60000);
+      window.setInterval(updateCountdown, 1000);
     })();
   </script>
 </body>
