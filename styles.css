@@ -1197,6 +1197,14 @@ img { display: block; max-width: 100%; }
   line-height: 1.12;
   opacity: 0.84;
 }
+
+.featured-shipping-countdown {
+  max-width: 760px;
+  margin-inline: auto;
+  color: var(--ink);
+  font-size: clamp(1.35rem, 3vw, 2.35rem);
+  line-height: 1.08;
+}
 .hero.hero-home .hero-text {
   color: var(--ink-soft);
 }
@@ -3620,11 +3628,7 @@ body.lightbox-open {
 .lead-capture-modal {
   position: fixed;
   inset: 0;
-  z-index: 160;
-}
-
-.lead-capture-modal[hidden] {
-  display: none !important;
+  z-index: 60;
 }
 
 .lead-capture-backdrop {

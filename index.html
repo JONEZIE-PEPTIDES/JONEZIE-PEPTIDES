@@ -31,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@700&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260728a" />
-  <link rel="stylesheet" href="styles.css?v=20260616d" />
+  <link rel="stylesheet" href="styles.css?v=20260903d" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -308,9 +308,8 @@
       <section id="featured" class="section-shell block-section">
         <div class="section-heading centered">
           <p class="eyebrow">Featured Products</p>
-          <h2>
-            Michigan Warehouse Stock
-            <span class="featured-heading-delivery">3-5 day delivery</span>
+          <h2 class="featured-shipping-countdown" data-shipping-countdown>
+            Place order before 10 PM Eastern for tomorrow shipment.
           </h2>
         </div>
         <div class="featured-grid" data-featured-grid></div>
@@ -650,6 +649,79 @@
   <script src="script.js?v=20260610a"></script>
   <script src="site-footer.js?v=20260603g"></script>
   <script src="lead-capture.js?v=20260622a"></script>
+  <script>
+    (() => {
+      const countdown = document.querySelector('[data-shipping-countdown]');
+      if (!countdown) return;
+
+      const timeZone = 'America/New_York';
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone,
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hourCycle: 'h23'
+      });
+
+      function getZoneParts(date) {
+        return formatter.formatToParts(date).reduce((parts, item) => {
+          if (item.type !== 'literal') parts[item.type] = Number(item.value);
+          return parts;
+        }, {});
+      }
+
+      function getTimeZoneOffset(date) {
+        const parts = getZoneParts(date);
+        const zonedUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+        return zonedUtc - date.getTime();
+      }
+
+      function zonedDateToUtc(parts) {
+        const utcGuess = new Date(Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, 0));
+        return new Date(utcGuess.getTime() - getTimeZoneOffset(utcGuess));
+      }
+
+      function addEasternDays(parts, days) {
+        const date = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + days, 12, 0, 0));
+        const next = getZoneParts(date);
+        return { year: next.year, month: next.month, day: next.day };
+      }
+
+      function formatDuration(milliseconds) {
+        const totalMinutes = Math.max(0, Math.ceil(milliseconds / 60000));
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        return `${hours} hr ${minutes} min`;
+      }
+
+      function updateCountdown() {
+        const now = new Date();
+        const easternNow = getZoneParts(now);
+        const todayCutoff = zonedDateToUtc({
+          year: easternNow.year,
+          month: easternNow.month,
+          day: easternNow.day,
+          hour: 22,
+          minute: 0
+        });
+        const beforeTodayCutoff = todayCutoff.getTime() > now.getTime();
+        const cutoff = beforeTodayCutoff
+          ? todayCutoff
+          : zonedDateToUtc({ ...addEasternDays(easternNow, 1), hour: 22, minute: 0 });
+        const remaining = formatDuration(cutoff.getTime() - now.getTime());
+
+        countdown.textContent = beforeTodayCutoff
+          ? `Place order in the next ${remaining} to have your package shipped out tomorrow.`
+          : `Today's 10 PM Eastern cutoff has passed. Place order in the next ${remaining} for the next shipment window.`;
+      }
+
+      updateCountdown();
+      window.setInterval(updateCountdown, 60000);
+    })();
+  </script>
 </body>
 </html>
 
