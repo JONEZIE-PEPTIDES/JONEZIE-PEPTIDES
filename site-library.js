@@ -92,7 +92,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       summary: 'A centralized guide for collagen, skin-remodeling, pigmentation, and appearance-focused research products.',
       intro: 'Aesthetics compounds usually sit at the intersection of collagen signaling, skin support, pigmentation models, and cosmetic-pathway research.',
       bullets: [
-        'Use it to connect GHK-CU, KPV, Glow, KLOW, MT-1, MT-2, SNAP-8, and similar appearance-focused products.',
+        'Use it to connect GHK-CU, KPV, Glow, KLOW, MT-1, MT-2, SNAP-8, Lemon Bottle, and similar appearance-focused products.',
         'Keep language focused on collagen, skin support, pigmentation, remodeling, or cosmetic-pathway research.',
         'Surface related comparison pages when the question is GHK-CU versus Glow, singles versus blends, or pigmentation support versus broader cosmetic-pathway coverage.'
       ],
@@ -340,7 +340,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
   };
 
   const NON_COMPARISON_CATEGORIES = new Set(['Support']);
-  const NON_COMPARISON_SLUGS = new Set(['bac-water']);
+  const NON_COMPARISON_SLUGS = new Set(['bac-water', 'b12-10000mcg-10ml']);
   const CATEGORY_RESEARCH_CONTEXT = {
     Metabolic: 'Commonly referenced in research involving appetite signaling, metabolic regulation, glycemic modeling, and body-composition pathways.',
     Recovery: 'Commonly referenced in research involving repair pathways, tissue remodeling, resilience signaling, and laboratory recovery models.',
@@ -386,7 +386,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'aesthetics-cosmetic',
       label: 'Cosmetic-support compounds',
       category: 'Aesthetics',
-      fragments: ['snap-8', 'b12-blend']
+      fragments: ['snap-8', 'lemon-bottle', 'b12-blend']
     },
     {
       key: 'growth-secretagogue',
@@ -546,6 +546,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
   function getProductForm(product) {
     if (!product) return 'Research vial';
     if (product.slug === 'bac-water') return 'Support vial';
+    if (product.slug === 'b12-10000mcg-10ml') return 'Red aqueous support vial';
     if (isBlendProduct(product)) return 'Multi-compound lyophilized vial';
     return 'Lyophilized research vial';
   }
@@ -556,6 +557,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     const blend = isBlendProduct(product);
     const fallback = blend ? `${product.category} research blend` : `${product.category} research compound`;
     if (product.slug === 'bac-water') return 'Laboratory support solution';
+    if (product.slug === 'b12-10000mcg-10ml') return 'Cobalamin support material';
 
     switch (theme?.key) {
       case 'metabolic-incretin':
@@ -596,6 +598,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
   function getProductStructureNote(product) {
     if (!product) return 'Cataloged as a research vial.';
     if (product.slug === 'bac-water') return 'Cataloged as a support solution used alongside storage, mixing, and broader laboratory reference work.';
+    if (product.slug === 'b12-10000mcg-10ml') return 'Cataloged as a red aqueous cobalamin support vial for methylation, red-cell, and neurologic-function research reference.';
     if (isBlendProduct(product)) return 'Listed as a multi-compound blend with multiple active entries in one vial.';
     const theme = getComparisonTheme(product);
     if (theme?.label) return `Listed as a single-compound vial inside the ${theme.label.toLowerCase()} lane.`;

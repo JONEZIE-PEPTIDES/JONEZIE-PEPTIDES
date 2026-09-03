@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-04-07 18:24:48",
-  "totalProducts": 63,
-  "totalConfigurations": 111,
+  "totalProducts": 65,
+  "totalConfigurations": 113,
   "featured": [
     {
       "name": "BPC-157",
@@ -367,6 +367,27 @@
           "tenVialPrice": "$60.00"
         }
       ]
+    },
+    {
+      "name": "B12 10,000mcg / 10ml Vial",
+      "sourceName": "B12 10000mcg 10ml",
+      "slug": "b12-10000mcg-10ml",
+      "category": "Support",
+      "description": "A red aqueous B12 support vial for cobalamin, methylation, red-cell biology, and neurologic-function research workflows.",
+      "startingPriceSingle": "$35.00",
+      "startingPrice8": "$280.00",
+      "startingPrice10": "$350.00",
+      "image": "B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a",
+      "options": [
+        {
+          "code": "B1210K",
+          "specification": "10000mcg/10ml vial",
+          "mgOption": "10,000mcg / 10ml",
+          "singleVialPrice": "$35.00",
+          "eightVialPrice": "$280.00",
+          "tenVialPrice": "$350.00"
+        }
+      ]
     }
   ],
   "products": [
@@ -459,6 +480,27 @@
           "singleVialPrice": "$23.00",
           "eightVialPrice": "$104.00",
           "tenVialPrice": "$160.00"
+        }
+      ]
+    },
+    {
+      "name": "B12 10,000mcg / 10ml Vial",
+      "sourceName": "B12 10000mcg 10ml",
+      "slug": "b12-10000mcg-10ml",
+      "category": "Support",
+      "description": "A red aqueous B12 support vial for cobalamin, methylation, red-cell biology, and neurologic-function research workflows.",
+      "startingPriceSingle": "$35.00",
+      "startingPrice8": "$280.00",
+      "startingPrice10": "$350.00",
+      "image": "B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a",
+      "options": [
+        {
+          "code": "B1210K",
+          "specification": "10000mcg/10ml vial",
+          "mgOption": "10,000mcg / 10ml",
+          "singleVialPrice": "$35.00",
+          "eightVialPrice": "$280.00",
+          "tenVialPrice": "$350.00"
         }
       ]
     },
@@ -1222,6 +1264,27 @@
           "singleVialPrice": "$31.63",
           "eightVialPrice": "$143.00",
           "tenVialPrice": "$220.00"
+        }
+      ]
+    },
+    {
+      "name": "Lemon Bottle",
+      "sourceName": "Lemon Bottle",
+      "slug": "lemon-bottle",
+      "category": "Metabolic",
+      "description": "A strong metabolic research SKU positioned around body-composition, appetite, and energy-use conversations.",
+      "startingPriceSingle": null,
+      "startingPrice8": null,
+      "startingPrice10": "$240.00",
+      "image": "product-placeholder.svg",
+      "options": [
+        {
+          "code": "???",
+          "specification": "10mg*10vials",
+          "mgOption": "10mg",
+          "singleVialPrice": null,
+          "eightVialPrice": null,
+          "tenVialPrice": "$240.00"
         }
       ]
     },

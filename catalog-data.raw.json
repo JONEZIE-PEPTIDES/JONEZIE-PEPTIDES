@@ -736,6 +736,14 @@
     "PriceP": "$160.00"
   },
   {
+    "CatNo": "???",
+    "ProductName": "Lemon Bottle",
+    "Specification": "10mg*10vials",
+    "OriginalUnitPrice": "",
+    "Markup": "",
+    "PriceP": "$240.00"
+  },
+  {
     "CatNo": "IG01",
     "ProductName": "IGF-1LR3",
     "Specification": "0.1mg*10vials",
@@ -878,5 +886,13 @@
     "OriginalUnitPrice": "",
     "Markup": "",
     "PriceP": "$220.00"
+  },
+  {
+    "CatNo": "B1210K",
+    "ProductName": "B12 10000mcg 10ml",
+    "Specification": "10000mcg/10ml vial",
+    "OriginalUnitPrice": "",
+    "Markup": "",
+    "PriceP": "$350.00"
   }
 ]

@@ -38,6 +38,15 @@ window.JONEZIE_PRODUCT_CONTENT = {
         'Because this is a support product rather than a peptide signaling agent, copy should stay practical and non-hyped.'
       ]
     },
+    'b12-10000mcg-10ml': {
+      shortDescription: 'B12 10,000mcg / 10ml Vial is a red aqueous cobalamin support material for methylation, DNA synthesis, red-cell biology, and neurologic-function research workflows.',
+      researchSummary: 'Vitamin B12, also called cobalamin, is studied for its role in methylation chemistry, DNA synthesis pathways, red-blood-cell biology, and neurologic-function research models.',
+      researchFindings: [
+        'Cobalamin research commonly focuses on methylation reactions, homocysteine metabolism, and DNA synthesis pathways.',
+        'Laboratory interest also includes red-blood-cell biology and neurologic-function models where B12 status is a key variable.',
+        'This listing is positioned as research-use support material, not as medical advice, dosing guidance, or a treatment product.'
+      ]
+    },
     'bac-water': {
       shortDescription: 'BAC Water is a support item used for reconstitution workflows in laboratory settings. Its value is procedural: cleaner handling, accurate mixing, and better day-to-day lab convenience.',
       researchSummary: 'This item is not sold for biologic activity; it supports preparation, dilution, and handling protocols for lyophilized compounds.',
