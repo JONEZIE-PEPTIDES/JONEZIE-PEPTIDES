@@ -1199,31 +1199,31 @@ img { display: block; max-width: 100%; }
 }
 
 .featured-countdown-heading {
-  max-width: 720px;
-  margin-bottom: 22px;
+  max-width: 600px;
+  margin-bottom: 18px;
 }
 
 .featured-countdown-card {
-  width: min(100%, 680px);
+  width: min(100%, 560px);
   margin: 0 auto;
-  padding: clamp(20px, 4vw, 34px);
-  border: 1px solid rgba(0, 194, 178, 0.38);
-  border-radius: 26px;
+  padding: clamp(16px, 3vw, 24px);
+  border: 1px solid rgba(40, 216, 239, 0.3);
+  border-radius: 18px;
   background:
-    radial-gradient(circle at 22% 18%, rgba(0, 194, 178, 0.16), transparent 34%),
-    radial-gradient(circle at 78% 28%, rgba(255, 47, 142, 0.14), transparent 32%),
-    linear-gradient(140deg, rgba(2, 24, 34, 0.96), rgba(3, 10, 18, 0.98));
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    radial-gradient(circle at 22% 18%, rgba(40, 216, 239, 0.1), transparent 36%),
+    radial-gradient(circle at 80% 28%, rgba(255, 95, 169, 0.1), transparent 34%),
+    linear-gradient(140deg, rgba(10, 22, 29, 0.94), rgba(6, 16, 24, 0.98));
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
 .featured-countdown-eyebrow,
 .featured-countdown-kicker p,
 .featured-countdown-message {
   margin: 0;
-  color: #bfefff;
+  color: var(--cyan-soft);
   font-family: "Sora", "Space Grotesk", sans-serif;
   font-weight: 800;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
@@ -1231,8 +1231,8 @@ img { display: block; max-width: 100%; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  font-size: clamp(0.94rem, 2vw, 1.35rem);
+  gap: 12px;
+  font-size: clamp(0.8rem, 1.6vw, 1rem);
 }
 
 .featured-countdown-eyebrow::before,
@@ -1243,72 +1243,73 @@ img { display: block; max-width: 100%; }
   content: "";
   display: block;
   height: 2px;
-  flex: 1 1 90px;
-  max-width: 120px;
-  background: linear-gradient(90deg, transparent, #ff2f8e);
+  flex: 1 1 64px;
+  max-width: 92px;
+  background: linear-gradient(90deg, transparent, var(--pink));
 }
 
 .featured-countdown-eyebrow::after,
 .featured-countdown-message::after {
-  background: linear-gradient(90deg, #ff2f8e, transparent);
+  background: linear-gradient(90deg, var(--pink), transparent);
 }
 
 .featured-countdown-kicker {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  margin: clamp(18px, 3vw, 30px) 0 16px;
+  gap: 12px;
+  margin: clamp(14px, 2.6vw, 20px) 0 12px;
 }
 
 .featured-countdown-kicker p {
-  color: #75eaff;
-  font-size: clamp(0.88rem, 2vw, 1.2rem);
+  color: var(--cyan);
+  font-size: clamp(0.76rem, 1.65vw, 0.96rem);
+  white-space: nowrap;
 }
 
 .featured-countdown-units {
   display: grid;
-  grid-template-columns: minmax(70px, 120px) auto minmax(70px, 120px) auto minmax(70px, 120px);
+  grid-template-columns: minmax(62px, 96px) auto minmax(62px, 96px) auto minmax(62px, 96px);
   align-items: center;
   justify-content: center;
-  gap: clamp(8px, 2vw, 18px);
+  gap: clamp(6px, 1.5vw, 12px);
 }
 
 .featured-countdown-unit {
   display: grid;
   place-items: center;
-  min-height: clamp(86px, 13vw, 124px);
-  padding: 12px 10px;
-  border: 2px solid rgba(191, 239, 255, 0.32);
-  border-radius: 16px;
-  background: rgba(2, 17, 28, 0.72);
+  min-height: clamp(72px, 11vw, 94px);
+  padding: 10px 8px;
+  border: 1px solid rgba(131, 242, 255, 0.28);
+  border-radius: 12px;
+  background: rgba(12, 31, 40, 0.72);
 }
 
 .featured-countdown-unit strong {
-  color: #ff2f8e;
+  color: var(--pink);
   font-family: "Sora", "Space Grotesk", sans-serif;
-  font-size: clamp(2.35rem, 8vw, 4.6rem);
+  font-size: clamp(2rem, 6vw, 3.15rem);
   font-weight: 800;
   line-height: 0.9;
 }
 
 .featured-countdown-unit span,
 .featured-countdown-separator {
-  color: #75eaff;
+  color: var(--cyan-soft);
   font-family: "Sora", "Space Grotesk", sans-serif;
   font-weight: 800;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .featured-countdown-unit span {
-  margin-top: 8px;
-  font-size: clamp(0.74rem, 2vw, 1rem);
+  margin-top: 6px;
+  font-size: clamp(0.64rem, 1.4vw, 0.82rem);
 }
 
 .featured-countdown-separator {
-  color: #ff2f8e;
-  font-size: clamp(2rem, 6vw, 3.8rem);
+  color: var(--pink);
+  font-size: clamp(1.55rem, 4vw, 2.5rem);
   line-height: 1;
 }
 
@@ -1316,14 +1317,38 @@ img { display: block; max-width: 100%; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  margin-top: clamp(18px, 3vw, 28px);
-  color: #ff5ca6;
-  font-size: clamp(1rem, 3vw, 1.65rem);
-  background: linear-gradient(90deg, #ff2f8e, #75eaff);
+  gap: 12px;
+  margin-top: clamp(14px, 2.5vw, 20px);
+  font-size: clamp(0.9rem, 2.4vw, 1.25rem);
+  background: var(--ember-brand-fill);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+@media (max-width: 520px) {
+  .featured-countdown-card {
+    padding: 14px 12px;
+    border-radius: 16px;
+  }
+
+  .featured-countdown-eyebrow,
+  .featured-countdown-kicker p,
+  .featured-countdown-message {
+    letter-spacing: 0.12em;
+  }
+
+  .featured-countdown-eyebrow::before,
+  .featured-countdown-eyebrow::after,
+  .featured-countdown-kicker span,
+  .featured-countdown-message::before,
+  .featured-countdown-message::after {
+    max-width: 34px;
+  }
+
+  .featured-countdown-units {
+    grid-template-columns: minmax(58px, 1fr) auto minmax(58px, 1fr) auto minmax(58px, 1fr);
+  }
 }
 .hero.hero-home .hero-text {
   color: var(--ink-soft);
