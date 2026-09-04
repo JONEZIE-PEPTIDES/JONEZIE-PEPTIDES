@@ -3,12 +3,12 @@ window.JONEZIE_PRODUCT_CONTENT = {
   disclaimerLong: 'All compounds listed on this site are offered strictly for laboratory research, analytical, or in-vitro use. Statements on this site summarize published research themes, preclinical findings, and early clinical observations where available; they are not medical claims, treatment claims, or dosing instructions. Products are not approved to diagnose, treat, cure, or prevent disease, and they are not for human consumption.',
   products: {
     '5-amino-1mq': {
-      shortDescription: '5-Amino-1MQ is a nicotinamide N-methyltransferase inhibitor used in metabolic research. Preclinical work has focused on adiposity, glucose handling, and energy-expenditure pathways.',
-      researchSummary: 'Research around NNMT inhibition has examined lower fat gain, improved glucose tolerance, and reduced liver-fat accumulation in obesity models.',
+      shortDescription: '5-Amino-1MQ is a small-molecule nicotinamide N-methyltransferase inhibitor used in metabolic research. Preclinical work has focused on adiposity, glucose handling, liver-fat signaling, and cellular energy pathways.',
+      researchSummary: 'Research around NNMT inhibition has examined adipose tissue metabolism, glucose tolerance, hepatic lipid accumulation, and energy-expenditure markers in preclinical obesity models.',
       researchFindings: [
-        'Preclinical NNMT-inhibition studies have linked this pathway to reduced adiposity and improved insulin sensitivity in diet-induced obesity models.',
-        'Mechanistic work focuses on energy balance, hepatic lipid handling, and methyl-donor metabolism rather than direct stimulant-style effects.',
-        'Human outcome data for 5-Amino-1MQ itself remain limited, so most claims should stay anchored to preclinical metabolic research.'
+        'Preclinical NNMT-inhibition studies have linked this pathway to adipose tissue remodeling, lower fat accumulation, and improved insulin-sensitivity markers in diet-induced obesity models.',
+        'Mechanistic work focuses on NAD-plus metabolism, methyl-donor balance, hepatic lipid handling, and energy-expenditure signaling rather than direct stimulant-style effects.',
+        'Human outcome data for 5-Amino-1MQ itself remain limited, so product copy should stay anchored to laboratory and preclinical metabolic research.'
       ]
     },
     aod: {

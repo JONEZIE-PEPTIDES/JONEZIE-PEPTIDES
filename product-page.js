@@ -226,6 +226,36 @@ function getBackorderNote(product, option) {
   return option?.backorderNote || product?.backorderNote || `${option?.code || 'This item'} is currently on backorder.`;
 }
 
+const TIRZEPATIDE_BACKORDER_NOTE = 'Backorder: order now. Tirzepatide orders ship starting 6/28/26.';
+
+function isTirzepatideSlug(slug) {
+  return String(slug || '').toLowerCase() === 'tirzepatide';
+}
+
+function forceTirzepatideBackorder(product) {
+  if (!product || !isTirzepatideSlug(product.slug)) return product;
+  product.inventoryStatus = 'backorder';
+  product.backorderNote = TIRZEPATIDE_BACKORDER_NOTE;
+  product.options = (product.options || []).map((option) => ({
+    ...option,
+    inventoryStatus: 'backorder',
+    backorderNote: TIRZEPATIDE_BACKORDER_NOTE
+  }));
+  return product;
+}
+
+function applyTirzepatideBackorderDomFallback() {
+  if (!isTirzepatideSlug(getSlugFromPath())) return;
+  document.querySelectorAll('[data-product-options] .spec-card').forEach((card) => {
+    const pill = card.querySelector('.inventory-pill');
+    if (!pill) return;
+    pill.className = 'inventory-pill inventory-backorder';
+    pill.textContent = 'Backorder';
+  });
+  const selectedSubtitle = document.querySelector('[data-selected-subtitle]');
+  if (selectedSubtitle) selectedSubtitle.textContent = TIRZEPATIDE_BACKORDER_NOTE;
+}
+
 function formatMoney(value) {
   if (!Number.isFinite(value)) return 'Pending';
   return `$${value.toFixed(2)}`;
@@ -261,10 +291,15 @@ function addItemToCart(item) {
 
 function renderProductPage() {
   const slug = getSlugFromPath();
-  if (!catalogData) return;
+  if (!catalogData) {
+    applyTirzepatideBackorderDomFallback();
+    return;
+  }
   const product = (catalogData.products || []).find((item) => item.slug === slug)
     || (catalogData.featured || []).find((item) => item.slug === slug);
   if (!product) return;
+  forceTirzepatideBackorder(product);
+
   const firstAvailableOption = product.options.find((option) => getInventoryStatus(option) !== 'sold_out');
   let selectedOption = firstAvailableOption || product.options[0] || null;
   let selectedPackKey = selectedOption && selectedOption.singleVialPrice ? 'singleVialPrice' : 'eightVialPrice';
@@ -517,9 +552,9 @@ function renderProductPage() {
           <p class="eyebrow">${escapeHtml(option.code)}</p>
           <h3>${escapeHtml(option.mgOption)}</h3>
           <p class="inventory-pill inventory-${inventoryStatus}">${getInventoryLabel(inventoryStatus)}</p>
-          <div class="spec-price-row"><span>Single</span><strong>${escapeHtml(option.singleVialPrice || 'Pending')}</strong></div>
-          <div class="spec-price-row"><span>8-pack</span><strong>${escapeHtml(option.eightVialPrice || 'Pending')}</strong></div>
-          <div class="spec-price-row live-row"><span>10-pack</span><strong>${escapeHtml(option.tenVialPrice || 'Pending')}</strong></div>
+          ${option.singleVialPrice ? `<div class="spec-price-row"><span>Single</span><strong>${escapeHtml(option.singleVialPrice)}</strong></div>` : ''}
+          ${option.eightVialPrice ? `<div class="spec-price-row"><span>8-pack</span><strong>${escapeHtml(option.eightVialPrice)}</strong></div>` : ''}
+          ${option.tenVialPrice ? `<div class="spec-price-row live-row"><span>10-pack</span><strong>${escapeHtml(option.tenVialPrice)}</strong></div>` : ''}
         </button>`;
     }).join('');
 
