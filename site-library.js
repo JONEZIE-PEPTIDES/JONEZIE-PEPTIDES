@@ -45,21 +45,21 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'metabolic',
       categories: ['Metabolic'],
       title: 'Metabolic Research Guide',
-      summary: 'A cleaner way to compare GLP-1, dual-agonist, and next-wave appetite-signaling compounds in one lane.',
-      intro: 'Metabolic products on Jonezie are usually evaluated for appetite signaling, body-composition modeling, glucose handling, and downstream cardiometabolic readouts.',
+      summary: 'Explore compounds studied in relation to metabolic signaling, glucose regulation, appetite-related pathways, energy balance, and body-composition models.',
+      intro: 'Metabolic research often reviews appetite signaling, incretin pathways, glucose regulation, energy balance, and body-composition models. Individual product pages and comparisons help clarify class, format, listed strengths, and supporting documentation.',
       bullets: [
-        'Compare mature GLP-1 products against dual- and triple-pathway compounds by strength range, category depth, and current demand.',
-        'Keep copy anchored to appetite, energy-balance, and glycemic research themes instead of treatment or outcome claims.',
-        'Use comparison pages when a researcher is deciding between semaglutide, tirzepatide, retatrutide, cagrilintide blends, or newer niche entries.'
+        'Compare GLP-1, GIP, glucagon, amylin, and adjacent metabolic research pathways.',
+        'Review whether a listing is a single compound or a blended research product.',
+        'Use comparison pages to review semaglutide, tirzepatide, retatrutide, cagrilintide blends, and nearby entries side by side.'
       ],
       faq: [
         {
-          question: 'Why open the metabolic guide first?',
-          answer: 'It brings semaglutide, tirzepatide, retatrutide, and neighboring compounds into one sharper read before you narrow by price, strength, or lane fit.'
+          question: 'Which products are included in metabolic research?',
+          answer: 'This category includes products such as semaglutide, tirzepatide, retatrutide, survodutide, mazdutide, cagrilintide, AOD, and SLU-PP-322 when listed in the active catalog.'
         },
         {
-          question: 'How should metabolic compounds be described on Jonezie?',
-          answer: 'Stay with research-first language around appetite signaling, energy balance, glycemic endpoints, and body-composition pathways while keeping the RUO notice intact.'
+          question: 'What should I compare first?',
+          answer: 'Start with compound class, molecular targets, available strengths, product format, storage information, and supporting documentation.'
         }
       ]
     },
@@ -67,21 +67,21 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'recovery',
       categories: ['Recovery'],
       title: 'Recovery Research Guide',
-      summary: 'A recovery-focused guide for tendon, ligament, tissue-repair, and wound-healing research products.',
-      intro: 'Recovery products on Jonezie cluster around soft-tissue remodeling, angiogenesis, wound response, and repair-pathway studies.',
+      summary: 'Explore compounds investigated in tissue-repair, inflammatory-signaling, vascular-response, and recovery-related laboratory models.',
+      intro: 'Recovery research commonly examines tissue-remodeling pathways, vascular response, inflammatory signaling, and repair-related laboratory models. Reviewing product pages and comparisons can help separate single compounds, blends, and supporting research categories.',
       bullets: [
-        'Use this guide when comparing BPC-157, TB500, Wolverine blends, Ara-290, and other repair-oriented products.',
-        'Keep messaging centered on repair pathways, resilience, tissue signaling, and laboratory handling discipline.',
-        'Open storage and mixing guidance alongside recovery products because these compounds are often reviewed in stacks or multi-vial setups.'
+        'Review BPC-157, TB500, Wolverine blends, Ara-290, and related repair-pathway products when available.',
+        'Compare single-compound listings against blends before selecting a product page.',
+        'Keep storage, mixing, and label information close when reviewing multi-vial research materials.'
       ],
       faq: [
         {
-          question: 'Which recovery compounds are commonly compared?',
-          answer: 'Researchers usually compare BPC-157, TB500, Wolverine blends, Ara-290, and Thymosin Alpha-1 when looking at repair-pathway coverage across different strengths, blends, and formats.'
+          question: 'Which recovery products are commonly reviewed together?',
+          answer: 'Customers often compare BPC-157, TB500, Wolverine blends, Ara-290, and Thymosin Alpha-1 by format, listed strength, and research category.'
         },
         {
-          question: 'What is the safest way to present recovery content?',
-          answer: 'Frame it around preclinical repair themes, tissue-signaling pathways, and careful lab handling rather than promises.'
+          question: 'Where can I find product-specific storage information?',
+          answer: 'Open the product page or the storage guide for the most relevant storage and handling notes tied to the selected product.'
         }
       ]
     },
@@ -89,21 +89,21 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'aesthetics',
       categories: ['Aesthetics'],
       title: 'Aesthetics Research Guide',
-      summary: 'A centralized guide for collagen, skin-remodeling, pigmentation, and appearance-focused research products.',
-      intro: 'Aesthetics compounds usually sit at the intersection of collagen signaling, skin support, pigmentation models, and cosmetic-pathway research.',
+      summary: 'Explore compounds studied in collagen-related pathways, pigmentation, skin biology, tissue remodeling, and cosmetic research models.',
+      intro: 'Aesthetics research may include collagen-related signaling, pigmentation pathways, skin-barrier biology, tissue remodeling, and cosmetic research models. Product pages help separate single compounds from blends and show current strengths and documentation.',
       bullets: [
-        'Use it to connect GHK-CU, KPV, Glow, KLOW, MT-1, MT-2, SNAP-8, Lemon Bottle, and similar appearance-focused products.',
-        'Keep language focused on collagen, skin support, pigmentation, remodeling, or cosmetic-pathway research.',
-        'Surface related comparison pages when the question is GHK-CU versus Glow, singles versus blends, or pigmentation support versus broader cosmetic-pathway coverage.'
+        'Review GHK-CU, KPV, MT-1, MT-2, SNAP-8, and related aesthetics-focused listings when available.',
+        'Compare skin, barrier, collagen, pigmentation, and cosmetic-pathway research context.',
+        'Use comparisons to separate individual compounds from multi-compound blends.'
       ],
       faq: [
         {
-          question: 'What belongs in the aesthetics category on Jonezie?',
-          answer: 'Products in this lane usually support skin, collagen, pigmentation, remodeling, or cosmetic-pathway research and pair naturally with clean storage guidance.'
+          question: 'What belongs in the aesthetics research category?',
+          answer: 'This category groups products reviewed for collagen, skin-barrier, pigmentation, tissue-remodeling, and cosmetic-pathway research context.'
         },
         {
-          question: 'Why link aesthetics products to guides and tools?',
-          answer: 'These compounds are often reviewed alongside singles and blends, so clear comparisons and handling reads make the lineup easier to navigate.'
+          question: 'How do I compare a single compound with a blend?',
+          answer: 'Check the product label, listed components, strengths, and supporting documentation, then use the comparison page when an appropriate side-by-side option is available.'
         }
       ]
     },
@@ -111,21 +111,21 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'growth',
       categories: ['Growth'],
       title: 'Growth-Axis Research Guide',
-      summary: 'A guide for GH-axis, secretagogue, endocrine, and body-composition research products.',
-      intro: 'Growth compounds on Jonezie are usually compared across GH-axis coverage, endocrine signaling, and body-composition research.',
+      summary: 'Explore compounds associated with growth-hormone signaling, secretagogue activity, endocrine pathways, and related laboratory models.',
+      intro: 'Growth-axis research often compares secretagogue activity, GHRH-related compounds, endocrine signaling, and related body-composition models. The most useful review starts with compound class, available strengths, and product-specific documentation.',
       bullets: [
-        'Use it to compare CJC-1295 variants, Ipamorelin, IGF-1LR3, HCG, HMG, and related growth-axis compounds.',
-        'Strength comparison is especially important here because multiple GH-pathway products have multi-tiered option sets.',
-        'Related comparison links help researchers move between direct GH products, secretagogues, and paired stacks.'
+        'Compare CJC-1295 variants, ipamorelin, IGF-1 LR3, HCG, HMG, and related growth-axis products when available.',
+        'Review strength options carefully because several listings have multiple tiers.',
+        'Use related comparisons to separate secretagogues, direct growth-signaling compounds, and endocrine-support products.'
       ],
       faq: [
         {
-          question: 'What makes the growth-axis lane different?',
-          answer: 'Growth-axis compounds are easiest to read when you compare secretagogues, direct growth-signaling compounds, and endocrine-support products by strength range and research focus.'
+          question: 'What makes the growth-axis category different?',
+          answer: 'Growth-axis products are usually reviewed by secretagogue activity, GH-axis signaling, endocrine context, listed strengths, and research format.'
         },
         {
-          question: 'What kind of content works best for growth products?',
-          answer: 'Concise, research-first summaries around GH signaling, endocrine modeling, and body-composition pathways usually work best while keeping claims measured.'
+          question: 'What should I review before comparing growth-axis products?',
+          answer: 'Confirm the product name, compound class, strength options, product documentation, and general storage information.'
         }
       ]
     },
@@ -133,21 +133,21 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'cognitive',
       categories: ['Cognitive'],
       title: 'Cognitive Research Guide',
-      summary: 'A guide for focus, stress-response, neuro-support, and restoration-pathway compounds.',
-      intro: 'Cognitive products on Jonezie usually connect through focus, neuroregulation, stress response, or restoration-oriented research themes.',
+      summary: 'Explore compounds studied in neuroregulation, stress-response signaling, sleep-related pathways, and cognitive research models.',
+      intro: 'Cognitive research can include neuroregulation, stress-response signaling, sleep-related pathways, neurotrophic support, and broader central-nervous-system research. Product pages and comparisons help keep those differences clear.',
       bullets: [
-        'Use it to cluster Semax, Selank, DSIP, Pinealon, VIP, Cerebrolysin, and Oxytocin Acetate without flattening them into one generic nootropic bucket.',
-        'Anchor descriptions to published neuro-support and regulatory-pathway research instead of lifestyle copy.',
-        'Comparison pages help users move between classic cognitive peptides and newer restoration products.'
+        'Review Semax, Selank, DSIP, Pinealon, VIP, Cerebrolysin, Oxytocin Acetate, and related products when listed.',
+        'Distinguish focus, stress-response, sleep, neurotrophic, and restoration-oriented research context.',
+        'Use individual product pages for product-specific documentation, strength options, and handling information.'
       ],
       faq: [
         {
-          question: 'What is the strongest use for the cognitive guide?',
-          answer: 'It gives researchers one cleaner lane for focus, neuro-support, sleep-related, and restoration-pathway compounds without flattening them into one bucket.'
+          question: 'Which products are included in cognitive research?',
+          answer: 'This category can include Semax, Selank, DSIP, Pinealon, VIP, Cerebrolysin, Oxytocin Acetate, and related neuroregulatory research products.'
         },
         {
-          question: 'How should cognitive copy stay compliant?',
-          answer: 'Use research-first language about neuroregulation, stress response, or restoration pathways and avoid therapeutic or human-use framing.'
+          question: 'How do I choose a comparison?',
+          answer: 'Start with products that share a general research area, then compare molecular targets, format, strengths, and storage information.'
         }
       ]
     },
@@ -155,21 +155,21 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'cellular',
       categories: ['Cellular'],
       title: 'Cellular Research Guide',
-      summary: 'A guide for mitochondrial, longevity, antioxidant, and whole-cell signaling products.',
-      intro: 'Cellular products on Jonezie usually map to mitochondrial signaling, antioxidant support, longevity-related pathways, and broader whole-cell function research.',
+      summary: 'Explore compounds investigated in mitochondrial function, cellular stress, antioxidant pathways, metabolic flexibility, and aging-related research.',
+      intro: 'Cellular research commonly reviews mitochondrial function, cellular stress response, antioxidant pathways, metabolic flexibility, and aging-related models. Evidence can vary by compound, so product-specific pages and supporting references should be reviewed closely.',
       bullets: [
-        'Use this guide for MOTS-c, NAD, SS-31, Epithalon, Thymalin, PNC27, and similar cellular-function products.',
-        'These products are often weighed across longevity, energy, and repair themes, so direct comparisons matter.',
-        'Guide content should stay technically clear and avoid broad anti-aging promises.'
+        'Review MOTS-c, NAD, SS-31, Epithalon, Thymalin, PNC27, and related cellular-function listings when available.',
+        'Compare mitochondrial, bioregulator, antioxidant, and cellular-stress research context separately.',
+        'Use product pages to review available strengths, documentation, and handling information.'
       ],
       faq: [
         {
-          question: 'Why open the cellular guide first?',
-          answer: 'It brings mitochondrial, longevity, and stress-response compounds into one cleaner read so overlap and differences are easier to spot.'
+          question: 'What should I compare in cellular research products?',
+          answer: 'Compare molecular target, research model, product format, listed strengths, storage notes, and available documentation.'
         },
         {
-          question: 'How should cellular compounds be summarized?',
-          answer: 'Focus on mitochondrial signaling, cellular stress, antioxidant pathways, and laboratory longevity research without overstating certainty.'
+          question: 'Are all cellular products studied the same way?',
+          answer: 'No. Some focus on mitochondrial signaling, while others are reviewed in bioregulator, antioxidant, cellular-stress, or specialty research models.'
         }
       ]
     },
@@ -177,21 +177,21 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'support',
       categories: ['Support', 'Performance'],
       title: 'Support And Performance Guide',
-      summary: 'A catch-all guide for support items, specialty products, and high-output research products that do not fit the core category hubs.',
-      intro: 'Support and performance items still need clear storage, mixing, and comparison context even when they do not belong to one dominant peptide lane.',
+      summary: 'Explore preparation supplies and specialty research products that do not fall within the primary research categories.',
+      intro: 'Support and specialty products can be used alongside broader research workflows or reviewed as narrower standalone listings. Check product pages for format, documentation, storage notes, and whether the item is eligible for comparison.',
       bullets: [
-        'Use it for BAC Water, Dermorphin, PT-141, LC216, and other specialty products that need context but should not distort the core category guides.',
-        'This guide is the right place for handling notes, quick math, and adjacent comparisons.',
-        'Link specialty products to tools and quick-reference assets so users can keep moving even when the product is niche.'
+        'Review BAC Water, B12 support items, Dermorphin, PT-141, LC216, and related specialty products when listed.',
+        'Use product pages to confirm whether a listing is a support material, specialty compound, or comparison-eligible product.',
+        'Keep storage, label, and preparation references available when reviewing support materials.'
       ],
       faq: [
         {
-          question: 'Why combine support and performance products in one guide?',
-          answer: 'It keeps specialty products easy to find without forcing them into the wrong lane.'
+          question: 'Why are support and specialty products grouped together?',
+          answer: 'Some items support laboratory preparation or sit outside the primary research categories, so they are grouped here for easier review.'
         },
         {
-          question: 'What matters most for support products?',
-          answer: 'Clear storage reads, mixing guidance, and nearby product links usually matter more than long sales copy.'
+          question: 'Are support items compared like peptide products?',
+          answer: 'Not always. Some support materials are not comparison-eligible, so their product page and storage notes are the best place to start.'
         }
       ]
     }
@@ -208,7 +208,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       ]
     },
     Recovery: {
-      title: 'Repair-lane storage',
+      title: 'Repair-category storage',
       shortSummary: 'Recovery compounds are best handled with the same cold-chain discipline used for other lyophilized research products, with extra attention to labeling and repeat handling.',
       bullets: [
         'Keep unopened material cool, dry, and sealed until needed.',
@@ -310,7 +310,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       steps: [
         'Check the compound, reconstitution volume, and lot label before beginning.',
         'Add diluent slowly with low agitation and let the vial rest briefly between motions.',
-        'Refrigerate after mixing and keep labeling consistent across compounds in the same lane.'
+        'Refrigerate after mixing and keep labeling consistent across compounds in the same research category.'
       ]
     },
     Cellular: {
@@ -342,14 +342,14 @@ window.JONEZIE_SITE_LIBRARY = (() => {
   const NON_COMPARISON_CATEGORIES = new Set(['Support']);
   const NON_COMPARISON_SLUGS = new Set(['bac-water', 'b12-10000mcg-10ml']);
   const CATEGORY_RESEARCH_CONTEXT = {
-    Metabolic: 'Commonly referenced in research involving appetite signaling, metabolic regulation, glycemic modeling, and body-composition pathways.',
-    Recovery: 'Commonly referenced in research involving repair pathways, tissue remodeling, resilience signaling, and laboratory recovery models.',
-    Aesthetics: 'Commonly referenced in research involving collagen support, pigmentation, skin remodeling, and cosmetic-pathway analysis.',
-    Growth: 'Commonly referenced in research involving GH-axis signaling, endocrine modeling, and body-composition studies.',
-    Cognitive: 'Commonly referenced in research involving neuro-support, focus regulation, stress-response signaling, and restoration pathways.',
-    Cellular: 'Commonly referenced in research involving mitochondrial signaling, cellular stress, longevity-focused analysis, and whole-cell function.',
-    Support: 'Commonly referenced as a laboratory support item used alongside storage, mixing, and broader research reference work.',
-    Performance: 'Commonly referenced in specialty signaling research where category fit is narrower and handling notes matter more than broad claims.'
+    Metabolic: 'Metabolic research may examine appetite signaling, metabolic regulation, glycemic modeling, and body-composition pathways.',
+    Recovery: 'Recovery research may examine repair pathways, tissue remodeling, vascular response, and inflammatory-signaling models.',
+    Aesthetics: 'Aesthetics research may examine collagen support, pigmentation, skin remodeling, and cosmetic-pathway analysis.',
+    Growth: 'Growth-axis research may examine GH-axis signaling, endocrine models, and related body-composition pathways.',
+    Cognitive: 'Cognitive research may examine neuro-support, stress-response signaling, sleep-related pathways, and restoration models.',
+    Cellular: 'Cellular research may examine mitochondrial signaling, cellular stress, antioxidant pathways, and whole-cell function.',
+    Support: 'Support items are reviewed as laboratory materials used alongside storage, mixing, and broader research reference work.',
+    Performance: 'Specialty research may examine narrower signaling pathways where product format and handling notes require closer review.'
   };
   const COMPARISON_THEME_RULES = [
     {
@@ -601,14 +601,14 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     if (product.slug === 'b12-10000mcg-10ml') return 'Cataloged as a red aqueous cobalamin support vial for methylation, red-cell, and neurologic-function research reference.';
     if (isBlendProduct(product)) return 'Listed as a multi-compound blend with multiple active entries in one vial.';
     const theme = getComparisonTheme(product);
-    if (theme?.label) return `Listed as a single-compound vial inside the ${theme.label.toLowerCase()} lane.`;
-    return `Listed as a single-compound vial inside the ${String(product.category || 'research').toLowerCase()} lane.`;
+    if (theme?.label) return `Listed as a single-compound vial inside the ${theme.label.toLowerCase()} research category.`;
+    return `Listed as a single-compound vial inside the ${String(product.category || 'research').toLowerCase()} research category.`;
   }
 
   function getProductResearchContext(product, productContent) {
     if (productContent?.researchSummary) return productContent.researchSummary;
     if (productContent?.shortDescription) return productContent.shortDescription;
-    return CATEGORY_RESEARCH_CONTEXT[product?.category] || 'Commonly referenced in laboratory comparison and handling work.';
+    return CATEGORY_RESEARCH_CONTEXT[product?.category] || 'Reviewed for laboratory comparison and handling reference work.';
   }
 
   function getProductHandlingNote(product) {
@@ -737,7 +737,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
   function getComparisonThemeLabel(product) {
     const theme = getComparisonTheme(product);
     if (theme?.label) return theme.label;
-    return `${product?.category || 'Research'} lane compounds`;
+    return `${product?.category || 'Research'} research category compounds`;
   }
 
   function scoreProductRelationship(sourceProduct, candidate) {
@@ -867,7 +867,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       },
       {
         question: `Where should I go next after reviewing ${product.name}?`,
-        answer: `Use the related comparisons, ${profile.guide?.title.toLowerCase() || 'research guide'}, and research tools to review nearby compounds, storage notes, and handling context without leaving the same lane.`
+        answer: `Use the related comparisons, ${profile.guide?.title.toLowerCase() || 'research guide'}, and research tools to review nearby compounds, storage notes, and handling context in the same research category.`
       }
     ];
   }
@@ -882,14 +882,14 @@ window.JONEZIE_SITE_LIBRARY = (() => {
         answer: `Putting ${leftProduct.name} and ${rightProduct.name} side by side helps researchers compare ${comparisonTheme.toLowerCase()}, current strengths, handling notes, and price entry points in one focused read.`
       },
       {
-        question: `Are ${leftProduct.name} and ${rightProduct.name} in the same research lane?`,
+        question: `Are ${leftProduct.name} and ${rightProduct.name} in the same research category?`,
         answer: leftProduct.category === rightProduct.category
-          ? `Yes. Both products sit in the ${leftProduct.category.toLowerCase()} lane and are grouped here because they speak to closely related research goals.`
-          : `They touch adjacent themes, but they do not sit in the same primary lane: ${leftProduct.category} and ${rightProduct.category}.`
+          ? `Yes. Both products sit in the ${leftProduct.category.toLowerCase()} research category and are grouped here because they speak to closely related research goals.`
+          : `They touch adjacent themes, but they do not sit in the same primary category: ${leftProduct.category} and ${rightProduct.category}.`
       },
       {
         question: `What should I review after this comparison?`,
-        answer: `Move from this read into the linked product pages, the ${leftProfile.guide?.title.toLowerCase() || 'matching research guide'}, and the related tools to compare structure notes, storage discipline, and nearby compounds in the same lane.`
+        answer: `Move from this read into the linked product pages, the ${leftProfile.guide?.title.toLowerCase() || 'matching research guide'}, and the related tools to compare structure notes, storage discipline, and nearby compounds in the same research category.`
       },
       {
         question: `What does this page avoid on purpose?`,

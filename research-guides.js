@@ -22,18 +22,18 @@
     statsNode.innerHTML = `
       <article class="guide-stat-card">
         <p class="eyebrow">Guides</p>
-        <strong>Lane-first product reading</strong>
-        <span>Use category-led guides to keep related compounds, products, and comparisons in the same reference flow.</span>
+        <strong>Clear Research References</strong>
+        <span>Review product information, handling considerations, and related research resources in one place.</span>
       </article>
       <article class="guide-stat-card">
         <p class="eyebrow">Handling</p>
-        <strong>Storage and prep context</strong>
-        <span>Each guide keeps storage, handling, and comparison notes close to the compounds in that lane.</span>
+        <strong>Storage &amp; Preparation</strong>
+        <span>Find general storage, documentation, and laboratory-handling information.</span>
       </article>
       <article class="guide-stat-card">
         <p class="eyebrow">RUO</p>
-        <strong>Research-reference only</strong>
-        <span>All guide copy stays inside laboratory, analytical, and catalog-reference language.</span>
+        <strong>Research Use Only</strong>
+        <span>All products and information are provided strictly for research, laboratory, and analytical purposes.</span>
       </article>`;
   }
 
@@ -41,7 +41,7 @@
     if (!guideIndexNode) return;
     guideIndexNode.innerHTML = library.GUIDE_LIBRARY.map((guide) => `
       <a class="resource-card" href="#guide-${guide.key}">
-        <p class="eyebrow">Guide</p>
+        <p class="eyebrow">Category</p>
         <h3>${escapeHtml(guide.title)}</h3>
         <p>${escapeHtml(guide.summary)}</p>
         <span class="catalog-link">View guide</span>
@@ -68,14 +68,14 @@
           <div class="guide-article-grid">
             <article class="guide-article-card">
               <p class="eyebrow">Key Concepts</p>
-              <h3>What defines this lane</h3>
+              <h3>What to review in this category</h3>
               <ul class="research-list">
                 ${guide.bullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join('')}
               </ul>
             </article>
             <article class="guide-article-card">
               <p class="eyebrow">Practical Notes</p>
-              <h3>Storage, handling, and review notes</h3>
+              <h3>General Storage &amp; Handling</h3>
               <ul class="research-list">
                 ${practicalNotes.map((note) => `<li>${escapeHtml(note)}</li>`).join('')}
               </ul>
@@ -90,21 +90,21 @@
             </article>
             <article class="guide-article-card">
               <p class="eyebrow">Related Comparisons</p>
-              <h3>Open direct side-by-side reads</h3>
+              <h3>Open related comparisons</h3>
               <div class="mini-link-grid">
                 ${comparisonCards.map((pair) => renderComparisonMiniCard(pair.left, pair.right)).join('')}
               </div>
             </article>
             <article class="guide-article-card">
               <p class="eyebrow">Related Tools</p>
-              <h3>Reference pages to keep open</h3>
+              <h3>Research tools</h3>
               <div class="mini-link-grid">
                 ${relatedTools.map((tool) => renderToolMiniCard(tool)).join('')}
               </div>
             </article>
             <article class="guide-article-card">
               <p class="eyebrow">FAQ</p>
-              <h3>Common guide questions</h3>
+              <h3>Common questions</h3>
               <div class="guide-faq-list">
                 ${guide.faq.map((item) => `
                   <div class="guide-faq-item">
@@ -124,8 +124,8 @@
       <div class="resource-strip">
         <article class="resource-strip-card">
           <p class="eyebrow">Comparisons</p>
-          <h2>When the lane is clear, open the side-by-side read.</h2>
-          <p>Move from the guide into direct compound comparisons for structure notes, product context, storage, and related listings.</p>
+          <h2>Compare related products side by side.</h2>
+          <p>Move from a guide into direct compound comparisons for class notes, product context, storage information, and related listings.</p>
           <div class="resource-links-inline">
             <a class="button secondary" href="comparison.html">View Comparisons</a>
             <a class="button secondary" href="research-tools.html">Use Research Tools</a>
@@ -133,7 +133,7 @@
         </article>
         <article class="resource-strip-card">
           <p class="eyebrow">Catalog</p>
-          <h2>Keep the rest of the reference flow close.</h2>
+          <h2>Keep product information close.</h2>
           <div class="mini-link-grid">
             <a class="mini-link-card" href="index.html#full-catalog">
               <strong>Full Products</strong>
@@ -145,7 +145,7 @@
             </a>
             <a class="mini-link-card" href="index.html#faq">
               <strong>FAQ</strong>
-              <span>Review ordering, research-use, and catalog-reference answers without leaving the main site shell.</span>
+              <span>Review ordering, research-use, and product-reference answers in the main FAQ.</span>
             </a>
           </div>
         </article>
@@ -159,7 +159,7 @@
     const notes = [];
 
     if (forms.length) {
-      notes.push(`Most listings in this lane are cataloged as ${forms.join(', ').toLowerCase()}.`);
+      notes.push(`Most listings in this category are cataloged as ${forms.join(', ').toLowerCase()}.`);
     }
     if (leadProfile?.storageNote) {
       notes.push(leadProfile.storageNote);
@@ -204,7 +204,7 @@
     return `
       <a class="mini-link-card" href="${library.getComparisonUrl(leftProduct.slug, rightProduct.slug)}">
         <strong>${escapeHtml(leftProduct.name)} vs ${escapeHtml(rightProduct.name)}</strong>
-        <span>Open the direct comparison for class notes, storage context, current strengths, and nearby compounds.</span>
+        <span>Compare research classification, molecular targets, available strengths, product format, and general storage information.</span>
       </a>`;
   }
 
@@ -218,8 +218,8 @@
 
   function updateMeta() {
     const canonicalUrl = `${library.getSiteOrigin()}/research-guides.html`;
-    const metaDescription = 'Crawlable Jonezie Labs research guides covering reconstitution, storage and handling, COA basics, product labels, comparison flow, cold chain, and lyophilized vial reference notes.';
-    document.title = 'Research Guides & Handling References | Jonezie Labs';
+    const metaDescription = 'Jonezie Labs research guides covering product information, laboratory handling, storage, labels, COAs, and compound comparisons for research-use-only reference.';
+    document.title = 'Research Guides | Jonezie Labs';
     upsertMeta('meta[name="description"]', { name: 'description', content: metaDescription });
     upsertMeta('meta[property="og:title"]', { property: 'og:title', content: document.title });
     upsertMeta('meta[property="og:description"]', { property: 'og:description', content: metaDescription });
