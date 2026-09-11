@@ -125,7 +125,7 @@
     }
   ];
 
-  const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide', 'b12-10000mcg-10ml', '5-amino-1mq', 'kpv', 'cjc-1295-without-dac'];
+  const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'kpv', 'cjc-1295-without-dac', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', '5-amino-1mq', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide', 'b12-10000mcg-10ml'];
   const BACKORDER_NOTES = {
     tirzepatide: 'Backorder: order now. Tirzepatide orders ship starting 6/28/26.'
   };
