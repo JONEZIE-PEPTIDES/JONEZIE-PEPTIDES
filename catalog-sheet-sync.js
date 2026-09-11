@@ -93,7 +93,39 @@
     ['LC216', '10mg', 31.625, 220.88, 261.8]
   ];
 
-  const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide', 'b12-10000mcg-10ml'];
+  const EXTRA_PRODUCTS = [
+    {
+      name: '5-Amino-1MQ',
+      sourceName: '5-amino-1mq',
+      slug: '5-amino-1mq',
+      category: 'Metabolic',
+      description: '5-Amino-1MQ is an active metabolic listing at Jonezie. A small-molecule NNMT inhibitor for adipose-tissue, glucose-handling, hepatic lipid, and cellular-energy research workflows.',
+      startingPriceSingle: '$23.00',
+      startingPrice8: '$160.64',
+      startingPrice10: '$190.40',
+      image: '5-AMINO-1MQ.png?v=20260904a',
+      options: [
+        {
+          code: '5AM5',
+          specification: '5mg*10vials',
+          mgOption: '5mg',
+          singleVialPrice: '$23.00',
+          eightVialPrice: '$160.64',
+          tenVialPrice: '$190.40'
+        },
+        {
+          code: '5AM10',
+          specification: '10mg*10vials',
+          mgOption: '10mg',
+          singleVialPrice: '$35.00',
+          eightVialPrice: '$244.45',
+          tenVialPrice: '$289.74'
+        }
+      ]
+    }
+  ];
+
+  const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide', 'b12-10000mcg-10ml', '5-amino-1mq'];
   const BACKORDER_NOTES = {
     tirzepatide: 'Backorder: order now. Tirzepatide orders ship starting 6/28/26.'
   };
@@ -347,6 +379,15 @@
       startingPrice8: first.eightVialPrice,
       startingPrice10: first.tenVialPrice
     };
+  });
+
+  EXTRA_PRODUCTS.forEach((extraProduct) => {
+    const existingIndex = products.findIndex((product) => product.slug === extraProduct.slug);
+    if (existingIndex >= 0) {
+      products[existingIndex] = extraProduct;
+    } else {
+      products.push(extraProduct);
+    }
   });
 
   const featured = FEATURED_SLUGS

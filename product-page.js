@@ -379,8 +379,8 @@ function renderProductPage() {
     const offerPrice = parsePrice(selectedOption?.[selectedPackKey] || selectedOption?.singleVialPrice || selectedOption?.eightVialPrice || selectedOption?.tenVialPrice);
     const packMap = {
       singleVialPrice: 'Single Vial',
-      eightVialPrice: '8-Vial Kit',
-      tenVialPrice: '10-Vial Pack'
+      eightVialPrice: '8-Kit',
+      tenVialPrice: 'Full 10-Kit'
     };
     const packLabel = packMap[selectedPackKey] || 'Research pricing';
     const metaDescription = `${productProfile?.researchContext || shortDescription} ${selectedOption ? `${selectedOption.mgOption} is currently listed with ${packLabel.toLowerCase()} pricing.` : ''} View ${product.name} product reference details from Jonezie Labs.`.replace(/\s+/g, ' ').trim();
@@ -528,8 +528,8 @@ function renderProductPage() {
   function getAvailablePacks(option) {
     return [
       { key: 'singleVialPrice', label: 'Single Vial', price: option.singleVialPrice },
-      { key: 'eightVialPrice', label: '8-Vial Kit', price: option.eightVialPrice },
-      { key: 'tenVialPrice', label: '10-Vial Pack', price: option.tenVialPrice }
+      { key: 'eightVialPrice', label: '8-Kit', price: option.eightVialPrice },
+      { key: 'tenVialPrice', label: 'Full 10-Kit', price: option.tenVialPrice }
     ].filter((pack) => pack.price);
   }
 
@@ -553,8 +553,8 @@ function renderProductPage() {
           <h3>${escapeHtml(option.mgOption)}</h3>
           <p class="inventory-pill inventory-${inventoryStatus}">${getInventoryLabel(inventoryStatus)}</p>
           ${option.singleVialPrice ? `<div class="spec-price-row"><span>Single</span><strong>${escapeHtml(option.singleVialPrice)}</strong></div>` : ''}
-          ${option.eightVialPrice ? `<div class="spec-price-row"><span>8-pack</span><strong>${escapeHtml(option.eightVialPrice)}</strong></div>` : ''}
-          ${option.tenVialPrice ? `<div class="spec-price-row live-row"><span>10-pack</span><strong>${escapeHtml(option.tenVialPrice)}</strong></div>` : ''}
+          ${option.eightVialPrice ? `<div class="spec-price-row"><span>8-Kit</span><strong>${escapeHtml(option.eightVialPrice)}</strong></div>` : ''}
+          ${option.tenVialPrice ? `<div class="spec-price-row live-row"><span>Full 10-Kit</span><strong>${escapeHtml(option.tenVialPrice)}</strong></div>` : ''}
         </button>`;
     }).join('');
 
@@ -593,8 +593,8 @@ function renderProductPage() {
     qtyInput.value = String(quantity);
     const packMap = {
       singleVialPrice: 'Single Vial',
-      eightVialPrice: '8-Vial Kit',
-      tenVialPrice: '10-Vial Pack'
+      eightVialPrice: '8-Kit',
+      tenVialPrice: 'Full 10-Kit'
     };
     const packLabel = packMap[selectedPackKey] || 'Pack';
     const unitPrice = parsePrice(selectedOption[selectedPackKey]);

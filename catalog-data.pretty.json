@@ -388,6 +388,35 @@
           "tenVialPrice": "$350.00"
         }
       ]
+    },
+    {
+      "name": "5-Amino-1MQ",
+      "sourceName": "5-amino-1mq",
+      "slug": "5-amino-1mq",
+      "category": "Metabolic",
+      "description": "5-Amino-1MQ is an active metabolic listing at Jonezie. A small-molecule NNMT inhibitor for adipose-tissue, glucose-handling, hepatic lipid, and cellular-energy research workflows.",
+      "startingPriceSingle": "$23.00",
+      "startingPrice8": "$160.64",
+      "startingPrice10": "$190.40",
+      "image": "5-AMINO-1MQ.png?v=20260904a",
+      "options": [
+        {
+          "code": "5AM5",
+          "specification": "5mg*10vials",
+          "mgOption": "5mg",
+          "singleVialPrice": "$23.00",
+          "eightVialPrice": "$160.64",
+          "tenVialPrice": "$190.40"
+        },
+        {
+          "code": "5AM10",
+          "specification": "10mg*10vials",
+          "mgOption": "10mg",
+          "singleVialPrice": "$35.00",
+          "eightVialPrice": "$244.45",
+          "tenVialPrice": "$289.74"
+        }
+      ]
     }
   ],
   "products": [
@@ -396,27 +425,27 @@
       "sourceName": "5-amino-1mq",
       "slug": "5-amino-1mq",
       "category": "Metabolic",
-      "description": "A strong metabolic research SKU positioned around body-composition, appetite, and energy-use conversations.",
+      "description": "5-Amino-1MQ is an active metabolic listing at Jonezie. A small-molecule NNMT inhibitor for adipose-tissue, glucose-handling, hepatic lipid, and cellular-energy research workflows.",
       "startingPriceSingle": "$23.00",
-      "startingPrice8": "$104.00",
-      "startingPrice10": "$160.00",
-      "image": "product-placeholder.svg",
+      "startingPrice8": "$160.64",
+      "startingPrice10": "$190.40",
+      "image": "5-AMINO-1MQ.png?v=20260904a",
       "options": [
         {
-          "code": "5AM",
+          "code": "5AM5",
           "specification": "5mg*10vials",
           "mgOption": "5mg",
           "singleVialPrice": "$23.00",
-          "eightVialPrice": "$104.00",
-          "tenVialPrice": "$160.00"
+          "eightVialPrice": "$160.64",
+          "tenVialPrice": "$190.40"
         },
         {
-          "code": "50AM",
-          "specification": "50mg*10vials",
-          "mgOption": "50mg",
-          "singleVialPrice": "$57.50",
-          "eightVialPrice": "$260.00",
-          "tenVialPrice": "$400.00"
+          "code": "5AM10",
+          "specification": "10mg*10vials",
+          "mgOption": "10mg",
+          "singleVialPrice": "$35.00",
+          "eightVialPrice": "$244.45",
+          "tenVialPrice": "$289.74"
         }
       ]
     },
