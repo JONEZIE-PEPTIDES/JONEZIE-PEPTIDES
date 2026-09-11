@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11 10:41:22",
+  "generatedAt": "2026-09-11 10:48:43",
   "totalProducts": 52,
   "totalConfigurations": 93,
   "featured": [
@@ -62,56 +62,6 @@
       ]
     },
     {
-      "name": "KPV",
-      "sourceName": "KPV",
-      "slug": "kpv",
-      "category": "Aesthetics",
-      "description": "KPV is an active aesthetics listing at Jonezie. An aesthetics-focused research product used in skin, pigmentation, collagen, or cosmetic-pathway workflows.",
-      "startingPriceSingle": "$37.00",
-      "startingPrice8": "$258.43",
-      "startingPrice10": "$306.31",
-      "image": "product-placeholder.svg",
-      "options": [
-        {
-          "code": "KPV10MG",
-          "specification": "10mg*10vials",
-          "mgOption": "10mg",
-          "singleVialPrice": "$37.00",
-          "eightVialPrice": "$258.43",
-          "tenVialPrice": "$306.31"
-        }
-      ]
-    },
-    {
-      "name": "CJC-1295 Without DAC",
-      "sourceName": "CJC-1295 Without DAC",
-      "slug": "cjc-1295-without-dac",
-      "category": "Growth",
-      "description": "CJC-1295 Without DAC is an active growth listing at Jonezie. A growth-axis research compound used in endocrine, recovery, and body-composition signaling studies.",
-      "startingPriceSingle": "$43.73",
-      "startingPrice8": "$305.42",
-      "startingPrice10": "$362.00",
-      "image": "product-placeholder.svg",
-      "options": [
-        {
-          "code": "C1W5MG",
-          "specification": "5mg*10vials",
-          "mgOption": "5mg",
-          "singleVialPrice": "$43.73",
-          "eightVialPrice": "$305.42",
-          "tenVialPrice": "$362.00"
-        },
-        {
-          "code": "C1W10MG",
-          "specification": "10mg*10vials",
-          "mgOption": "10mg",
-          "singleVialPrice": "$74.00",
-          "eightVialPrice": "$516.86",
-          "tenVialPrice": "$612.61"
-        }
-      ]
-    },
-    {
       "name": "KLOW",
       "sourceName": "KLOW (GHK-CU50+TB10+BC10+KPV10)",
       "slug": "ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg",
@@ -129,35 +79,6 @@
           "singleVialPrice": "$127.82",
           "eightVialPrice": "$892.76",
           "tenVialPrice": "$1,058.15"
-        }
-      ]
-    },
-    {
-      "name": "5-Amino-1MQ",
-      "sourceName": "5-amino-1mq",
-      "slug": "5-amino-1mq",
-      "category": "Metabolic",
-      "description": "5-Amino-1MQ is an active metabolic listing at Jonezie. A small-molecule NNMT inhibitor for adipose-tissue, glucose-handling, hepatic lipid, and cellular-energy research workflows.",
-      "startingPriceSingle": "$23.00",
-      "startingPrice8": "$160.64",
-      "startingPrice10": "$190.40",
-      "image": "5-AMINO-1MQ.png?v=20260904a",
-      "options": [
-        {
-          "code": "5AM5",
-          "specification": "5mg*10vials",
-          "mgOption": "5mg",
-          "singleVialPrice": "$23.00",
-          "eightVialPrice": "$160.64",
-          "tenVialPrice": "$190.40"
-        },
-        {
-          "code": "5AM10",
-          "specification": "10mg*10vials",
-          "mgOption": "10mg",
-          "singleVialPrice": "$35.00",
-          "eightVialPrice": "$244.45",
-          "tenVialPrice": "$289.74"
         }
       ]
     },
@@ -391,6 +312,85 @@
           "singleVialPrice": "$22.00",
           "eightVialPrice": "$176.00",
           "tenVialPrice": "$220.00"
+        }
+      ]
+    },
+    {
+      "name": "5-Amino-1MQ",
+      "sourceName": "5-amino-1mq",
+      "slug": "5-amino-1mq",
+      "category": "Metabolic",
+      "description": "5-Amino-1MQ is an active metabolic listing at Jonezie. A small-molecule NNMT inhibitor for adipose-tissue, glucose-handling, hepatic lipid, and cellular-energy research workflows.",
+      "startingPriceSingle": "$23.00",
+      "startingPrice8": "$160.64",
+      "startingPrice10": "$190.40",
+      "image": "5-AMINO-1MQ.png?v=20260904a",
+      "options": [
+        {
+          "code": "5AM5",
+          "specification": "5mg*10vials",
+          "mgOption": "5mg",
+          "singleVialPrice": "$23.00",
+          "eightVialPrice": "$160.64",
+          "tenVialPrice": "$190.40"
+        },
+        {
+          "code": "5AM10",
+          "specification": "10mg*10vials",
+          "mgOption": "10mg",
+          "singleVialPrice": "$35.00",
+          "eightVialPrice": "$244.45",
+          "tenVialPrice": "$289.74"
+        }
+      ]
+    },
+    {
+      "name": "KPV",
+      "sourceName": "KPV",
+      "slug": "kpv",
+      "category": "Aesthetics",
+      "description": "KPV is an active aesthetics listing at Jonezie. An aesthetics-focused research product used in skin, pigmentation, collagen, or cosmetic-pathway workflows.",
+      "startingPriceSingle": "$37.00",
+      "startingPrice8": "$258.43",
+      "startingPrice10": "$306.31",
+      "image": "product-placeholder.svg",
+      "options": [
+        {
+          "code": "KPV10MG",
+          "specification": "10mg*10vials",
+          "mgOption": "10mg",
+          "singleVialPrice": "$37.00",
+          "eightVialPrice": "$258.43",
+          "tenVialPrice": "$306.31"
+        }
+      ]
+    },
+    {
+      "name": "CJC-1295 Without DAC",
+      "sourceName": "CJC-1295 Without DAC",
+      "slug": "cjc-1295-without-dac",
+      "category": "Growth",
+      "description": "CJC-1295 Without DAC is an active growth listing at Jonezie. A growth-axis research compound used in endocrine, recovery, and body-composition signaling studies.",
+      "startingPriceSingle": "$43.73",
+      "startingPrice8": "$305.42",
+      "startingPrice10": "$362.00",
+      "image": "product-placeholder.svg",
+      "options": [
+        {
+          "code": "C1W5MG",
+          "specification": "5mg*10vials",
+          "mgOption": "5mg",
+          "singleVialPrice": "$43.73",
+          "eightVialPrice": "$305.42",
+          "tenVialPrice": "$362.00"
+        },
+        {
+          "code": "C1W10MG",
+          "specification": "10mg*10vials",
+          "mgOption": "10mg",
+          "singleVialPrice": "$74.00",
+          "eightVialPrice": "$516.86",
+          "tenVialPrice": "$612.61"
         }
       ]
     }

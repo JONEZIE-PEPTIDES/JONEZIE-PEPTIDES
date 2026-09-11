@@ -20,7 +20,9 @@
     'ghk-cu',
     'selank',
     'bpc-157',
-    'nad'
+    'nad',
+    'kpv',
+    'cjc-1295-without-dac'
   ];
 
   const IMAGE_OVERRIDES_BY_SLUG = {
