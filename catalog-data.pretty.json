@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11 10:48:43",
+  "generatedAt": "2026-09-12 17:02:38",
   "totalProducts": 52,
   "totalConfigurations": 93,
   "featured": [
@@ -226,9 +226,7 @@
           "mgOption": "5mg",
           "singleVialPrice": "$26.91",
           "eightVialPrice": "$187.95",
-          "tenVialPrice": "$222.77",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$222.77"
         },
         {
           "code": "TIR10MG",
@@ -236,9 +234,7 @@
           "mgOption": "10mg",
           "singleVialPrice": "$33.64",
           "eightVialPrice": "$234.94",
-          "tenVialPrice": "$278.46",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$278.46"
         },
         {
           "code": "TIR15MG",
@@ -246,9 +242,7 @@
           "mgOption": "15mg",
           "singleVialPrice": "$43.73",
           "eightVialPrice": "$305.42",
-          "tenVialPrice": "$362.00",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$362.00"
         },
         {
           "code": "TIR20MG",
@@ -256,9 +250,7 @@
           "mgOption": "20mg",
           "singleVialPrice": "$53.82",
           "eightVialPrice": "$375.90",
-          "tenVialPrice": "$445.54",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$445.54"
         },
         {
           "code": "TIR30MG",
@@ -266,9 +258,7 @@
           "mgOption": "30mg",
           "singleVialPrice": "$63.91",
           "eightVialPrice": "$446.38",
-          "tenVialPrice": "$529.07",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$529.07"
         },
         {
           "code": "TIR40MG",
@@ -276,9 +266,7 @@
           "mgOption": "40mg",
           "singleVialPrice": "$80.73",
           "eightVialPrice": "$563.85",
-          "tenVialPrice": "$668.30",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$668.30"
         },
         {
           "code": "TIR50MG",
@@ -286,13 +274,9 @@
           "mgOption": "50mg",
           "singleVialPrice": "$97.55",
           "eightVialPrice": "$681.31",
-          "tenVialPrice": "$807.53",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$807.53"
         }
-      ],
-      "inventoryStatus": "backorder",
-      "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+      ]
     },
     {
       "name": "B12 10,000mcg / 10ml Vial",
@@ -737,9 +721,7 @@
           "mgOption": "5mg",
           "singleVialPrice": "$26.91",
           "eightVialPrice": "$187.95",
-          "tenVialPrice": "$222.77",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$222.77"
         },
         {
           "code": "TIR10MG",
@@ -747,9 +729,7 @@
           "mgOption": "10mg",
           "singleVialPrice": "$33.64",
           "eightVialPrice": "$234.94",
-          "tenVialPrice": "$278.46",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$278.46"
         },
         {
           "code": "TIR15MG",
@@ -757,9 +737,7 @@
           "mgOption": "15mg",
           "singleVialPrice": "$43.73",
           "eightVialPrice": "$305.42",
-          "tenVialPrice": "$362.00",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$362.00"
         },
         {
           "code": "TIR20MG",
@@ -767,9 +745,7 @@
           "mgOption": "20mg",
           "singleVialPrice": "$53.82",
           "eightVialPrice": "$375.90",
-          "tenVialPrice": "$445.54",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$445.54"
         },
         {
           "code": "TIR30MG",
@@ -777,9 +753,7 @@
           "mgOption": "30mg",
           "singleVialPrice": "$63.91",
           "eightVialPrice": "$446.38",
-          "tenVialPrice": "$529.07",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$529.07"
         },
         {
           "code": "TIR40MG",
@@ -787,9 +761,7 @@
           "mgOption": "40mg",
           "singleVialPrice": "$80.73",
           "eightVialPrice": "$563.85",
-          "tenVialPrice": "$668.30",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$668.30"
         },
         {
           "code": "TIR50MG",
@@ -797,13 +769,9 @@
           "mgOption": "50mg",
           "singleVialPrice": "$97.55",
           "eightVialPrice": "$681.31",
-          "tenVialPrice": "$807.53",
-          "inventoryStatus": "backorder",
-          "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+          "tenVialPrice": "$807.53"
         }
-      ],
-      "inventoryStatus": "backorder",
-      "backorderNote": "Backorder: order now. Tirzepatide orders ship starting 6/28/26."
+      ]
     },
     {
       "name": "CJC-1295 Without DAC",
