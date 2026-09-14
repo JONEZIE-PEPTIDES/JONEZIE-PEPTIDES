@@ -77,6 +77,15 @@
     if (checkoutPromoCopy) {
       checkoutPromoCopy.innerHTML = `Active code: <strong>${activePromo.code}</strong> (${Math.round(activePromo.rate * 100)}% off)`;
     }
+
+    document.dispatchEvent(new CustomEvent('jonezie:promo-updated', {
+      detail: {
+        code: activePromo.code,
+        rate: activePromo.rate,
+        message: activePromo.message,
+        freeShipping: activePromo.freeShipping
+      }
+    }));
   }
 
   window.JONEZIE_PROMO = {

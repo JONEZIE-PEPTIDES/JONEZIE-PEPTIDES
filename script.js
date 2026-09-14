@@ -117,6 +117,66 @@ function getProductContent(product) {
   return contentData?.products?.[product.slug] || null;
 }
 
+function getProductDisplaySummary(product, productContent) {
+  if (window.JONEZIE_SITE_LIBRARY?.getProductDisplaySummary) {
+    return window.JONEZIE_SITE_LIBRARY.getProductDisplaySummary(product, productContent);
+  }
+  return productContent?.shortDescription || product.description || '';
+}
+
+function getLowestOfferedPrice(product) {
+  const candidates = [];
+  (product.options || []).forEach((option) => {
+    const status = String(option.inventoryStatus || '').toLowerCase();
+    if (['sold_out', 'discontinued', 'hidden', 'test', 'gift', 'complimentary'].includes(status)) return;
+
+    ['singleVialPrice', 'eightVialPrice', 'tenVialPrice'].forEach((field) => {
+      const numeric = parsePrice(option[field]);
+      if (numeric > 0) candidates.push({ numeric, display: option[field] });
+    });
+  });
+
+  if (!candidates.length) return product.startingPriceSingle || '';
+  candidates.sort((a, b) => a.numeric - b.numeric);
+  return candidates[0].display;
+}
+
+let cardPromoSource;
+
+function normalizeCardPromo(promo) {
+  const code = String(promo?.code || '').trim();
+  const rate = Number(promo?.rate || 0);
+  if (!code || !Number.isFinite(rate) || rate <= 0) return null;
+  return { code, rate };
+}
+
+function getActiveCardPromo() {
+  if (cardPromoSource !== undefined) return cardPromoSource;
+  return normalizeCardPromo(window.JONEZIE_PROMO?.getActivePromo?.());
+}
+
+function formatDiscountedPrice(price, rate) {
+  const numeric = parsePrice(price);
+  if (!numeric || !Number.isFinite(rate) || rate <= 0) return '';
+  return `$${(numeric * (1 - rate)).toFixed(2)}`;
+}
+
+function renderCardPricing(product) {
+  const price = getLowestOfferedPrice(product);
+  if (!price) return '<span class="catalog-price-rule">View all pricing</span>';
+  const promo = getActiveCardPromo();
+  const promoPrice = promo ? formatDiscountedPrice(price, promo.rate) : '';
+  const promoLine = promoPrice
+    ? `<span class="card-promo-price">${escapeHtml(promoPrice)} when you use code ${escapeHtml(promo.code.toLowerCase())}</span>`
+    : '';
+  return `
+    <div class="card-pricing">
+      <span class="card-from-price">${escapeHtml(price)}</span>
+      ${promoLine}
+      <span class="catalog-price-rule">View all pricing</span>
+    </div>`;
+}
+
 function renderFeatured() {
   const grid = document.querySelector('[data-featured-grid]');
   if (!grid || !catalogData) return;
@@ -124,8 +184,9 @@ function renderFeatured() {
   const featured = (catalogData.featured || []).filter(Boolean);
   grid.innerHTML = featured.map((product, index) => {
     const productContent = getProductContent(product);
-    const description = productContent?.shortDescription || product.description;
+    const description = getProductDisplaySummary(product, productContent);
     const strengthChips = renderStrengthChips(product.options);
+    const pricing = renderCardPricing(product);
     const imageSrc = getImageSrc(product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     const loadingMode = index < 3 ? 'eager' : 'lazy';
@@ -134,11 +195,8 @@ function renderFeatured() {
       <a class="product-card card-link-shell ${getAccent(product.category)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
         <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" loading="${loadingMode}" decoding="async" fetchpriority="${fetchPriority}" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         <div class="product-copy">
-          <div class="product-top">
-            <div class="product-badge">${escapeHtml(product.category)}</div>
-            <span class="catalog-price-rule">view pricing</span>
-          </div>
           <h3>${escapeHtml(product.name)}</h3>
+          <div class="product-top product-top-price">${pricing}</div>
           <span class="catalog-link">Open product page</span>
           <p>${escapeHtml(description)}</p>
           <div class="option-chips">${strengthChips}</div>
@@ -154,25 +212,45 @@ function renderCatalog() {
   const products = [...(catalogData.products || [])].sort((a, b) => a.name.localeCompare(b.name));
   grid.innerHTML = products.map((product) => {
     const productContent = getProductContent(product);
-    const description = productContent?.shortDescription || product.description;
+    const description = getProductDisplaySummary(product, productContent);
     const strengthChips = renderStrengthChips(product.options);
+    const pricing = renderCardPricing(product);
     const imageSrc = getImageSrc(product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
       <a class="catalog-card card-link-shell" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
         <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         <div class="catalog-copy">
-          <div class="catalog-top">
-            <span class="catalog-tag">${escapeHtml(product.category)}</span>
-            <span class="catalog-price-rule">view pricing</span>
-          </div>
           <h3>${escapeHtml(product.name)}</h3>
+          <div class="catalog-top catalog-top-price">${pricing}</div>
           <span class="catalog-link">Open product page</span>
           <p>${escapeHtml(description)}</p>
           <div class="option-chips">${strengthChips}</div>
         </div>
       </a>`;
   }).join('');
+}
+
+let hasRenderedCatalog = false;
+
+function ensureCatalogRendered() {
+  if (hasRenderedCatalog) return;
+  renderCatalog();
+  bindProductClickTracking(document.querySelector('[data-catalog-grid]'));
+  hasRenderedCatalog = true;
+}
+
+function refreshProductCardPricing() {
+  renderFeatured();
+  bindProductClickTracking(document.querySelector('[data-featured-grid]'));
+  if (!hasRenderedCatalog) return;
+  renderCatalog();
+  bindProductClickTracking(document.querySelector('[data-catalog-grid]'));
+}
+
+function handlePromoUpdated(event) {
+  cardPromoSource = normalizeCardPromo(event.detail);
+  refreshProductCardPricing();
 }
 
 function renderCounts() {
@@ -349,11 +427,11 @@ function initMerchPurchases() {
   });
 }
 
-function initProductClickTracking() {
+function bindProductClickTracking(scope = document) {
   if (!catalogData) return;
   const allProducts = [...(catalogData.featured || []), ...(catalogData.products || [])];
   const bySlug = new Map(allProducts.map((product) => [product.slug, product]));
-  document.querySelectorAll('[data-product-slug]').forEach((link) => {
+  scope.querySelectorAll('[data-product-slug]').forEach((link) => {
     if (link.dataset.analyticsBound) return;
     link.dataset.analyticsBound = 'true';
     link.addEventListener('click', () => {
@@ -370,9 +448,46 @@ function initProductClickTracking() {
   });
 }
 
+function initDeferredCatalogRender() {
+  const section = document.querySelector('#full-catalog');
+  const grid = document.querySelector('[data-catalog-grid]');
+  if (!section || !grid || !catalogData) return;
+
+  if (window.location.hash === '#full-catalog') {
+    ensureCatalogRendered();
+    return;
+  }
+
+  const renderOnDemand = () => {
+    ensureCatalogRendered();
+    window.removeEventListener('hashchange', handleHashChange);
+  };
+
+  const handleHashChange = () => {
+    if (window.location.hash === '#full-catalog') {
+      renderOnDemand();
+    }
+  };
+
+  window.addEventListener('hashchange', handleHashChange);
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      observer.disconnect();
+      renderOnDemand();
+    }, { rootMargin: '320px 0px' });
+    observer.observe(section);
+    return;
+  }
+
+  window.setTimeout(renderOnDemand, 1200);
+}
+
 renderCounts();
 renderFeatured();
-renderCatalog();
-initProductClickTracking();
+bindProductClickTracking(document.querySelector('[data-featured-grid]'));
+document.addEventListener('jonezie:promo-updated', handlePromoUpdated);
+initDeferredCatalogRender();
 initMerchImageLightbox();
 initMerchPurchases();

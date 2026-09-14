@@ -10,6 +10,8 @@
     'bpc-10mg-plus-tb-10mg',
     'cerebrolysin',
     'bac-water',
+    'b12-10000mcg-10ml',
+    '5-amino-1mq',
     'glutathione',
     'hcg',
     'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg',
@@ -18,7 +20,9 @@
     'ghk-cu',
     'selank',
     'bpc-157',
-    'nad'
+    'nad',
+    'kpv',
+    'cjc-1295-without-dac'
   ];
 
   const IMAGE_OVERRIDES_BY_SLUG = {
@@ -37,6 +41,8 @@
     aod: 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/AOD_5MG_3ML_Vial_Jonezie_Labs_.webp?v=20260501a',
     tesamorelin: 'tesa-new-new-hero-product-image.png',
     'bac-water': 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/BAC_WATER_10ML_Vial.webp?v=20260501h',
+    'b12-10000mcg-10ml': 'B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a',
+    '5-amino-1mq': '5-AMINO-1MQ.png?v=20260904a',
     'ghk-cu': 'ghk-cu-new-new-hero-product-image.webp',
     'mots-c': 'mots-c-new-new-hero-product-image.png',
     'cjc-1295-with-dac': 'cjc-1295-with-dac-official.png',
@@ -67,7 +73,9 @@
     'mt-1': 'mt-1-new-new-hero-product-image.webp',
     mt1: 'mt-1-new-new-hero-product-image.webp',
     'melanotan-1': 'mt-1-new-new-hero-product-image.webp',
-    'slu-pp-322': 'slu-pp-322-new-hero-product-image.webp',    'igf-1lr3': 'igf-1lr3-new-hero-product-image.webp',
+    'slu-pp-322': 'slu-pp-322-new-hero-product-image.webp',
+    'lemon-bottle': 'lemon-bottle-new-hero-product-image.webp',
+    'igf-1lr3': 'igf-1lr3-new-hero-product-image.webp',
     ipamorelin: 'ipamorelin-new-hero-product-image.webp',
     pinealon: 'pinealon-new-hero-product-image.webp',
     selank: 'selank-new-new-hero-product-image.webp',

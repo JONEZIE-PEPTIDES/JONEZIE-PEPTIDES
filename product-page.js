@@ -110,6 +110,23 @@ function getProductContent(product) {
   return contentData?.products?.[product.slug] || null;
 }
 
+function getCategoryDisplayLabel(category) {
+  if (siteLibrary?.getCategoryDisplayLabel) return siteLibrary.getCategoryDisplayLabel(category);
+  const labels = {
+    Metabolic: 'Metabolic Research',
+    Cognitive: 'Cognitive Research',
+    Recovery: 'Tissue & Repair Research',
+    Growth: 'Growth-Axis Research',
+    Cellular: 'Cellular Research',
+    Aesthetics: 'Dermal & Pigmentation Research',
+    Specialty: 'Specialty Research',
+    Performance: 'Specialty Research',
+    Support: 'Laboratory Support'
+  };
+  const key = String(category || '').trim();
+  return labels[key] || key || 'Research';
+}
+
 function getProductImageSrc(path) {
   const sanitized = String(path || '').replace('../', '').trim();
   const fallback = `${PRODUCT_FALLBACK_IMAGE}?v=${PRODUCT_ASSET_VERSION}`;
@@ -170,12 +187,12 @@ function getProductHeaderSummary(product) {
   if (productContent?.researchSummary) return productContent.researchSummary;
   if (productContent?.shortDescription) return productContent.shortDescription;
   const categoryFallbacks = {
-    Metabolic: 'Commonly referenced in research involving appetite-signaling, metabolic modeling, and energy-balance pathways.',
+    Metabolic: 'Commonly referenced in research involving receptor signaling, metabolic modeling, and energy-balance pathways.',
     Recovery: 'Commonly referenced in research involving repair-pathway signaling, tissue modeling, and laboratory recovery comparisons.',
     Aesthetics: 'Commonly referenced in research involving cosmetic-pathway, collagen, pigmentation, and appearance-focused product comparison.',
     Growth: 'Commonly referenced in research involving GH-axis signaling, endocrine modeling, and growth-related comparison work.',
     Cognitive: 'Commonly referenced in research involving neuro-support, focus, stress-response, and restoration pathways.',
-    Cellular: 'Commonly referenced in research involving mitochondrial signaling, cellular stress, and longevity-focused analytical work.',
+    Cellular: 'Commonly referenced in research involving mitochondrial signaling, cellular stress, and cellular-aging analytical work.',
     Performance: 'Commonly referenced in research involving high-output signaling and specialty comparison work.',
     Support: 'Referenced as a support item used alongside storage, mixing, and broader laboratory reference work.'
   };
@@ -226,6 +243,36 @@ function getBackorderNote(product, option) {
   return option?.backorderNote || product?.backorderNote || `${option?.code || 'This item'} is currently on backorder.`;
 }
 
+const TIRZEPATIDE_BACKORDER_NOTE = 'Backorder: order now. Tirzepatide orders ship starting 6/28/26.';
+
+function isTirzepatideSlug(slug) {
+  return String(slug || '').toLowerCase() === 'tirzepatide';
+}
+
+function forceTirzepatideBackorder(product) {
+  if (!product || !isTirzepatideSlug(product.slug)) return product;
+  product.inventoryStatus = 'backorder';
+  product.backorderNote = TIRZEPATIDE_BACKORDER_NOTE;
+  product.options = (product.options || []).map((option) => ({
+    ...option,
+    inventoryStatus: 'backorder',
+    backorderNote: TIRZEPATIDE_BACKORDER_NOTE
+  }));
+  return product;
+}
+
+function applyTirzepatideBackorderDomFallback() {
+  if (!isTirzepatideSlug(getSlugFromPath())) return;
+  document.querySelectorAll('[data-product-options] .spec-card').forEach((card) => {
+    const pill = card.querySelector('.inventory-pill');
+    if (!pill) return;
+    pill.className = 'inventory-pill inventory-backorder';
+    pill.textContent = 'Backorder';
+  });
+  const selectedSubtitle = document.querySelector('[data-selected-subtitle]');
+  if (selectedSubtitle) selectedSubtitle.textContent = TIRZEPATIDE_BACKORDER_NOTE;
+}
+
 function formatMoney(value) {
   if (!Number.isFinite(value)) return 'Pending';
   return `$${value.toFixed(2)}`;
@@ -261,10 +308,15 @@ function addItemToCart(item) {
 
 function renderProductPage() {
   const slug = getSlugFromPath();
-  if (!catalogData) return;
+  if (!catalogData) {
+    applyTirzepatideBackorderDomFallback();
+    return;
+  }
   const product = (catalogData.products || []).find((item) => item.slug === slug)
     || (catalogData.featured || []).find((item) => item.slug === slug);
   if (!product) return;
+  forceTirzepatideBackorder(product);
+
   const firstAvailableOption = product.options.find((option) => getInventoryStatus(option) !== 'sold_out');
   let selectedOption = firstAvailableOption || product.options[0] || null;
   let selectedPackKey = selectedOption && selectedOption.singleVialPrice ? 'singleVialPrice' : 'eightVialPrice';
@@ -314,7 +366,9 @@ function renderProductPage() {
   document.title = siteLibrary?.getProductPageTitle ? siteLibrary.getProductPageTitle(product) : `${product.name} | Jonezie Labs`;
   const meta = document.querySelector('meta[name="description"]');
   const productContent = getProductContent(product);
-  const shortDescription = productContent?.shortDescription || product.description;
+  const shortDescription = siteLibrary?.getProductDisplaySummary
+    ? siteLibrary.getProductDisplaySummary(product, productContent)
+    : productContent?.shortDescription || product.description;
   const researchSummary = getProductHeaderSummary(product);
   const productProfile = siteLibrary?.getProductInfoProfile(product, productContent, catalogData) || null;
   const researchFindings = productContent?.researchFindings || [];
@@ -344,8 +398,8 @@ function renderProductPage() {
     const offerPrice = parsePrice(selectedOption?.[selectedPackKey] || selectedOption?.singleVialPrice || selectedOption?.eightVialPrice || selectedOption?.tenVialPrice);
     const packMap = {
       singleVialPrice: 'Single Vial',
-      eightVialPrice: '8-Vial Kit',
-      tenVialPrice: '10-Vial Pack'
+      eightVialPrice: '8-Kit',
+      tenVialPrice: 'Full 10-Kit'
     };
     const packLabel = packMap[selectedPackKey] || 'Research pricing';
     const metaDescription = `${productProfile?.researchContext || shortDescription} ${selectedOption ? `${selectedOption.mgOption} is currently listed with ${packLabel.toLowerCase()} pricing.` : ''} View ${product.name} product reference details from Jonezie Labs.`.replace(/\s+/g, ' ').trim();
@@ -438,7 +492,7 @@ function renderProductPage() {
     unitPrice: parsePrice(selectedOption?.[selectedPackKey] || product.startingPriceSingle)
   });
   if (titleNode) titleNode.textContent = product.name;
-  if (eyebrowNode) eyebrowNode.textContent = product.category;
+  if (eyebrowNode) eyebrowNode.textContent = getCategoryDisplayLabel(product.category);
   if (descriptionNode) descriptionNode.textContent = researchSummary;
   if (heroImageNode) {
     heroImageNode.src = getProductImageSrc(product.image);
@@ -493,8 +547,8 @@ function renderProductPage() {
   function getAvailablePacks(option) {
     return [
       { key: 'singleVialPrice', label: 'Single Vial', price: option.singleVialPrice },
-      { key: 'eightVialPrice', label: '8-Vial Kit', price: option.eightVialPrice },
-      { key: 'tenVialPrice', label: '10-Vial Pack', price: option.tenVialPrice }
+      { key: 'eightVialPrice', label: '8-Kit', price: option.eightVialPrice },
+      { key: 'tenVialPrice', label: 'Full 10-Kit', price: option.tenVialPrice }
     ].filter((pack) => pack.price);
   }
 
@@ -517,9 +571,9 @@ function renderProductPage() {
           <p class="eyebrow">${escapeHtml(option.code)}</p>
           <h3>${escapeHtml(option.mgOption)}</h3>
           <p class="inventory-pill inventory-${inventoryStatus}">${getInventoryLabel(inventoryStatus)}</p>
-          <div class="spec-price-row"><span>Single</span><strong>${escapeHtml(option.singleVialPrice || 'Pending')}</strong></div>
-          <div class="spec-price-row"><span>8-pack</span><strong>${escapeHtml(option.eightVialPrice || 'Pending')}</strong></div>
-          <div class="spec-price-row live-row"><span>10-pack</span><strong>${escapeHtml(option.tenVialPrice || 'Pending')}</strong></div>
+          ${option.singleVialPrice ? `<div class="spec-price-row"><span>Single</span><strong>${escapeHtml(option.singleVialPrice)}</strong></div>` : ''}
+          ${option.eightVialPrice ? `<div class="spec-price-row"><span>8-Kit</span><strong>${escapeHtml(option.eightVialPrice)}</strong></div>` : ''}
+          ${option.tenVialPrice ? `<div class="spec-price-row live-row"><span>Full 10-Kit</span><strong>${escapeHtml(option.tenVialPrice)}</strong></div>` : ''}
         </button>`;
     }).join('');
 
@@ -558,8 +612,8 @@ function renderProductPage() {
     qtyInput.value = String(quantity);
     const packMap = {
       singleVialPrice: 'Single Vial',
-      eightVialPrice: '8-Vial Kit',
-      tenVialPrice: '10-Vial Pack'
+      eightVialPrice: '8-Kit',
+      tenVialPrice: 'Full 10-Kit'
     };
     const packLabel = packMap[selectedPackKey] || 'Pack';
     const unitPrice = parsePrice(selectedOption[selectedPackKey]);

@@ -31,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@700&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260728a" />
-  <link rel="stylesheet" href="styles.css?v=20260616d" />
+  <link rel="stylesheet" href="styles.css?v=20260914pricegap" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -235,7 +235,6 @@
           <a href="research-guides.html">Research Guides</a>
           <a href="comparison.html">Comparisons</a>
           <a href="michigan-peptides.html">Michigan</a>
-          <a href="index.html#merch">Merch</a>
           <a href="index.html#faq">FAQ</a>
           <a href="index.html#process">Ordering</a>
         
@@ -264,7 +263,6 @@
         <a href="research-guides.html" class="site-nav-mobile-link">Research Guides</a>
         <a href="comparison.html" class="site-nav-mobile-link">Comparisons</a>
         <a href="michigan-peptides.html" class="site-nav-mobile-link">Michigan</a>
-        <a href="#merch" class="site-nav-mobile-link">Merch</a>
         <a href="#faq" class="site-nav-mobile-link">FAQ</a>
         <a href="#process" class="site-nav-mobile-link">Ordering</a>
 
@@ -288,7 +286,6 @@
         <div class="hero-home-inner">
           <p class="hero-kicker">Research-grade peptides</p>
           <h1>Precision peptides for <span class="hero-script">serious</span> research</h1>
-          <p class="hero-text hero-home-text">We got them hot peppers!</p>
           <div class="hero-actions hero-home-actions">
             <a class="button primary" href="#featured">Start Your Research</a>
             <a class="button secondary" href="#full-catalog">View Full Catalog</a>
@@ -300,18 +297,37 @@
         <div class="trust-points trust-points-home">
           <span>99%+ Purity</span>
           <span>3rd Party Tested</span>
-          <span>COA Included</span>
-          <span>US warehouse stock 3-5 day delivery</span>
+          <span>3-5 day delivery</span>
         </div>
       </section>
 
       <section id="featured" class="section-shell block-section">
-        <div class="section-heading centered">
-          <p class="eyebrow">Featured Products</p>
-          <h2>
-            Michigan Warehouse Stock
-            <span class="featured-heading-delivery">3-5 day delivery</span>
-          </h2>
+        <div class="section-heading centered featured-countdown-heading">
+          <div class="featured-countdown-card" data-shipping-countdown aria-label="Shipping cutoff countdown">
+            <p class="featured-countdown-eyebrow">Featured Products</p>
+            <div class="featured-countdown-kicker">
+              <span></span>
+              <p>Order in the next</p>
+              <span></span>
+            </div>
+            <div class="featured-countdown-units" aria-live="polite">
+              <div class="featured-countdown-unit">
+                <strong data-countdown-hours>00</strong>
+                <span>Hrs</span>
+              </div>
+              <div class="featured-countdown-separator">:</div>
+              <div class="featured-countdown-unit">
+                <strong data-countdown-minutes>00</strong>
+                <span>Min</span>
+              </div>
+              <div class="featured-countdown-separator">:</div>
+              <div class="featured-countdown-unit">
+                <strong data-countdown-seconds>00</strong>
+                <span>Sec</span>
+              </div>
+            </div>
+            <p class="featured-countdown-message" data-countdown-message>Ships Tomorrow</p>
+          </div>
         </div>
         <div class="featured-grid" data-featured-grid></div>
       </section>
@@ -365,7 +381,7 @@
         </div>
       </section>
 
-      <section id="merch" class="section-shell block-section merch-section">
+      <section id="merch" class="section-shell block-section merch-section" hidden>
         <div class="section-heading centered compact merch-heading">
           <img class="merch-title-image" src="merch-title-image-tight.png?v=20260410c" alt="Merch" />
         </div>
@@ -634,24 +650,102 @@
     </figure>
   </div>
 
-  <script src="catalog-data.js?v=20260717a"></script>
-  <script src="catalog-sheet-sync.js?v=20260618d"></script>
+  <script src="catalog-data.js?v=20260911b"></script>
+  <script src="catalog-sheet-sync.js?v=20260911b"></script>
   <script src="catalog-admin-config.js?v=20260410a"></script>
   <script src="catalog-admin.js?v=20260410a"></script>
-  <script src="catalog-image-overrides.js?v=20260716c"></script>
+  <script src="catalog-image-overrides.js?v=20260911a"></script>
   <script src="analytics-events.js?v=20260716a"></script>
-  <script src="promo-banner.js?v=20260615a"></script>
-  <script src="product-content.js?v=20260716a"></script>
+  <script src="promo-banner.js?v=20260914promo2"></script>
+  <script src="product-content.js?v=20260914ipamorelin"></script>
   <script src="lead-capture-config.js?v=20260513a"></script>
-  <script src="site-library.js?v=20260716b"></script>
+  <script src="site-library.js?v=20260914catlabels"></script>
   <script src="cart-nav.js?v=20260616a"></script>
   <script src="nav-search.js?v=20260610a"></script>
-  <script src="age-gate.js?v=20260804a"></script>
-  <script src="script.js?v=20260610a"></script>
+  <script src="age-gate.js?v=20260427c"></script>
+  <script src="script.js?v=20260914promo2"></script>
   <script src="site-footer.js?v=20260603g"></script>
-  <script src="lead-capture.js?v=20260804a"></script>
+  <script src="lead-capture.js?v=20260622a"></script>
+  <script>
+    (() => {
+      const countdown = document.querySelector('[data-shipping-countdown]');
+      if (!countdown) return;
+      const hoursNode = countdown.querySelector('[data-countdown-hours]');
+      const minutesNode = countdown.querySelector('[data-countdown-minutes]');
+      const secondsNode = countdown.querySelector('[data-countdown-seconds]');
+      const messageNode = countdown.querySelector('[data-countdown-message]');
+
+      const timeZone = 'America/New_York';
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone,
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hourCycle: 'h23'
+      });
+
+      function getZoneParts(date) {
+        return formatter.formatToParts(date).reduce((parts, item) => {
+          if (item.type !== 'literal') parts[item.type] = Number(item.value);
+          return parts;
+        }, {});
+      }
+
+      function getTimeZoneOffset(date) {
+        const parts = getZoneParts(date);
+        const zonedUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+        return zonedUtc - date.getTime();
+      }
+
+      function zonedDateToUtc(parts) {
+        const utcGuess = new Date(Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, 0));
+        return new Date(utcGuess.getTime() - getTimeZoneOffset(utcGuess));
+      }
+
+      function addEasternDays(parts, days) {
+        const date = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + days, 12, 0, 0));
+        const next = getZoneParts(date);
+        return { year: next.year, month: next.month, day: next.day };
+      }
+
+      function updateCountdown() {
+        const now = new Date();
+        const easternNow = getZoneParts(now);
+        const todayCutoff = zonedDateToUtc({
+          year: easternNow.year,
+          month: easternNow.month,
+          day: easternNow.day,
+          hour: 22,
+          minute: 0
+        });
+        const beforeTodayCutoff = todayCutoff.getTime() > now.getTime();
+        const cutoff = beforeTodayCutoff
+          ? todayCutoff
+          : zonedDateToUtc({ ...addEasternDays(easternNow, 1), hour: 22, minute: 0 });
+        const totalSeconds = Math.max(0, Math.floor((cutoff.getTime() - now.getTime()) / 1000));
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        if (hoursNode) hoursNode.textContent = String(hours).padStart(2, '0');
+        if (minutesNode) minutesNode.textContent = String(minutes).padStart(2, '0');
+        if (secondsNode) secondsNode.textContent = String(seconds).padStart(2, '0');
+        if (messageNode) {
+          messageNode.textContent = beforeTodayCutoff ? 'Ships Tomorrow' : 'Next Shipment Window';
+        }
+      }
+
+      updateCountdown();
+      window.setInterval(updateCountdown, 1000);
+    })();
+  </script>
 </body>
 </html>
+
+
 
 
 

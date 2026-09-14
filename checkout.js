@@ -1,4 +1,4 @@
-const CART_KEY = 'jonezie_cart';
+﻿const CART_KEY = 'jonezie_cart';
 const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
 const cartRoot = document.querySelector('[data-checkout-cart]');
@@ -52,6 +52,10 @@ const PROMO_CODES = {
     rate: 0.35,
     freeShipping: false
   },
+  FALL35: {
+    rate: 0.35,
+    freeShipping: false
+  },
   'FRIEND&FAM25': {
     rate: 0.25,
     freeShipping: false
@@ -79,7 +83,7 @@ const PROMO_CODES = {
     freeShipping: true
   },
   MILKO: {
-    rate: 0.60,
+    rate: 0.50,
     freeShipping: false
   },
   WELCOME7: {
@@ -813,7 +817,6 @@ function buildOrderRequestPayload({
     })),
     includedWithOrder: [
       'Free vial cap cover',
-      'Free Hot Girl Summer sticker'
     ],
     pageUrl: window.location.href,
     timezone: String(Intl.DateTimeFormat().resolvedOptions().timeZone || '').trim(),

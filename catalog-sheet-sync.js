@@ -52,6 +52,7 @@
     ['Glutathione', '1200mg', 31.625, 220.88, 261.8],
     ['Glutathione', '1500mg', 34.5, 240.96, 285.6],
     ['BAC Water', '10ml/10vials', 8.625, 60.24, 71.4],
+    ['B12 10000mcg 10ml', '10,000mcg / 10ml', 18.80342, 150.42735, 188.03419],
     ['Cagrilintide2.5mg+Semaglutide2.5mg', '5mg', 46, 321.28, 380.8],
     ['Cagrilintide5mg+Semaglutide5mg', '10mg', 77.625, 542.16, 642.6],
     ['HMG', '75iu', 34.5, 240.96, 285.6],
@@ -75,7 +76,9 @@
     ['NAD', '1000mg', 69, 481.92, 571.2],
     ['GLOW STACK (BPC 157 10mg+GHK-CU 50mg+TB500 10mg)', '70mg', 86.25, 602.4, 714],
     ['Survodutide', '10mg', 135.125, 943.76, 1118.6],
-    ['SLU-PP-322', '5mg', 57.5, 401.6, 476],    ['IGF-1LR3', '0.1mg', 20.125, 140.56, 166.6],
+    ['SLU-PP-322', '5mg', 57.5, 401.6, 476],
+    ['Lemon Bottle', '10mg', 34.5, 240.96, 285.6],
+    ['IGF-1LR3', '0.1mg', 20.125, 140.56, 166.6],
     ['IGF-1LR3', '1mg', 97.75, 682.72, 809.2],
     ['VIP', '5mg', 40.25, 281.12, 333.2],
     ['VIP', '10mg', 69, 481.92, 571.2],
@@ -90,7 +93,39 @@
     ['LC216', '10mg', 31.625, 220.88, 261.8]
   ];
 
-  const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide'];
+  const EXTRA_PRODUCTS = [
+    {
+      name: '5-Amino-1MQ',
+      sourceName: '5-amino-1mq',
+      slug: '5-amino-1mq',
+      category: 'Metabolic',
+      description: '5-Amino-1MQ is an active metabolic listing at Jonezie. A small-molecule NNMT inhibitor for adipose-tissue, glucose-handling, hepatic lipid, and cellular-energy research workflows.',
+      startingPriceSingle: '$23.00',
+      startingPrice8: '$160.64',
+      startingPrice10: '$190.40',
+      image: '5-AMINO-1MQ.png?v=20260904a',
+      options: [
+        {
+          code: '5AM5',
+          specification: '5mg*10vials',
+          mgOption: '5mg',
+          singleVialPrice: '$23.00',
+          eightVialPrice: '$160.64',
+          tenVialPrice: '$190.40'
+        },
+        {
+          code: '5AM10',
+          specification: '10mg*10vials',
+          mgOption: '10mg',
+          singleVialPrice: '$35.00',
+          eightVialPrice: '$244.45',
+          tenVialPrice: '$289.74'
+        }
+      ]
+    }
+  ];
+
+  const FEATURED_SLUGS = ['bpc-157', 'ghk-cu', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', 'mots-c', 'retatrutide', 'semaglutide', 'tirzepatide', 'b12-10000mcg-10ml', '5-amino-1mq', 'kpv', 'cjc-1295-without-dac'];
   const BACKORDER_NOTES = {
     tirzepatide: 'Backorder: order now. Tirzepatide orders ship starting 6/28/26.'
   };
@@ -106,7 +141,8 @@
     'kisspeptin-10': 'Kisspeptin-10',
     cerebrolysin: 'Cerebrolysin',
     'klow (ghk-cu50+tb10+bc10+kpv10)': 'KLOW',
-    'glow stack (bpc 157 10mg+ghk-cu 50mg+tb500 10mg)': 'GLOW Stack (BPC 157 10mg + GHK-CU 50mg + TB500 10mg)'
+    'glow stack (bpc 157 10mg+ghk-cu 50mg+tb500 10mg)': 'GLOW Stack (BPC 157 10mg + GHK-CU 50mg + TB500 10mg)',
+    'b12 10000mcg 10ml': 'B12 10,000mcg / 10ml Vial'
   };
 
   const SLUG_OVERRIDES = {
@@ -124,7 +160,8 @@
     'kisspeptin-10': 'kisspeptin-10',
     'mots-c': 'mots-c',
     'ss-31': 'ss-31',
-    'igf-1lr3': 'igf-1lr3'
+    'igf-1lr3': 'igf-1lr3',
+    'b12 10000mcg 10ml': 'b12-10000mcg-10ml'
   };
 
   const CATEGORY_OVERRIDES = {
@@ -168,14 +205,17 @@
     nad: 'Cellular',
     'glow stack (bpc 157 10mg+ghk-cu 50mg+tb500 10mg)': 'Aesthetics',
     survodutide: 'Metabolic',
-    'slu-pp-322': 'Metabolic',    'igf-1lr3': 'Growth',
+    'slu-pp-322': 'Metabolic',
+    'lemon bottle': 'Aesthetics',
+    'igf-1lr3': 'Growth',
     vip: 'Cognitive',
     'ghrp-6 acetate': 'Growth',
     mazdutide: 'Metabolic',
     thymalin: 'Cellular',
     dsip: 'Cognitive',
     'thymosin alpha-1': 'Recovery',
-    lc216: 'Performance'
+    lc216: 'Performance',
+    'b12 10000mcg 10ml': 'Support'
   };
 
   const IMAGE_OVERRIDES_BY_SLUG = {
@@ -184,7 +224,8 @@
     semaglutide: 'semaglutide-20mg-official.png',
     tirzepatide: 'tirzepatide-15mg-official.png',
     retatrutide: 'retatrutide-gradient-vial.png',
-    'mt-1': 'mt-1-10mg-official.png'
+    'mt-1': 'mt-1-10mg-official.png',
+    'b12-10000mcg-10ml': 'B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a'
   };
 
   const DESCRIPTION_BY_CATEGORY = {
@@ -225,7 +266,7 @@
   function inferCategory(rawName) {
     const name = String(rawName || '').toLowerCase();
     if (name.includes('semaglutide') || name.includes('tirzepatide') || name.includes('retatrutide') || name.includes('cagrilintide') || name.includes('survodutide') || name.includes('mazdutide') || name.includes('aod') || name.includes('slu-pp')) return 'Metabolic';
-    if (name.includes('ghk') || name.includes('snap') || name.includes('kpv') || name.includes('mt-1') || name.includes('mt-2')) return 'Aesthetics';
+    if (name.includes('ghk') || name.includes('snap') || name.includes('lemon bottle') || name.includes('kpv') || name.includes('mt-1') || name.includes('mt-2')) return 'Aesthetics';
     if (name.includes('tb500') || name.includes('bpc') || name.includes('tesamorelin') || name.includes('thymosin alpha')) return 'Recovery';
     if (name.includes('ghrp') || name.includes('hcg') || name.includes('hmg') || name.includes('ipamorelin') || name.includes('igf') || name.includes('cjc')) return 'Growth';
     if (name.includes('semax') || name.includes('selank') || name.includes('dsip') || name.includes('pinealon') || name.includes('vip') || name.includes('cerebrolysin') || name.includes('oxytocin')) return 'Cognitive';
@@ -338,6 +379,15 @@
       startingPrice8: first.eightVialPrice,
       startingPrice10: first.tenVialPrice
     };
+  });
+
+  EXTRA_PRODUCTS.forEach((extraProduct) => {
+    const existingIndex = products.findIndex((product) => product.slug === extraProduct.slug);
+    if (existingIndex >= 0) {
+      products[existingIndex] = extraProduct;
+    } else {
+      products.push(extraProduct);
+    }
   });
 
   const featured = FEATURED_SLUGS
