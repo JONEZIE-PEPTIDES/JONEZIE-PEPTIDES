@@ -16,6 +16,21 @@ CATALOG_SYNC_PATH = ROOT / "catalog-sheet-sync.js"
 PRODUCT_CONTENT_PATH = ROOT / "product-content.js"
 SITE_LIBRARY_PATH = ROOT / "site-library.js"
 FALLBACK_IMAGE = "product-placeholder.svg"
+CATEGORY_DISPLAY_LABELS = {
+    "Metabolic": "Metabolic Research",
+    "Cognitive": "Cognitive Research",
+    "Recovery": "Tissue & Repair Research",
+    "Growth": "Growth-Axis Research",
+    "Cellular": "Cellular Research",
+    "Aesthetics": "Dermal & Pigmentation Research",
+    "Specialty": "Specialty Research",
+    "Support": "Laboratory Support",
+}
+
+
+def get_category_display_label(category: str | None) -> str:
+    key = (category or "").strip()
+    return CATEGORY_DISPLAY_LABELS.get(key, key or "Research")
 
 
 def main() -> None:
@@ -188,6 +203,16 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
     }
 
     html = template
+
+    def replace_wrapped(pattern, value):
+        return re.sub(
+            pattern,
+            lambda match: f"{match.group(1)}{value}{match.group(2)}",
+            html,
+            count=1,
+            flags=re.S,
+        )
+
     html = html.replace("<head>", "<head>\n  <base href=\"/\" />", 1)
     html = re.sub(r"<title>.*?</title>", f"<title>{escape(title)}</title>", html, count=1, flags=re.S)
     html = re.sub(
@@ -225,9 +250,9 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
         flags=re.S,
     )
     html = html.replace("<body>", f'<body data-product-slug="{escape(product["slug"], quote=True)}">', 1)
-    html = re.sub(r'(<p class="eyebrow" data-product-category>).*?(</p>)', rf"\1{escape(product.get('category') or 'Research')}\2", html, count=1, flags=re.S)
-    html = re.sub(r'(<h1 data-product-title>).*?(</h1>)', rf"\1{escape(product['name'])}\2", html, count=1, flags=re.S)
-    html = re.sub(r'(<p class="hero-text" data-product-description>).*?(</p>)', rf"\1{escape(hero_summary)}\2", html, count=1, flags=re.S)
+    html = replace_wrapped(r'(<p class="eyebrow" data-product-category>).*?(</p>)', escape(get_category_display_label(product.get('category'))))
+    html = replace_wrapped(r'(<h1 data-product-title>).*?(</h1>)', escape(product['name']))
+    html = replace_wrapped(r'(<p class="hero-text" data-product-description>).*?(</p>)', escape(hero_summary))
     html = re.sub(
         r'<img data-product-hero-image src=".*?" alt=".*?" />',
         f'<img data-product-hero-image src="{image_src}" alt="{escape(product["name"], quote=True)} product image" />',
@@ -241,14 +266,18 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
     )
     html = re.sub(
         r'(<h2 data-selected-title>).*?(</h2>)',
-        rf"\1{escape(product['name'])} {escape(selected_option.get('mgOption') or 'Reference')}\2",
+        lambda match: f"{match.group(1)}{escape(product['name'])} {escape(selected_option.get('mgOption') or 'Reference')}{match.group(2)}",
         html,
         count=1,
         flags=re.S,
     )
     html = re.sub(
         r'(<p data-selected-subtitle>).*?(</p>)',
-        rf"\1{escape((selected_option.get('code') or 'Option') + ' is currently listed with ' + selected_pack_label.lower() + ' pricing.')}\2",
+        lambda match: (
+            f"{match.group(1)}"
+            f"{escape((selected_option.get('code') or 'Option') + ' is currently listed with ' + selected_pack_label.lower() + ' pricing.')}"
+            f"{match.group(2)}"
+        ),
         html,
         count=1,
         flags=re.S,
@@ -258,8 +287,8 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
         f'<div class="pack-picker" data-pack-picker>{render_pack_picker(selected_option, selected_pack_key)}</div>',
         1,
     )
-    html = re.sub(r'(<strong data-selected-price>).*?(</strong>)', rf"\1{escape(selected_price)}\2", html, count=1, flags=re.S)
-    html = re.sub(r'(<strong data-selected-total>).*?(</strong>)', rf"\1{escape(selected_price)}\2", html, count=1, flags=re.S)
+    html = replace_wrapped(r'(<strong data-selected-price>).*?(</strong>)', escape(selected_price))
+    html = replace_wrapped(r'(<strong data-selected-total>).*?(</strong>)', escape(selected_price))
     html = html.replace(
         '<section class="section-shell block-section product-detail-grid" data-product-highlights></section>',
         f'<section class="section-shell block-section product-detail-grid" data-product-highlights>{render_highlights(product, product_content, profile, strengths, research_findings, storage_profile, mixing_profile, category_guide)}</section>',
