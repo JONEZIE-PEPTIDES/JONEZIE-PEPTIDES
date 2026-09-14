@@ -31,13 +31,21 @@
   <link rel="icon" type="image/png" href="../favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=20260728a" />
 <script src="landing-config.js?v=20260909b"></script>
+<script src="merch-data.js?v=20260914staging2"></script>
   <script>
-    if (window.JONEZIE_RESEARCH_STANDARDS_CONFIG?.showMainSiteEntrances === false) {
+    const standardsRedirect = window.JONEZIE_STANDARDS_MERCH?.redirect || {};
+    const hideMainSiteEntrances = window.JONEZIE_RESEARCH_STANDARDS_CONFIG?.showMainSiteEntrances === false ||
+      (!standardsRedirect.enabled && standardsRedirect.hideMainSiteLinksWhenDisabled !== false);
+
+    if (hideMainSiteEntrances) {
       document.documentElement.classList.add('rs-hide-main-site-entrances');
     }
-  </script>  
-  <script>
-    window.location.replace('../index.html#featured');
+
+    if (standardsRedirect.enabled) {
+      window.setTimeout(() => {
+        window.location.replace(standardsRedirect.target || '../index.html#featured');
+      }, Number(standardsRedirect.delayMs) || 0);
+    }
   </script>
 <script type="application/ld+json">
   {
@@ -59,6 +67,90 @@
     }
   }
   </script>  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Jonezie Labs Signature Hat",
+    "image": "https://www.jonezielabs.com/jonezie-labs-hat.png",
+    "description": "Jonezie Labs branded adjustable snapback hat with the signature logo mark.",
+    "sku": "JL-STANDARDS-HAT-001",
+    "brand": {
+      "@type": "Brand",
+      "name": "Jonezie Labs"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.jonezielabs.com/standards/",
+      "priceCurrency": "USD",
+      "price": "110.00",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Drying Rack Stand for Lab Glassware and Bottles",
+    "image": "https://www.jonezielabs.com/standards/drying-rack-stand-lab-glassware-bottles.png",
+    "description": "Drying rack stand for organizing and air-drying laboratory glassware, bottles, cylinders, and beakers.",
+    "sku": "JL-STANDARDS-DRYING-RACK-001",
+    "brand": {
+      "@type": "Brand",
+      "name": "Jonezie Labs"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.jonezielabs.com/standards/",
+      "priceCurrency": "USD",
+      "price": "85.00",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "22 Pcs Stainless Steel Lab Spatula Micro Scoop Set",
+    "image": "https://www.jonezielabs.com/standards/stainless-steel-lab-spatula-micro-scoop-set.png",
+    "description": "Stainless steel 22-piece lab spatula and micro scoop set for handling powders and small laboratory samples.",
+    "sku": "JL-STANDARDS-SPATULA-SET-001",
+    "brand": {
+      "@type": "Brand",
+      "name": "Jonezie Labs"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.jonezielabs.com/standards/",
+      "priceCurrency": "USD",
+      "price": "25.00",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Fully Automatic Micro Vickers Hardness Tester",
+    "image": "https://www.jonezielabs.com/standards/fully-automatic-micro-vickers-hardness-tester.png",
+    "description": "Fully automatic Micro Vickers hardness tester with automatic measurement software for laboratory material hardness testing workflows.",
+    "sku": "JL-STANDARDS-VICKERS-001",
+    "brand": {
+      "@type": "Brand",
+      "name": "Jonezie Labs"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.jonezielabs.com/standards/",
+      "priceCurrency": "USD",
+      "price": "51993.75",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  }
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -611,6 +703,158 @@
       font-size: 0.82rem;
     }
 
+    .standards-merch-section {
+      text-align: left;
+    }
+
+    .standards-merch-section > .standards-kicker,
+    .standards-merch-section > h2 {
+      text-align: center;
+    }
+
+    .standards-merch-section > h2 {
+      margin: 0 auto;
+    }
+
+    .standards-merch-panel {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.95fr) minmax(0, 1.05fr);
+      gap: 24px;
+      align-items: stretch;
+      margin-top: 28px;
+    }
+
+    .standards-merch-media,
+    .standards-merch-copy {
+      border: 1px solid var(--ad-line);
+      border-radius: var(--ad-radius);
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: var(--ad-shadow);
+    }
+
+    .standards-merch-media {
+      display: grid;
+      place-items: center;
+      padding: clamp(20px, 4vw, 42px);
+    }
+
+    .standards-merch-media img {
+      display: block;
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+    }
+
+    .standards-merch-copy {
+      padding: clamp(20px, 3vw, 30px);
+    }
+
+    .standards-merch-copy h3 {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(1.7rem, 4vw, 3rem);
+      line-height: 1.02;
+    }
+
+    .standards-merch-copy > p {
+      color: var(--ad-muted);
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    .standards-merch-facts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    .standards-merch-facts div {
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid rgba(7, 19, 34, 0.1);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .standards-merch-facts span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ad-muted);
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .standards-merch-facts strong {
+      display: block;
+      font-size: 0.96rem;
+      overflow-wrap: anywhere;
+    }
+
+    .standards-merch-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .standards-merch-form label {
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: rgba(7, 19, 34, 0.72);
+    }
+
+    .standards-merch-form select,
+    .standards-merch-form input {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid rgba(7, 19, 34, 0.14);
+      border-radius: 14px;
+      padding: 0 12px;
+      background: rgba(255, 255, 255, 0.86);
+      color: var(--ad-ink);
+      font-weight: 800;
+    }
+
+    .standards-quantity-control {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr) 46px;
+      gap: 8px;
+    }
+
+    .standards-quantity-control button {
+      border: 1px solid rgba(7, 19, 34, 0.14);
+      border-radius: 14px;
+      background: #071322;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1.25rem;
+      font-weight: 900;
+    }
+
+    .standards-merch-form .standards-button {
+      width: 100%;
+      border: 0;
+    }
+
+    .standards-merch-checkout-link {
+      justify-self: start;
+      color: var(--ad-teal-dark);
+      font-size: 0.86rem;
+      font-weight: 900;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .standards-merch-feedback {
+      min-height: 22px;
+      margin: 0;
+      color: var(--ad-teal-dark);
+      font-size: 0.9rem;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
     .standards-footer {
       margin: 12px auto 34px;
       padding: 28px;
@@ -788,6 +1032,11 @@
         grid-template-columns: 1fr;
       }
 
+      .standards-merch-panel,
+      .standards-merch-facts {
+        grid-template-columns: 1fr;
+      }
+
       .standards-card,
       .standards-support-card,
       .standards-disclaimer {
@@ -903,6 +1152,146 @@
               <h3>Transparent Standards</h3>
               <p>Clear labeling, straightforward communication, and consistent processes.</p>
             </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="standards-section standards-section-centered standards-shell standards-merch-section" id="merchandise" aria-labelledby="standards-merch-heading">
+        <p class="standards-kicker">Standards Merchandise</p>
+        <h2 id="standards-merch-heading">Standards Store</h2>
+        <div class="standards-merch-panel" data-merch-product>
+          <figure class="standards-merch-media">
+            <img src="../jonezie-labs-hat.png?v=20260410a" alt="Jonezie Labs Signature Hat" width="800" height="800" />
+          </figure>
+          <article class="standards-merch-copy">
+            <p class="standards-kicker">Hat</p>
+            <h3>Signature Hat</h3>
+            <p>Premium navy snapback with the Jonezie Labs neon mark across the front panel. Adjustable one-size fit.</p>
+            <div class="standards-merch-facts" aria-label="Product facts">
+              <div><span>Price</span><strong data-product-price>$110.00</strong></div>
+              <div><span>Option</span><strong>One Size</strong></div>
+              <div><span>Type</span><strong>Merchandise</strong></div>
+            </div>
+
+            <form class="standards-merch-form" data-merch-add-form data-product-slug="jonezie-labs-signature-hat">
+              <label for="hat-option">Option</label>
+              <select id="hat-option" name="option" data-merch-option>
+                <option value="One Size">One Size</option>
+              </select>
+
+              <label for="hat-quantity">Quantity</label>
+              <div class="standards-quantity-control">
+                <button type="button" data-qty-minus aria-label="Decrease quantity">-</button>
+                <input id="hat-quantity" name="quantity" type="number" min="1" value="1" inputmode="numeric" data-merch-quantity />
+                <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+              </div>
+
+              <button class="standards-button" type="submit">Add To Cart</button>
+              <a class="standards-merch-checkout-link" href="checkout.html">Review merchandise checkout</a>
+              <p class="standards-merch-feedback" data-merch-feedback aria-live="polite"></p>
+            </form>
+          </article>
+        </div>
+
+        <div class="standards-merch-panel" data-merch-product>
+          <figure class="standards-merch-media">
+            <img src="fully-automatic-micro-vickers-hardness-tester.png?v=20260914a" alt="Fully Automatic Micro Vickers Hardness Tester with automatic measurement software" width="400" height="337" />
+          </figure>
+          <article class="standards-merch-copy">
+            <p class="standards-kicker">Automatic Micro Hardness Tester</p>
+            <h3>Fully Automatic Micro Vickers Hardness Tester</h3>
+            <p>Fully automatic Micro Vickers hardness tester with automatic measurement software for laboratory material hardness testing workflows.</p>
+            <div class="standards-merch-facts" aria-label="Product facts">
+              <div><span>Price</span><strong data-product-price>$51,993.75</strong></div>
+              <div><span>Option</span><strong>Automatic Measurement Software</strong></div>
+              <div><span>Type</span><strong>Automatic Micro Hardness Tester</strong></div>
+            </div>
+
+            <form class="standards-merch-form" data-merch-add-form data-product-slug="fully-automatic-micro-vickers-hardness-tester">
+              <label for="vickers-option">Option</label>
+              <select id="vickers-option" name="option" data-merch-option>
+                <option value="Automatic Measurement Software">Automatic Measurement Software</option>
+              </select>
+
+              <label for="vickers-quantity">Quantity</label>
+              <div class="standards-quantity-control">
+                <button type="button" data-qty-minus aria-label="Decrease quantity">-</button>
+                <input id="vickers-quantity" name="quantity" type="number" min="1" value="1" inputmode="numeric" data-merch-quantity />
+                <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+              </div>
+
+              <button class="standards-button" type="submit">Add To Cart</button>
+              <a class="standards-merch-checkout-link" href="checkout.html">Review merchandise checkout</a>
+              <p class="standards-merch-feedback" data-merch-feedback aria-live="polite"></p>
+            </form>
+          </article>
+        </div>
+
+        <div class="standards-merch-panel" data-merch-product>
+          <figure class="standards-merch-media">
+            <img src="stainless-steel-lab-spatula-micro-scoop-set.png?v=20260914a" alt="22 piece stainless steel lab spatula and micro scoop set" width="337" height="326" />
+          </figure>
+          <article class="standards-merch-copy">
+            <p class="standards-kicker">Lab Spatula Micro Scoop Set</p>
+            <h3>22 Pcs Stainless Steel Lab Spatula Micro Scoop Set</h3>
+            <p>Stainless steel 22-piece lab spatula and micro scoop set for handling powders and small laboratory samples.</p>
+            <div class="standards-merch-facts" aria-label="Product facts">
+              <div><span>Price</span><strong data-product-price>$25.00</strong></div>
+              <div><span>Option</span><strong>22 Piece Set</strong></div>
+              <div><span>Type</span><strong>Lab Spatula Micro Scoop Set</strong></div>
+            </div>
+
+            <form class="standards-merch-form" data-merch-add-form data-product-slug="stainless-steel-lab-spatula-micro-scoop-set">
+              <label for="spatula-option">Option</label>
+              <select id="spatula-option" name="option" data-merch-option>
+                <option value="22 Piece Set">22 Piece Set</option>
+              </select>
+
+              <label for="spatula-quantity">Quantity</label>
+              <div class="standards-quantity-control">
+                <button type="button" data-qty-minus aria-label="Decrease quantity">-</button>
+                <input id="spatula-quantity" name="quantity" type="number" min="1" value="1" inputmode="numeric" data-merch-quantity />
+                <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+              </div>
+
+              <button class="standards-button" type="submit">Add To Cart</button>
+              <a class="standards-merch-checkout-link" href="checkout.html">Review merchandise checkout</a>
+              <p class="standards-merch-feedback" data-merch-feedback aria-live="polite"></p>
+            </form>
+          </article>
+        </div>
+
+        <div class="standards-merch-panel" data-merch-product>
+          <figure class="standards-merch-media">
+            <img src="drying-rack-stand-lab-glassware-bottles.png?v=20260914a" alt="Drying rack stand for lab glassware and bottles" width="263" height="327" />
+          </figure>
+          <article class="standards-merch-copy">
+            <p class="standards-kicker">Lab Glassware Drying Rack</p>
+            <h3>Drying Rack Stand for Lab Glassware and Bottles</h3>
+            <p>Drying rack stand for organizing and air-drying laboratory glassware, bottles, cylinders, and beakers.</p>
+            <div class="standards-merch-facts" aria-label="Product facts">
+              <div><span>Price</span><strong data-product-price>$85.00</strong></div>
+              <div><span>Option</span><strong>Rack Stand</strong></div>
+              <div><span>Type</span><strong>Lab Glassware Drying Rack</strong></div>
+            </div>
+
+            <form class="standards-merch-form" data-merch-add-form data-product-slug="drying-rack-stand-lab-glassware-bottles">
+              <label for="drying-rack-option">Option</label>
+              <select id="drying-rack-option" name="option" data-merch-option>
+                <option value="Rack Stand">Rack Stand</option>
+              </select>
+
+              <label for="drying-rack-quantity">Quantity</label>
+              <div class="standards-quantity-control">
+                <button type="button" data-qty-minus aria-label="Decrease quantity">-</button>
+                <input id="drying-rack-quantity" name="quantity" type="number" min="1" value="1" inputmode="numeric" data-merch-quantity />
+                <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+              </div>
+
+              <button class="standards-button" type="submit">Add To Cart</button>
+              <a class="standards-merch-checkout-link" href="checkout.html">Review merchandise checkout</a>
+              <p class="standards-merch-feedback" data-merch-feedback aria-live="polite"></p>
+            </form>
           </article>
         </div>
       </section>
@@ -1052,6 +1441,7 @@
       </div>
     </footer>
   </div>
+  <script src="merch-store.js?v=20260914staging2"></script>
 </body>
 </html>
 
