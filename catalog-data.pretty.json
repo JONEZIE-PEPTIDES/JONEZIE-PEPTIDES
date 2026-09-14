@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11 10:48:43",
+  "generatedAt": "2026-09-14 15:46:38",
   "totalProducts": 52,
   "totalConfigurations": 93,
   "featured": [
@@ -1243,18 +1243,18 @@
       "slug": "cerebrolysin",
       "category": "Cognitive",
       "description": "Cerebrolysin is an active cognitive listing at Jonezie. A cognitive and neuro-support research compound used in focus, stress-response, and restoration-pathway studies.",
-      "startingPriceSingle": "$16.82",
-      "startingPrice8": "$117.47",
-      "startingPrice10": "$139.23",
+      "startingPriceSingle": "$37.00",
+      "startingPrice8": "$258.43",
+      "startingPrice10": "$306.31",
       "image": "product-placeholder.svg",
       "options": [
         {
           "code": "CER60MG",
           "specification": "60mg*10vials",
           "mgOption": "60mg",
-          "singleVialPrice": "$16.82",
-          "eightVialPrice": "$117.47",
-          "tenVialPrice": "$139.23"
+          "singleVialPrice": "$37.00",
+          "eightVialPrice": "$258.43",
+          "tenVialPrice": "$306.31"
         }
       ]
     },

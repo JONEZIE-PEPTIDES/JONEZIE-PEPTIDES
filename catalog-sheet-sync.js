@@ -56,7 +56,7 @@
     ['Cagrilintide2.5mg+Semaglutide2.5mg', '5mg', 46, 321.28, 380.8],
     ['Cagrilintide5mg+Semaglutide5mg', '10mg', 77.625, 542.16, 642.6],
     ['HMG', '75iu', 34.5, 240.96, 285.6],
-    ['cerebrolysin', '60mg', 14.375, 100.4, 119],
+    ['cerebrolysin', '60mg', 31.625, 220.88, 261.8],
     ['Cagrilintide', '5mg', 63.25, 441.76, 523.6],
     ['Cagrilintide', '10mg', 92, 642.56, 761.6],
     ['Ara-290', '10mg', 31.625, 220.88, 261.8],
