@@ -32,6 +32,10 @@ const PROMO_CODES = {
     rate: 0.30,
     freeShipping: false
   },
+  FALL25: {
+    rate: 0.25,
+    freeShipping: false
+  },
   FOUNDER50: {
     rate: 0.50,
     freeShipping: false
@@ -394,7 +398,10 @@ function getPromoDetails() {
 function renderPromoStatus(promo) {
   if (!activePromoCopy) return;
   if (!promo.code) {
-    activePromoCopy.innerHTML = 'Active code: <strong>SUMMER</strong> (30% off)';
+    const activePromo = window.JONEZIE_PROMO?.getActivePromo?.();
+    const activeCode = activePromo?.code || 'FALL25';
+    const activeRate = Number(activePromo?.rate || 0.25);
+    activePromoCopy.innerHTML = `Active code: <strong>${escapeHtml(activeCode)}</strong> (${Math.round(activeRate * 100)}% off)`;
     activePromoCopy.dataset.state = 'default';
     return;
   }

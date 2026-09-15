@@ -1,9 +1,9 @@
 (() => {
   const DEFAULT_PROMO = {
-    code: 'SUMMER',
-    rate: 0.30,
+    code: 'FALL25',
+    rate: 0.25,
     freeShipping: false,
-    message: 'Use code SUMMER for 30% off'
+    message: 'Use code FALL25 for 25% off'
   };
 
   const USA250_PROMO = {
