@@ -4172,7 +4172,7 @@ body.lightbox-open {
 .lead-capture-modal {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 1000;
 }
 
 .lead-capture-backdrop {
@@ -4184,7 +4184,9 @@ body.lightbox-open {
 
 .lead-capture-dialog {
   position: relative;
+  z-index: 1;
   width: min(calc(100% - 24px), 468px);
+  max-height: calc(100dvh - 32px);
   margin: min(9vh, 72px) auto 0;
   padding: 26px;
   border: 1px solid rgba(98, 219, 240, 0.14);
@@ -4196,13 +4198,14 @@ body.lightbox-open {
   box-shadow: 0 24px 72px rgba(0, 0, 0, 0.38);
   display: grid;
   gap: 10px;
+  overflow-y: auto;
 }
 
 .lead-capture-brand {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-right: 44px;
+  padding-right: 58px;
 }
 
 .lead-capture-logo {
@@ -4347,10 +4350,11 @@ body.lightbox-open {
 
 .lead-capture-close {
   position: absolute;
+  z-index: 2;
   top: 16px;
   right: 16px;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.05);
@@ -4358,6 +4362,7 @@ body.lightbox-open {
   font-size: 1.4rem;
   cursor: pointer;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+  touch-action: manipulation;
 }
 
 @media (max-width: 1120px) {
