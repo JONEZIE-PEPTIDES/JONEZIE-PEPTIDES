@@ -3,7 +3,7 @@ window.JONEZIE_STANDARDS_MERCH = {
     // Light-switch control for /standards/: false shows this page, true redirects to target.
     enabled: true,
     target: '../index.html#featured',
-    delayMs: 100,
+    delayMs: 0,
     hideMainSiteLinksWhenDisabled: true
   },
   cartKey: 'jonezie_standards_merch_cart',

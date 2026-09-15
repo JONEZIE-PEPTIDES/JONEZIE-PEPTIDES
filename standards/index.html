@@ -31,7 +31,7 @@
   <link rel="icon" type="image/png" href="../favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=20260728a" />
 <script src="landing-config.js?v=20260909b"></script>
-<script src="merch-data.js?v=20260915redirecton1"></script>
+<script src="merch-data.js?v=20260915redirectfast1"></script>
   <script>
     const standardsRedirect = window.JONEZIE_STANDARDS_MERCH?.redirect || {};
     const hideMainSiteEntrances = window.JONEZIE_RESEARCH_STANDARDS_CONFIG?.showMainSiteEntrances === false ||
@@ -42,9 +42,16 @@
     }
 
     if (standardsRedirect.enabled) {
-      window.setTimeout(() => {
-        window.location.replace(standardsRedirect.target || '../index.html#featured');
-      }, Number(standardsRedirect.delayMs) || 0);
+      const redirectTarget = standardsRedirect.target || '../index.html#featured';
+      const redirectDelayMs = Number(standardsRedirect.delayMs) || 0;
+
+      if (redirectDelayMs <= 0) {
+        window.location.replace(redirectTarget);
+      } else {
+        window.setTimeout(() => {
+          window.location.replace(redirectTarget);
+        }, redirectDelayMs);
+      }
     }
   </script>
 <script type="application/ld+json">
