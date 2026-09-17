@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-15 15:54:21",
-  "totalProducts": 52,
-  "totalConfigurations": 93,
+  "generatedAt": "2026-09-17 12:26:22",
+  "totalProducts": 51,
+  "totalConfigurations": 92,
   "featured": [
     {
       "name": "BPC-157",
@@ -1539,27 +1539,6 @@
           "singleVialPrice": "$67.27",
           "eightVialPrice": "$469.87",
           "tenVialPrice": "$556.92"
-        }
-      ]
-    },
-    {
-      "name": "Lemon Bottle",
-      "sourceName": "Lemon Bottle",
-      "slug": "lemon-bottle",
-      "category": "Aesthetics",
-      "description": "Lemon Bottle is an active aesthetics listing at Jonezie. An aesthetics-focused research product used in skin, pigmentation, collagen, or cosmetic-pathway workflows.",
-      "startingPriceSingle": "$40.36",
-      "startingPrice8": "$281.92",
-      "startingPrice10": "$334.15",
-      "image": "product-placeholder.svg",
-      "options": [
-        {
-          "code": "LB10MG",
-          "specification": "10mg*10vials",
-          "mgOption": "10mg",
-          "singleVialPrice": "$40.36",
-          "eightVialPrice": "$281.92",
-          "tenVialPrice": "$334.15"
         }
       ]
     },

@@ -397,7 +397,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'aesthetics-cosmetic',
       label: 'Cosmetic-support compounds',
       category: 'Aesthetics',
-      fragments: ['snap-8', 'lemon-bottle', 'b12-blend']
+      fragments: ['snap-8', 'b12-blend']
     },
     {
       key: 'growth-secretagogue',
