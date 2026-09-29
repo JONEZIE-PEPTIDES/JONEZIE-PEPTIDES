@@ -946,7 +946,7 @@ async function submitOrderRequest(payload) {
     return { ok: true, mode: 'remote' };
   } catch (error) {
     console.error('Order request submission failed.', error);
-    return { ok: false, reason: 'network-error' };
+    return { ok: true, mode: 'manual-email', reason: 'network-error' };
   }
 }
 
@@ -1027,7 +1027,12 @@ form?.addEventListener('submit', async (event) => {
     if (promo.isValid && promo.firstOrderOnly) markFirstOrderCodeRedeemed(email, promo.code);
     renderManualOrderFallback(payload);
     openOrderRequestMailto(payload);
-    setFeedback('Email draft opened if your desktop has a mail app. If nothing opened, use the copy button below and email the order request to orders@jonezielabs.com.', 'info');
+    setFeedback(
+      submission.reason === 'network-error'
+        ? 'Automatic submission was blocked. Use the email draft or copy the order request below and send it to orders@jonezielabs.com.'
+        : 'Email draft opened if your desktop has a mail app. If nothing opened, use the copy button below and email the order request to orders@jonezielabs.com.',
+      'info'
+    );
     successCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
