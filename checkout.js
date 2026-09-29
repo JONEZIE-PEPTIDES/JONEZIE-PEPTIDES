@@ -20,7 +20,7 @@ const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
 const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
-const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
+const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will review your order and email a secure invoice link shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
 const FIRST_ORDER_CODE_REDEMPTIONS_KEY = 'jonezie_first_order_code_redeemed_emails';
 const LEGACY_WELCOME_CODE_REDEMPTIONS_KEY = 'jonezie_welcome7_redeemed_emails';
 const PROMO_CODES = {
@@ -597,7 +597,7 @@ function renderSubmittedOrder() {
   cartRoot.innerHTML = `
     <div class="empty-cart-card checkout-complete-card">
       <h2>Order request received.</h2>
-      <p>We are reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure Stripe invoice by email shortly.</p>
+      <p>We are reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure invoice link by email shortly.</p>
       <p class="checkout-complete-meta">${escapeHtml(submittedOrderSnapshot.shippingLabel)}</p>
       <ul class="checkout-complete-list">
         ${submittedOrderSnapshot.items.map((item) => `<li>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity} | ${escapeHtml(item.lineTotalDisplay)}</li>`).join('')}
@@ -622,7 +622,8 @@ function renderSubmittedOrderPremium() {
         <div>
           <h2>Order request received.</h2>
           <p class="checkout-complete-thanks">Thanks, ${escapeHtml(submittedOrderSnapshot.customerFirstName)} - we're reviewing your order now.</p>
-          <p>No payment was collected on this page. Once your order is reviewed and confirmed, Jonezie Labs will email a secure Stripe invoice to the email address on your order. Please check your inbox and spam folder.</p>
+          <p>No payment was collected on this page. Once your order is reviewed and confirmed, Jonezie Labs will email a secure invoice link to the email address on your order. Please check your inbox and spam folder.</p>
+          <p class="checkout-payment-options"><strong>Payment options include:</strong> credit or debit card, Apple Pay, Google Pay, Cash App Pay, ACH bank transfer, and Afterpay.</p>
         </div>
       </div>
 
@@ -655,7 +656,7 @@ function renderSubmittedOrderPremium() {
       <h3>What happens next</h3>
       <div class="checkout-next-grid">
         <article><span>1</span><strong>Review</strong><p>We confirm your order request.</p></article>
-        <article><span>2</span><strong>Invoice</strong><p>We email your Stripe invoice link.</p></article>
+        <article><span>2</span><strong>Invoice</strong><p>We email your secure invoice link.</p></article>
         <article><span>3</span><strong>Payment</strong><p>You pay the secure invoice.</p></article>
         <article><span>4</span><strong>Ship</strong><p>Tracking is sent after label creation.</p></article>
       </div>
@@ -771,7 +772,7 @@ function buildOrderRequestPayload({
   return {
     orderId,
     requestedAt,
-    invoiceFlow: 'Review and confirm order, then email a secure Stripe invoice.',
+    invoiceFlow: 'Review and confirm order, then email a secure invoice link.',
     paymentNotice: 'All invoices must be paid before an order is shipped. Orders with unpaid invoices for more than 48 hours may be automatically canceled.',
     researchUseNotice: 'Items requested below are for laboratory research only.',
     customer: {
@@ -1044,7 +1045,7 @@ form?.addEventListener('submit', async (event) => {
     successCard.hidden = false;
     successCard.innerHTML = `
       <h2>Reminder</h2>
-      <p>Please check your inbox and spam folder for your Stripe invoice. No payment was collected at checkout.</p>
+      <p>Please check your inbox and spam folder for your secure invoice link. No payment was collected at checkout.</p>
     `;
   }
   if (form) form.hidden = true;

@@ -2514,6 +2514,15 @@ body.lightbox-open {
   font-size: 1.15rem;
   font-weight: 800;
 }
+.checkout-complete-card .checkout-payment-options {
+  margin-top: 10px;
+  color: rgba(244, 251, 255, 0.72);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+.checkout-payment-options strong {
+  color: var(--text);
+}
 .checkout-invoice-alert {
   display: grid;
   grid-template-columns: 92px minmax(0, 1fr);
