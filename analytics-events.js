@@ -145,6 +145,17 @@ window.JONEZIE_ANALYTICS = (() => {
     });
   }
 
+  function orderRequestFallback(payload = {}, extra = {}) {
+    const cart = Array.isArray(payload.cart) ? payload.cart : (Array.isArray(payload.items) ? payload.items : []);
+    const orderValue = toNumber(payload.total || payload.totals?.estimatedTotal);
+    event('order_request_fallback', buildCartPayload(cart, {
+      value: orderValue,
+      order_id: String(payload.orderId || '').slice(0, 80),
+      fallback_reason: String(extra.reason || 'manual-email').slice(0, 80),
+      durable_capture_enabled: Boolean(extra.durableCaptureEnabled)
+    }));
+  }
+
   return {
     event,
     buildItem,
@@ -158,6 +169,7 @@ window.JONEZIE_ANALYTICS = (() => {
     applyPromoCode,
     search,
     generateLead,
-    orderRequestSubmit
+    orderRequestSubmit,
+    orderRequestFallback
   };
 })();

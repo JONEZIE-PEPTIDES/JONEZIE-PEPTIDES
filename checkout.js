@@ -20,6 +20,8 @@ const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
 const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
+const ORDER_REQUEST_DURABLE_ENDPOINT = String(ORDER_REQUEST_CONFIG.durableEndpoint || '').trim();
+const ORDER_REQUEST_TIMEOUT_MS = Math.max(3000, Number(ORDER_REQUEST_CONFIG.requestTimeoutMs) || 12000);
 const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will review your order and email a secure invoice link shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
 const FIRST_ORDER_CODE_REDEMPTIONS_KEY = 'jonezie_first_order_code_redeemed_emails';
 const LEGACY_WELCOME_CODE_REDEMPTIONS_KEY = 'jonezie_welcome7_redeemed_emails';
@@ -367,6 +369,10 @@ function isLocalPreview() {
 
 function getOrderRequestEndpoint() {
   return String(ORDER_REQUEST_CONFIG.endpoint || '').trim();
+}
+
+function getDurableOrderRequestEndpoint() {
+  return ORDER_REQUEST_DURABLE_ENDPOINT;
 }
 
 function createOrderId() {
@@ -922,33 +928,100 @@ function renderManualOrderFallback(payload) {
   });
 }
 
-async function submitOrderRequest(payload) {
-  const endpoint = getOrderRequestEndpoint();
-  if (!endpoint) {
-    if (isLocalPreview()) {
-      return { ok: true, mode: 'manual-email' };
-    }
-
-    return { ok: true, mode: 'manual-email' };
-  }
-
+async function submitDurableOrderRequest(payload, endpoint) {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), ORDER_REQUEST_TIMEOUT_MS);
   try {
-    await fetch(endpoint, {
+    const response = await fetch(endpoint, {
       method: 'POST',
-      mode: 'no-cors',
+      mode: 'cors',
       cache: 'no-store',
       credentials: 'omit',
       keepalive: true,
       headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: controller.signal
     });
-    return { ok: true, mode: 'remote' };
-  } catch (error) {
-    console.error('Order request submission failed.', error);
-    return { ok: true, mode: 'manual-email', reason: 'network-error' };
+    const result = await response.json().catch(() => ({}));
+    if (response.ok && result.ok && result.saved) {
+      return {
+        ok: true,
+        mode: 'durable',
+        duplicate: Boolean(result.duplicate),
+        orderId: result.orderId || payload.orderId
+      };
+    }
+
+    if (response.status >= 400 && response.status < 500 && ![408, 429].includes(response.status)) {
+      return {
+        ok: false,
+        mode: 'rejected',
+        reason: 'validation-error',
+        message: result.error || result.errors?.join(' ') || 'The order request could not be validated.'
+      };
+    }
+
+    throw new Error(result.error || `Durable order capture returned ${response.status}.`);
+  } finally {
+    window.clearTimeout(timeoutId);
   }
+}
+
+async function submitLegacyOrderRequest(payload, endpoint) {
+  await fetch(endpoint, {
+    method: 'POST',
+    mode: 'no-cors',
+    cache: 'no-store',
+    credentials: 'omit',
+    keepalive: true,
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
+    body: JSON.stringify(payload)
+  });
+  return { ok: true, mode: 'remote' };
+}
+
+async function submitOrderRequest(payload) {
+  const durableEndpoint = getDurableOrderRequestEndpoint();
+  const legacyEndpoint = getOrderRequestEndpoint();
+  let durableFailure = null;
+
+  if (durableEndpoint) {
+    try {
+      const durableResult = await submitDurableOrderRequest(payload, durableEndpoint);
+      if (!durableResult.ok) return durableResult;
+      return durableResult;
+    } catch (error) {
+      durableFailure = error;
+      console.error('Durable order capture failed; trying the backup endpoint.', error);
+    }
+  }
+
+  if (legacyEndpoint) {
+    try {
+      return await submitLegacyOrderRequest(payload, legacyEndpoint);
+    } catch (error) {
+      console.error('Backup order request submission failed.', error);
+      return {
+        ok: true,
+        mode: 'manual-email',
+        reason: durableFailure ? 'all-endpoints-failed' : 'network-error'
+      };
+    }
+  }
+
+  if (isLocalPreview() || !legacyEndpoint) {
+    return {
+      ok: true,
+      mode: 'manual-email',
+      reason: durableFailure ? 'all-endpoints-failed' : 'endpoint-not-configured'
+    };
+  }
+
+  return { ok: true, mode: 'manual-email', reason: 'network-error' };
 }
 
 form?.addEventListener('submit', async (event) => {
@@ -1019,17 +1092,20 @@ form?.addEventListener('submit', async (event) => {
   if (clearCartButton) clearCartButton.disabled = false;
 
   if (!submission.ok) {
-    setFeedback('We could not submit your order request. Please try again or email orders@jonezielabs.com for help.', 'error');
+    setFeedback(submission.message || 'We could not submit your order request. Please review your information or email orders@jonezielabs.com for help.', 'error');
     return;
   }
 
   if (submission.mode === 'manual-email') {
-    window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
+    window.JONEZIE_ANALYTICS?.orderRequestFallback(payload, {
+      reason: submission.reason,
+      durableCaptureEnabled: Boolean(getDurableOrderRequestEndpoint())
+    });
     if (promo.isValid && promo.firstOrderOnly) markFirstOrderCodeRedeemed(email, promo.code);
     renderManualOrderFallback(payload);
     openOrderRequestMailto(payload);
     setFeedback(
-      submission.reason === 'network-error'
+      ['network-error', 'all-endpoints-failed'].includes(submission.reason)
         ? 'Automatic submission was blocked. Use the email draft or copy the order request below and send it to orders@jonezielabs.com.'
         : 'Email draft opened if your desktop has a mail app. If nothing opened, use the copy button below and email the order request to orders@jonezielabs.com.',
       'info'

@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jonezie-order-capture-staging",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-09-29",
+  "vars": {
+    "ENVIRONMENT": "staging",
+    "ALLOWED_ORIGINS": "https://staging.jonezielabs.com,http://127.0.0.1:8012",
+    "ADMIN_EMAILS": "orders@jonezielabs.com",
+    "NOTIFICATION_FROM": "Jonezie Labs Staging <orders@updates.jonezielabs.com>",
+    "REPLY_TO_EMAIL": "orders@jonezielabs.com",
+    "SEND_CUSTOMER_CONFIRMATION": "true"
+  },
+  "d1_databases": [
+    {
+      "binding": "ORDERS",
+      "database_name": "jonezie-order-capture-staging",
+      "database_id": "REPLACE_WITH_STAGING_D1_DATABASE_ID"
+    }
+  ],
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  }
+}
