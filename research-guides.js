@@ -21,17 +21,17 @@
     if (!statsNode) return;
     statsNode.innerHTML = `
       <article class="guide-stat-card">
-        <p class="eyebrow">Guides</p>
+        <p class="eyebrow"><svg aria-hidden="true"><use href="#guide-icon-book"></use></svg><span class="sr-only">Guides</span></p>
         <strong>Clear Research References</strong>
         <span>Review product information, handling considerations, and related research resources in one place.</span>
       </article>
       <article class="guide-stat-card">
-        <p class="eyebrow">Handling</p>
+        <p class="eyebrow"><svg aria-hidden="true"><use href="#guide-icon-flask"></use></svg><span class="sr-only">Handling</span></p>
         <strong>Storage &amp; Preparation</strong>
         <span>Find general storage, documentation, and laboratory-handling information.</span>
       </article>
       <article class="guide-stat-card">
-        <p class="eyebrow">RUO</p>
+        <p class="eyebrow"><svg aria-hidden="true"><use href="#guide-icon-shield"></use></svg><span class="sr-only">Research use only</span></p>
         <strong>Research Use Only</strong>
         <span>All products and information are provided strictly for research, laboratory, and analytical purposes.</span>
       </article>`;
