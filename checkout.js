@@ -20,6 +20,7 @@ const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
 const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
+const ORDER_REQUEST_RESPONSE_TIMEOUT_MS = 12000;
 const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will review your order and email a secure invoice link shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
 const FIRST_ORDER_CODE_REDEMPTIONS_KEY = 'jonezie_first_order_code_redeemed_emails';
 const LEGACY_WELCOME_CODE_REDEMPTIONS_KEY = 'jonezie_welcome7_redeemed_emails';
@@ -936,8 +937,7 @@ async function submitOrderRequest(payload) {
     return { ok: true, mode: 'manual-email' };
   }
 
-  try {
-    await fetch(endpoint, {
+  const request = fetch(endpoint, {
       method: 'POST',
       mode: 'no-cors',
       cache: 'no-store',
@@ -947,12 +947,28 @@ async function submitOrderRequest(payload) {
         'Content-Type': 'text/plain;charset=utf-8'
       },
       body: JSON.stringify(payload)
-    });
-    return { ok: true, mode: 'remote' };
-  } catch (error) {
-    console.error('Order request submission failed.', error);
+    })
+    .then(() => ({ status: 'completed' }))
+    .catch((error) => ({ status: 'failed', error }));
+
+  let timeoutId = null;
+  const timeout = new Promise((resolve) => {
+    timeoutId = window.setTimeout(() => resolve({ status: 'timeout' }), ORDER_REQUEST_RESPONSE_TIMEOUT_MS);
+  });
+  const result = await Promise.race([request, timeout]);
+  if (result.status !== 'timeout' && timeoutId !== null) window.clearTimeout(timeoutId);
+
+  if (result.status === 'timeout') {
+    console.warn('Order request response timed out; the background request is still running.');
+    return { ok: true, mode: 'remote', reason: 'response-timeout' };
+  }
+
+  if (result.status === 'failed') {
+    console.error('Order request submission failed.', result.error);
     return { ok: true, mode: 'manual-email', reason: 'network-error' };
   }
+
+  return { ok: true, mode: 'remote' };
 }
 
 form?.addEventListener('submit', async (event) => {
@@ -1042,6 +1058,11 @@ form?.addEventListener('submit', async (event) => {
     return;
   }
 
+  if (submission.reason === 'response-timeout') {
+    window.JONEZIE_ANALYTICS?.event('order_request_response_timeout', {
+      order_id: String(payload.orderId || '').slice(0, 80)
+    });
+  }
   window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
   if (promo.isValid && promo.firstOrderOnly) markFirstOrderCodeRedeemed(email, promo.code);
   submittedOrderSnapshot = buildSubmittedOrderSnapshot(payload);
