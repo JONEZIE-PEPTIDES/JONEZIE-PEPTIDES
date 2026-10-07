@@ -1,8 +1,41 @@
 window.JONEZIE_ANALYTICS = (() => {
   const CURRENCY = 'USD';
+  const OPENAI_PIXEL_ID = 'KSmzruZQ5f9iccztyfWh6j';
+  const OPENAI_PIXEL_SDK_URL = 'https://bzrcdn.openai.com/sdk/oaiq.min.js';
 
   function hasGtag() {
     return typeof window.gtag === 'function';
+  }
+
+  function hasOpenAiPixel() {
+    return typeof window.oaiq === 'function';
+  }
+
+  function initOpenAiPixel() {
+    if (!OPENAI_PIXEL_ID || hasOpenAiPixel()) {
+      if (hasOpenAiPixel()) {
+        window.oaiq('init', { pixelId: OPENAI_PIXEL_ID });
+      }
+      return;
+    }
+
+    const queue = function queueOpenAiPixel() {
+      queue.q.push(arguments);
+    };
+    queue.q = [];
+    window.oaiq = queue;
+
+    const sdkScript = document.createElement('script');
+    sdkScript.async = true;
+    sdkScript.src = OPENAI_PIXEL_SDK_URL;
+    const firstScript = document.getElementsByTagName('script')[0];
+    if (firstScript?.parentNode) {
+      firstScript.parentNode.insertBefore(sdkScript, firstScript);
+    } else {
+      document.head.appendChild(sdkScript);
+    }
+
+    window.oaiq('init', { pixelId: OPENAI_PIXEL_ID });
   }
 
   function toNumber(value) {
@@ -62,6 +95,16 @@ window.JONEZIE_ANALYTICS = (() => {
   function event(name, params = {}) {
     if (!name || !hasGtag()) return;
     window.gtag('event', name, params);
+  }
+
+  function openAiLeadCreated() {
+    if (!hasOpenAiPixel()) return;
+    window.oaiq(
+      'measure',
+      'lead_created',
+      { type: 'customer_action' },
+      { opt_out: true }
+    );
   }
 
   function viewItem(item) {
@@ -143,7 +186,10 @@ window.JONEZIE_ANALYTICS = (() => {
       tax: 0,
       order_request_status: 'invoice_pending'
     });
+    openAiLeadCreated();
   }
+
+  initOpenAiPixel();
 
   return {
     event,
