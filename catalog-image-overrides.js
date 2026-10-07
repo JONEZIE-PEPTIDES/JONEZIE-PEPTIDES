@@ -69,7 +69,7 @@
     survodutide: 'survodutide-new-hero-product-image.webp',
     semaglutide: 'semaglutide-new-hero-product-image.webp',
     'tirzepatide': 'tirzepatide-new-hero-product-image.webp',
-    retatrutide: 'reta-new-new-hero-product-image.webp',
+    retatrutide: 'glp-3-rt-new-hero-product-image.webp?v=20261007a',
     'mt-1': 'mt-1-new-new-hero-product-image.webp',
     mt1: 'mt-1-new-new-hero-product-image.webp',
     'melanotan-1': 'mt-1-new-new-hero-product-image.webp',
@@ -85,9 +85,10 @@
     lc216: 'lc216-new-hero-product-image.webp'
   };
 
-  const FEATURED_NAME_OVERRIDES = {
+  const DISPLAY_NAME_OVERRIDES = {
     'bpc-10mg-plus-tb-10mg': 'Wolverine 10mg',
-    cerebrolysin: 'Cerebrolysin 60mg'
+    cerebrolysin: 'Cerebrolysin 60mg',
+    retatrutide: 'GLP-3(RT)'
   };
 
   const FEATURED_FALLBACK_PRODUCTS = {
@@ -127,6 +128,9 @@
     list.forEach((product) => {
       const override = IMAGE_OVERRIDES_BY_SLUG[product?.slug];
       if (override) product.image = override;
+      const displayName = DISPLAY_NAME_OVERRIDES[product?.slug];
+      if (displayName) product.name = displayName;
+      if (product?.slug === 'retatrutide') product.searchAliases = ['reta', 'retatrutide'];
     });
   }
 
@@ -143,11 +147,6 @@
       return { ...product };
     })
     .filter(Boolean);
-
-  catalog.featured.forEach((product) => {
-    const displayName = FEATURED_NAME_OVERRIDES[product.slug];
-    if (displayName) product.name = displayName;
-  });
 
   applyOverrides(catalog.featured);
   applyOverrides(catalog.products);

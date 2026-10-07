@@ -282,10 +282,10 @@ window.JONEZIE_PRODUCT_CONTENT = {
       ]
     },
     retatrutide: {
-      shortDescription: 'Retatrutide is an investigational multi-receptor agonist studied for GLP-1, GIP, and glucagon receptor activity, with literature examining receptor signaling and metabolic pathway readouts.',
+      shortDescription: 'GLP-3(RT) is an investigational multi-receptor agonist studied for GLP-1, GIP, and glucagon receptor activity, with literature examining receptor signaling and metabolic pathway readouts.',
       researchSummary: 'Clinical and translational literature has examined GLP-1, GIP, and glucagon receptor engagement, energy-balance endpoints, and metabolic-pathway markers.',
       researchFindings: [
-        'Retatrutide stands out because it targets three pathways rather than one or two incretin-related receptors.',
+        'GLP-3(RT) stands out because it targets three pathways rather than one or two incretin-related receptors.',
         'Mid-stage clinical studies have reported notable body-weight endpoint changes and strong metabolic-pathway interest.',
         'That makes it a flagship metabolic-research product with substantial receptor-pharmacology context.'
       ]

@@ -5130,7 +5130,8 @@ body.lightbox-open {
   position: relative;
   display: grid;
   place-items: center;
-  min-height: 300px;
+  height: clamp(280px, 30vw, 360px);
+  min-height: 0;
   overflow: hidden;
   border-radius: 22px;
   background:
@@ -5141,10 +5142,9 @@ body.lightbox-open {
   mask-image: linear-gradient(90deg, transparent 0%, #000 16%, #000 100%);
 }
 
-.tools-vial-glow {
+.tools-molecule-glow {
   position: absolute;
   inset: 15% 4% 4% 6%;
-  height: auto;
   background:
     radial-gradient(circle at 35% 72%, rgba(73,231,255,0.54), transparent 34%),
     radial-gradient(circle at 78% 54%, rgba(255,79,168,0.48), transparent 35%);
@@ -5152,13 +5152,34 @@ body.lightbox-open {
   opacity: 0.95;
 }
 
-.tools-hero-visual img {
-  position: relative;
+.tools-hero-visual canvas,
+.tools-molecule-fallback {
+  position: absolute;
   z-index: 2;
-  width: min(46%, 240px);
-  max-height: 330px;
-  object-fit: contain;
-  filter: drop-shadow(0 28px 42px rgba(0,0,0,0.44));
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 22px 26px rgba(0, 0, 0, 0.4));
+}
+
+.tools-molecule-fallback {
+  inset: 12% 15%;
+  width: 70%;
+  height: 76%;
+  animation: tools-molecule-float 6s ease-in-out infinite;
+}
+
+.tools-molecule-fallback[hidden] {
+  display: none;
+}
+
+@keyframes tools-molecule-float {
+  50% { transform: translateY(-9px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tools-molecule-fallback { animation: none; }
 }
 
 .tools-start-strip {
@@ -5462,14 +5483,13 @@ body.lightbox-open {
   margin: 0;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 850px) {
   .tools-hero-shell {
     grid-template-columns: 1fr;
   }
 
   .tools-hero-visual {
-    min-height: 280px;
-    place-items: center;
+    height: 260px;
   }
 
   .tools-start-strip,

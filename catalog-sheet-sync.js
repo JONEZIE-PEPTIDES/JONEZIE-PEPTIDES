@@ -139,7 +139,8 @@
     cerebrolysin: 'Cerebrolysin',
     'klow (ghk-cu50+tb10+bc10+kpv10)': 'KLOW',
     'glow stack (bpc 157 10mg+ghk-cu 50mg+tb500 10mg)': 'GLOW Stack (BPC 157 10mg + GHK-CU 50mg + TB500 10mg)',
-    'b12 10000mcg 10ml': 'B12 10,000mcg / 10ml Vial'
+    'b12 10000mcg 10ml': 'B12 10,000mcg / 10ml Vial',
+    retatrutide: 'GLP-3(RT)'
   };
 
   const SLUG_OVERRIDES = {
@@ -158,7 +159,8 @@
     'mots-c': 'mots-c',
     'ss-31': 'ss-31',
     'igf-1lr3': 'igf-1lr3',
-    'b12 10000mcg 10ml': 'b12-10000mcg-10ml'
+    'b12 10000mcg 10ml': 'b12-10000mcg-10ml',
+    retatrutide: 'retatrutide'
   };
 
   const CATEGORY_OVERRIDES = {
@@ -219,7 +221,7 @@
     'ghk-cu': 'ghk-cu-100mg-official.png',
     semaglutide: 'semaglutide-20mg-official.png',
     tirzepatide: 'tirzepatide-15mg-official.png',
-    retatrutide: 'retatrutide-gradient-vial.png',
+    retatrutide: 'glp-3-rt-new-hero-product-image.webp?v=20261007a',
     'mt-1': 'mt-1-10mg-official.png',
     'b12-10000mcg-10ml': 'B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a'
   };

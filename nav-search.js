@@ -28,7 +28,14 @@
   [...(catalog?.featured || []), ...(catalog?.products || [])].forEach((product) => {
     if (!product?.slug || seen.has(product.slug)) return;
     seen.add(product.slug);
-    products.push({ name: product.name, slug: product.slug, category: product.category || 'Product' });
+    products.push({
+      name: product.name,
+      slug: product.slug,
+      category: product.category || 'Product',
+      searchTerms: [product.name, product.slug, product.sourceName, ...(product.searchAliases || [])]
+        .filter(Boolean)
+        .map((value) => String(value).toLowerCase())
+    });
   });
 
   products.sort((a, b) => a.name.localeCompare(b.name));
@@ -117,7 +124,7 @@
       activeIndex = -1;
       matches = (query
         ? products.filter((product) => {
-            return product.name.toLowerCase().includes(query) || product.slug.toLowerCase().includes(query);
+            return product.searchTerms.some((term) => term.includes(query));
           })
         : products
       ).slice(0, 8);
@@ -165,10 +172,10 @@
     if (!query || !products.length) return false;
 
     const exactMatch = products.find((product) => {
-      return product.name.toLowerCase() === query || product.slug.toLowerCase() === query;
+      return product.searchTerms.some((term) => term === query);
     });
     const partialMatch = products.find((product) => {
-      return product.name.toLowerCase().includes(query) || product.slug.toLowerCase().includes(query);
+      return product.searchTerms.some((term) => term.includes(query));
     });
     const match = exactMatch || partialMatch;
 

@@ -61,12 +61,12 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       bullets: [
         'Compare GLP-1, GIP, glucagon, amylin, and adjacent metabolic research pathways.',
         'Review whether a listing is a single compound or a blended research product.',
-        'Use comparison pages to review semaglutide, tirzepatide, retatrutide, cagrilintide blends, and nearby entries side by side.'
+        'Use comparison pages to review semaglutide, tirzepatide, GLP-3(RT), cagrilintide blends, and nearby entries side by side.'
       ],
       faq: [
         {
           question: 'Which products are included in metabolic research?',
-          answer: 'This category includes products such as semaglutide, tirzepatide, retatrutide, survodutide, mazdutide, cagrilintide, AOD, and SLU-PP-322 when listed in the active catalog.'
+          answer: 'This category includes products such as semaglutide, tirzepatide, GLP-3(RT), survodutide, mazdutide, cagrilintide, AOD, and SLU-PP-322 when listed in the active catalog.'
         },
         {
           question: 'What should I compare first?',

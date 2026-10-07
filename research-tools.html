@@ -31,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260728a" />
-  <link rel="stylesheet" href="styles.css?v=20260914pricegap" />
+  <link rel="stylesheet" href="styles.css?v=20261007molecule3" />
   <script type="application/ld+json" data-tools-schema>
     {
       "@context": "https://schema.org",
@@ -204,9 +204,44 @@
             </div>
           </div>
         </div>
-        <div class="tools-hero-visual" aria-hidden="true">
-          <div class="tools-vial-glow"></div>
-          <img src="jonezie_reta_vial_true_transparent.png" alt="" />
+        <div class="tools-hero-visual" data-peptide-molecule aria-hidden="true">
+          <div class="tools-molecule-glow"></div>
+          <svg class="tools-molecule-fallback" viewBox="0 0 520 320" role="presentation">
+            <defs>
+              <linearGradient id="tools-molecule-bond" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#e4f8fc" />
+                <stop offset="1" stop-color="#6a8795" />
+              </linearGradient>
+              <radialGradient id="tools-molecule-carbon" cx="35%" cy="28%" r="75%">
+                <stop offset="0" stop-color="#fff" />
+                <stop offset="1" stop-color="#8bb7c5" />
+              </radialGradient>
+              <radialGradient id="tools-molecule-nitrogen" cx="35%" cy="28%" r="75%">
+                <stop offset="0" stop-color="#e8fdff" />
+                <stop offset="1" stop-color="#32b8d9" />
+              </radialGradient>
+              <radialGradient id="tools-molecule-oxygen" cx="35%" cy="28%" r="75%">
+                <stop offset="0" stop-color="#ffe4f3" />
+                <stop offset="1" stop-color="#f14d9f" />
+              </radialGradient>
+            </defs>
+            <g fill="none" stroke="url(#tools-molecule-bond)" stroke-linecap="round" stroke-width="10">
+              <path d="M50 174 117 127 179 174 247 115 312 165 378 118 447 158" />
+              <path d="M179 174 194 242M312 165 318 236M378 118 390 51" />
+            </g>
+            <g fill="url(#tools-molecule-carbon)">
+              <circle cx="117" cy="127" r="18" /><circle cx="179" cy="174" r="19" />
+              <circle cx="312" cy="165" r="18" /><circle cx="378" cy="118" r="19" />
+            </g>
+            <g fill="url(#tools-molecule-nitrogen)">
+              <circle cx="50" cy="174" r="20" /><circle cx="247" cy="115" r="20" />
+              <circle cx="447" cy="158" r="20" />
+            </g>
+            <g fill="url(#tools-molecule-oxygen)">
+              <circle cx="194" cy="242" r="20" /><circle cx="318" cy="236" r="20" />
+              <circle cx="390" cy="51" r="20" />
+            </g>
+          </svg>
         </div>
       </section>
 
@@ -403,18 +438,19 @@
   </div>
 
   <script src="catalog-data.js?v=20260914cerebrolysin1"></script>
-  <script src="catalog-sheet-sync.js?v=20260914cerebrolysin1"></script>
+  <script src="catalog-sheet-sync.js?v=20261007glp3"></script>
   <script src="catalog-admin-config.js?v=20261005lc216backorder"></script>
   <script src="catalog-admin.js?v=20260410a"></script>
-  <script src="catalog-image-overrides.js?v=20260911a"></script>
-  <script src="product-content.js?v=20260914ipamorelin"></script>
+  <script src="catalog-image-overrides.js?v=20261007glp3"></script>
+  <script src="product-content.js?v=20261007glp3"></script>
   <script src="lead-capture-config.js?v=20260513a"></script>
-  <script src="site-library.js?v=20260914catlabels"></script>
+  <script src="site-library.js?v=20261007glp3"></script>
   <script src="analytics-events.js?v=20261007a"></script>
   <script src="cart-nav.js?v=20260616a"></script>
-  <script src="nav-search.js?v=20260610a"></script>
+  <script src="nav-search.js?v=20261007aliases"></script>
   <script src="age-gate.js?v=20260427c"></script>
   <script src="research-tools.js?v=20260510c"></script>
+  <script type="module" src="research-tools-molecule.js?v=20261007d"></script>
   <script src="site-footer.js?v=20260603g"></script>
   <script src="lead-capture.js?v=20260622a"></script>
 </body>
