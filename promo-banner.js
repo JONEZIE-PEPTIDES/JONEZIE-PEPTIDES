@@ -1,9 +1,9 @@
 (() => {
   const DEFAULT_PROMO = {
-    code: 'SUMMER',
-    rate: 0.30,
+    code: 'FALL25',
+    rate: 0.25,
     freeShipping: false,
-    message: 'Use code SUMMER for 30% off'
+    message: 'Use code FALL25 for 25% off'
   };
 
   const USA250_PROMO = {
@@ -77,6 +77,15 @@
     if (checkoutPromoCopy) {
       checkoutPromoCopy.innerHTML = `Active code: <strong>${activePromo.code}</strong> (${Math.round(activePromo.rate * 100)}% off)`;
     }
+
+    document.dispatchEvent(new CustomEvent('jonezie:promo-updated', {
+      detail: {
+        code: activePromo.code,
+        rate: activePromo.rate,
+        message: activePromo.message,
+        freeShipping: activePromo.freeShipping
+      }
+    }));
   }
 
   window.JONEZIE_PROMO = {

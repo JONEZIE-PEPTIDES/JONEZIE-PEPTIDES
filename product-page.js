@@ -110,6 +110,23 @@ function getProductContent(product) {
   return contentData?.products?.[product.slug] || null;
 }
 
+function getCategoryDisplayLabel(category) {
+  if (siteLibrary?.getCategoryDisplayLabel) return siteLibrary.getCategoryDisplayLabel(category);
+  const labels = {
+    Metabolic: 'Metabolic Research',
+    Cognitive: 'Cognitive Research',
+    Recovery: 'Tissue & Repair Research',
+    Growth: 'Growth-Axis Research',
+    Cellular: 'Cellular Research',
+    Aesthetics: 'Dermal & Pigmentation Research',
+    Specialty: 'Specialty Research',
+    Performance: 'Specialty Research',
+    Support: 'Laboratory Support'
+  };
+  const key = String(category || '').trim();
+  return labels[key] || key || 'Research';
+}
+
 function getProductImageSrc(path) {
   const sanitized = String(path || '').replace('../', '').trim();
   const fallback = `${PRODUCT_FALLBACK_IMAGE}?v=${PRODUCT_ASSET_VERSION}`;
@@ -170,12 +187,12 @@ function getProductHeaderSummary(product) {
   if (productContent?.researchSummary) return productContent.researchSummary;
   if (productContent?.shortDescription) return productContent.shortDescription;
   const categoryFallbacks = {
-    Metabolic: 'Commonly referenced in research involving appetite-signaling, metabolic modeling, and energy-balance pathways.',
+    Metabolic: 'Commonly referenced in research involving receptor signaling, metabolic modeling, and energy-balance pathways.',
     Recovery: 'Commonly referenced in research involving repair-pathway signaling, tissue modeling, and laboratory recovery comparisons.',
     Aesthetics: 'Commonly referenced in research involving cosmetic-pathway, collagen, pigmentation, and appearance-focused product comparison.',
     Growth: 'Commonly referenced in research involving GH-axis signaling, endocrine modeling, and growth-related comparison work.',
     Cognitive: 'Commonly referenced in research involving neuro-support, focus, stress-response, and restoration pathways.',
-    Cellular: 'Commonly referenced in research involving mitochondrial signaling, cellular stress, and longevity-focused analytical work.',
+    Cellular: 'Commonly referenced in research involving mitochondrial signaling, cellular stress, and cellular-aging analytical work.',
     Performance: 'Commonly referenced in research involving high-output signaling and specialty comparison work.',
     Support: 'Referenced as a support item used alongside storage, mixing, and broader laboratory reference work.'
   };
@@ -317,7 +334,9 @@ function renderProductPage() {
   document.title = siteLibrary?.getProductPageTitle ? siteLibrary.getProductPageTitle(product) : `${product.name} | Jonezie Labs`;
   const meta = document.querySelector('meta[name="description"]');
   const productContent = getProductContent(product);
-  const shortDescription = productContent?.shortDescription || product.description;
+  const shortDescription = siteLibrary?.getProductDisplaySummary
+    ? siteLibrary.getProductDisplaySummary(product, productContent)
+    : productContent?.shortDescription || product.description;
   const researchSummary = getProductHeaderSummary(product);
   const productProfile = siteLibrary?.getProductInfoProfile(product, productContent, catalogData) || null;
   const researchFindings = productContent?.researchFindings || [];
@@ -441,7 +460,7 @@ function renderProductPage() {
     unitPrice: parsePrice(selectedOption?.[selectedPackKey] || product.startingPriceSingle)
   });
   if (titleNode) titleNode.textContent = product.name;
-  if (eyebrowNode) eyebrowNode.textContent = product.category;
+  if (eyebrowNode) eyebrowNode.textContent = getCategoryDisplayLabel(product.category);
   if (descriptionNode) descriptionNode.textContent = researchSummary;
   if (heroImageNode) {
     heroImageNode.src = getProductImageSrc(product.image);

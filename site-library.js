@@ -13,6 +13,17 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     short: 'For laboratory research reference only. Not for human or veterinary use.',
     full: 'All product information is provided for research, laboratory, or analytical reference only. Products are not for human or veterinary use.'
   };
+  const CATEGORY_DISPLAY_LABELS = {
+    Metabolic: 'Metabolic Research',
+    Cognitive: 'Cognitive Research',
+    Recovery: 'Tissue & Repair Research',
+    Growth: 'Growth-Axis Research',
+    Cellular: 'Cellular Research',
+    Aesthetics: 'Dermal & Pigmentation Research',
+    Specialty: 'Specialty Research',
+    Performance: 'Specialty Research',
+    Support: 'Laboratory Support'
+  };
   const TOOL_LIBRARY = [
     {
       key: 'reconstitution-calculator',
@@ -45,8 +56,8 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'metabolic',
       categories: ['Metabolic'],
       title: 'Metabolic Research Guide',
-      summary: 'Explore compounds studied in relation to metabolic signaling, glucose regulation, appetite-related pathways, energy balance, and body-composition models.',
-      intro: 'Metabolic research often reviews appetite signaling, incretin pathways, glucose regulation, energy balance, and body-composition models. Individual product pages and comparisons help clarify class, format, listed strengths, and supporting documentation.',
+      summary: 'Explore compounds studied in relation to metabolic signaling, incretin pathways, glucose-homeostasis markers, energy-balance endpoints, and metabolic endpoint models.',
+      intro: 'Metabolic research often reviews receptor signaling, incretin pathways, glucose-homeostasis markers, energy-balance endpoints, and metabolic endpoint models. Individual product pages and comparisons help clarify class, format, listed strengths, and supporting documentation.',
       bullets: [
         'Compare GLP-1, GIP, glucagon, amylin, and adjacent metabolic research pathways.',
         'Review whether a listing is a single compound or a blended research product.',
@@ -67,7 +78,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'recovery',
       categories: ['Recovery'],
       title: 'Recovery Research Guide',
-      summary: 'Explore compounds investigated in tissue-repair, inflammatory-signaling, vascular-response, and recovery-related laboratory models.',
+      summary: 'Explore compounds investigated in tissue-repair pathways, inflammatory-signaling, vascular-response, and wound-closure laboratory models.',
       intro: 'Recovery research commonly examines tissue-remodeling pathways, vascular response, inflammatory signaling, and repair-related laboratory models. Reviewing product pages and comparisons can help separate single compounds, blends, and supporting research categories.',
       bullets: [
         'Review BPC-157, TB500, Wolverine blends, Ara-290, and related repair-pathway products when available.',
@@ -77,7 +88,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       faq: [
         {
           question: 'Which recovery products are commonly reviewed together?',
-          answer: 'Customers often compare BPC-157, TB500, Wolverine blends, Ara-290, and Thymosin Alpha-1 by format, listed strength, and research category.'
+          answer: 'Researchers often compare BPC-157, TB500, Wolverine blends, Ara-290, and Thymosin Alpha-1 by format, listed strength, and research category.'
         },
         {
           question: 'Where can I find product-specific storage information?',
@@ -112,7 +123,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       categories: ['Growth'],
       title: 'Growth-Axis Research Guide',
       summary: 'Explore compounds associated with growth-hormone signaling, secretagogue activity, endocrine pathways, and related laboratory models.',
-      intro: 'Growth-axis research often compares secretagogue activity, GHRH-related compounds, endocrine signaling, and related body-composition models. The most useful review starts with compound class, available strengths, and product-specific documentation.',
+      intro: 'Growth-axis research often compares secretagogue activity, GHRH-related compounds, endocrine signaling, and related endocrine-response models. The most useful review starts with compound class, available strengths, and product-specific documentation.',
       bullets: [
         'Compare CJC-1295 variants, ipamorelin, IGF-1 LR3, HCG, HMG, and related growth-axis products when available.',
         'Review strength options carefully because several listings have multiple tiers.',
@@ -137,7 +148,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       intro: 'Cognitive research can include neuroregulation, stress-response signaling, sleep-related pathways, neurotrophic support, and broader central-nervous-system research. Product pages and comparisons help keep those differences clear.',
       bullets: [
         'Review Semax, Selank, DSIP, Pinealon, VIP, Cerebrolysin, Oxytocin Acetate, and related products when listed.',
-        'Distinguish focus, stress-response, sleep, neurotrophic, and restoration-oriented research context.',
+        'Distinguish focus, stress-response, sleep, neurotrophic, and CNS-signaling research context.',
         'Use individual product pages for product-specific documentation, strength options, and handling information.'
       ],
       faq: [
@@ -245,9 +256,9 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     },
     Cellular: {
       title: 'Cellular-function storage',
-      shortSummary: 'Cellular and longevity-focused products should stay cool, dry, and light-protected pre-mix, with refrigerated storage after reconstitution.',
+      shortSummary: 'Cellular and cellular-aging research products should stay cool, dry, and light-protected pre-mix, with refrigerated storage after reconstitution.',
       bullets: [
-        'Use consistent labeling when comparing mitochondrial or longevity-focused compounds across several strengths.',
+        'Use consistent labeling when comparing mitochondrial or cellular-aging compounds across several strengths.',
         'Keep mixed material cold between sessions and avoid unnecessary agitation.',
         'Document open dates for research traceability and quicker replenishment planning.'
       ]
@@ -342,11 +353,11 @@ window.JONEZIE_SITE_LIBRARY = (() => {
   const NON_COMPARISON_CATEGORIES = new Set(['Support']);
   const NON_COMPARISON_SLUGS = new Set(['bac-water', 'b12-10000mcg-10ml']);
   const CATEGORY_RESEARCH_CONTEXT = {
-    Metabolic: 'Metabolic research may examine appetite signaling, metabolic regulation, glycemic modeling, and body-composition pathways.',
+    Metabolic: 'Metabolic research may examine receptor signaling, metabolic regulation, glycemic-marker modeling, and metabolic endpoint pathways.',
     Recovery: 'Recovery research may examine repair pathways, tissue remodeling, vascular response, and inflammatory-signaling models.',
-    Aesthetics: 'Aesthetics research may examine collagen support, pigmentation, skin remodeling, and cosmetic-pathway analysis.',
-    Growth: 'Growth-axis research may examine GH-axis signaling, endocrine models, and related body-composition pathways.',
-    Cognitive: 'Cognitive research may examine neuro-support, stress-response signaling, sleep-related pathways, and restoration models.',
+    Aesthetics: 'Aesthetics research may examine collagen-pathway signaling, pigmentation, skin remodeling, and cosmetic-pathway analysis.',
+    Growth: 'Growth-axis research may examine GH-axis signaling, endocrine models, and related metabolic-pathway context.',
+    Cognitive: 'Cognitive research may examine neuro-support, stress-response signaling, sleep-related pathways, and CNS-signaling models.',
     Cellular: 'Cellular research may examine mitochondrial signaling, cellular stress, antioxidant pathways, and whole-cell function.',
     Support: 'Support items are reviewed as laboratory materials used alongside storage, mixing, and broader research reference work.',
     Performance: 'Specialty research may examine narrower signaling pathways where product format and handling notes require closer review.'
@@ -354,13 +365,13 @@ window.JONEZIE_SITE_LIBRARY = (() => {
   const COMPARISON_THEME_RULES = [
     {
       key: 'metabolic-incretin',
-      label: 'Appetite-signaling compounds',
+      label: 'Incretin and satiety-pathway compounds',
       category: 'Metabolic',
       fragments: ['semaglutide', 'tirzepatide', 'retatrutide', 'survodutide', 'mazdutide', 'cagrilintide']
     },
     {
       key: 'metabolic-body-composition',
-      label: 'Body-composition compounds',
+      label: 'Metabolic endpoint compounds',
       category: 'Metabolic',
       fragments: ['aod', '5-amino-1mq', 'slu-pp-322']
     },
@@ -386,7 +397,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       key: 'aesthetics-cosmetic',
       label: 'Cosmetic-support compounds',
       category: 'Aesthetics',
-      fragments: ['snap-8', 'lemon-bottle', 'b12-blend']
+      fragments: ['snap-8', 'b12-blend']
     },
     {
       key: 'growth-secretagogue',
@@ -501,8 +512,17 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     return product.category === 'Support' ? 'Research Support' : 'Research Peptide';
   }
 
+  function getCategoryDisplayLabel(category) {
+    const key = String(category || '').trim();
+    return CATEGORY_DISPLAY_LABELS[key] || key || 'Research';
+  }
+
   function getProductPageTitle(product) {
     if (!product?.name) return 'Research Product | Jonezie Labs';
+    if (product.slug === 'glutathione') return 'Glutathione Redox Research | Jonezie Labs';
+    if (product.slug === 'hcg') return 'HCG LHCGR Research | Jonezie Labs';
+    if (product.slug === 'ipamorelin') return 'Ipamorelin GHS-R1a Research | Jonezie Labs';
+    if (product.slug === 'selank') return 'Selank Neuroregulatory Research | Jonezie Labs';
     return `${product.name} ${getProductSeoTypeLabel(product)} | Jonezie Labs`;
   }
 
@@ -563,7 +583,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       case 'metabolic-incretin':
         return blend ? 'Multi-pathway incretin blend' : 'Incretin-pathway research compound';
       case 'metabolic-body-composition':
-        return blend ? 'Body-composition research blend' : 'Body-composition research compound';
+        return blend ? 'Metabolic endpoint research blend' : 'Metabolic endpoint research compound';
       case 'recovery-repair':
         return blend ? 'Repair-pathway peptide blend' : 'Repair-pathway research peptide';
       case 'aesthetics-skin':
@@ -609,6 +629,31 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     if (productContent?.researchSummary) return productContent.researchSummary;
     if (productContent?.shortDescription) return productContent.shortDescription;
     return CATEGORY_RESEARCH_CONTEXT[product?.category] || 'Reviewed for laboratory comparison and handling reference work.';
+  }
+
+  function getProductDisplaySummary(product, productContent = null) {
+    if (productContent?.shortDescription) return productContent.shortDescription;
+    const name = product?.name || 'This listing';
+    switch (product?.category) {
+      case 'Metabolic':
+        return `${name} is listed for laboratory research into receptor signaling, glucose-homeostasis markers, energy-balance endpoints, and related metabolic pathway models.`;
+      case 'Recovery':
+        return `${name} is listed for laboratory research into repair pathways, tissue-remodeling models, vascular response, and inflammatory-signaling context.`;
+      case 'Aesthetics':
+        return `${name} is listed for laboratory research into collagen-pathway signaling, skin-model biology, pigmentation, and cosmetic-pathway analysis.`;
+      case 'Growth':
+        return `${name} is listed for laboratory research into GH-axis signaling, endocrine models, and related metabolic-pathway context.`;
+      case 'Cognitive':
+        return `${name} is listed for laboratory research into neuroregulation, stress-response signaling, sleep-related pathways, and CNS-signaling models.`;
+      case 'Cellular':
+        return `${name} is listed for laboratory research into mitochondrial signaling, cellular stress, antioxidant pathways, and whole-cell function.`;
+      case 'Support':
+        return `${name} is listed as a laboratory support material for storage, preparation, handling, and analytical reference workflows.`;
+      case 'Performance':
+        return `${name} is listed for laboratory research into specialty signaling pathways, product format, and handling context.`;
+      default:
+        return product?.description || 'Reviewed for laboratory comparison and handling reference work.';
+    }
   }
 
   function getProductHandlingNote(product) {
@@ -657,10 +702,10 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     const strengths = getOptionStrengthList(product);
     return {
       name: product?.name || 'Research compound',
-      shortDescription: productContent?.shortDescription || product?.description || '',
+      shortDescription: getProductDisplaySummary(product, productContent),
       researchContext: getProductResearchContext(product, productContent),
       compoundClass: getProductCompoundClass(product),
-      researchCategory: product?.category || 'Research',
+      researchCategory: getCategoryDisplayLabel(product?.category),
       form: getProductForm(product),
       storageNote: storageProfile.shortSummary,
       handlingNote: getProductHandlingNote(product),
@@ -1219,6 +1264,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     getProductBySlug,
     getProductUrl,
     getProductCanonicalUrl,
+    getCategoryDisplayLabel,
     getProductPageTitle,
     getProductMetaDescription,
     getComparisonUrl,
@@ -1232,6 +1278,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     getMixingProfile,
     getProductForm,
     getProductCompoundClass,
+    getProductDisplaySummary,
     getProductStructureNote,
     getProductResearchContext,
     getProductHandlingNote,

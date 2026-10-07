@@ -20,7 +20,8 @@ const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
 const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
-const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will review your order and email a secure Stripe invoice shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
+const ORDER_REQUEST_RESPONSE_TIMEOUT_MS = 12000;
+const ORDER_REQUEST_SUCCESS_MESSAGE = 'Thank you for your order request. We will review your order and email a secure invoice link shortly. Payment must be completed before your order is shipped. Orders with unpaid invoices after 48 hours may be automatically canceled. Once payment is completed, your order will be prepared for shipment and tracking information will be sent by email.';
 const FIRST_ORDER_CODE_REDEMPTIONS_KEY = 'jonezie_first_order_code_redeemed_emails';
 const LEGACY_WELCOME_CODE_REDEMPTIONS_KEY = 'jonezie_welcome7_redeemed_emails';
 const PROMO_CODES = {
@@ -30,6 +31,14 @@ const PROMO_CODES = {
   },
   SUMMER: {
     rate: 0.30,
+    freeShipping: false
+  },
+  FALL25: {
+    rate: 0.25,
+    freeShipping: false
+  },
+  VET40: {
+    rate: 0.40,
     freeShipping: false
   },
   FOUNDER50: {
@@ -394,7 +403,10 @@ function getPromoDetails() {
 function renderPromoStatus(promo) {
   if (!activePromoCopy) return;
   if (!promo.code) {
-    activePromoCopy.innerHTML = 'Active code: <strong>SUMMER</strong> (30% off)';
+    const activePromo = window.JONEZIE_PROMO?.getActivePromo?.();
+    const activeCode = activePromo?.code || 'FALL25';
+    const activeRate = Number(activePromo?.rate || 0.25);
+    activePromoCopy.innerHTML = `Active code: <strong>${escapeHtml(activeCode)}</strong> (${Math.round(activeRate * 100)}% off)`;
     activePromoCopy.dataset.state = 'default';
     return;
   }
@@ -590,7 +602,7 @@ function renderSubmittedOrder() {
   cartRoot.innerHTML = `
     <div class="empty-cart-card checkout-complete-card">
       <h2>Order request received.</h2>
-      <p>We are reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure Stripe invoice by email shortly.</p>
+      <p>We are reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure invoice link by email shortly.</p>
       <p class="checkout-complete-meta">${escapeHtml(submittedOrderSnapshot.shippingLabel)}</p>
       <ul class="checkout-complete-list">
         ${submittedOrderSnapshot.items.map((item) => `<li>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity} | ${escapeHtml(item.lineTotalDisplay)}</li>`).join('')}
@@ -615,7 +627,8 @@ function renderSubmittedOrderPremium() {
         <div>
           <h2>Order request received.</h2>
           <p class="checkout-complete-thanks">Thanks, ${escapeHtml(submittedOrderSnapshot.customerFirstName)} - we're reviewing your order now.</p>
-          <p>No payment was collected on this page. Once your order is reviewed and confirmed, Jonezie Labs will email a secure Stripe invoice to the email address on your order. Please check your inbox and spam folder.</p>
+          <p>No payment was collected on this page. Once your order is reviewed and confirmed, Jonezie Labs will email a secure invoice link to the email address on your order. Please check your inbox and spam folder.</p>
+          <p class="checkout-payment-options"><strong>Payment options include:</strong> credit or debit card, Apple Pay, Google Pay, Cash App Pay, ACH bank transfer, and Afterpay.</p>
         </div>
       </div>
 
@@ -648,7 +661,7 @@ function renderSubmittedOrderPremium() {
       <h3>What happens next</h3>
       <div class="checkout-next-grid">
         <article><span>1</span><strong>Review</strong><p>We confirm your order request.</p></article>
-        <article><span>2</span><strong>Invoice</strong><p>We email your Stripe invoice link.</p></article>
+        <article><span>2</span><strong>Invoice</strong><p>We email your secure invoice link.</p></article>
         <article><span>3</span><strong>Payment</strong><p>You pay the secure invoice.</p></article>
         <article><span>4</span><strong>Ship</strong><p>Tracking is sent after label creation.</p></article>
       </div>
@@ -764,7 +777,7 @@ function buildOrderRequestPayload({
   return {
     orderId,
     requestedAt,
-    invoiceFlow: 'Review and confirm order, then email a secure Stripe invoice.',
+    invoiceFlow: 'Review and confirm order, then email a secure invoice link.',
     paymentNotice: 'All invoices must be paid before an order is shipped. Orders with unpaid invoices for more than 48 hours may be automatically canceled.',
     researchUseNotice: 'Items requested below are for laboratory research only.',
     customer: {
@@ -924,8 +937,7 @@ async function submitOrderRequest(payload) {
     return { ok: true, mode: 'manual-email' };
   }
 
-  try {
-    await fetch(endpoint, {
+  const request = fetch(endpoint, {
       method: 'POST',
       mode: 'no-cors',
       cache: 'no-store',
@@ -935,12 +947,28 @@ async function submitOrderRequest(payload) {
         'Content-Type': 'text/plain;charset=utf-8'
       },
       body: JSON.stringify(payload)
-    });
-    return { ok: true, mode: 'remote' };
-  } catch (error) {
-    console.error('Order request submission failed.', error);
-    return { ok: false, reason: 'network-error' };
+    })
+    .then(() => ({ status: 'completed' }))
+    .catch((error) => ({ status: 'failed', error }));
+
+  let timeoutId = null;
+  const timeout = new Promise((resolve) => {
+    timeoutId = window.setTimeout(() => resolve({ status: 'timeout' }), ORDER_REQUEST_RESPONSE_TIMEOUT_MS);
+  });
+  const result = await Promise.race([request, timeout]);
+  if (result.status !== 'timeout' && timeoutId !== null) window.clearTimeout(timeoutId);
+
+  if (result.status === 'timeout') {
+    console.warn('Order request response timed out; the background request is still running.');
+    return { ok: true, mode: 'remote', reason: 'response-timeout' };
   }
+
+  if (result.status === 'failed') {
+    console.error('Order request submission failed.', result.error);
+    return { ok: true, mode: 'manual-email', reason: 'network-error' };
+  }
+
+  return { ok: true, mode: 'remote' };
 }
 
 form?.addEventListener('submit', async (event) => {
@@ -1020,11 +1048,21 @@ form?.addEventListener('submit', async (event) => {
     if (promo.isValid && promo.firstOrderOnly) markFirstOrderCodeRedeemed(email, promo.code);
     renderManualOrderFallback(payload);
     openOrderRequestMailto(payload);
-    setFeedback('Email draft opened if your desktop has a mail app. If nothing opened, use the copy button below and email the order request to orders@jonezielabs.com.', 'info');
+    setFeedback(
+      submission.reason === 'network-error'
+        ? 'Automatic submission was blocked. Use the email draft or copy the order request below and send it to orders@jonezielabs.com.'
+        : 'Email draft opened if your desktop has a mail app. If nothing opened, use the copy button below and email the order request to orders@jonezielabs.com.',
+      'info'
+    );
     successCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
 
+  if (submission.reason === 'response-timeout') {
+    window.JONEZIE_ANALYTICS?.event('order_request_response_timeout', {
+      order_id: String(payload.orderId || '').slice(0, 80)
+    });
+  }
   window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
   if (promo.isValid && promo.firstOrderOnly) markFirstOrderCodeRedeemed(email, promo.code);
   submittedOrderSnapshot = buildSubmittedOrderSnapshot(payload);
@@ -1032,7 +1070,7 @@ form?.addEventListener('submit', async (event) => {
     successCard.hidden = false;
     successCard.innerHTML = `
       <h2>Reminder</h2>
-      <p>Please check your inbox and spam folder for your Stripe invoice. No payment was collected at checkout.</p>
+      <p>Please check your inbox and spam folder for your secure invoice link. No payment was collected at checkout.</p>
     `;
   }
   if (form) form.hidden = true;
