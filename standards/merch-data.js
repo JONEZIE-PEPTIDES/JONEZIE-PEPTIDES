@@ -56,7 +56,7 @@ window.JONEZIE_STANDARDS_MERCH = {
     {
       slug: 'research-vial-kit-case',
       sku: 'JL-STANDARDS-VIAL-CASE-001',
-      name: 'Research Vial Kit Case',
+      name: 'Research Kit',
       option: 'One Case',
       price: 57.18,
       saleRate: 0.30,
