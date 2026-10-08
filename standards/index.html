@@ -31,7 +31,7 @@
   <link rel="icon" type="image/png" href="../favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=20260728a" />
 <script src="landing-config.js?v=20260920entryoff1"></script>
-<script src="merch-data.js?v=20261008promo25preview1"></script>
+<script src="merch-data.js?v=20261008vialcase1"></script>
   <script>
     const standardsRedirect = window.JONEZIE_STANDARDS_MERCH?.redirect || {};
     const hideMainSiteEntrances = window.JONEZIE_RESEARCH_STANDARDS_CONFIG?.showMainSiteEntrances === false ||
@@ -154,6 +154,27 @@
       "url": "https://www.jonezielabs.com/standards/",
       "priceCurrency": "USD",
       "price": "51993.75",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Research Vial Kit Case",
+    "image": "https://www.jonezielabs.com/standards/research-vial-kit-case.png",
+    "description": "Compact case with molded compartments for organizing research vials and small laboratory supplies.",
+    "sku": "JL-STANDARDS-VIAL-CASE-001",
+    "brand": {
+      "@type": "Brand",
+      "name": "Jonezie Labs"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.jonezielabs.com/standards/",
+      "priceCurrency": "USD",
+      "price": "57.18",
       "itemCondition": "https://schema.org/NewCondition"
     }
   }
@@ -770,6 +791,10 @@
       height: auto;
     }
 
+    .standards-merch-media .standards-vial-case-image {
+      max-width: 320px;
+    }
+
     .standards-merch-copy {
       padding: clamp(20px, 3vw, 30px);
     }
@@ -1342,6 +1367,40 @@
             </form>
           </article>
         </div>
+
+        <div class="standards-merch-panel" data-merch-product>
+          <figure class="standards-merch-media">
+            <img class="standards-vial-case-image" src="research-vial-kit-case.png?v=20261008a" alt="Open research vial kit case with molded compartments" width="259" height="194" />
+          </figure>
+          <article class="standards-merch-copy">
+            <p class="standards-kicker">Vial Storage Case</p>
+            <h3>Research Vial Kit Case</h3>
+            <p>Compact case with molded compartments for organizing research vials and small laboratory supplies.</p>
+            <div class="standards-merch-facts" aria-label="Product facts">
+              <div><span>Price</span><strong data-product-price>$57.18</strong></div>
+              <div><span>Option</span><strong>One Case</strong></div>
+              <div><span>Type</span><strong>Vial Storage Case</strong></div>
+            </div>
+
+            <form class="standards-merch-form" data-merch-add-form data-product-slug="research-vial-kit-case">
+              <label for="vial-case-option">Option</label>
+              <select id="vial-case-option" name="option" data-merch-option>
+                <option value="One Case">One Case</option>
+              </select>
+
+              <label for="vial-case-quantity">Quantity</label>
+              <div class="standards-quantity-control">
+                <button type="button" data-qty-minus aria-label="Decrease quantity">-</button>
+                <input id="vial-case-quantity" name="quantity" type="number" min="1" value="1" inputmode="numeric" data-merch-quantity />
+                <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+              </div>
+
+              <button class="standards-button" type="submit">Add To Cart</button>
+              <a class="standards-merch-checkout-link" href="checkout.html">Review merchandise checkout</a>
+              <p class="standards-merch-feedback" data-merch-feedback aria-live="polite"></p>
+            </form>
+          </article>
+        </div>
       </section>
 
       <section id="standards" class="standards-section standards-section-centered standards-shell" aria-labelledby="our-standards">
@@ -1489,7 +1548,7 @@
       </div>
     </footer>
   </div>
-  <script src="merch-store.js?v=20261008promo25preview1"></script>
+  <script src="merch-store.js?v=20261008vialcase1"></script>
 </body>
 </html>
 

@@ -16,22 +16,31 @@
   const all = (selector, scope = document) => [...scope.querySelectorAll(selector)];
   const cents = (value) => Math.round(Number(value || 0) * 100);
   const basePrice = (item) => Number(products.find((product) => product.slug === item.slug)?.price ?? item.unitPrice) || 0;
-  const salePriceCents = (item) => Math.round(cents(basePrice(item)) * (1 - promotionRate));
+  const productPromotionRate = (item) => {
+    const product = products.find((entry) => entry.slug === item.slug);
+    const specialRate = Math.min(1, Math.max(0, Number(product?.saleRate) || 0));
+    return Math.max(promotionRate, specialRate);
+  };
+  const salePriceCents = (item) => Math.round(cents(basePrice(item)) * (1 - productPromotionRate(item)));
 
   function renderPromotion() {
-    if (!promotionRate) return;
-    const percent = Math.round(promotionRate * 100);
+    const specialOffers = products.filter((product) => productPromotionRate(product) > promotionRate);
+    if (!promotionRate && !specialOffers.length) return;
+    const offers = [
+      promotionRate ? `${Math.round(promotionRate * 100)}% off ${specialOffers.length ? 'other Standards Store products' : 'every Standards Store item'}` : '',
+      ...specialOffers.map((product) => `${product.name}: ${Math.round(productPromotionRate(product) * 100)}% off`)
+    ].filter(Boolean).join('. ');
     all('[data-merch-promo-announcement]').forEach((node) => {
       node.hidden = false;
-      node.textContent = `${percent}% off every Standards Store item. Sale prices are applied automatically in your cart.`;
+      node.textContent = `${offers}. Sale prices are applied automatically in your cart.`;
     });
     all('[data-merch-promo-message]').forEach((node) => {
       node.hidden = false;
-      node.textContent = `${percent}% off every product. Regular and sale prices are shown below.`;
+      node.textContent = `${offers}. Regular and sale prices are shown below.`;
     });
     all('[data-merch-promo-checkout]').forEach((node) => {
       node.hidden = false;
-      node.textContent = `${percent}% off all Standards Store items is applied automatically.`;
+      node.textContent = `${offers}. Discounts are applied automatically.`;
     });
   }
 
@@ -125,14 +134,14 @@
       const priceNode = by('[data-product-price]', form.closest('[data-merch-product]') || document);
       if (priceNode) {
         priceNode.textContent = money(salePriceCents(product) / 100);
-        if (promotionRate) {
+        if (productPromotionRate(product)) {
           const regularPrice = document.createElement('del');
           regularPrice.className = 'standards-price-regular';
           regularPrice.textContent = money(product.price);
           priceNode.before(regularPrice);
           const saleLabel = document.createElement('small');
           saleLabel.className = 'standards-sale-label';
-          saleLabel.textContent = `${Math.round(promotionRate * 100)}% off`;
+          saleLabel.textContent = `${Math.round(productPromotionRate(product) * 100)}% off`;
           priceNode.after(saleLabel);
         }
       }
@@ -219,9 +228,9 @@
     });
     const discountLine = by('[data-summary-discount-line]');
     if (discountLine) {
-      discountLine.hidden = !promotionRate || !totals.items;
+      discountLine.hidden = !totals.discount;
       const label = by('[data-summary-discount-label]', discountLine);
-      if (label) label.textContent = `Standards Store ${Math.round(promotionRate * 100)}% Off`;
+      if (label) label.textContent = 'Standards Store savings';
     }
   }
 
@@ -246,7 +255,7 @@
         <div>
           <h2>${item.name}</h2>
           <p>${item.option} | ${item.productType}</p>
-          ${promotionRate ? `<del class="checkout-item-regular">${money(basePrice(item))}</del>` : ''}
+          ${productPromotionRate(item) ? `<del class="checkout-item-regular">${money(basePrice(item))}</del>` : ''}
           <span>${money(salePriceCents(item) / 100)} each</span>
           <span>Qty ${item.quantity}</span>
           <strong>${money(salePriceCents(item) * Number(item.quantity) / 100)}</strong>
@@ -304,6 +313,7 @@
         option: item.option,
         quantity: item.quantity,
         regularUnitPrice: basePrice(item),
+        promotionRate: productPromotionRate(item),
         unitPrice: salePriceCents(item) / 100,
         lineTotal: salePriceCents(item) * Number(item.quantity) / 100
       })),

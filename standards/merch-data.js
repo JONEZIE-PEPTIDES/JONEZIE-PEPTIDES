@@ -52,6 +52,17 @@ window.JONEZIE_STANDARDS_MERCH = {
       image: 'drying-rack-stand-lab-glassware-bottles.png?v=20260914a',
       productType: 'Lab Glassware Drying Rack',
       description: 'Drying rack stand for organizing and air-drying laboratory glassware, bottles, cylinders, and beakers.'
+    },
+    {
+      slug: 'research-vial-kit-case',
+      sku: 'JL-STANDARDS-VIAL-CASE-001',
+      name: 'Research Vial Kit Case',
+      option: 'One Case',
+      price: 57.18,
+      saleRate: 0.30,
+      image: 'research-vial-kit-case.png?v=20261008a',
+      productType: 'Vial Storage Case',
+      description: 'Compact case with molded compartments for organizing research vials and small laboratory supplies.'
     }
   ],
   shippingOptions: [
