@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="../favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=20260728a" />
-  <script src="merch-data.js?v=20261008redirectoff1"></script>
+  <script src="merch-data.js?v=20261008promo25preview1"></script>
   <script>
     const standardsRedirect = window.JONEZIE_STANDARDS_MERCH?.redirect || {};
 
@@ -26,7 +26,7 @@
       }, Number(standardsRedirect.delayMs) || 0);
     }
   </script>
-  <link rel="stylesheet" href="storefront.css?v=20260914staging1" />
+  <link rel="stylesheet" href="storefront.css?v=20261008promo25preview1" />
 </head>
 <body>
   <div class="store-page checkout-page" data-standards-checkout>
@@ -50,6 +50,7 @@
       <section class="checkout-main">
         <p class="store-kicker">Merchandise Checkout</p>
         <h1>Review your Standards cart.</h1>
+        <p class="checkout-promo-message" data-merch-promo-checkout hidden></p>
         <div data-merch-checkout-items></div>
 
         <form class="checkout-form" data-merch-checkout-form>
@@ -85,6 +86,7 @@
         <p class="store-kicker">Summary</p>
         <div class="summary-line"><span>Items</span><strong data-summary-items>0</strong></div>
         <div class="summary-line"><span>Subtotal</span><strong data-summary-subtotal>$0.00</strong></div>
+        <div class="summary-line promotion" data-summary-discount-line hidden><span data-summary-discount-label>Standards Store promotion</span><strong data-summary-discount>-$0.00</strong></div>
         <div class="summary-line"><span>Shipping</span><strong data-summary-shipping>$0.00</strong></div>
         <div class="summary-line"><span>Tax</span><strong data-summary-tax>Calculated on invoice</strong></div>
         <div class="summary-line total"><span>Estimated Due Before Tax</span><strong data-summary-total>$0.00</strong></div>
@@ -100,6 +102,6 @@
     </footer>
   </div>
 
-  <script src="merch-store.js?v=20260914staging2"></script>
+  <script src="merch-store.js?v=20261008promo25preview1"></script>
 </body>
 </html>

@@ -31,7 +31,7 @@
   <link rel="icon" type="image/png" href="../favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=20260728a" />
 <script src="landing-config.js?v=20260920entryoff1"></script>
-<script src="merch-data.js?v=20261008redirectoff1"></script>
+<script src="merch-data.js?v=20261008promo25preview1"></script>
   <script>
     const standardsRedirect = window.JONEZIE_STANDARDS_MERCH?.redirect || {};
     const hideMainSiteEntrances = window.JONEZIE_RESEARCH_STANDARDS_CONFIG?.showMainSiteEntrances === false ||
@@ -255,6 +255,24 @@
     .standards-shell {
       width: min(100% - 32px, 1180px);
       margin: 0 auto;
+    }
+
+    .standards-promo-bar {
+      padding: 12px 16px;
+      background: var(--ad-ink);
+      color: #fff;
+      font-size: 0.88rem;
+      font-weight: 800;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .standards-store-promo {
+      margin: 12px 0 0;
+      color: var(--ad-teal-dark);
+      font-size: 0.9rem;
+      font-weight: 800;
+      text-align: center;
     }
 
     .standards-header-wrap {
@@ -799,6 +817,26 @@
       overflow-wrap: anywhere;
     }
 
+    .standards-price-regular {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--ad-muted);
+      font-size: 0.78rem;
+    }
+
+    .standards-merch-facts strong[data-product-price] {
+      font-size: 1.1rem;
+    }
+
+    .standards-sale-label {
+      display: block;
+      margin-top: 4px;
+      color: var(--ad-pink);
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
     .standards-merch-form {
       display: grid;
       gap: 12px;
@@ -1092,6 +1130,8 @@
       </header>
     </div>
 
+    <aside class="standards-promo-bar" aria-label="Standards Store promotion" data-merch-promo-announcement hidden></aside>
+
     <main class="standards-main">
       <section class="standards-hero standards-shell">
         <div class="standards-hero-copy">
@@ -1166,6 +1206,7 @@
       <section class="standards-section standards-section-centered standards-shell standards-merch-section" id="merchandise" aria-labelledby="standards-merch-heading">
         <p class="standards-kicker">Standards Merchandise</p>
         <h2 id="standards-merch-heading">Standards Store</h2>
+        <p class="standards-store-promo" data-merch-promo-message hidden></p>
         <div class="standards-merch-panel" data-merch-product>
           <figure class="standards-merch-media">
             <img src="../jonezie-labs-hat.png?v=20260410a" alt="Jonezie Labs Signature Hat" width="800" height="800" />
@@ -1448,7 +1489,7 @@
       </div>
     </footer>
   </div>
-  <script src="merch-store.js?v=20260914staging2"></script>
+  <script src="merch-store.js?v=20261008promo25preview1"></script>
 </body>
 </html>
 

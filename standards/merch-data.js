@@ -8,6 +8,10 @@ window.JONEZIE_STANDARDS_MERCH = {
   },
   cartKey: 'jonezie_standards_merch_cart',
   orderKey: 'jonezie_standards_merch_last_order',
+  promotion: {
+    enabled: true,
+    rate: 0.25
+  },
   products: [
     {
       slug: 'jonezie-labs-signature-hat',

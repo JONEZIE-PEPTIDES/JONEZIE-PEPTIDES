@@ -4,6 +4,9 @@
   const cartKey = config.cartKey || 'jonezie_standards_merch_cart';
   const orderKey = config.orderKey || 'jonezie_standards_merch_last_order';
   const shippingOptions = config.shippingOptions || [];
+  const promotionRate = config.promotion?.enabled === true
+    ? Math.min(1, Math.max(0, Number(config.promotion.rate) || 0))
+    : 0;
 
   const money = (value) => Number(value || 0).toLocaleString('en-US', {
     style: 'currency',
@@ -11,6 +14,42 @@
   });
   const by = (selector, scope = document) => scope.querySelector(selector);
   const all = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+  const cents = (value) => Math.round(Number(value || 0) * 100);
+  const basePrice = (item) => Number(products.find((product) => product.slug === item.slug)?.price ?? item.unitPrice) || 0;
+  const salePriceCents = (item) => Math.round(cents(basePrice(item)) * (1 - promotionRate));
+
+  function renderPromotion() {
+    if (!promotionRate) return;
+    const percent = Math.round(promotionRate * 100);
+    all('[data-merch-promo-announcement]').forEach((node) => {
+      node.hidden = false;
+      node.textContent = `${percent}% off every Standards Store item. Sale prices are applied automatically in your cart.`;
+    });
+    all('[data-merch-promo-message]').forEach((node) => {
+      node.hidden = false;
+      node.textContent = `${percent}% off every product. Regular and sale prices are shown below.`;
+    });
+    all('[data-merch-promo-checkout]').forEach((node) => {
+      node.hidden = false;
+      node.textContent = `${percent}% off all Standards Store items is applied automatically.`;
+    });
+  }
+
+  function updateStructuredPrices() {
+    all('script[type="application/ld+json"]').forEach((script) => {
+      let schema;
+      try {
+        schema = JSON.parse(script.textContent);
+      } catch {
+        return;
+      }
+      if (schema['@type'] !== 'Product' || !schema.offers) return;
+      const product = products.find((item) => item.sku === schema.sku);
+      if (!product) return;
+      schema.offers.price = (salePriceCents(product) / 100).toFixed(2);
+      script.textContent = JSON.stringify(schema);
+    });
+  }
 
   function readCart() {
     try {
@@ -84,7 +123,19 @@
       const optionInput = by('[data-merch-option]', form);
       const feedback = by('[data-merch-feedback]', form);
       const priceNode = by('[data-product-price]', form.closest('[data-merch-product]') || document);
-      if (priceNode) priceNode.textContent = money(product.price);
+      if (priceNode) {
+        priceNode.textContent = money(salePriceCents(product) / 100);
+        if (promotionRate) {
+          const regularPrice = document.createElement('del');
+          regularPrice.className = 'standards-price-regular';
+          regularPrice.textContent = money(product.price);
+          priceNode.before(regularPrice);
+          const saleLabel = document.createElement('small');
+          saleLabel.className = 'standards-sale-label';
+          saleLabel.textContent = `${Math.round(promotionRate * 100)}% off`;
+          priceNode.after(saleLabel);
+        }
+      }
 
       by('[data-qty-minus]', form)?.addEventListener('click', () => {
         const current = clampQuantity(qtyInput);
@@ -137,13 +188,16 @@
 
   function calculateTotals(cart = readCart(), shipping = getSelectedShipping()) {
     const items = cartQuantity(cart);
-    const subtotal = cart.reduce((sum, item) => sum + (Number(item.unitPrice) * Number(item.quantity)), 0);
-    const shippingCost = cart.length && shipping ? Number(shipping.price || 0) : 0;
+    const subtotalCents = cart.reduce((sum, item) => sum + cents(basePrice(item)) * Number(item.quantity), 0);
+    const saleSubtotalCents = cart.reduce((sum, item) => sum + salePriceCents(item) * Number(item.quantity), 0);
+    const shippingCents = cart.length && shipping ? cents(shipping.price) : 0;
     return {
       items,
-      subtotal,
-      shipping: shippingCost,
-      total: subtotal + shippingCost
+      subtotal: subtotalCents / 100,
+      discount: (subtotalCents - saleSubtotalCents) / 100,
+      shipping: shippingCents / 100,
+      total: (saleSubtotalCents + shippingCents) / 100,
+      promotionRate
     };
   }
 
@@ -154,6 +208,7 @@
     const map = {
       '[data-summary-items]': String(totals.items),
       '[data-summary-subtotal]': money(totals.subtotal),
+      '[data-summary-discount]': `- ${money(totals.discount)}`,
       '[data-summary-shipping]': money(totals.shipping),
       '[data-summary-total]': money(totals.total),
       '[data-summary-tax]': config.tax?.label || 'Calculated on invoice'
@@ -162,6 +217,12 @@
       const node = by(selector);
       if (node) node.textContent = value;
     });
+    const discountLine = by('[data-summary-discount-line]');
+    if (discountLine) {
+      discountLine.hidden = !promotionRate || !totals.items;
+      const label = by('[data-summary-discount-label]', discountLine);
+      if (label) label.textContent = `Standards Store ${Math.round(promotionRate * 100)}% Off`;
+    }
   }
 
   function renderCheckoutItems() {
@@ -185,9 +246,10 @@
         <div>
           <h2>${item.name}</h2>
           <p>${item.option} | ${item.productType}</p>
-          <span>${money(item.unitPrice)} each</span>
+          ${promotionRate ? `<del class="checkout-item-regular">${money(basePrice(item))}</del>` : ''}
+          <span>${money(salePriceCents(item) / 100)} each</span>
           <span>Qty ${item.quantity}</span>
-          <strong>${money(item.unitPrice * item.quantity)}</strong>
+          <strong>${money(salePriceCents(item) * Number(item.quantity) / 100)}</strong>
         </div>
         <button type="button" data-remove-merch="${index}">Remove</button>
       </article>
@@ -241,8 +303,9 @@
         name: item.name,
         option: item.option,
         quantity: item.quantity,
-        unitPrice: item.unitPrice,
-        lineTotal: item.unitPrice * item.quantity
+        regularUnitPrice: basePrice(item),
+        unitPrice: salePriceCents(item) / 100,
+        lineTotal: salePriceCents(item) * Number(item.quantity) / 100
       })),
       pageUrl: location.href
     };
@@ -262,6 +325,7 @@
       <ul>
         ${payload.items.map((item) => `<li>${item.name} | ${item.option} | Qty ${item.quantity} | ${money(item.lineTotal)}</li>`).join('')}
       </ul>
+      ${payload.totals.discount ? `<p>Standards Store promotion saved ${money(payload.totals.discount)}.</p>` : ''}
       <p>Shipping: ${payload.shippingMethod?.label || 'Not selected'} | ${payload.shippingMethod?.window || ''} | ${money(payload.totals.shipping)}</p>
       <p>Estimated due before tax: ${money(payload.totals.total)}. Tax is ${payload.taxBehavior.toLowerCase()}.</p>
       <p>Payment flow: ${payload.paymentFlow}.</p>
@@ -298,6 +362,8 @@
     });
   }
 
+  renderPromotion();
+  updateStructuredPrices();
   updateCartCount();
   initProductPage();
   initCheckoutPage();

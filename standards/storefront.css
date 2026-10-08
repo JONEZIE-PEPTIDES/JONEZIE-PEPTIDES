@@ -396,6 +396,13 @@ textarea {
   margin-top: 24px;
 }
 
+.checkout-promo-message {
+  margin: 14px 0 0;
+  color: #087989;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
 .checkout-form h2 {
   margin-top: 10px;
   font-size: 1.35rem;
@@ -431,6 +438,13 @@ textarea {
   margin-top: 6px;
 }
 
+.checkout-item-regular {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
 .checkout-item button {
   min-height: 40px;
   padding: 0 12px;
@@ -463,6 +477,14 @@ textarea {
 
 .summary-line.total {
   border-color: rgba(242, 56, 148, 0.24);
+}
+
+.summary-line.promotion {
+  color: #087989;
+}
+
+.summary-line[hidden] {
+  display: none;
 }
 
 .summary-note {
