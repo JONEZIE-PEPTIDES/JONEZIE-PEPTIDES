@@ -32,7 +32,7 @@
     ].filter(Boolean).join('. ');
     all('[data-merch-promo-announcement]').forEach((node) => {
       node.hidden = false;
-      node.textContent = `${offers}. Sale prices are applied automatically in your cart.`;
+      node.textContent = `${offers}. Sale prices are applied automatically in your cart. Ships same day.`;
     });
     all('[data-merch-promo-message]').forEach((node) => {
       node.hidden = false;
