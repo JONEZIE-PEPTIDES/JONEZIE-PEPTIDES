@@ -28,7 +28,7 @@
     if (!promotionRate && !specialOffers.length) return;
     const offers = [
       promotionRate ? `${Math.round(promotionRate * 100)}% off ${specialOffers.length ? 'other Standards Store products' : 'every Standards Store item'}` : '',
-      ...specialOffers.map((product) => `${product.name}: ${Math.round(productPromotionRate(product) * 100)}% off`)
+      ...specialOffers.map((product) => `${product.promotionLabel || product.name}: ${Math.round(productPromotionRate(product) * 100)}% off`)
     ].filter(Boolean).join('. ');
     all('[data-merch-promo-announcement]').forEach((node) => {
       node.hidden = false;
@@ -63,7 +63,10 @@
   function readCart() {
     try {
       const parsed = JSON.parse(localStorage.getItem(cartKey) || '[]');
-      return Array.isArray(parsed) ? parsed : [];
+      return Array.isArray(parsed) ? parsed.map((item) => {
+        const product = products.find((entry) => entry.slug === item.slug);
+        return product ? { ...item, name: product.name } : item;
+      }) : [];
     } catch {
       return [];
     }
