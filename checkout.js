@@ -43,7 +43,8 @@ const PROMO_CODES = {
   },
   FOUNDER50: {
     rate: 0.50,
-    freeShipping: false
+    freeShipping: false,
+    active: false
   },
   LENNY04: {
     rate: 0.40,
@@ -260,6 +261,7 @@ function formatMoney(value) {
 }
 
 function isPromoCurrentlyActive(promo) {
+  if (promo?.active === false) return false;
   if (!promo?.startsAt || !promo?.endsAt) return true;
   const startsAt = Date.parse(promo.startsAt);
   const endsAt = Date.parse(promo.endsAt);
