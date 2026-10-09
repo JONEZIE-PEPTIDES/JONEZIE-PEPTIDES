@@ -41,6 +41,25 @@ const PROMO_CODES = {
     rate: 0.40,
     freeShipping: false
   },
+  MRGOGO: {
+    rate: 0.40,
+    freeShipping: false,
+    enabledAt: '2026-10-09T20:54:00Z',
+    durationHours: 24,
+    eligiblePackKeys: ['singleVialPrice'],
+    eligibleVariants: {
+      retatrutide: ['10mg'],
+      tirzepatide: ['15mg'],
+      semaglutide: ['10mg'],
+      tesamorelin: ['10mg'],
+      'mots-c': ['10mg'],
+      'ghk-cu': ['50mg'],
+      'bpc-5mg-plus-tb-5mg': ['10mg'],
+      'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg': ['80mg'],
+      kpv: ['10mg'],
+      hcg: ['5000iu']
+    }
+  },
   FOUNDER50: {
     rate: 0.50,
     freeShipping: false,
@@ -265,6 +284,12 @@ function formatMoney(value) {
 
 function isPromoCurrentlyActive(promo) {
   if (promo?.active === false) return false;
+  if (promo?.durationHours) {
+    const enabledAt = Date.parse(promo.enabledAt);
+    if (!Number.isFinite(enabledAt)) return false;
+    const now = Date.now();
+    return now >= enabledAt && now < enabledAt + promo.durationHours * 60 * 60 * 1000;
+  }
   if (!promo?.startsAt || !promo?.endsAt) return true;
   const startsAt = Date.parse(promo.startsAt);
   const endsAt = Date.parse(promo.endsAt);
@@ -401,11 +426,44 @@ function getPromoDetails() {
     rate: isValid ? getPromoRate(promo) : 0,
     freeShipping: isValid ? Boolean(promo?.freeShipping) : false,
     firstOrderOnly: isValid ? Boolean(promo?.firstOrderOnly) : false,
+    eligiblePackKeys: isValid ? promo?.eligiblePackKeys || null : null,
+    eligibleVariants: isValid ? promo?.eligibleVariants || null : null,
     isValid
   };
 }
 
-function renderPromoStatus(promo) {
+function isPromoEligibleItem(item, promo) {
+  if (!promo?.eligibleVariants) return true;
+  const slug = String(item.slug || '').toLowerCase();
+  const strength = String(item.mgOption || '').toLowerCase();
+  if (!promo.eligibleVariants[slug]?.includes(strength)) return false;
+
+  const packKey = item.packKey || (String(item.packLabel || '').toLowerCase() === 'single vial' ? 'singleVialPrice' : '');
+  if (!promo.eligiblePackKeys?.includes(packKey)) return false;
+
+  const product = window.JONEZIE_CATALOG?.products?.find((entry) => entry.slug === slug);
+  const option = product?.options?.find((entry) => String(entry.mgOption || '').toLowerCase() === strength);
+  if (!option || String(option.inventoryStatus || '').toLowerCase() === 'sold_out') return false;
+  const catalogPriceCents = Math.round(Number(String(option[packKey] || '').replace(/[$,]/g, '')) * 100);
+  const cartPriceCents = Math.round(Number(item.unitPrice) * 100);
+  return catalogPriceCents > 0 && cartPriceCents === catalogPriceCents;
+}
+
+function getPromoDiscount(cart, promo) {
+  if (!promo?.isValid) return 0;
+  if (!promo.eligibleVariants) {
+    return cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0) * promo.rate;
+  }
+  const discountCents = cart.reduce((sum, item) => {
+    if (!isPromoEligibleItem(item, promo)) return sum;
+    const unitCents = Math.round(Number(item.unitPrice) * 100);
+    const saleCents = Math.round(unitCents * (1 - promo.rate));
+    return sum + (unitCents - saleCents) * item.quantity;
+  }, 0);
+  return discountCents / 100;
+}
+
+function renderPromoStatus(promo, cart = []) {
   if (!activePromoCopy) return;
   if (!promo.code) {
     const activePromo = window.JONEZIE_PROMO?.getActivePromo?.();
@@ -416,7 +474,11 @@ function renderPromoStatus(promo) {
     return;
   }
   if (promo.isValid) {
-    activePromoCopy.innerHTML = `Active code: <strong>${escapeHtml(promo.code)}</strong> (${Math.round(promo.rate * 100)}% off)`;
+    const scope = promo.eligibleVariants ? ' on selected single-vial products' : '';
+    activePromoCopy.innerHTML = `Active code: <strong>${escapeHtml(promo.code)}</strong> (${Math.round(promo.rate * 100)}% off${scope})`;
+    if (promo.eligibleVariants && cart.length && !getPromoDiscount(cart, promo)) {
+      activePromoCopy.innerHTML += '. No eligible items in this cart.';
+    }
     activePromoCopy.dataset.state = 'valid';
     return;
   }
@@ -481,12 +543,13 @@ function trackBeginCheckoutOnce(cart, promo, shippingOption) {
   });
 }
 
-function trackPromoIfValid(promo, subtotal) {
-  if (!promo?.isValid || !promo.code || promo.code === lastTrackedPromoCode) return;
+function trackPromoIfValid(promo, cart) {
+  const discountValue = getPromoDiscount(cart, promo);
+  if (!promo?.isValid || !promo.code || !discountValue || promo.code === lastTrackedPromoCode) return;
   lastTrackedPromoCode = promo.code;
   window.JONEZIE_ANALYTICS?.applyPromoCode(promo.code, {
     discount_rate: promo.rate,
-    discount_value: subtotal * promo.rate
+    discount_value: discountValue
   });
 }
 
@@ -709,10 +772,10 @@ function renderCart() {
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
   const promo = getPromoDetails();
-  renderPromoStatus(promo);
+  renderPromoStatus(promo, cart);
   const shippingOption = renderShippingOptions(cart, promo);
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
-  const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
+  const discountAmount = getPromoDiscount(cart, promo);
   const total = subtotal - discountAmount + shippingCost;
   trackBeginCheckoutOnce(cart, promo, shippingOption);
 
@@ -798,7 +861,7 @@ function buildOrderRequestPayload({
       shippingZip: String(zipCode || '').trim(),
       shippingAddress
     },
-    promoCode: promo.isValid ? promo.code : '',
+    promoCode: promo.isValid && (!promo.eligibleVariants || discountAmount > 0) ? promo.code : '',
     notes: String(notes || '').trim(),
     shippingMethod: shippingOption ? {
       id: shippingOption.id,
@@ -813,7 +876,7 @@ function buildOrderRequestPayload({
       subtotal,
       subtotalDisplay: formatMoney(subtotal),
       discount: discountAmount,
-      discountDisplay: promo.isValid ? `- ${formatMoney(discountAmount)}` : '$0.00',
+      discountDisplay: discountAmount > 0 ? `- ${formatMoney(discountAmount)}` : '$0.00',
       shipping: shippingCost,
       shippingDisplay: shippingOption ? (promo.freeShipping ? 'FREE' : formatMoney(shippingCost)) : '$0.00',
       estimatedTotal: total,
@@ -1015,7 +1078,7 @@ form?.addEventListener('submit', async (event) => {
   const shippingOption = getSelectedShipping(cart);
   const shippingCost = getEffectiveShippingCost(shippingOption, promo);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
-  const discountAmount = promo.isValid ? subtotal * promo.rate : 0;
+  const discountAmount = getPromoDiscount(cart, promo);
   const total = subtotal - discountAmount + shippingCost;
 
   const payload = buildOrderRequestPayload({
@@ -1099,8 +1162,7 @@ clearCartButton?.addEventListener('click', () => {
 promoCodeInput?.addEventListener('input', () => {
   if (submittedOrderSnapshot) return;
   const cart = getCart();
-  const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
-  trackPromoIfValid(getPromoDetails(), subtotal);
+  trackPromoIfValid(getPromoDetails(), cart);
   renderCart();
 });
 
