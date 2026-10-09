@@ -102,10 +102,15 @@ function getImageSrc(path) {
 function renderStrengthChips(options) {
   const limit = 4;
   const strengthList = (options || [])
-    .map((option) => escapeHtml(option.mgOption))
+    .map((option) => {
+      const strength = escapeHtml(option.mgOption);
+      if (!strength) return '';
+      const isBackorder = String(option.inventoryStatus || '').toLowerCase() === 'backorder';
+      return `<span${isBackorder ? ' class="backorder-chip"' : ''}>${strength}${isBackorder ? ' (Backorder)' : ''}</span>`;
+    })
     .filter(Boolean);
 
-  const visible = strengthList.slice(0, limit).map((strength) => `<span>${strength}</span>`);
+  const visible = strengthList.slice(0, limit);
   if (strengthList.length > limit) {
     visible.push(`<span class="more-chip">+${strengthList.length - limit}</span>`);
   }

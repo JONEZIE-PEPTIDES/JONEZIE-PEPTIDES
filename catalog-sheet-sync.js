@@ -128,6 +128,44 @@
   const BACKORDER_NOTES = {};
   const PRODUCT_PRICE_MULTIPLIER = 1.17;
 
+  // Amino Club regular single-vial prices checked 2026-10-09. Increases are halved.
+  // Only include an exact compound/blend and strength with a verified regular price.
+  const AMINO_CLUB_REGULAR_PRICES = {
+    'MT-2 (Melanotan 2 Acetate)|10mg': 29.95,
+    'PT-141|10mg': 29.99,
+    'Selank|10mg': 29.95,
+    'Epithalon|10mg': 29.99,
+    'BPC157|10mg': 39.99,
+    'WOLVERINE (BPC 5mg + TB 5mg)|10mg': 79.99,
+    'WOLVERINE (BPC 10mg + TB 10mg)|20mg': 149.99,
+    'Semax|10mg': 29.95,
+    'AOD|5mg': 49.99,
+    'Tesamorelin|10mg': 69.99,
+    'GHK-CU|50mg': 29.99,
+    'KissPeptin-10|10mg': 49.99,
+    'MOTS-c|10mg': 39.99,
+    'KPV|10mg': 39.99,
+    'Retatrutide|10mg': 69.99,
+    'Retatrutide|20mg': 134.99,
+    'Glutathione|1500mg': 59.99,
+    'Cagrilintide|10mg': 69.99,
+    'Ara-290|10mg': 49.99,
+    'SNAP-8|10mg': 29.99,
+    'Pinealon|10mg': 49.99,
+    'KLOW (GHK-CU50+TB10+BC10+KPV10)|80mg': 99.99,
+    'TB500|10mg': 39.99,
+    'Ipamorelin|10mg': 49.99,
+    'NAD|500mg': 69.99,
+    'GLOW STACK (BPC 157 10mg+GHK-CU 50mg+TB500 10mg)|70mg': 89.99,
+    'IGF-1LR3|1mg': 69.99,
+    'VIP|10mg': 49.99,
+    'DSIP|5mg': 29.99,
+    'Thymosin Alpha-1|10mg': 39.99
+  };
+  const SINGLE_PRICE_OVERRIDES = {
+    'Retatrutide|20mg': 107
+  };
+
   const NAME_OVERRIDES = {
     bpc157: 'BPC-157',
     'mt-1': 'MT-1 (Melanotan 1)',
@@ -326,6 +364,15 @@
     const displayStrength = getDisplayStrength(strength);
     const specification = String(strength).includes('vials') ? String(strength) : `${strength}*10vials`;
     const image = IMAGE_OVERRIDES_BY_SLUG[slug] || 'product-placeholder.svg';
+    const priceKey = `${rawName}|${strength}`;
+    const competitorRegularPrice = AMINO_CLUB_REGULAR_PRICES[priceKey];
+    const currentSingleCents = Math.round(Number(applyProductPriceMultiplier(single).toFixed(2)) * 100);
+    const targetSingleCents = competitorRegularPrice == null ? null : Math.round((competitorRegularPrice - 2) * 100);
+    const matchedSinglePrice = SINGLE_PRICE_OVERRIDES[priceKey] ?? (targetSingleCents == null ? null : Math.round(
+      targetSingleCents > currentSingleCents
+        ? (currentSingleCents + targetSingleCents) / 2
+        : targetSingleCents
+    ) / 100);
 
     if (!byProduct.has(slug)) {
       byProduct.set(slug, {
@@ -348,9 +395,9 @@
       code: optionCode,
       specification,
       mgOption: displayStrength,
-      singleVialPrice: formatMoney(applyProductPriceMultiplier(single)),
-      eightVialPrice: formatMoney(applyProductPriceMultiplier(eightPack)),
-      tenVialPrice: formatMoney(applyProductPriceMultiplier(tenPack))
+      singleVialPrice: formatMoney(matchedSinglePrice ?? applyProductPriceMultiplier(single)),
+      eightVialPrice: formatMoney(matchedSinglePrice === null ? applyProductPriceMultiplier(eightPack) : matchedSinglePrice * eightPack / single),
+      tenVialPrice: formatMoney(matchedSinglePrice === null ? applyProductPriceMultiplier(tenPack) : matchedSinglePrice * tenPack / single)
     });
   });
 

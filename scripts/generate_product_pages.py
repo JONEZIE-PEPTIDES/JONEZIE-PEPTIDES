@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = ROOT / "products"
 TEMPLATE_PATH = ROOT / "product.html"
 CATALOG_SYNC_PATH = ROOT / "catalog-sheet-sync.js"
+CATALOG_ADMIN_CONFIG_PATH = ROOT / "catalog-admin-config.js"
+CATALOG_ADMIN_PATH = ROOT / "catalog-admin.js"
 PRODUCT_CONTENT_PATH = ROOT / "product-content.js"
 SITE_LIBRARY_PATH = ROOT / "site-library.js"
 FALLBACK_IMAGE = "product-placeholder.svg"
@@ -104,7 +106,7 @@ def build_context() -> quickjs.Context:
         var fetch = function(){ return Promise.resolve({}); };
         """
     )
-    for path in (CATALOG_SYNC_PATH, PRODUCT_CONTENT_PATH, SITE_LIBRARY_PATH):
+    for path in (CATALOG_SYNC_PATH, CATALOG_ADMIN_CONFIG_PATH, CATALOG_ADMIN_PATH, PRODUCT_CONTENT_PATH, SITE_LIBRARY_PATH):
         ctx.eval(path.read_text())
     return ctx
 
@@ -146,6 +148,12 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
         "tenVialPrice": "10-Vial Pack",
     }[selected_pack_key]
     selected_price = selected_option.get(selected_pack_key) or "Pending"
+    selected_code = selected_option.get("code") or "Option"
+    selected_subtitle = (
+        f"{selected_code} is currently on backorder."
+        if selected_option.get("inventoryStatus") == "backorder"
+        else f"{selected_code} is currently listed with {selected_pack_label.lower()} pricing."
+    )
     strengths = ", ".join(profile.get("strengths") or [option.get("mgOption") for option in product.get("options") or [] if option.get("mgOption")])
     research_findings = product_content.get("researchFindings") or []
     comparison_candidates = profile.get("comparisonCandidates") or []
@@ -171,7 +179,7 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
                     "@type": "Offer",
                     "priceCurrency": "USD",
                     "price": normalize_price(selected_price),
-                    "availability": "https://schema.org/InStock",
+                    "availability": "https://schema.org/BackOrder" if selected_option.get("inventoryStatus") == "backorder" else "https://schema.org/InStock",
                     "url": canonical,
                     "seller": {"@type": "Organization", "name": "Jonezie Labs"},
                 },
@@ -275,7 +283,7 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
         r'(<p data-selected-subtitle>).*?(</p>)',
         lambda match: (
             f"{match.group(1)}"
-            f"{escape((selected_option.get('code') or 'Option') + ' is currently listed with ' + selected_pack_label.lower() + ' pricing.')}"
+            f"{escape(selected_subtitle)}"
             f"{match.group(2)}"
         ),
         html,
@@ -311,12 +319,14 @@ def render_option_cards(product: dict, selected_option: dict) -> str:
     cards = []
     for option in product.get("options") or []:
         selected = " is-selected" if option.get("code") == selected_option.get("code") else ""
+        status = option.get("inventoryStatus") or "in_stock"
+        label = {"in_stock": "In Stock", "backorder": "Backorder", "sold_out": "Sold Out"}.get(status, "In Stock")
         cards.append(
             f"""
         <button type="button" class="spec-card spec-card-button{selected}" data-option-code="{escape(option.get('code') or '', quote=True)}">
           <p class="eyebrow">{escape(option.get('code') or '')}</p>
           <h3>{escape(option.get('mgOption') or 'Pending')}</h3>
-          <p class="inventory-pill inventory-in_stock">In Stock</p>
+          <p class="inventory-pill inventory-{escape(status)}">{escape(label)}</p>
           <div class="spec-price-row"><span>Single</span><strong>{escape(option.get('singleVialPrice') or 'Pending')}</strong></div>
           <div class="spec-price-row"><span>8-pack</span><strong>{escape(option.get('eightVialPrice') or 'Pending')}</strong></div>
           <div class="spec-price-row live-row"><span>10-pack</span><strong>{escape(option.get('tenVialPrice') or 'Pending')}</strong></div>

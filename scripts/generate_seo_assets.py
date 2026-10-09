@@ -3,14 +3,18 @@ from __future__ import annotations
 
 import ast
 import itertools
+import json
 import re
 from datetime import date
 from pathlib import Path
 from xml.sax.saxutils import escape
 
+import quickjs
+
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_SYNC_PATH = ROOT / "catalog-sheet-sync.js"
+CATALOG_ADMIN_CONFIG_PATH = ROOT / "catalog-admin-config.js"
 ROBOTS_PATH = ROOT / "robots.txt"
 SITEMAP_PATH = ROOT / "sitemap.xml"
 SITE_ORIGIN = "https://www.jonezielabs.com"
@@ -35,7 +39,8 @@ COMPARISON_THEME_RULES = [
 
 def main() -> None:
     text = CATALOG_SYNC_PATH.read_text()
-    products = build_product_records(text)
+    removed_slugs = get_removed_product_slugs()
+    products = [product for product in build_product_records(text) if product["slug"] not in removed_slugs]
     unique_slugs = [product["slug"] for product in products]
 
     base_urls = [
@@ -52,6 +57,13 @@ def main() -> None:
     lastmod = date.today().isoformat()
     write_robots()
     write_sitemap(base_urls + product_urls + comparison_urls, lastmod)
+
+
+def get_removed_product_slugs() -> set[str]:
+    ctx = quickjs.Context()
+    ctx.eval("var window = {};")
+    ctx.eval(CATALOG_ADMIN_CONFIG_PATH.read_text())
+    return set(json.loads(ctx.eval("JSON.stringify(window.JONEZIE_ADMIN_CONFIG.removeProductSlugs || [])")))
 
 
 def parse_product_rows(text: str) -> list[list[object]]:

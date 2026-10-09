@@ -7,7 +7,6 @@
     'tesamorelin',
     'semax',
     'mt-1',
-    'bpc-10mg-plus-tb-10mg',
     'cerebrolysin',
     'bac-water',
     'b12-10000mcg-10ml',
@@ -32,7 +31,6 @@
     epithalon: 'epithalon-new-hero-product-image.webp',
     'bpc-157': 'bpc-157-new-new-hero-product-image.webp',
     'bpc-5mg-plus-tb-5mg': 'wolverine-new-hero-product-image.webp',
-    'bpc-10mg-plus-tb-10mg': 'wolverine-new-hero-product-image.webp',
     semax: 'semax-new-new-hero-product-image.webp',
     kpv: 'kpv-new-hero-product-image.webp?v=20260716a',
     'ss-31': 'ss-31-new-hero-product-image.webp',
@@ -86,7 +84,6 @@
   };
 
   const DISPLAY_NAME_OVERRIDES = {
-    'bpc-10mg-plus-tb-10mg': 'Wolverine 10mg',
     cerebrolysin: 'Cerebrolysin 60mg',
     retatrutide: 'GLP-3(RT)'
   };

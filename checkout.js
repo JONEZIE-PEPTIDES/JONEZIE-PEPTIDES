@@ -236,7 +236,10 @@ function initCheckoutForm() {
 
 function getCart() {
   try {
-    return JSON.parse(window.localStorage.getItem(CART_KEY) || '[]');
+    const removed = new Set(window.JONEZIE_ADMIN_CONFIG?.removeProductSlugs || []);
+    const removedOptions = new Set(window.JONEZIE_ADMIN_CONFIG?.removeOptionCodes || []);
+    const items = JSON.parse(window.localStorage.getItem(CART_KEY) || '[]');
+    return Array.isArray(items) ? items.filter((item) => !removed.has(item.slug) && !removedOptions.has(item.code)) : [];
   } catch {
     return [];
   }

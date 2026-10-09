@@ -1,6 +1,9 @@
 window.JONEZIE_ADMIN_CONFIG = {
   // Remove by slug (example: ['tesamorelin'])
-  removeProductSlugs: [],
+  removeProductSlugs: ['bpc-10mg-plus-tb-10mg'],
+
+  // Hide individual configurations without removing the product.
+  removeOptionCodes: ['TIR5MG', 'TIR40MG', 'TIR50MG'],
 
   // Add full product objects here in the same shape as catalog-data.js.
   // Optional: include featured: true to also inject into featured cards.
@@ -11,6 +14,11 @@ window.JONEZIE_ADMIN_CONFIG = {
   // internalLeadDays is intentionally not shown in the storefront UI.
   optionInventory: {
     LC210MG: { status: 'backorder', internalLeadDays: '20-23' },
+    S310MG: { status: 'backorder' },
+    S350MG: { status: 'backorder' },
+    RET15MG: { status: 'backorder' },
+    MC40MG: { status: 'backorder' },
+    TES15MG: { status: 'backorder' },
     // RT20: { status: 'backorder', internalLeadDays: '20-23' },
     // CU100: { status: 'in_stock', internalLeadDays: '5-10' }
   },

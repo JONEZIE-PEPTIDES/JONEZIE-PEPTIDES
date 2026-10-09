@@ -10,7 +10,9 @@
   function getCartCount() {
     try {
       const cart = JSON.parse(window.localStorage.getItem(CART_KEY) || '[]');
-      return cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+      const removed = new Set(window.JONEZIE_ADMIN_CONFIG?.removeProductSlugs || []);
+      const removedOptions = new Set(window.JONEZIE_ADMIN_CONFIG?.removeOptionCodes || []);
+      return cart.reduce((sum, item) => sum + (removed.has(item.slug) || removedOptions.has(item.code) ? 0 : Number(item.quantity) || 0), 0);
     } catch {
       return 0;
     }

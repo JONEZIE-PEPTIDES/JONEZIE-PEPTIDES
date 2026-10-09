@@ -15,6 +15,7 @@
   --pink: #ff5fa9;
   --pink-soft: #ff9bc6;
   --ember-fill: linear-gradient(135deg, #8fdfff, #ff79bc);
+  --backorder-fill: linear-gradient(135deg, #9ff3d2 0%, #ff9bc6 100%);
   --ember-brand-fill: linear-gradient(90deg, #9fe8ff 0%, #b8d8ff 24%, #d39ce6 56%, #ff5ba7 100%);
   --shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
   --radius-xl: 30px;
@@ -2145,6 +2146,9 @@ body.lightbox-open {
 .option-chips .more-chip {
   background: linear-gradient(135deg, #9edff9, #e89bc4);
 }
+.option-chips .backorder-chip {
+  background: var(--backorder-fill);
+}
 .spec-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .spec-card { padding: 22px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: linear-gradient(180deg, rgba(15,31,40,0.9), rgba(9,19,25,0.94)); box-shadow: var(--shadow); }
 .spec-card h3 {
@@ -2219,7 +2223,7 @@ body.lightbox-open {
 }
 .inventory-backorder {
   color: #1f1d28;
-  background: linear-gradient(135deg, #ffe49a, #ff9f80);
+  background: var(--backorder-fill);
 }
 .inventory-sold_out {
   color: #f4fbff;
