@@ -35,6 +35,7 @@ assert.equal(enabled.window.CRISP_WEBSITE_ID, websiteId);
 assert.equal(enabled.appended.length, 2);
 assert.equal(enabled.appended[0].id, 'jonezie-chat-launcher-style');
 assert.match(enabled.appended[0].textContent, /#crisp-chatbox \[data-id="chat_opened"\]/);
+assert.match(enabled.appended[0].textContent, /#crisp-chatbox \[data-id="chat_closed"\]/);
 assert.match(enabled.appended[0].textContent, /\[class\*="--visitor"\]\[class\*="--text"\]/);
 assert.match(enabled.appended[0].textContent, /background: #9ff3d2/);
 assert.equal(enabled.appended[1].src, 'https://client.crisp.chat/l.js');

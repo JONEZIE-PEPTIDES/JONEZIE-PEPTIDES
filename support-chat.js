@@ -9,11 +9,13 @@
   const style = document.createElement('style');
   style.id = 'jonezie-chat-launcher-style';
   style.textContent = `
-    #crisp-chatbox [data-id="chat_opened"] {
+    #crisp-chatbox [data-id="chat_opened"],
+    #crisp-chatbox [data-id="chat_closed"] {
       background: linear-gradient(135deg, #8fdfff 0%, #b8d8ff 35%, #d39ce6 65%, #ff5ba7 100%) !important;
       box-shadow: 0 0 0 2px rgba(255, 255, 255, .8), 0 8px 20px rgba(0, 0, 0, .24) !important;
     }
-    #crisp-chatbox [data-id="chat_opened"] > span:first-child {
+    #crisp-chatbox [data-id="chat_opened"] > span:first-child,
+    #crisp-chatbox [data-id="chat_closed"] > span:first-child {
       filter: brightness(0) opacity(.82);
     }
     #crisp-chatbox [class*="--visitor"][class*="--text"] > span > span > span:has(> span > span[dir="auto"]) {
