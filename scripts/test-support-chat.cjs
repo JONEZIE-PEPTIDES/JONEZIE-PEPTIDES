@@ -32,11 +32,15 @@ assert.equal(disabled.window.CRISP_WEBSITE_ID, undefined);
 
 const enabled = run(source);
 assert.equal(enabled.window.CRISP_WEBSITE_ID, websiteId);
-assert.equal(enabled.appended.length, 1);
-assert.equal(enabled.appended[0].src, 'https://client.crisp.chat/l.js');
-assert.equal(enabled.appended[0].async, true);
+assert.equal(enabled.appended.length, 2);
+assert.equal(enabled.appended[0].id, 'jonezie-chat-launcher-style');
+assert.match(enabled.appended[0].textContent, /#crisp-chatbox \[data-id="chat_opened"\]/);
+assert.match(enabled.appended[0].textContent, /\[class\*="--visitor"\]\[class\*="--text"\]/);
+assert.match(enabled.appended[0].textContent, /background: #9ff3d2/);
+assert.equal(enabled.appended[1].src, 'https://client.crisp.chat/l.js');
+assert.equal(enabled.appended[1].async, true);
 vm.runInContext(source, enabled.context);
-assert.equal(enabled.appended.length, 1);
+assert.equal(enabled.appended.length, 2);
 
 for (const file of ['standards/index.html', 'standards/checkout.html']) {
   const html = fs.readFileSync(path.join(root, file), 'utf8');
