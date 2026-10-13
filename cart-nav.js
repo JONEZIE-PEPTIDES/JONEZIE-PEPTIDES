@@ -3,10 +3,6 @@
   const MAX_BADGE_COUNT = 99;
   const CHECKOUT_PATH = 'checkout.html';
 
-  function shouldShowFloatingCart() {
-    return !/\/checkout\.html$/i.test(window.location.pathname);
-  }
-
   function getCartCount() {
     try {
       const cart = JSON.parse(window.localStorage.getItem(CART_KEY) || '[]');
@@ -18,36 +14,36 @@
     }
   }
 
-  function createFloatingCartButton() {
-    if (!shouldShowFloatingCart()) return null;
-    const existing = document.querySelector('[data-floating-cart]');
+  function createMobileCartButton() {
+    const header = document.querySelector('.site-header .menu-toggle');
+    if (!header) return null;
+    const existing = document.querySelector('[data-mobile-cart]');
     if (existing) return existing;
 
     const shortcut = document.createElement('a');
-    shortcut.className = 'floating-cart-shortcut';
+    shortcut.className = 'mobile-cart-shortcut';
     shortcut.href = document.querySelector('[data-cart-link]')?.getAttribute('href') || CHECKOUT_PATH;
-    shortcut.setAttribute('data-floating-cart', '');
+    shortcut.setAttribute('data-mobile-cart', '');
     shortcut.setAttribute('data-cart-link', '');
     shortcut.setAttribute('aria-label', 'Open cart');
-    shortcut.hidden = true;
     shortcut.innerHTML = `
-      <span class="floating-cart-icon" aria-hidden="true">
+      <span class="mobile-cart-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" role="presentation">
           <path d="M3 4h2.2l2.1 9.3c.1.4.4.7.8.7h8.9c.4 0 .8-.3.9-.7l1.6-6.3H7.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
           <circle cx="10" cy="19" r="1.7" fill="currentColor"/>
           <circle cx="17" cy="19" r="1.7" fill="currentColor"/>
         </svg>
       </span>
-      <span class="floating-cart-count" data-cart-count hidden>0</span>
+      <span class="mobile-cart-count" data-cart-count hidden>0</span>
     `;
-    document.body.appendChild(shortcut);
+    header.before(shortcut);
     return shortcut;
   }
 
   function renderCartBadge() {
     const count = getCartCount();
     const displayCount = count > MAX_BADGE_COUNT ? `${MAX_BADGE_COUNT}+` : String(count);
-    const floatingCart = createFloatingCartButton();
+    createMobileCartButton();
 
     document.querySelectorAll('[data-cart-count]').forEach((node) => {
       node.textContent = displayCount;
@@ -59,10 +55,6 @@
       const label = count > 0 ? `Open cart with ${count} ${suffix}` : 'Open cart';
       node.setAttribute('aria-label', label);
     });
-
-    if (floatingCart) {
-      floatingCart.hidden = count === 0;
-    }
   }
 
   window.addEventListener('storage', (event) => {
