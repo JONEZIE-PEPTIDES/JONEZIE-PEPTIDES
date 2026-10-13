@@ -5,7 +5,7 @@ const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(root, 'support-chat.js'), 'utf8');
-const testId = 'e93e073a-1f69-4cbc-8934-f9e1611e65bb';
+const websiteId = '17a74d8e-fc64-43cc-83e4-ea5b69b5835e';
 
 function run(scriptSource) {
   const elements = new Map();
@@ -26,21 +26,31 @@ function run(scriptSource) {
   return { context, window, appended };
 }
 
-const disabled = run(source);
+const disabled = run(source.replace(websiteId, ''));
 assert.equal(disabled.appended.length, 0);
 assert.equal(disabled.window.CRISP_WEBSITE_ID, undefined);
 
-const enabled = run(source.replace("const websiteId = '';", `const websiteId = '${testId}';`));
-assert.equal(enabled.window.CRISP_WEBSITE_ID, testId);
+const enabled = run(source);
+assert.equal(enabled.window.CRISP_WEBSITE_ID, websiteId);
 assert.equal(enabled.appended.length, 1);
 assert.equal(enabled.appended[0].src, 'https://client.crisp.chat/l.js');
 assert.equal(enabled.appended[0].async, true);
-vm.runInContext(source.replace("const websiteId = '';", `const websiteId = '${testId}';`), enabled.context);
+vm.runInContext(source, enabled.context);
 assert.equal(enabled.appended.length, 1);
 
 for (const file of ['standards/index.html', 'standards/checkout.html']) {
   const html = fs.readFileSync(path.join(root, file), 'utf8');
-  assert.match(html, /<script src="\.\.\/support-chat\.js\?v=20261013staging1" async><\/script>/);
+  assert.match(html, /<script src="\.\.\/support-chat\.js\?v=20261013staging2" async><\/script>/);
+}
+
+for (const file of [
+  'standards/about/index.html',
+  'standards/contact/index.html',
+  'standards/faq/index.html',
+  'standards/standards/index.html'
+]) {
+  const html = fs.readFileSync(path.join(root, file), 'utf8');
+  assert.match(html, /<script src="\.\.\/\.\.\/support-chat\.js\?v=20261013staging2" async><\/script>/);
 }
 
 console.log('Support chat staging loader checks passed.');

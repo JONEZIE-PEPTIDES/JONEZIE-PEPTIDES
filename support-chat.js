@@ -1,6 +1,5 @@
 (() => {
-  // Set this to the Website ID from the Jonezie Labs Crisp workspace after signup.
-  const websiteId = '';
+  const websiteId = '17a74d8e-fc64-43cc-83e4-ea5b69b5835e';
   if (!/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(websiteId)) return;
   if (document.getElementById('jonezie-crisp-chat')) return;
 
