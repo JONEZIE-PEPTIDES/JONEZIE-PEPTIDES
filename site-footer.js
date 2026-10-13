@@ -114,4 +114,12 @@
   } else {
     renderFooter();
   }
+
+  if (!document.getElementById('jonezie-support-chat-loader')) {
+    const script = document.createElement('script');
+    script.id = 'jonezie-support-chat-loader';
+    script.src = `${ROOT}support-chat.js?v=20261013staging1`;
+    script.async = true;
+    document.head.appendChild(script);
+  }
 })();
