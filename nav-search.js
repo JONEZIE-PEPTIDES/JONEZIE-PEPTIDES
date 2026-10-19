@@ -231,6 +231,7 @@
       const productPill = nav.querySelector('.nav-products-pill');
       nav.querySelectorAll('.site-nav-mobile-link').forEach((link) => link.remove());
       const mobileMarkup = NAV_CATEGORY_LINKS
+        .map(([href, label]) => label === 'Merch' ? ['terms.html', 'Policies'] : [href, label])
         .map(([href, label]) => `<a href="${normalizeHref(href)}" class="site-nav-mobile-link">${label}</a>`)
         .join('');
       if (productPill) {
