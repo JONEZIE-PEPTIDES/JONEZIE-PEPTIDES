@@ -25,18 +25,19 @@
 
       <nav class="site-footer-links" aria-label="Footer shop links">
         <h3>Shop</h3>
-        <a href="${ROOT}index.html#featured"><span>Ready to Ship</span>${icon('chevron')}</a>
+        <a href="${ROOT}terms.html"><span>Policies</span>${icon('chevron')}</a>
         <a href="${ROOT}product.html"><span>Full Catalog</span>${icon('chevron')}</a>
         <a href="${ROOT}index.html#featured"><span>Popular Picks</span>${icon('chevron')}</a>
         <a href="${ROOT}research-tools.html"><span>Research Tools</span>${icon('chevron')}</a>
-        <a href="${ROOT}index.html#faq"><span>FAQ</span>${icon('chevron')}</a>
+        <a href="${ROOT}research-guides.html"><span>Research Guides</span>${icon('chevron')}</a>
       </nav>
 
       <nav class="site-footer-links site-footer-links-support" aria-label="Footer support links">
         <h3>Support</h3>
         <a href="mailto:customerservice@jonezielabs.com?subject=Jonezie%20Labs%20Support"><span>Contact Us</span>${icon('chevron')}</a>
         <a href="mailto:orders@jonezie.com?subject=Order%20Help"><span>Order Help</span>${icon('chevron')}</a>
-        <a href="${ROOT}index.html#faq"><span>Shipping & Processing</span>${icon('chevron')}</a>
+        <a href="${ROOT}shipping-policy.html"><span>Shipping Policy</span>${icon('chevron')}</a>
+        <a href="${ROOT}returns-refunds.html"><span>Returns &amp; Refunds</span>${icon('chevron')}</a>
         <a href="mailto:customerservice@jonezielabs.com?subject=COAs%20and%20Product%20Questions"><span>COAs & Product Questions</span>${icon('chevron')}</a>
         <a href="${ROOT}index.html#supplier-intake"><span>Supplier Intake</span>${icon('chevron')}</a>
       </nav>
@@ -64,7 +65,7 @@
 
     <div class="site-footer-legal">
       <div class="site-footer-legal-icon" aria-hidden="true">${icon('beaker')}</div>
-      <p>Research-use only. Not for human or veterinary use.<br />Products and information are not intended to diagnose, treat, cure, or prevent any disease.</p>
+      <p>Research products are for laboratory use only, not human or veterinary use.<br />Product information is not intended to diagnose, treat, cure, or prevent disease.</p>
       <span aria-hidden="true" class="site-footer-dot"></span>
       <p class="site-footer-copyright">&copy; 2026 Jonezie Labs LLC.<br />All rights reserved.</p>
     </div>
