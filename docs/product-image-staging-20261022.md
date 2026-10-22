@@ -1,6 +1,6 @@
 # Product image staging
 
-Status: first batch prepared; awaiting additional images before publishing.
+Status: two batches prepared (17 images); awaiting completion before publishing to the live site.
 Branch: `staging/product-images-20261022`.
 Do not merge into `main` until the user says the image collection is complete.
 
@@ -24,3 +24,19 @@ Updated the catalog image overrides, source catalog image mappings, existing
 root/canonical product hero images, and product image metadata. Shared script
 cache versions were refreshed on consuming HTML pages. No pricing, stock,
 product options, or Standards redirect settings were changed.
+
+## Batch 2
+
+| Attachment | Product slug | Label on supplied image |
+| --- | --- | --- |
+| Photo 1 | pt-141 | PT-141 10 mg |
+| Photo 2 | tirzepatide | Tirzepatide 15 mg |
+| Photo 3 | cagrilintide-5mg-plus-semaglutide-5mg | Cag+Sema 10 mg total |
+| Photo 4 | ipamorelin | Ipamorelin 10 mg |
+| Photo 5 | epithalon | Epithalon 10 mg |
+| Photo 6 | thymosin-alpha-1 | Thymosin Alpha-1 10 mg |
+| Photo 7 | kisspeptin-10 | Kisspeptin 10 mg |
+
+Product cards use full-width, natural-height images with contain sizing to
+preserve the entire photo on mobile and desktop. The separate private Sites
+preview is published for review; production GitHub Pages remains unchanged.
