@@ -255,11 +255,18 @@
   };
 
   const IMAGE_OVERRIDES_BY_SLUG = {
-    'bpc-157': 'bpc-157-10mg-official.png',
-    'ghk-cu': 'ghk-cu-100mg-official.png',
+    'bpc-157': 'assets/products/20261022/bpc-157.webp',
+    'ghk-cu': 'assets/products/20261022/ghk-cu.webp',
+    'bac-water': 'assets/products/20261022/bac-water.webp',
+    kpv: 'assets/products/20261022/kpv.webp',
+    'ara-290': 'assets/products/20261022/ara-290.webp',
+    selank: 'assets/products/20261022/selank.webp',
+    semax: 'assets/products/20261022/semax.webp',
+    tesamorelin: 'assets/products/20261022/tesamorelin.webp',
+    nad: 'assets/products/20261022/nad.webp',
     semaglutide: 'semaglutide-20mg-official.png',
     tirzepatide: 'tirzepatide-15mg-official.png',
-    retatrutide: 'glp-3-rt-new-hero-product-image.webp?v=20261007a',
+    retatrutide: 'assets/products/20261022/retatrutide.webp',
     'mt-1': 'mt-1-10mg-official.png',
     'b12-10000mcg-10ml': 'B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a'
   };
