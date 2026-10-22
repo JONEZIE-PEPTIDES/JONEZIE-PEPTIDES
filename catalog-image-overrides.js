@@ -42,7 +42,7 @@
     'b12-10000mcg-10ml': 'B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a',
     '5-amino-1mq': '5-AMINO-1MQ.png?v=20260904a',
     'ghk-cu': 'assets/products/20261022/ghk-cu.webp',
-    'mots-c': 'mots-c-new-new-hero-product-image.png',
+    'mots-c': 'assets/products/20261022/mots-c.webp',
     'cjc-1295-with-dac': 'cjc-1295-with-dac-official.png',
     'kisspeptin-10': 'assets/products/20261022/kisspeptin-10.webp',
     dermorphin: 'dermorphin-new-hero-product-image.webp',

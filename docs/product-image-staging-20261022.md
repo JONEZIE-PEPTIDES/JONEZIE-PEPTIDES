@@ -1,6 +1,6 @@
 # Product image staging
 
-Status: two batches prepared (17 images); awaiting completion before publishing to the live site.
+Status: three batches prepared (18 images); awaiting completion before publishing to the live site.
 Branch: `staging/product-images-20261022`.
 Do not merge into `main` until the user says the image collection is complete.
 
@@ -40,3 +40,7 @@ product options, or Standards redirect settings were changed.
 Product cards use full-width, natural-height images with contain sizing to
 preserve the entire photo on mobile and desktop. The separate private Sites
 preview is published for review; production GitHub Pages remains unchanged.
+
+## Batch 3
+
+Photo 1: `mots-c`, MOTS-c 10 mg / 3 mL vial.
