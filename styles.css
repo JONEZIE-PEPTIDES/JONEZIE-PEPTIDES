@@ -62,6 +62,24 @@ img { display: block; max-width: 100%; }
   color: var(--text);
 }
 
+.trustpilot-collector {
+  width: min(calc(100vw - 64px), 1540px);
+  min-height: 52px;
+  margin: clamp(42px, 7vw, 82px) auto 0;
+}
+
+.trustpilot-collector .trustpilot-widget {
+  min-height: 52px;
+}
+
+.trustpilot-collector a {
+  color: var(--cyan-soft);
+}
+
+.trustpilot-collector + .site-footer {
+  margin-top: 24px;
+}
+
 .site-footer-main {
   display: grid;
   grid-template-columns: minmax(230px, 1fr) minmax(150px, 0.52fr) minmax(210px, 0.72fr) minmax(285px, 0.9fr);
@@ -4679,6 +4697,11 @@ body.lightbox-open {
   }
 }
 @media (max-width: 860px) {
+  .trustpilot-collector {
+    width: min(calc(100vw - 24px), 620px);
+    margin-top: 42px;
+  }
+
   .site-footer {
     width: min(calc(100vw - 24px), 620px);
     margin-top: 42px;
