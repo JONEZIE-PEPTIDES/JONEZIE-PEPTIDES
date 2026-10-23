@@ -102,7 +102,7 @@
       startingPriceSingle: '$23.00',
       startingPrice8: '$160.64',
       startingPrice10: '$190.40',
-      image: '5-AMINO-1MQ.png?v=20260904a',
+      image: 'assets/products/20261022/5-amino-1mq.webp',
       options: [
         {
           code: '5AM5',
@@ -274,7 +274,12 @@
     'thymosin-alpha-1': 'assets/products/20261022/thymosin-alpha-1.webp',
     'kisspeptin-10': 'assets/products/20261022/kisspeptin-10.webp',
     retatrutide: 'assets/products/20261022/retatrutide.webp',
-    'mt-1': 'mt-1-10mg-official.png',
+    'mt-1': 'assets/products/20261022/mt-1.webp',
+    'mt-2': 'assets/products/20261022/mt-2.webp',
+    '5-amino-1mq': 'assets/products/20261022/5-amino-1mq.webp',
+    glutathione: 'assets/products/20261022/glutathione.webp',
+    hcg: 'assets/products/20261022/hcg.webp',
+    'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'assets/products/20261022/bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg.webp',
     'b12-10000mcg-10ml': 'B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a'
   };
 
