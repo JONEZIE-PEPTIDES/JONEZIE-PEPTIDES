@@ -1,5 +1,6 @@
 const ADMIN_EMAIL = 'orders@jonezielabs.com';
 const BACKUP_ADMIN_EMAIL = 'jonezielabs@gmail.com';
+const TRUSTPILOT_INVITE_EMAIL = 'www.jonezielabs.com+3cb2831dc3@invite.trustpilot.com';
 const FROM_NAME = 'Jonezie Labs';
 const REPLY_TO_EMAIL = 'orders@jonezielabs.com';
 const LEAD_SHEET_NAME = 'Jonezie Lead Capture Log';
@@ -46,7 +47,7 @@ function doPost(event) {
       MailApp.sendEmail({
         to: customerEmail,
         cc: ADMIN_EMAIL,
-        bcc: BACKUP_ADMIN_EMAIL,
+        bcc: `${BACKUP_ADMIN_EMAIL},${TRUSTPILOT_INVITE_EMAIL}`,
         subject: `Jonezie Labs order request received - ${orderId}`,
         body: buildCustomerEmail(payload),
         name: FROM_NAME,
