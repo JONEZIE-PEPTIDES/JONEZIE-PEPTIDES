@@ -86,6 +86,7 @@ assert(html.indexOf('trust-section-home section-shell') < html.indexOf('id="new-
 assert(html.indexOf('id="new-labels"') < html.indexOf('id="featured"'));
 assert(html.indexOf('id="featured"') < html.indexOf('data-shipping-countdown'));
 assert.match(html, /class="label-reveal-link" href="#full-catalog"/);
+assert.match(html, /class="label-reveal-link" href="#full-catalog">Explore the new look<\/a>/);
 assert.match(html, /class="label-reveal-rain" aria-hidden="true" inert/);
 assert.match(read('new-labels.css'), /prefers-reduced-motion: reduce/);
 assert(!html.includes('label-reveal-toggle'), 'No animation toggle in the announcement');

@@ -70,7 +70,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 23px;
   min-height: 48px;
   padding: 12px 23px;
   border: 1px solid var(--pink);
@@ -82,7 +81,6 @@
   text-decoration: none;
   transition: background-color 160ms ease;
 }
-.label-reveal-link span { font-size: 1.3rem; line-height: 1; }
 .label-reveal-link:hover { background: var(--pink-soft); }
 .label-reveal-link:focus-visible { outline: 3px solid var(--pink); outline-offset: 5px; }
 .label-reveal-note { margin: 17px 0 0; color: var(--paper); font-size: 0.68rem; letter-spacing: 0.03em; }
