@@ -1,6 +1,6 @@
 # Product image staging
 
-Status: four batches prepared (24 images); awaiting completion before publishing to the live site.
+Status: five batches prepared (32 distinct product images); awaiting completion before publishing to the live site.
 Branch: `staging/product-images-20261022`.
 Do not merge into `main` until the user says the image collection is complete.
 
@@ -56,3 +56,21 @@ Photo 1: `mots-c`, MOTS-c 10 mg / 3 mL vial.
 | Photo 5 | bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg | GLOW 70 mg |
 | Photo 6 | hcg | HCG 5000 IU |
 | Photo 7 | bac-water | BAC Water 10 mL (already included in batch 1) |
+
+## Batch 5
+
+| Attachment | Product slug | Label on supplied image |
+| --- | --- | --- |
+| Photo 1 | cerebrolysin | Cerebrolysin 60 mg |
+| Photo 2 | ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg | KLOW 80 mg |
+| Photo 3 | snap-8 | SNAP-8 10 mg |
+| Photo 4 | cagrilintide | Cagrilintide 10 mg |
+| Photo 5 | igf-1lr3 | IGF-1LR3 1 mg |
+| Photo 6 | ss-31 | SS-31 10 mg (replacement) |
+| Photo 7 | cjc-1295-without-dac | CJC-1295 5 mg |
+| Photo 8 | tb500 | TB500 10 mg |
+| Photo 9 | tirzepatide | Tirzepatide 15 mg (replaces batch 2 photo) |
+
+Tirzepatide now uses `tirzepatide-20261027.webp` to bypass cached older artwork.
+The new SS-31 photo replaces the existing catalog hero. No product options or
+strengths were changed to match the illustrative hero labels.
