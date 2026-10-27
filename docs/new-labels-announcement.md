@@ -1,0 +1,23 @@
+# New-label announcement
+
+Staging only. Inserted between the research standards strip and the intact
+featured-products/countdown section. CTA uses the existing `#full-catalog`.
+
+The explicit 32-item approved inventory is in `new-labels.js`. It is checked
+against the current new-label catalog overrides by `scripts/test-new-labels.cjs`.
+The old `tirzepatide.webp` is excluded; `tirzepatide-20261027.webp` is included.
+All sources are full square photos in `assets/products/20261022/`, not cutouts.
+320px WebP derivatives in `assets/products/label-reveal/` preserve the entire
+composition; the full set totals 330,618 bytes. Original hero assets are unchanged.
+
+Uses existing Sora/Manrope typography, paper/pink/background/radius tokens and a
+section-scoped Cypress green. No global CSS rules or animation libraries added.
+The 440px desktop panel adapts naturally on mobile. Cards move on CSS transforms
+with negative delays; each new image is selected only at an offscreen loop boundary.
+The center text never animates. Decorative cards are inert and hidden from assistive
+technology. Observers defer image requests, pause offscreen, and track panel height.
+Reduced motion keeps the distributed cards static; the button explains that state.
+
+Run `node scripts/test-new-labels.cjs` for asset, lifecycle and integration checks.
+Browser review covers desktop/mobile placement, photo composition, pause/play,
+catalog activation, offscreen pausing, no horizontal overflow and live countdown.
