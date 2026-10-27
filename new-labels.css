@@ -6,6 +6,7 @@
   display: grid;
   place-items: center;
   min-height: 440px;
+  scroll-margin-top: 165px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
@@ -132,7 +133,7 @@
 }
 
 @media (max-width: 700px) {
-  .label-reveal { min-height: 580px; }
+  .label-reveal { min-height: 580px; scroll-margin-top: 120px; }
   .label-reveal-copy { padding: 125px 34px 130px; max-width: 370px; }
   .label-reveal h2 { font-size: clamp(2.3rem, 8.5vw, 3rem); }
   .label-reveal-eyebrow { font-size: 0.58rem; letter-spacing: 0.14em; margin-bottom: 17px; }
