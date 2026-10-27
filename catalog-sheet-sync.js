@@ -102,7 +102,7 @@
       startingPriceSingle: '$23.00',
       startingPrice8: '$160.64',
       startingPrice10: '$190.40',
-      image: '5-AMINO-1MQ.png?v=20260904a',
+      image: 'assets/products/20261022/5-amino-1mq.webp',
       options: [
         {
           code: '5AM5',
@@ -255,12 +255,39 @@
   };
 
   const IMAGE_OVERRIDES_BY_SLUG = {
-    'bpc-157': 'bpc-157-10mg-official.png',
-    'ghk-cu': 'ghk-cu-100mg-official.png',
+    'mots-c': 'assets/products/20261022/mots-c.webp',
+    'bpc-157': 'assets/products/20261022/bpc-157.webp',
+    'ghk-cu': 'assets/products/20261022/ghk-cu.webp',
+    'bac-water': 'assets/products/20261022/bac-water.webp',
+    kpv: 'assets/products/20261022/kpv.webp',
+    'ara-290': 'assets/products/20261022/ara-290.webp',
+    selank: 'assets/products/20261022/selank.webp',
+    semax: 'assets/products/20261022/semax.webp',
+    tesamorelin: 'assets/products/20261022/tesamorelin.webp',
+    nad: 'assets/products/20261022/nad.webp',
     semaglutide: 'semaglutide-20mg-official.png',
-    tirzepatide: 'tirzepatide-15mg-official.png',
-    retatrutide: 'glp-3-rt-new-hero-product-image.webp?v=20261007a',
-    'mt-1': 'mt-1-10mg-official.png',
+    tirzepatide: 'assets/products/20261022/tirzepatide-20261027.webp',
+    cerebrolysin: 'assets/products/20261022/cerebrolysin.webp',
+    'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg': 'assets/products/20261022/ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg.webp',
+    'snap-8': 'assets/products/20261022/snap-8.webp',
+    cagrilintide: 'assets/products/20261022/cagrilintide.webp',
+    'igf-1lr3': 'assets/products/20261022/igf-1lr3.webp',
+    'ss-31': 'assets/products/20261022/ss-31.webp',
+    'cjc-1295-without-dac': 'assets/products/20261022/cjc-1295-without-dac.webp',
+    tb500: 'assets/products/20261022/tb500.webp',
+    'pt-141': 'assets/products/20261022/pt-141.webp',
+    'cagrilintide-5mg-plus-semaglutide-5mg': 'assets/products/20261022/cagrilintide-5mg-plus-semaglutide-5mg.webp',
+    ipamorelin: 'assets/products/20261022/ipamorelin.webp',
+    epithalon: 'assets/products/20261022/epithalon.webp',
+    'thymosin-alpha-1': 'assets/products/20261022/thymosin-alpha-1.webp',
+    'kisspeptin-10': 'assets/products/20261022/kisspeptin-10.webp',
+    retatrutide: 'assets/products/20261022/retatrutide.webp',
+    'mt-1': 'assets/products/20261022/mt-1.webp',
+    'mt-2': 'assets/products/20261022/mt-2.webp',
+    '5-amino-1mq': 'assets/products/20261022/5-amino-1mq.webp',
+    glutathione: 'assets/products/20261022/glutathione.webp',
+    hcg: 'assets/products/20261022/hcg.webp',
+    'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'assets/products/20261022/bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg.webp',
     'b12-10000mcg-10ml': 'B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a'
   };
 

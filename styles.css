@@ -1671,16 +1671,13 @@ img { display: block; max-width: 100%; }
 .featured-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .product-card { overflow: hidden; }
 .product-card img {
+  display: block;
   width: 100%;
-  height: 270px;
+  height: auto;
+  aspect-ratio: auto;
   object-fit: contain;
-  object-position: center bottom;
-  background: linear-gradient(135deg, #9fe8ff 0%, #b8d8ff 24%, #d39ce6 56%, #ff5ba7 100%);
-}
-[data-product-slug="retatrutide"].product-card img,
-[data-product-slug="retatrutide"].catalog-card img {
-  object-fit: cover;
   object-position: center;
+  background: linear-gradient(135deg, #9fe8ff 0%, #b8d8ff 24%, #d39ce6 56%, #ff5ba7 100%);
 }
 .product-copy { padding: 22px; }
 .product-top {
@@ -1769,11 +1766,13 @@ img { display: block; max-width: 100%; }
   overflow: hidden;
 }
 .catalog-card img {
+  display: block;
   width: 100%;
-  height: 270px;
+  height: auto;
+  aspect-ratio: auto;
   margin: 0;
   object-fit: contain;
-  object-position: center bottom;
+  object-position: center;
   background: linear-gradient(135deg, #9fe8ff 0%, #b8d8ff 24%, #d39ce6 56%, #ff5ba7 100%);
   border-radius: 0;
 }
@@ -4900,7 +4899,7 @@ body.lightbox-open {
     width: 100%;
     min-width: 0;
   }
-  .product-card img { height: 240px; }
+  .product-card img { height: auto; }
   .site-footer { flex-direction: column; }
 }
 
