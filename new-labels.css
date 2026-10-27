@@ -1,5 +1,5 @@
 .label-reveal {
-  --reveal-cypress: #0b3029;
+  --reveal-bg: var(--bg);
   --reveal-travel: 620px;
   position: relative;
   isolation: isolate;
@@ -10,7 +10,7 @@
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
-  background: radial-gradient(ellipse at 50% 45%, #16483b 0%, var(--reveal-cypress) 65%, var(--bg) 140%);
+  background: radial-gradient(ellipse at 50% 45%, var(--bg-soft) 0%, var(--reveal-bg) 75%);
   color: var(--paper);
   contain: layout paint;
 }
@@ -29,7 +29,7 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(90deg, transparent 15%, rgba(11, 48, 41, 0.65) 27%, var(--reveal-cypress) 35%, var(--reveal-cypress) 65%, rgba(11, 48, 41, 0.65) 73%, transparent 85%);
+  background: radial-gradient(ellipse at 50% 45%, rgba(40, 216, 239, 0.045), transparent 65%), linear-gradient(90deg, transparent 15%, rgba(6, 16, 24, 0.65) 27%, var(--reveal-bg) 35%, var(--reveal-bg) 65%, rgba(6, 16, 24, 0.65) 73%, transparent 85%);
 }
 
 .label-reveal-copy {
@@ -84,8 +84,7 @@
 }
 .label-reveal-link span { font-size: 1.3rem; line-height: 1; }
 .label-reveal-link:hover { background: var(--pink-soft); }
-.label-reveal-link:focus-visible,
-.label-reveal-toggle:focus-visible { outline: 3px solid var(--pink); outline-offset: 5px; }
+.label-reveal-link:focus-visible { outline: 3px solid var(--pink); outline-offset: 5px; }
 .label-reveal-note { margin: 17px 0 0; color: var(--paper); font-size: 0.68rem; letter-spacing: 0.03em; }
 
 .label-reveal-card {
@@ -107,26 +106,6 @@
 .label-reveal-card.is-distant { filter: blur(0.35px); }
 .label-reveal[data-running="true"] .label-reveal-card { animation-play-state: running; }
 
-.label-reveal-toggle {
-  position: absolute;
-  right: 16px;
-  bottom: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 44px;
-  padding: 9px 12px;
-  border: 1px solid rgba(255, 250, 244, 0.22);
-  border-radius: 999px;
-  background: var(--reveal-cypress);
-  color: var(--paper);
-  font: inherit;
-  font-size: 0.65rem;
-  cursor: pointer;
-}
-.label-reveal-toggle[hidden] { display: none; }
-.label-reveal-toggle:disabled { cursor: default; }
-
 @keyframes label-reveal-fall {
   from { transform: translate3d(-50%, -180px, 0) rotate(var(--card-tilt)); }
   to { transform: translate3d(calc(-50% + var(--card-drift)), var(--reveal-travel), 0) rotate(var(--card-end-tilt)); }
@@ -139,9 +118,8 @@
   .label-reveal-eyebrow { font-size: 0.58rem; letter-spacing: 0.14em; margin-bottom: 17px; }
   .label-reveal-description { font-size: 0.85rem; margin: 20px auto 22px; }
   .label-reveal::before {
-    background: linear-gradient(180deg, transparent 6%, rgba(11, 48, 41, 0.7) 18%, var(--reveal-cypress) 28%, var(--reveal-cypress) 73%, rgba(11, 48, 41, 0.7) 84%, transparent 97%);
+    background: radial-gradient(ellipse at 50% 45%, rgba(40, 216, 239, 0.045), transparent 65%), linear-gradient(180deg, transparent 6%, rgba(6, 16, 24, 0.7) 18%, var(--reveal-bg) 28%, var(--reveal-bg) 73%, rgba(6, 16, 24, 0.7) 84%, transparent 97%);
   }
-  .label-reveal-toggle { bottom: 10px; right: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

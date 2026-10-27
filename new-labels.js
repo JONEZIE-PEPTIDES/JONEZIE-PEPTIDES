@@ -15,13 +15,9 @@
     'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg'
   ];
   const rain = section.querySelector('.label-reveal-rain');
-  const control = section.querySelector('.label-reveal-toggle');
-  const icon = section.querySelector('[data-label-reveal-icon]');
-  const status = section.querySelector('[data-label-reveal-status]');
   const mobile = matchMedia('(max-width: 700px)');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let cursor = 0;
-  let paused = false;
   let visible = false;
   let initialized = false;
 
@@ -31,12 +27,7 @@
   }
 
   function syncMotion() {
-    section.dataset.running = String(visible && !paused && !reduced.matches && !document.hidden);
-    control.disabled = reduced.matches;
-    control.setAttribute('aria-pressed', String(paused || reduced.matches));
-    control.setAttribute('aria-label', reduced.matches ? 'Product animation disabled by reduced-motion preference' : paused ? 'Play product animation' : 'Pause product animation');
-    status.textContent = reduced.matches ? 'Motion reduced' : paused ? 'Play motion' : 'Pause motion';
-    icon.textContent = reduced.matches || paused ? '\u25b7' : '\u2759\u2759';
+    section.dataset.running = String(visible && !reduced.matches && !document.hidden);
   }
 
   function buildCards() {
@@ -83,7 +74,6 @@
     if (!entries.some(entry => entry.isIntersecting)) return;
     initialized = true;
     buildCards();
-    control.hidden = false;
     syncMotion();
     preloadObserver.disconnect();
   }, { rootMargin: '240px' });
@@ -92,7 +82,6 @@
     visible = entries[0].isIntersecting;
     syncMotion();
   }).observe(section);
-  control.addEventListener('click', () => { paused = !paused; syncMotion(); });
   mobile.addEventListener('change', buildCards);
   reduced.addEventListener('change', syncMotion);
   document.addEventListener('visibilitychange', syncMotion);

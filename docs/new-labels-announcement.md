@@ -11,13 +11,14 @@ All sources are full square photos in `assets/products/20261022/`, not cutouts.
 composition; the full set totals 330,618 bytes. Original hero assets are unchanged.
 
 Uses existing Sora/Manrope typography, paper/pink/background/radius tokens and a
-section-scoped Cypress green. No global CSS rules or animation libraries added.
+native blue-black backdrop with a subtle cyan/teal glow. No global CSS rules or animation libraries added.
 The 440px desktop panel adapts naturally on mobile. Cards move on CSS transforms
 with negative delays; each new image is selected only at an offscreen loop boundary.
 The center text never animates. Decorative cards are inert and hidden from assistive
 technology. Observers defer image requests, pause offscreen, and track panel height.
-Reduced motion keeps the distributed cards static; the button explains that state.
+Reduced motion keeps the distributed cards static. The visible pause/play button
+was removed at the user's request; offscreen and hidden-tab pausing remain.
 
 Run `node scripts/test-new-labels.cjs` for asset, lifecycle and integration checks.
-Browser review covers desktop/mobile placement, photo composition, pause/play,
+Browser review covers desktop/mobile placement, photo composition,
 catalog activation, offscreen pausing, no horizontal overflow and live countdown.

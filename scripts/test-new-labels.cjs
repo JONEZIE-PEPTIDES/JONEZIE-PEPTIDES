@@ -25,8 +25,8 @@ class Element {
 function setup({ mobile = false, reduced = false } = {}) {
   const section = new Element();
   section.offsetHeight = mobile ? 580 : 440;
-  const rain = new Element(), control = new Element(), icon = new Element(), status = new Element();
-  section.querySelector = key => ({ '.label-reveal-rain': rain, '.label-reveal-toggle': control, '[data-label-reveal-icon]': icon, '[data-label-reveal-status]': status })[key];
+  const rain = new Element();
+  section.querySelector = key => ({ '.label-reveal-rain': rain })[key];
   const media = [Object.assign(new Element(), { matches: mobile }), Object.assign(new Element(), { matches: reduced })];
   const observers = [];
   const document = new Element();
@@ -46,16 +46,11 @@ function setup({ mobile = false, reduced = false } = {}) {
   assert.equal(rain.children.length, 0, 'No image requests before proximity observer');
   observers[0].fn([{ isIntersecting: true }]);
   observers[1].fn([{ isIntersecting: true }]);
-  return { section, rain, control, status, media, document, observers };
+  return { section, rain, media, document, observers };
 }
 
 const desktop = setup();
 assert.equal(desktop.rain.children.length, 18);
-assert.equal(desktop.section.dataset.running, 'true');
-desktop.control.events.click();
-assert.equal(desktop.section.dataset.running, 'false');
-assert.equal(desktop.control.attrs['aria-label'], 'Play product animation');
-desktop.control.events.click();
 assert.equal(desktop.section.dataset.running, 'true');
 desktop.observers[1].fn([{ isIntersecting: false }]);
 assert.equal(desktop.section.dataset.running, 'false');
@@ -79,14 +74,12 @@ assert.equal(seen.size, 32, 'Every approved label must cycle');
 desktop.media[1].matches = true;
 desktop.media[1].events.change();
 assert.equal(desktop.section.dataset.running, 'false');
-assert.equal(desktop.control.disabled, true);
 desktop.media[1].matches = false;
 desktop.media[1].events.change();
 assert.equal(desktop.section.dataset.running, 'true');
 const phone = setup({ mobile: true, reduced: true });
 assert.equal(phone.rain.children.length, 8);
 assert.equal(phone.section.dataset.running, 'false');
-assert.equal(phone.status.textContent, 'Motion reduced');
 
 const html = read('index.html');
 assert(html.indexOf('trust-section-home section-shell') < html.indexOf('id="new-labels"'));
@@ -95,4 +88,6 @@ assert(html.indexOf('id="featured"') < html.indexOf('data-shipping-countdown'));
 assert.match(html, /class="label-reveal-link" href="#full-catalog"/);
 assert.match(html, /class="label-reveal-rain" aria-hidden="true" inert/);
 assert.match(read('new-labels.css'), /prefers-reduced-motion: reduce/);
-console.log(`PASS: 32 current assets (${totalBytes} bytes), full cycle, lazy initialization, pause/play, offscreen and tab pause, reduced motion, mobile count, placement and catalog anchor.`);
+assert(!html.includes('label-reveal-toggle'), 'No animation toggle in the announcement');
+assert(!read('new-labels.css').includes('reveal-cypress'), 'Use the native blue-black palette');
+console.log(`PASS: 32 current assets (${totalBytes} bytes), full cycle, lazy initialization, offscreen and tab pause, reduced motion, mobile count, placement, catalog anchor and removed toggle.`);
