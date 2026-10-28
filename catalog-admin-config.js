@@ -14,8 +14,8 @@ window.JONEZIE_ADMIN_CONFIG = {
   // internalLeadDays is intentionally not shown in the storefront UI.
   optionInventory: {
     LC210MG: { status: 'backorder', internalLeadDays: '20-23' },
-    S310MG: { status: 'backorder' },
-    S350MG: { status: 'backorder' },
+    S310MG: { status: 'in_stock' },
+    S350MG: { status: 'in_stock' },
     RET15MG: { status: 'backorder' },
     MC40MG: { status: 'backorder' },
     TES15MG: { status: 'backorder' },
