@@ -5,8 +5,8 @@ inventory lives at `catalog.html`; previous `index.html#full-catalog` links redi
 Pricing, stock, variants, checkout and the shipping countdown are unchanged.
 
 `new-label-products.js` is the shared approved-artwork manifest, in homepage order.
-Both featured products and the animated announcement read it. All 33 approved
-products are included, including the Wolverine image supplied on 2026-10-27.
+Both featured products and the animated announcement read it. All 34 approved
+products are included, including Wolverine and the B12 3000 MCG / 3 mL image.
 MOTS-c and Tesamorelin must have at least four products between them.
 
 Homepage/catalog cards use a compact, blended studio-background frame for approved

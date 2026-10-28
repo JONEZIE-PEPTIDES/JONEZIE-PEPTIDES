@@ -52,6 +52,7 @@
     ['Glutathione', '1200mg', 31.625, 220.88, 261.8],
     ['Glutathione', '1500mg', 34.5, 240.96, 285.6],
     ['BAC Water', '10ml/10vials', 8.625, 60.24, 71.4],
+    ['B12 10000mcg 10ml', '3000 MCG / 3 mL', 17, 136, 170],
     ['B12 10000mcg 10ml', '10,000mcg / 10ml', 18.80342, 150.42735, 188.03419],
     ['Cagrilintide2.5mg+Semaglutide2.5mg', '5mg', 46, 321.28, 380.8],
     ['Cagrilintide5mg+Semaglutide5mg', '10mg', 77.625, 542.16, 642.6],
@@ -163,6 +164,7 @@
     'Thymosin Alpha-1|10mg': 39.99
   };
   const SINGLE_PRICE_OVERRIDES = {
+    'B12 10000mcg 10ml|3000 MCG / 3 mL': 17,
     'Retatrutide|20mg': 107
   };
 
@@ -177,7 +179,7 @@
     cerebrolysin: 'Cerebrolysin',
     'klow (ghk-cu50+tb10+bc10+kpv10)': 'KLOW',
     'glow stack (bpc 157 10mg+ghk-cu 50mg+tb500 10mg)': 'GLOW Stack (BPC 157 10mg + GHK-CU 50mg + TB500 10mg)',
-    'b12 10000mcg 10ml': 'B12 10,000mcg / 10ml Vial',
+    'b12 10000mcg 10ml': 'B12',
     retatrutide: 'GLP-3(RT)'
   };
 
@@ -289,7 +291,7 @@
     glutathione: 'assets/products/20261022/glutathione.webp',
     hcg: 'assets/products/20261022/hcg.webp',
     'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'assets/products/20261022/bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg.webp',
-    'b12-10000mcg-10ml': 'B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a'
+    'b12-10000mcg-10ml': 'assets/products/20261022/b12-3000mcg-3ml.webp'
   };
 
   const DESCRIPTION_BY_CATEGORY = {
@@ -339,7 +341,7 @@
   }
 
   function parseStrengthOrder(value) {
-    const match = String(value || '').toLowerCase().match(/(\d+(\.\d+)?)/);
+    const match = String(value || '').replace(/,/g, '').toLowerCase().match(/(\d+(\.\d+)?)/);
     return match ? Number.parseFloat(match[1]) : 999999;
   }
 

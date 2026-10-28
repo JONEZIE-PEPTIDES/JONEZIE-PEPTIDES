@@ -19,7 +19,7 @@
     aod: 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/AOD_5MG_3ML_Vial_Jonezie_Labs_.webp?v=20260501a',
     tesamorelin: 'assets/products/20261022/tesamorelin.webp',
     'bac-water': 'assets/products/20261022/bac-water.webp',
-    'b12-10000mcg-10ml': 'B12_10000MCG_10ML_Red_Water_Vial.webp?v=20260903a',
+    'b12-10000mcg-10ml': 'assets/products/20261022/b12-3000mcg-3ml.webp',
     '5-amino-1mq': 'assets/products/20261022/5-amino-1mq.webp',
     'ghk-cu': 'assets/products/20261022/ghk-cu.webp',
     'mots-c': 'assets/products/20261022/mots-c.webp',

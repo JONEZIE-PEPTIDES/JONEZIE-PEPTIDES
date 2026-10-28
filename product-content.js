@@ -39,7 +39,7 @@ window.JONEZIE_PRODUCT_CONTENT = {
       ]
     },
     'b12-10000mcg-10ml': {
-      shortDescription: 'B12 10,000mcg / 10ml Vial is a red aqueous cobalamin support material for methylation, DNA synthesis, red-cell biology, and neurologic-function research workflows.',
+      shortDescription: 'B12 is a red aqueous cobalamin support material for methylation, DNA synthesis, red-cell biology, and neurologic-function research workflows.',
       researchSummary: 'Vitamin B12, also called cobalamin, is studied for its role in methylation chemistry, DNA synthesis pathways, red-blood-cell biology, and neurologic-function research models.',
       researchFindings: [
         'Cobalamin research commonly focuses on methylation reactions, homocysteine metabolism, and DNA synthesis pathways.',
