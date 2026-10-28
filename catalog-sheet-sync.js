@@ -255,6 +255,7 @@
   };
 
   const IMAGE_OVERRIDES_BY_SLUG = {
+    'bpc-5mg-plus-tb-5mg': 'assets/products/20261022/wolverine.webp',
     'mots-c': 'assets/products/20261022/mots-c.webp',
     'bpc-157': 'assets/products/20261022/bpc-157.webp',
     'ghk-cu': 'assets/products/20261022/ghk-cu.webp',

@@ -65,7 +65,7 @@
         </div>
 
         <div class="checkout-complete-actions">
-          <a class="button primary" href="index.html#full-catalog">Continue Shopping</a>
+          <a class="button primary" href="catalog.html">Continue Shopping</a>
           <a class="button secondary" href="mailto:orders@jonezielabs.com?subject=Order%20request%20help">Need Help?</a>
         </div>
       </div>`;

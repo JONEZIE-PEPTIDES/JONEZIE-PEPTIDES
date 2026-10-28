@@ -1,28 +1,8 @@
 (() => {
   const catalog = window.JONEZIE_CATALOG;
   if (!catalog) return;
-  const FEATURED_WITH_NEW_ART = [
-    'retatrutide',
-    'mots-c',
-    'tesamorelin',
-    'semax',
-    'mt-1',
-    'cerebrolysin',
-    'bac-water',
-    'b12-10000mcg-10ml',
-    '5-amino-1mq',
-    'glutathione',
-    'hcg',
-    'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg',
-    'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg',
-    'tirzepatide',
-    'ghk-cu',
-    'selank',
-    'bpc-157',
-    'nad',
-    'kpv',
-    'cjc-1295-without-dac'
-  ];
+  const approvedLabels = window.JONEZIE_NEW_LABELS || [];
+  const approvedSlugs = new Set(approvedLabels.map(({ slug }) => slug));
 
   const IMAGE_OVERRIDES_BY_SLUG = {
     'mt-2': 'assets/products/20261022/mt-2.webp',
@@ -30,7 +10,7 @@
     'oxytocin-acetate': 'oxytocin-acetate-new-hero-product-image.webp',
     epithalon: 'assets/products/20261022/epithalon.webp',
     'bpc-157': 'assets/products/20261022/bpc-157.webp',
-    'bpc-5mg-plus-tb-5mg': 'wolverine-new-hero-product-image.webp',
+    'bpc-5mg-plus-tb-5mg': 'assets/products/20261022/wolverine.webp',
     semax: 'assets/products/20261022/semax.webp',
     kpv: 'assets/products/20261022/kpv.webp',
     'ss-31': 'assets/products/20261022/ss-31.webp',
@@ -80,7 +60,8 @@
     mazdutide: 'mazdutide-new-hero-product-image.webp',
     thymalin: 'thymalin-new-hero-product-image.webp',
     'thymosin-alpha-1': 'assets/products/20261022/thymosin-alpha-1.webp',
-    lc216: 'lc216-new-hero-product-image.webp'
+    lc216: 'lc216-new-hero-product-image.webp',
+    ...Object.fromEntries(approvedLabels.map(({ slug, image }) => [slug, image]))
   };
 
   const DISPLAY_NAME_OVERRIDES = {
@@ -125,6 +106,7 @@
     list.forEach((product) => {
       const override = IMAGE_OVERRIDES_BY_SLUG[product?.slug];
       if (override) product.image = override;
+      product.hasUpdatedLabel = approvedSlugs.has(product.slug);
       const displayName = DISPLAY_NAME_OVERRIDES[product?.slug];
       if (displayName) product.name = displayName;
       if (product?.slug === 'retatrutide') product.searchAliases = ['reta', 'retatrutide'];
@@ -137,8 +119,9 @@
       .map((product) => [product.slug, product])
   );
 
-  catalog.featured = FEATURED_WITH_NEW_ART
-    .map((slug) => {
+  // The approved list also defines display order, without a second allowlist.
+  catalog.featured = approvedLabels
+    .map(({ slug }) => {
       const product = featuredLookup.get(slug);
       if (!product) return null;
       return { ...product };

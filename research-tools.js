@@ -308,7 +308,7 @@
               <strong>Comparison Guides</strong>
               <span>Open side-by-side product reads for class, structure notes, handling context, and related options.</span>
             </a>
-            <a class="mini-link-card" href="index.html#full-catalog">
+            <a class="mini-link-card" href="catalog.html">
               <strong>Full Products</strong>
               <span>Return to the live catalog for product cards, current pricing, and the active image lineup.</span>
             </a>

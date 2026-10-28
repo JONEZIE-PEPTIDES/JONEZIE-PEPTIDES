@@ -1669,6 +1669,7 @@ img { display: block; max-width: 100%; }
 }
 
 .featured-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.featured-catalog-action { display: flex; justify-content: center; margin-top: 32px; }
 .product-card { overflow: hidden; }
 .product-card img {
   display: block;

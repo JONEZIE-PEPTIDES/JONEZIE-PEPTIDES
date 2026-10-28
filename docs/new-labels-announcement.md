@@ -1,14 +1,14 @@
 # New-label announcement
 
 Approved for production release on 2026-10-27. Inserted between the research standards strip and the intact
-featured-products/countdown section. CTA uses the existing `#full-catalog`.
+featured-products/countdown section. CTA now opens the separate `catalog.html` page.
 
-The explicit 32-item approved inventory is in `new-labels.js`. It is checked
-against the current new-label catalog overrides by `scripts/test-new-labels.cjs`.
+The shared 33-item approved inventory is in `new-label-products.js`. It drives
+the featured grid and animation; `scripts/test-featured-catalog.cjs` checks parity.
 The old `tirzepatide.webp` is excluded; `tirzepatide-20261027.webp` is included.
 All sources are full square photos in `assets/products/20261022/`, not cutouts.
 320px WebP derivatives in `assets/products/label-reveal/` preserve the entire
-composition; the full set totals 330,618 bytes. Original hero assets are unchanged.
+composition; the full set totals 342,986 bytes, including Wolverine.
 
 Uses existing Sora/Manrope typography, paper/pink/background/radius tokens and a
 native blue-black backdrop with a subtle cyan/teal glow. No global CSS rules or animation libraries added.

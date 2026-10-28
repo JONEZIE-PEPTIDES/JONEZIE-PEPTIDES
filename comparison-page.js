@@ -92,7 +92,7 @@
                 <strong>Research Tools</strong>
                 <span>Open concentration, storage, and preparation references inside the same brand flow.</span>
               </a>
-              <a class="mini-link-card" href="index.html#full-catalog">
+              <a class="mini-link-card" href="catalog.html">
                 <strong>Full Products</strong>
                 <span>Return to the live catalog for product cards, current pricing, and the active listing view.</span>
               </a>

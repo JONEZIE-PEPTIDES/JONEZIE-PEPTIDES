@@ -735,7 +735,7 @@ function renderSubmittedOrderPremium() {
       </div>
 
       <div class="checkout-complete-actions">
-        <a class="button primary" href="index.html#full-catalog">Continue Shopping</a>
+        <a class="button primary" href="catalog.html">Continue Shopping</a>
         <a class="button secondary" href="mailto:orders@jonezielabs.com?subject=Order%20request%20help%20-%20${encodeURIComponent(submittedOrderSnapshot.orderId || 'Jonezie')}">Need Help?</a>
       </div>
     </div>`;
@@ -756,7 +756,7 @@ function renderCart() {
       <div class="empty-cart-card">
         <h2>Your cart is empty.</h2>
         <p>Go back to the catalog, choose a product option, and add it to cart to begin checkout.</p>
-        <a class="button primary" href="index.html#full-catalog">Browse Catalog</a>
+        <a class="button primary" href="catalog.html">Browse Catalog</a>
       </div>`;
     renderSummaryValues({
       itemCount: 0,

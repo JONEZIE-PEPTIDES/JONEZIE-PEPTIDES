@@ -12,6 +12,13 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    function redirectLegacyCatalog() {
+      if (location.hash === '#full-catalog') location.replace('catalog.html');
+    }
+    redirectLegacyCatalog();
+    window.addEventListener('hashchange', redirectLegacyCatalog);
+  </script>
   <title>Jonezie Labs | Research Use Peptides</title>
   <meta name="description" content="Shop Jonezie Labs for research use peptides, support compounds, transparent pricing, and a cleaner research ordering experience built for serious buyers." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
@@ -31,10 +38,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@700&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260728a" />
-  <link rel="stylesheet" href="styles.css?v=20261027labels-live1" />
+  <link rel="stylesheet" href="styles.css?v=20261027catalog1" />
   <script src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
   <link rel="stylesheet" href="new-labels.css?v=20261027d" />
-  <script src="new-labels.js?v=20261027c" defer></script>
+  <script src="new-labels.js?v=20261027catalog1" defer></script>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -231,7 +238,7 @@
           <img class="brand-master-logo" src="jonezie-labs-master-logo.png?v=20260410c" alt="Jonezie Labs" />
         </a>
         <div id="brand-menu-home" class="brand-menu-panel" hidden>
-          <a href="index.html#full-catalog">Full Products</a>
+          <a href="catalog.html">Full Products</a>
           <a href="index.html#featured">Popular Products</a>
           <a href="why-jonezie.html">Why Jonezie</a>
           <a href="research-tools.html">Research Tools</a>
@@ -259,7 +266,7 @@
           <input id="nav-search-home" type="search" data-nav-search-input list="nav-search-list-home" placeholder="Search products" />
           <datalist id="nav-search-list-home"></datalist>
         </form>
-        <a href="#full-catalog" class="site-nav-mobile-link">Full Products</a>
+        <a href="catalog.html" class="site-nav-mobile-link">Full Products</a>
         <a href="#featured" class="site-nav-mobile-link">Popular Products</a>
         <a href="why-jonezie.html" class="site-nav-mobile-link">Why Jonezie</a>
         <a href="research-tools.html" class="site-nav-mobile-link">Research Tools</a>
@@ -269,7 +276,7 @@
         <a href="#faq" class="site-nav-mobile-link">FAQ</a>
         <a href="#process" class="site-nav-mobile-link">Ordering</a>
 
-        <a href="#full-catalog" class="nav-products-pill">Products</a>
+        <a href="catalog.html" class="nav-products-pill">Products</a>
         <a href="checkout.html" class="nav-cart" data-cart-link aria-label="Open cart">
           <span class="nav-cart-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" role="presentation">
@@ -291,7 +298,7 @@
           <h1>Precision peptides for <span class="hero-script">serious</span> research</h1>
           <div class="hero-actions hero-home-actions">
             <a class="button primary" href="#featured">Start Your Research</a>
-            <a class="button secondary" href="#full-catalog">View Full Catalog</a>
+            <a class="button secondary" href="catalog.html">View Full Catalog</a>
           </div>
         </div>
       </section>
@@ -310,7 +317,7 @@
           <p class="label-reveal-eyebrow">INTRODUCING OUR NEW LABELS</p>
           <h2 id="label-reveal-title">New labels.<br />Same Jonezie.</h2>
           <p class="label-reveal-description">A fresh look for the same amazing research products you know and love.</p>
-          <a class="label-reveal-link" href="#full-catalog">Explore the new look</a>
+          <a class="label-reveal-link" href="catalog.html">Explore the new look</a>
           <p class="label-reveal-note">For research use only.</p>
         </div>
       </section>
@@ -344,15 +351,11 @@
           </div>
         </div>
         <div class="featured-grid" data-featured-grid></div>
+        <div class="featured-catalog-action">
+          <a class="button primary" href="catalog.html">View full catalog</a>
+        </div>
       </section>
 
-      <section id="full-catalog" class="section-shell block-section">
-        <div class="section-heading centered compact">
-          <p class="eyebrow">Full Catalog</p>
-          <h2>Browse full inventory of compounds.</h2>
-        </div>
-        <div class="catalog-grid" data-catalog-grid></div>
-      </section>
 
       <section id="research-resources" class="section-shell block-section resource-hub-shell">
         <div class="section-heading centered compact">
@@ -672,20 +675,21 @@
   </div>
 
   <script src="catalog-data.js?v=20260914cerebrolysin1"></script>
-  <script src="catalog-sheet-sync.js?v=20261027images5"></script>
+  <script src="catalog-sheet-sync.js?v=20261027catalog1"></script>
   <script src="catalog-admin-config.js?v=20261009tirvariants"></script>
   <script src="catalog-admin.js?v=20261009tirvariants"></script>
-  <script src="catalog-image-overrides.js?v=20261027images5"></script>
+  <script src="new-label-products.js?v=20261027catalog1"></script>
+  <script src="catalog-image-overrides.js?v=20261027catalog1"></script>
   <script src="analytics-events.js?v=20261007a"></script>
   <script src="promo-banner.js?v=20260915fall25"></script>
   <script src="product-content.js?v=20261007glp3"></script>
   <script src="lead-capture-config.js?v=20260513a"></script>
   <script src="site-library.js?v=20261007glp3"></script>
   <script src="cart-nav.js?v=20261013mobileheadercart"></script>
-  <script src="nav-search.js?v=20261007aliases"></script>
+  <script src="nav-search.js?v=20261027catalog1"></script>
   <script src="age-gate.js?v=20260427c"></script>
-  <script src="script.js?v=20261009backorders"></script>
-  <script src="site-footer.js?v=20260603g"></script>
+  <script src="script.js?v=20261027catalog1"></script>
+  <script src="site-footer.js?v=20261027catalog1"></script>
   <script src="lead-capture.js?v=20260622a"></script>
   <script>
     (() => {

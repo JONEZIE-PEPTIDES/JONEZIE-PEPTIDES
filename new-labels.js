@@ -3,17 +3,8 @@
   const section = document.querySelector('[data-label-reveal]');
   if (!section) return;
 
-  // Approved collection only. The superseded Tirzepatide photo is deliberately excluded.
-  const approved = [
-    'tirzepatide-20261027', 'bac-water', 'ghk-cu', 'ss-31', 'bpc-157', 'nad',
-    'cagrilintide', 'snap-8', 'mots-c', 'cerebrolysin', 'kpv', 'hcg',
-    'ara-290', 'mt-1', 'mt-2', 'selank', 'semax', 'retatrutide',
-    'tesamorelin', 'pt-141', 'ipamorelin', 'epithalon', 'thymosin-alpha-1',
-    'kisspeptin-10', '5-amino-1mq', 'glutathione', 'igf-1lr3',
-    'cjc-1295-without-dac', 'tb500', 'cagrilintide-5mg-plus-semaglutide-5mg',
-    'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg',
-    'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg'
-  ];
+  const approved = window.JONEZIE_NEW_LABELS || [];
+  if (!approved.length) return;
   const rain = section.querySelector('.label-reveal-rain');
   const mobile = matchMedia('(max-width: 700px)');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -22,7 +13,7 @@
   let initialized = false;
 
   function nextImage(img) {
-    img.src = `assets/products/label-reveal/${approved[cursor % approved.length]}.webp`;
+    img.src = approved[cursor % approved.length].thumbnail;
     cursor += 1;
   }
 

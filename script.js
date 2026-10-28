@@ -196,9 +196,10 @@ function renderFeatured() {
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     const loadingMode = index < 3 ? 'eager' : 'lazy';
     const fetchPriority = index < 3 ? 'high' : 'low';
+    const imageDimensions = product.hasUpdatedLabel ? 'width="1254" height="1254"' : '';
     return `
       <a class="product-card card-link-shell ${getAccent(product.category)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
-        <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" loading="${loadingMode}" decoding="async" fetchpriority="${fetchPriority}" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
+        <img src="${imageSrc}" ${imageDimensions} alt="${escapeHtml(product.name)} product visual" loading="${loadingMode}" decoding="async" fetchpriority="${fetchPriority}" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         <div class="product-copy">
           <h3>${escapeHtml(product.name)}</h3>
           <div class="product-top product-top-price">${pricing}</div>
@@ -433,7 +434,7 @@ function initMerchPurchases() {
 }
 
 function bindProductClickTracking(scope = document) {
-  if (!catalogData) return;
+  if (!scope || !catalogData) return;
   const allProducts = [...(catalogData.featured || []), ...(catalogData.products || [])];
   const bySlug = new Map(allProducts.map((product) => [product.slug, product]));
   scope.querySelectorAll('[data-product-slug]').forEach((link) => {

@@ -6,12 +6,12 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const read = name => fs.readFileSync(path.join(root, name), 'utf8');
 const code = read('new-labels.js');
-const approved = [...code.match(/const approved = \[([\s\S]*?)\];/)[1].matchAll(/'([^']+)'/g)].map(m => m[1]);
-const current = [...new Set([...read('catalog-image-overrides.js').matchAll(/assets\/products\/20261022\/([^']+)\.webp/g)].map(m => m[1]))];
-assert.deepEqual([...approved].sort(), current.sort());
-assert.equal(new Set(approved).size, 32);
-assert(!approved.includes('tirzepatide'));
-const totalBytes = approved.reduce((n, name) => n + fs.statSync(path.join(root, 'assets/products/label-reveal', `${name}.webp`)).size, 0);
+const window = {};
+vm.runInNewContext(read('new-label-products.js'), { window });
+const approved = window.JONEZIE_NEW_LABELS;
+assert.equal(new Set(approved.map(item => item.slug)).size, approved.length);
+assert(!approved.some(item => item.image.endsWith('/tirzepatide.webp')));
+const totalBytes = approved.reduce((n, item) => n + fs.statSync(path.join(root, item.thumbnail)).size, 0);
 assert(totalBytes < 400000);
 
 class Element {
@@ -34,6 +34,7 @@ function setup({ mobile = false, reduced = false } = {}) {
   document.querySelector = () => section;
   document.createElement = () => new Element();
   vm.runInNewContext(code, {
+    window,
     document,
     matchMedia: query => media[query.includes('reduced') ? 1 : 0],
     ResizeObserver: class { constructor(fn) { this.fn = fn; } observe() { this.fn(); } },
@@ -70,7 +71,7 @@ for (let pass = 0; pass < 3; pass += 1) {
     assert.equal(card.children[0].alt, '');
   }
 }
-assert.equal(seen.size, 32, 'Every approved label must cycle');
+assert.equal(seen.size, approved.length, 'Every approved label must cycle');
 desktop.media[1].matches = true;
 desktop.media[1].events.change();
 assert.equal(desktop.section.dataset.running, 'false');
@@ -85,10 +86,9 @@ const html = read('index.html');
 assert(html.indexOf('trust-section-home section-shell') < html.indexOf('id="new-labels"'));
 assert(html.indexOf('id="new-labels"') < html.indexOf('id="featured"'));
 assert(html.indexOf('id="featured"') < html.indexOf('data-shipping-countdown'));
-assert.match(html, /class="label-reveal-link" href="#full-catalog"/);
-assert.match(html, /class="label-reveal-link" href="#full-catalog">Explore the new look<\/a>/);
+assert.match(html, /class="label-reveal-link" href="catalog.html">Explore the new look<\/a>/);
 assert.match(html, /class="label-reveal-rain" aria-hidden="true" inert/);
 assert.match(read('new-labels.css'), /prefers-reduced-motion: reduce/);
 assert(!html.includes('label-reveal-toggle'), 'No animation toggle in the announcement');
 assert(!read('new-labels.css').includes('reveal-cypress'), 'Use the native blue-black palette');
-console.log(`PASS: 32 current assets (${totalBytes} bytes), full cycle, lazy initialization, offscreen and tab pause, reduced motion, mobile count, placement, catalog anchor and removed toggle.`);
+console.log(`PASS: ${approved.length} current assets (${totalBytes} bytes), full cycle, lazy initialization, offscreen and tab pause, reduced motion, mobile count, placement and catalog navigation.`);

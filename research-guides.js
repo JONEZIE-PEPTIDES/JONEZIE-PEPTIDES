@@ -135,7 +135,7 @@
           <p class="eyebrow">Catalog</p>
           <h2>Keep product information close.</h2>
           <div class="mini-link-grid">
-            <a class="mini-link-card" href="index.html#full-catalog">
+            <a class="mini-link-card" href="catalog.html">
               <strong>Full Products</strong>
               <span>Return to the live product listing for current pricing, card presentation, and the active catalog view.</span>
             </a>

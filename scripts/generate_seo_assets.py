@@ -45,6 +45,7 @@ def main() -> None:
 
     base_urls = [
         f"{SITE_ORIGIN}/",
+        f"{SITE_ORIGIN}/catalog.html",
         f"{SITE_ORIGIN}/comparison.html",
         f"{SITE_ORIGIN}/research-guides.html",
         f"{SITE_ORIGIN}/research-tools.html",

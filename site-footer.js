@@ -26,7 +26,7 @@
       <nav class="site-footer-links" aria-label="Footer shop links">
         <h3>Shop</h3>
         <a href="${ROOT}terms.html"><span>Policies</span>${icon('chevron')}</a>
-        <a href="${ROOT}product.html"><span>Full Catalog</span>${icon('chevron')}</a>
+        <a href="${ROOT}catalog.html"><span>Full Catalog</span>${icon('chevron')}</a>
         <a href="${ROOT}index.html#featured"><span>Popular Picks</span>${icon('chevron')}</a>
         <a href="${ROOT}research-tools.html"><span>Research Tools</span>${icon('chevron')}</a>
         <a href="${ROOT}research-guides.html"><span>Research Guides</span>${icon('chevron')}</a>

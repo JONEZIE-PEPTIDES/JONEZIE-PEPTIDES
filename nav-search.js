@@ -1,6 +1,6 @@
 (() => {
   const NAV_CATEGORY_LINKS = [
-    ['index.html#full-catalog', 'Full Products'],
+    ['catalog.html', 'Full Products'],
     ['index.html#featured', 'Popular Products'],
     ['why-jonezie.html', 'Why Jonezie'],
     ['research-tools.html', 'Research Tools'],
@@ -236,7 +236,7 @@
         .join('');
       if (productPill) {
         productPill.insertAdjacentHTML('beforebegin', mobileMarkup);
-        productPill.href = normalizeHref('index.html#full-catalog');
+        productPill.href = normalizeHref('catalog.html');
       }
     });
   }
