@@ -63,18 +63,61 @@ img { display: block; max-width: 100%; }
 }
 
 .trustpilot-collector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  min-height: 52px;
-  margin: 0 auto 26px;
+  margin: 0;
   text-align: center;
 }
 
-.trustpilot-collector .trustpilot-widget {
-  min-height: 52px;
+.trustpilot-review-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 48px;
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Sora", "Space Grotesk", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
 }
 
-.trustpilot-collector a {
-  color: var(--cyan-soft);
+.trustpilot-review-link svg {
+  width: 22px;
+  height: 22px;
+  margin-left: 3px;
+  color: #00b67a;
+  flex: 0 0 auto;
+}
+
+.trustpilot-review-link strong {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.trustpilot-review-link > span { white-space: nowrap; }
+
+@media (max-width: 380px) {
+  .trustpilot-review-link { gap: 5px; padding-inline: 14px; font-size: 0.7rem; }
+  .trustpilot-review-link strong { font-size: 0.92rem; }
+}
+
+.trustpilot-review-link:hover {
+  background: #fff;
+  border-color: var(--cyan-soft);
+}
+
+.trustpilot-review-link:focus-visible {
+  outline: 2px solid var(--cyan-soft);
+  outline-offset: 4px;
 }
 
 .site-footer-main {
@@ -1214,6 +1257,207 @@ img { display: block; max-width: 100%; }
   margin-bottom: 18px;
 }
 
+#featured {
+  --featured-inset: 42px;
+  padding: var(--featured-inset);
+  scroll-margin-top: 146px;
+}
+
+.featured-promo {
+  margin: calc(-1 * var(--featured-inset)) calc(-1 * var(--featured-inset)) 0;
+}
+
+.featured-promo-row {
+  --promo-play-state: paused;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  min-height: 330px;
+  padding: 28px 32px;
+  overflow: hidden;
+  border-radius: calc(var(--radius-xl) - 1px) calc(var(--radius-xl) - 1px) 0 0;
+  background:
+    radial-gradient(ellipse at 35% 100%, rgba(40, 216, 239, 0.12), transparent 52%),
+    radial-gradient(ellipse at 72% 92%, rgba(255, 95, 169, 0.09), transparent 48%),
+    var(--bg);
+}
+
+.featured-promo-row[data-active="true"] { --promo-play-state: running; }
+
+.featured-promo-row::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -20%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 32% 48%, rgba(40, 216, 239, 0.13), transparent 38%),
+    radial-gradient(ellipse at 64% 70%, rgba(255, 95, 169, 0.1), transparent 32%);
+  animation: featured-light-reveal 4.5s ease-in-out both;
+  animation-play-state: var(--promo-play-state);
+}
+
+.featured-promo-row::after {
+  content: "";
+  position: absolute;
+  inset: auto 6% 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(40, 216, 239, 0.28), rgba(255, 95, 169, 0.28), transparent);
+}
+
+.featured-promo-offer {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(140px, 0.75fr) minmax(0, 1.65fr);
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  min-width: 0;
+}
+
+.featured-offer-copy {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-family: "Sora", "Space Grotesk", sans-serif;
+}
+
+.featured-offer-discount { margin: 0; }
+
+.featured-offer-discount strong {
+  display: block;
+  color: var(--paper);
+  font-size: clamp(2.5rem, 4.6vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.075em;
+  line-height: 0.96;
+}
+
+.featured-offer-discount strong span {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.64em;
+  letter-spacing: -0.045em;
+}
+
+.featured-offer-discount > span {
+  display: block;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.featured-offer-code {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 18px 0 0;
+  padding: 9px 22px;
+  border: 1px solid rgba(255, 95, 169, 0.55);
+  border-radius: 999px;
+  background: rgba(255, 95, 169, 0.12);
+  box-shadow: 0 0 24px rgba(255, 95, 169, 0.1), inset 0 0 16px rgba(255, 95, 169, 0.05);
+  color: var(--paper);
+}
+
+.featured-offer-code span {
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.featured-offer-code strong { font-size: 1rem; letter-spacing: 0.03em; }
+
+.featured-case-scene {
+  min-width: 0;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.featured-case-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 54%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, #000 54%, transparent 75%);
+  animation: featured-case-reveal 4.5s ease-in-out both;
+  animation-play-state: var(--promo-play-state);
+}
+
+.featured-case-scene figcaption {
+  display: grid;
+  gap: 3px;
+  margin-top: -4px;
+  color: var(--paper);
+  font-family: "Sora", "Space Grotesk", sans-serif;
+  font-size: clamp(0.65rem, 1.15vw, 0.85rem);
+  line-height: 1.35;
+}
+
+.featured-case-scene figcaption > span {
+  color: var(--cyan-soft);
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.featured-offer-note { margin: 9px 0 0; color: var(--muted); font-size: 0.6rem; }
+
+.featured-promo-panel {
+  display: grid;
+  align-content: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.featured-promo-panel .featured-countdown-heading {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.featured-promo-panel .featured-countdown-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 20px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.featured-promo > .trustpilot-collector {
+  padding: 22px var(--featured-inset);
+}
+
+@keyframes featured-light-reveal {
+  0%, 100% { transform: translateX(0); opacity: 0.6; }
+  50% { transform: translateX(5%); opacity: 1; }
+}
+
+@keyframes featured-case-reveal {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-promo-row::before, .featured-case-art { animation: none; }
+}
+
 .featured-countdown-card {
   width: min(100%, 560px);
   margin: 0 auto;
@@ -1227,7 +1471,6 @@ img { display: block; max-width: 100%; }
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
-.featured-countdown-eyebrow,
 .featured-countdown-kicker p,
 .featured-countdown-message {
   margin: 0;
@@ -1238,16 +1481,20 @@ img { display: block; max-width: 100%; }
   text-transform: uppercase;
 }
 
-.featured-countdown-eyebrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  font-size: clamp(0.8rem, 1.6vw, 1rem);
+.featured-countdown-card .featured-countdown-title {
+  margin: 0;
+  padding-bottom: 6px;
+  font-family: "Sora", "Space Grotesk", sans-serif;
+  font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  background: var(--ember-brand-fill);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.featured-countdown-eyebrow::before,
-.featured-countdown-eyebrow::after,
 .featured-countdown-kicker span,
 .featured-countdown-message::before,
 .featured-countdown-message::after {
@@ -1259,7 +1506,6 @@ img { display: block; max-width: 100%; }
   background: linear-gradient(90deg, transparent, var(--pink));
 }
 
-.featured-countdown-eyebrow::after,
 .featured-countdown-message::after {
   background: linear-gradient(90deg, var(--pink), transparent);
 }
@@ -1302,6 +1548,7 @@ img { display: block; max-width: 100%; }
   font-size: clamp(2rem, 6vw, 3.15rem);
   font-weight: 800;
   line-height: 0.9;
+  font-variant-numeric: tabular-nums;
 }
 
 .featured-countdown-unit span,
@@ -1343,14 +1590,11 @@ img { display: block; max-width: 100%; }
     border-radius: 16px;
   }
 
-  .featured-countdown-eyebrow,
   .featured-countdown-kicker p,
   .featured-countdown-message {
     letter-spacing: 0.12em;
   }
 
-  .featured-countdown-eyebrow::before,
-  .featured-countdown-eyebrow::after,
   .featured-countdown-kicker span,
   .featured-countdown-message::before,
   .featured-countdown-message::after {
@@ -1361,6 +1605,112 @@ img { display: block; max-width: 100%; }
     grid-template-columns: minmax(58px, 1fr) auto minmax(58px, 1fr) auto minmax(58px, 1fr);
   }
 }
+
+@media (max-width: 860px) {
+  #featured { --featured-inset: 24px; }
+}
+
+@media (min-width: 761px) and (max-width: 1000px) {
+  .featured-promo-row { padding-inline: 20px; }
+  .featured-promo-offer { grid-template-columns: minmax(112px, 0.75fr) minmax(0, 1.65fr); }
+  .featured-offer-code { padding-inline: 14px; }
+  .featured-promo-panel .featured-countdown-card { padding: 10px; }
+  .featured-promo-panel .featured-countdown-title { font-size: 1.5rem; }
+  .featured-promo-panel .featured-countdown-kicker p { font-size: 0.68rem; }
+  .featured-promo-panel .featured-countdown-message { font-size: 0.95rem; }
+  .featured-promo-panel .featured-countdown-units {
+    grid-template-columns: minmax(48px, 1fr) 9px minmax(48px, 1fr) 9px minmax(48px, 1fr);
+    gap: 6px;
+  }
+  .featured-promo-panel .featured-countdown-unit { min-height: 76px; }
+  .featured-promo-panel .featured-countdown-unit strong { font-size: 2.3rem; }
+  .featured-promo-panel .featured-countdown-separator { font-size: 1.5rem; }
+}
+
+@media (max-width: 760px) {
+  .featured-promo-row {
+    grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+    gap: 10px;
+    min-height: 260px;
+    padding: 22px 12px;
+  }
+
+  .featured-promo-offer { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .featured-offer-discount strong { font-size: clamp(1.5rem, 6.8vw, 2.2rem); letter-spacing: -0.055em; white-space: nowrap; }
+  .featured-offer-discount strong span { display: inline; margin: 0; font-size: 1em; }
+  .featured-offer-discount > span { margin-top: 5px; font-size: 0.55rem; letter-spacing: 0.18em; }
+  .featured-offer-code { flex-direction: row; align-items: center; gap: 4px; margin-top: 9px; padding: 6px 9px; }
+  .featured-offer-code span { font-size: 0.45rem; letter-spacing: 0.02em; }
+  .featured-offer-code strong { font-size: 0.65rem; }
+  .featured-case-scene { max-width: 260px; }
+  .featured-case-scene figcaption { gap: 3px; font-size: clamp(0.6rem, 2.4vw, 0.8rem); }
+  .featured-offer-note { margin-top: 6px; font-size: 0.5rem; }
+
+  .featured-promo > .trustpilot-collector {
+    padding-block: 20px;
+  }
+
+  .featured-promo-panel .featured-countdown-card {
+    padding: 0;
+  }
+
+  .featured-promo-panel .featured-countdown-title {
+    padding-bottom: 2px;
+    font-size: clamp(0.9rem, 3.7vw, 1.4rem);
+  }
+
+  .featured-promo-panel .featured-countdown-kicker p,
+  .featured-promo-panel .featured-countdown-message {
+    font-size: clamp(0.55rem, 2.2vw, 0.72rem);
+    letter-spacing: 0.08em;
+  }
+
+  .featured-promo-panel .featured-countdown-kicker,
+  .featured-promo-panel .featured-countdown-message {
+    gap: 5px;
+  }
+
+  .featured-promo-panel .featured-countdown-kicker {
+    margin: clamp(7px, 2vw, 10px) 0 7px;
+  }
+
+  .featured-promo-panel .featured-countdown-kicker span,
+  .featured-promo-panel .featured-countdown-message::before,
+  .featured-promo-panel .featured-countdown-message::after {
+    max-width: 18px;
+  }
+
+  .featured-promo-panel .featured-countdown-units {
+    grid-template-columns: minmax(28px, 1fr) 4px minmax(28px, 1fr) 4px minmax(28px, 1fr);
+    gap: 3px;
+  }
+
+  .featured-promo-panel .featured-countdown-unit {
+    min-height: clamp(48px, 15vw, 62px);
+    padding: 6px 2px;
+    border-radius: 8px;
+  }
+
+  .featured-promo-panel .featured-countdown-unit strong {
+    font-size: clamp(1.25rem, 5.5vw, 1.65rem);
+  }
+
+  .featured-promo-panel .featured-countdown-unit span {
+    margin-top: 4px;
+    font-size: clamp(0.5rem, 1.8vw, 0.56rem);
+    letter-spacing: 0.06em;
+  }
+
+  .featured-promo-panel .featured-countdown-separator {
+    font-size: clamp(0.9rem, 4vw, 1.25rem);
+    letter-spacing: 0;
+  }
+
+  .featured-promo-panel .featured-countdown-message {
+    margin-top: clamp(7px, 2vw, 10px);
+  }
+}
+
 .hero.hero-home .hero-text {
   color: var(--ink-soft);
 }
@@ -4489,9 +4839,13 @@ body.lightbox-open {
 
 @media (max-width: 1120px) {
   .hero,
-  .featured-grid,
   .steps-grid,
-  .cta-panel,
+  .cta-panel { grid-template-columns: 1fr; }
+  .featured-grid,
+  .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .featured-grid,
   .catalog-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 1040px) {

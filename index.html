@@ -38,8 +38,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@700&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260728a" />
-  <link rel="stylesheet" href="styles.css?v=20261027widecards1" />
-  <script src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+  <link rel="stylesheet" href="styles.css?v=20261028casereveal1" />
+  <script src="featured-promo.js?v=20261028casereveal1" defer></script>
   <link rel="stylesheet" href="new-labels.css?v=20261027stagger1" />
   <script src="new-labels.js?v=20261028lanes1" defer></script>
   <script type="application/ld+json">
@@ -313,38 +313,59 @@
       </section>
 
       <section id="featured" class="section-shell block-section">
-        <div class="section-heading centered featured-countdown-heading">
-          <div class="featured-countdown-card" data-shipping-countdown aria-label="Shipping cutoff countdown">
-            <p class="featured-countdown-eyebrow">Featured Products</p>
-            <div class="featured-countdown-kicker">
-              <span></span>
-              <p>Order in the next</p>
-              <span></span>
+        <div class="featured-promo">
+          <div class="featured-promo-row" data-featured-promo>
+            <div class="featured-promo-offer">
+              <div class="featured-offer-copy">
+                <p class="featured-offer-discount"><strong>25% <span>OFF</span></strong><span>Sitewide</span></p>
+                <p class="featured-offer-code"><span>Use code</span> <strong>FALL25</strong></p>
+              </div>
+              <figure class="featured-case-scene">
+                <img class="featured-case-art" src="assets/promos/featured-case-scene-v1-960.webp" srcset="assets/promos/featured-case-scene-v1-480.webp 480w, assets/promos/featured-case-scene-v1-960.webp 960w" sizes="(max-width: 760px) 44vw, (max-width: 1000px) 28vw, 360px" width="960" height="640" loading="lazy" decoding="async" alt="Jonezie Labs clear-lid case with blue-capped vials and cyan and pink lighting" />
+                <figcaption><span>Buy 3+ units</span><strong>Get a free Jonezie case</strong></figcaption>
+                <p class="featured-offer-note">For research use only.</p>
+              </figure>
             </div>
-            <div class="featured-countdown-units" aria-live="polite">
-              <div class="featured-countdown-unit">
-                <strong data-countdown-hours>00</strong>
-                <span>Hrs</span>
-              </div>
-              <div class="featured-countdown-separator">:</div>
-              <div class="featured-countdown-unit">
-                <strong data-countdown-minutes>00</strong>
-                <span>Min</span>
-              </div>
-              <div class="featured-countdown-separator">:</div>
-              <div class="featured-countdown-unit">
-                <strong data-countdown-seconds>00</strong>
-                <span>Sec</span>
+            <div class="featured-promo-panel">
+              <div class="section-heading centered featured-countdown-heading">
+                <div class="featured-countdown-card" data-shipping-countdown aria-label="Shipping cutoff countdown">
+                  <h2 class="featured-countdown-title">Featured Products</h2>
+                  <div class="featured-countdown-kicker">
+                    <span></span>
+                    <p>Order in the next</p>
+                    <span></span>
+                  </div>
+                  <div class="featured-countdown-units" aria-live="polite">
+                    <div class="featured-countdown-unit">
+                      <strong data-countdown-hours>00</strong>
+                      <span>Hrs</span>
+                    </div>
+                    <div class="featured-countdown-separator">:</div>
+                    <div class="featured-countdown-unit">
+                      <strong data-countdown-minutes>00</strong>
+                      <span>Min</span>
+                    </div>
+                    <div class="featured-countdown-separator">:</div>
+                    <div class="featured-countdown-unit">
+                      <strong data-countdown-seconds>00</strong>
+                      <span>Sec</span>
+                    </div>
+                  </div>
+                  <p class="featured-countdown-message" data-countdown-message>Ships Today</p>
+                </div>
               </div>
             </div>
-            <p class="featured-countdown-message" data-countdown-message>Ships Today</p>
           </div>
+          <section class="trustpilot-collector" id="trustpilot-collector" aria-label="Leave a review on Trustpilot">
+            <a class="trustpilot-review-link" href="https://www.trustpilot.com/review/www.jonezielabs.com" target="_blank" rel="noopener noreferrer" aria-label="Review Jonezie Labs on Trustpilot (opens in a new tab)">
+              <span>Review us on</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="m12 1.5 2.5 7.7h8.1l-6.5 4.8 2.5 7.7-6.6-4.8-6.6 4.8 2.5-7.7-6.5-4.8h8.1z" fill="currentColor" />
+              </svg>
+              <strong>Trustpilot</strong>
+            </a>
+          </section>
         </div>
-        <section class="trustpilot-collector" id="trustpilot-collector" aria-label="Leave a review on Trustpilot">
-          <div class="trustpilot-widget" data-locale="en-US" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="6a4ffcfa541c4a9a59def1db" data-style-height="52px" data-style-width="100%">
-            <a href="https://www.trustpilot.com/review/www.jonezielabs.com" target="_blank" rel="noopener">Trustpilot</a>
-          </div>
-        </section>
         <div class="featured-grid" data-featured-grid></div>
         <div class="featured-catalog-action">
           <a class="button primary" href="catalog.html">View full catalog</a>
