@@ -29,7 +29,7 @@
     'ss-31': 'ss-31',
     'kisspeptin-10': 'kisspeptin-10',
     cagrilintide: 'cagrilintide',
-    'cagrilintide-5mg-plus-semaglutide-5mg': 'cagrilintide-5mg-plus-semaglutide-5mg',
+    'cagrilintide-5mg-plus-semaglutide-5mg': 'cagrilintide-5mg-plus-semaglutide-5mg-20261028',
     'ara-290': 'ara-290',
     'snap-8': 'snap-8',
     tb500: 'tb500',

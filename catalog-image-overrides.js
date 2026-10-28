@@ -30,7 +30,7 @@
     glutathione: 'assets/products/20261022/glutathione.webp',
     cagrilintide: 'assets/products/20261022/cagrilintide.webp',
     'cagrilintide-2-5mg-plus-semaglutide-2-5mg': 'OFFICAL%20PRODUCT%20IMAGES%20FOR%20JONEZIE%20LABS%20SITE/CAG_SEMA_5MG_3ML_Vial.webp?v=20260501a',
-    'cagrilintide-5mg-plus-semaglutide-5mg': 'assets/products/20261022/cagrilintide-5mg-plus-semaglutide-5mg.webp',
+    'cagrilintide-5mg-plus-semaglutide-5mg': 'assets/products/20261022/cagrilintide-5mg-plus-semaglutide-5mg-20261028.webp',
     hmg: 'hmg-new-hero-product-image.webp',
     cerebrolysin: 'assets/products/20261022/cerebrolysin.webp',
     'ara-290': 'assets/products/20261022/ara-290.webp',

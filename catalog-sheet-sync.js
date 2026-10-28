@@ -279,7 +279,7 @@
     'cjc-1295-without-dac': 'assets/products/20261022/cjc-1295-without-dac.webp',
     tb500: 'assets/products/20261022/tb500.webp',
     'pt-141': 'assets/products/20261022/pt-141.webp',
-    'cagrilintide-5mg-plus-semaglutide-5mg': 'assets/products/20261022/cagrilintide-5mg-plus-semaglutide-5mg.webp',
+    'cagrilintide-5mg-plus-semaglutide-5mg': 'assets/products/20261022/cagrilintide-5mg-plus-semaglutide-5mg-20261028.webp',
     ipamorelin: 'assets/products/20261022/ipamorelin.webp',
     epithalon: 'assets/products/20261022/epithalon.webp',
     'thymosin-alpha-1': 'assets/products/20261022/thymosin-alpha-1.webp',
