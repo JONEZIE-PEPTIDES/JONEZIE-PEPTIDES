@@ -30,9 +30,9 @@
       for (let row = 0; row < rows; row += 1) {
         const card = document.createElement('div');
         const distant = lane % 3 === 2;
-        // Each speed group spans the whole loop, so it cannot bunch into a wave.
-        const duration = 27 + row * 3;
-        const phase = (0.08 + lane / lanes.length + row * (1 / rows + 1 / (rows * lanes.length))) % 1;
+        // Cards in a lane share one speed, so their spacing cannot drift or collide.
+        const duration = mobile.matches ? 30 : 27 + (lane % 3) * 3;
+        const phase = (0.08 + lane / (lanes.length * rows) + row / rows) % 1;
         card.className = `label-reveal-card${distant ? ' is-distant' : ''}`;
         const properties = {
           '--card-x': `${x}%`,

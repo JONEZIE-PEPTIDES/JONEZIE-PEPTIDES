@@ -87,20 +87,23 @@ assert.equal(phone.rain.children.length, 8);
 assert.equal(phone.section.dataset.running, 'false');
 
 function checkContinuousRain({ section, rain }, mobile) {
-  const groups = new Map();
+  const lanes = new Map();
   const cards = rain.children.map(card => {
     const value = key => parseFloat(card.properties[key]);
     const duration = value('--card-duration');
     const phase = -value('--card-delay') / duration;
-    if (!groups.has(duration)) groups.set(duration, []);
-    groups.get(duration).push(phase);
-    return { duration, phase, size: value('--card-size') };
+    const lane = card.properties['--card-x'];
+    const result = { duration, phase, size: value('--card-size'), lane };
+    if (!lanes.has(lane)) lanes.set(lane, []);
+    lanes.get(lane).push(result);
+    return result;
   });
-  for (const phases of groups.values()) {
-    phases.sort((a, b) => a - b);
+  for (const laneCards of lanes.values()) {
+    assert.equal(new Set(laneCards.map(card => card.duration)).size, 1, 'Cards in one lane must share a speed');
+    const phases = laneCards.map(card => card.phase).sort((a, b) => a - b);
     phases.forEach((phase, index) => {
       const next = index + 1 < phases.length ? phases[index + 1] : phases[0] + 1;
-      assert(Math.abs(next - phase - 1 / phases.length) < 1e-9, 'Each speed group must remain evenly staggered');
+      assert(Math.abs(next - phase - 1 / phases.length) < 1e-9, 'Cards in one lane must remain evenly staggered');
     });
   }
   const height = section.offsetHeight;
@@ -111,11 +114,23 @@ function checkContinuousRain({ section, rain }, mobile) {
   let minimum = cards.length;
   for (let step = 0; step <= 29700; step += 1) {
     const seconds = step / 10; // Complete repeating period of the 27/30/33-second loops.
-    const count = cards.filter(({ duration, phase, size }) => {
+    const positions = new Map();
+    const count = cards.filter(({ duration, phase, size, lane }) => {
       const progress = (phase + seconds / duration) % 1;
       const top = -size - 24 + progress * (height + size + 48);
+      if (!positions.has(lane)) positions.set(lane, []);
+      positions.get(lane).push({ top, bottom: top + size });
       return zones.some(([start, end]) => Math.min(top + size, end) - Math.max(top, start) >= 16);
     }).length;
+    for (const lanePositions of positions.values()) {
+      lanePositions.sort((a, b) => a.top - b.top);
+      for (let index = 1; index < lanePositions.length; index += 1) {
+        assert(
+          lanePositions[index - 1].bottom <= lanePositions[index].top,
+          `Cards in one lane overlap after ${seconds.toFixed(1)} seconds`,
+        );
+      }
+    }
     minimum = Math.min(minimum, count);
   }
   assert(minimum >= (mobile ? 2 : 10), `Rain must stay visible throughout all loops (minimum ${minimum})`);
