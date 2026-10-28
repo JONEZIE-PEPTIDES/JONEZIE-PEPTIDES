@@ -14,12 +14,13 @@ const before = JSON.parse(JSON.stringify(catalog.products));
 vm.runInContext(read('catalog-image-overrides.js'), context);
 const labels = Array.from(context.window.JONEZIE_NEW_LABELS);
 const featured = Array.from(catalog.featured);
-assert.equal(labels.length, 34);
+assert.equal(labels.length, 35);
 assert.deepEqual(featured.map(p => p.slug), labels.map(p => p.slug));
 assert(featured.every(p => p.hasUpdatedLabel));
 const order = featured.map(p => p.slug);
 assert(Math.abs(order.indexOf('tesamorelin') - order.indexOf('mots-c')) - 1 >= 4);
 assert(order.includes('b12-10000mcg-10ml'));
+assert(order.includes('semaglutide'));
 assert(order.includes('bpc-5mg-plus-tb-5mg'));
 for (const item of labels) {
   assert(fs.existsSync(path.join(root, item.image)), item.image);
@@ -73,4 +74,4 @@ for (const file of cp.execFileSync('git', ['ls-files', '*.html'], { cwd: root, e
   const manifest = html.indexOf('<script src="new-label-products.js');
   assert(manifest >= 0 && manifest < override, file + ' must load approved labels first');
 }
-console.log('PASS: 34 approved features, four-product MOTS/Tesa gap, automatic future inclusion, unchanged catalog pricing/options, separate catalog, legacy redirect and shared script ordering.');
+console.log('PASS: 35 approved features, four-product MOTS/Tesa gap, automatic future inclusion, unchanged catalog pricing/options, separate catalog, legacy redirect and shared script ordering.');

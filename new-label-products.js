@@ -3,6 +3,7 @@
   // This shared list controls homepage features and the animated reveal.
   const artwork = {
     retatrutide: 'retatrutide',
+    semaglutide: 'semaglutide-20261028',
     'mots-c': 'mots-c',
     semax: 'semax',
     'mt-1': 'mt-1',

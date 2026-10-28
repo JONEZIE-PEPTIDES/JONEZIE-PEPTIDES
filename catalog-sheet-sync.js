@@ -268,7 +268,7 @@
     semax: 'assets/products/20261022/semax.webp',
     tesamorelin: 'assets/products/20261022/tesamorelin.webp',
     nad: 'assets/products/20261022/nad.webp',
-    semaglutide: 'semaglutide-20mg-official.png',
+    semaglutide: 'assets/products/20261022/semaglutide-20261028.webp',
     tirzepatide: 'assets/products/20261022/tirzepatide-20261027.webp',
     cerebrolysin: 'assets/products/20261022/cerebrolysin.webp',
     'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg': 'assets/products/20261022/ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg.webp',

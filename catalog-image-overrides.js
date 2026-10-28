@@ -45,7 +45,7 @@
     'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'assets/products/20261022/bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg.webp',
     nad: 'assets/products/20261022/nad.webp',
     survodutide: 'survodutide-new-hero-product-image.webp',
-    semaglutide: 'semaglutide-new-hero-product-image.webp',
+    semaglutide: 'assets/products/20261022/semaglutide-20261028.webp',
     'tirzepatide': 'assets/products/20261022/tirzepatide-20261027.webp',
     retatrutide: 'assets/products/20261022/retatrutide.webp',
     'mt-1': 'assets/products/20261022/mt-1.webp',
