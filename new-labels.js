@@ -30,8 +30,9 @@
       for (let row = 0; row < rows; row += 1) {
         const card = document.createElement('div');
         const distant = lane % 3 === 2;
-        const duration = 25 + ((lane * 3 + row * 2) % 10);
-        const phase = mobile.matches ? (row === 0 ? 0.2 : 0.79) + lane * 0.017 : 0.19 + row * 0.29 + (lane % 2) * 0.05;
+        // Each speed group spans the whole loop, so it cannot bunch into a wave.
+        const duration = 27 + row * 3;
+        const phase = (0.08 + lane / lanes.length + row * (1 / rows + 1 / (rows * lanes.length))) % 1;
         card.className = `label-reveal-card${distant ? ' is-distant' : ''}`;
         const properties = {
           '--card-x': `${x}%`,
@@ -58,7 +59,7 @@
   }
 
   const sizeObserver = new ResizeObserver(() => {
-    section.style.setProperty('--reveal-travel', `${section.offsetHeight + 180}px`);
+    section.style.setProperty('--reveal-travel', `${section.offsetHeight + 24}px`);
   });
   sizeObserver.observe(section);
   const preloadObserver = new IntersectionObserver(entries => {

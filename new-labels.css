@@ -1,6 +1,6 @@
 .label-reveal {
   --reveal-bg: var(--bg);
-  --reveal-travel: 620px;
+  --reveal-travel: 464px;
   position: relative;
   isolation: isolate;
   display: grid;
@@ -105,7 +105,7 @@
 .label-reveal[data-running="true"] .label-reveal-card { animation-play-state: running; }
 
 @keyframes label-reveal-fall {
-  from { transform: translate3d(-50%, -180px, 0) rotate(var(--card-tilt)); }
+  from { transform: translate3d(-50%, calc(-100% - 24px), 0) rotate(var(--card-tilt)); }
   to { transform: translate3d(calc(-50% + var(--card-drift)), var(--reveal-travel), 0) rotate(var(--card-end-tilt)); }
 }
 

@@ -15,7 +15,11 @@ const totalBytes = approved.reduce((n, item) => n + fs.statSync(path.join(root, 
 assert(totalBytes < 400000);
 
 class Element {
-  constructor() { this.children = []; this.events = {}; this.dataset = {}; this.attrs = {}; this.style = { setProperty() {} }; }
+  constructor() {
+    this.children = []; this.events = {}; this.dataset = {}; this.attrs = {};
+    this.properties = {};
+    this.style = { setProperty: (key, value) => { this.properties[key] = value; } };
+  }
   append(child) { this.children.push(child); }
   replaceChildren() { this.children = []; }
   addEventListener(name, fn) { this.events[name] = fn; }
@@ -82,6 +86,43 @@ const phone = setup({ mobile: true, reduced: true });
 assert.equal(phone.rain.children.length, 8);
 assert.equal(phone.section.dataset.running, 'false');
 
+function checkContinuousRain({ section, rain }, mobile) {
+  const groups = new Map();
+  const cards = rain.children.map(card => {
+    const value = key => parseFloat(card.properties[key]);
+    const duration = value('--card-duration');
+    const phase = -value('--card-delay') / duration;
+    if (!groups.has(duration)) groups.set(duration, []);
+    groups.get(duration).push(phase);
+    return { duration, phase, size: value('--card-size') };
+  });
+  for (const phases of groups.values()) {
+    phases.sort((a, b) => a - b);
+    phases.forEach((phase, index) => {
+      const next = index + 1 < phases.length ? phases[index + 1] : phases[0] + 1;
+      assert(Math.abs(next - phase - 1 / phases.length) < 1e-9, 'Each speed group must remain evenly staggered');
+    });
+  }
+  const height = section.offsetHeight;
+  assert.equal(section.properties['--reveal-travel'], `${height + 24}px`);
+  assert(read('new-labels.css').includes('translate3d(-50%, calc(-100% - 24px), 0)'));
+  // Include the mobile copy mask, not just cards hidden behind the text.
+  const zones = mobile ? [[0, height * 0.18], [height * 0.84, height]] : [[0, height]];
+  let minimum = cards.length;
+  for (let step = 0; step <= 29700; step += 1) {
+    const seconds = step / 10; // Complete repeating period of the 27/30/33-second loops.
+    const count = cards.filter(({ duration, phase, size }) => {
+      const progress = (phase + seconds / duration) % 1;
+      const top = -size - 24 + progress * (height + size + 48);
+      return zones.some(([start, end]) => Math.min(top + size, end) - Math.max(top, start) >= 16);
+    }).length;
+    minimum = Math.min(minimum, count);
+  }
+  assert(minimum >= (mobile ? 2 : 10), `Rain must stay visible throughout all loops (minimum ${minimum})`);
+}
+checkContinuousRain(desktop, false);
+checkContinuousRain(phone, true);
+
 const html = read('index.html');
 assert(html.indexOf('trust-section-home section-shell') < html.indexOf('id="new-labels"'));
 assert(html.indexOf('id="new-labels"') < html.indexOf('id="featured"'));
@@ -91,4 +132,4 @@ assert.match(html, /class="label-reveal-rain" aria-hidden="true" inert/);
 assert.match(read('new-labels.css'), /prefers-reduced-motion: reduce/);
 assert(!html.includes('label-reveal-toggle'), 'No animation toggle in the announcement');
 assert(!read('new-labels.css').includes('reveal-cypress'), 'Use the native blue-black palette');
-console.log(`PASS: ${approved.length} current assets (${totalBytes} bytes), full cycle, lazy initialization, offscreen and tab pause, reduced motion, mobile count, placement and catalog navigation.`);
+console.log(`PASS: ${approved.length} current assets (${totalBytes} bytes), continuous staggered desktop/mobile loops, full cycle, lazy initialization, offscreen and tab pause, reduced motion, mobile count, placement and catalog navigation.`);
