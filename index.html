@@ -337,7 +337,7 @@
                 <span>Sec</span>
               </div>
             </div>
-            <p class="featured-countdown-message" data-countdown-message>Ships Tomorrow</p>
+            <p class="featured-countdown-message" data-countdown-message>Ships Today</p>
           </div>
         </div>
         <section class="trustpilot-collector" id="trustpilot-collector" aria-label="Leave a review on Trustpilot">
@@ -748,7 +748,7 @@
         if (minutesNode) minutesNode.textContent = String(minutes).padStart(2, '0');
         if (secondsNode) secondsNode.textContent = String(seconds).padStart(2, '0');
         if (messageNode) {
-          messageNode.textContent = beforeTodayCutoff ? 'Ships Tomorrow' : 'Next Shipment Window';
+          messageNode.textContent = beforeTodayCutoff ? 'Ships Today' : 'Next Shipment Window';
         }
       }
 

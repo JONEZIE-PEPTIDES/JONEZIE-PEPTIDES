@@ -57,6 +57,8 @@ assert(styles.includes('transparent, #000 20%, #000 80%, transparent'), 'The com
 assert(fs.statSync(path.join(root, 'assets/products/card-studio-background.webp')).size < 30000);
 assert(!home.includes('data-catalog-grid'));
 assert(home.includes('data-featured-grid'));
+assert(!home.includes('Ships Tomorrow'));
+assert.equal(home.split('Ships Today').length - 1, 2, 'Initial and live countdown copy must both say Ships Today');
 assert.match(home, /class="featured-catalog-action">\s*<a[^>]*href="catalog.html">View full catalog<\/a>/);
 assert(full.includes('data-catalog-grid'));
 assert(!full.includes('data-featured-grid'));
