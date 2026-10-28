@@ -198,8 +198,10 @@ function renderFeatured() {
     const fetchPriority = index < 3 ? 'high' : 'low';
     const imageDimensions = product.hasUpdatedLabel ? 'width="1254" height="1254"' : '';
     return `
-      <a class="product-card card-link-shell ${getAccent(product.category)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
+      <a class="product-card card-link-shell ${getAccent(product.category)}" data-updated-label="${Boolean(product.hasUpdatedLabel)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
+        ${product.hasUpdatedLabel ? '<div class="product-card-media">' : ''}
         <img src="${imageSrc}" ${imageDimensions} alt="${escapeHtml(product.name)} product visual" loading="${loadingMode}" decoding="async" fetchpriority="${fetchPriority}" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
+        ${product.hasUpdatedLabel ? '</div>' : ''}
         <div class="product-copy">
           <h3>${escapeHtml(product.name)}</h3>
           <div class="product-top product-top-price">${pricing}</div>
@@ -224,8 +226,10 @@ function renderCatalog() {
     const imageSrc = getImageSrc(product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
-      <a class="catalog-card card-link-shell" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
+      <a class="catalog-card card-link-shell" data-updated-label="${Boolean(product.hasUpdatedLabel)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
+        ${product.hasUpdatedLabel ? '<div class="product-card-media">' : ''}
         <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
+        ${product.hasUpdatedLabel ? '</div>' : ''}
         <div class="catalog-copy">
           <h3>${escapeHtml(product.name)}</h3>
           <div class="catalog-top catalog-top-price">${pricing}</div>

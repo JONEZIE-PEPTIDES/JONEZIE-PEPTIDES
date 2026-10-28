@@ -9,6 +9,11 @@ Both featured products and the animated announcement read it. All 33 approved
 products are included, including the Wolverine image supplied on 2026-10-27.
 MOTS-c and Tesamorelin must have at least four products between them.
 
+Homepage/catalog cards use a compact, blended studio-background frame for approved
+photos. The original image remains unchanged inside that frame. Product detail
+images and the falling announcement's square thumbnails are not reframed.
+See `product-card-framing.md` for rendering and background-asset details.
+
 For each future approved label update:
 
 1. Preserve the full supplied composition; export the hero WebP to

@@ -40,6 +40,20 @@ assert.equal(catalog.featured.at(-1).slug, 'oxytocin-acetate');
 assert.equal(catalog.featured.at(-1).image, 'test-hero.webp');
 
 const home = read('index.html'), full = read('catalog.html');
+const styles = read('styles.css');
+for (const selector of ['product-card', 'catalog-card']) {
+  const imageRule = styles.match(new RegExp(`\\.${selector} img \\{([^}]+)\\}`))[1];
+  assert.match(imageRule, /height: auto;/, 'Old-label images keep their original natural sizing');
+  assert.match(imageRule, /object-fit: contain;/);
+}
+assert.match(styles, /\.product-card-media \{\s*--product-frame-height: 270px;/);
+assert.match(styles, /\.product-card-media \{ --product-frame-height: 240px; \}/);
+assert(!home.includes('.product-card img'), 'Homepage must not override shared compact image sizing');
+assert.equal(read('script.js').split('data-updated-label="${Boolean(product.hasUpdatedLabel)}"').length - 1, 2);
+assert.equal(read('script.js').split("product.hasUpdatedLabel ? '<div class=\"product-card-media\">'").length - 1, 2);
+assert.match(styles, /width: min\(100%, var\(--product-frame-height\)\);\s*height: auto;\s*aspect-ratio: 1;/);
+assert(styles.includes('transparent, #000 20%, #000 80%, transparent'), 'The complete vial stays in the opaque center');
+assert(fs.statSync(path.join(root, 'assets/products/card-studio-background.webp')).size < 30000);
 assert(!home.includes('data-catalog-grid'));
 assert(home.includes('data-featured-grid'));
 assert.match(home, /class="featured-catalog-action">\s*<a[^>]*href="catalog.html">View full catalog<\/a>/);

@@ -1774,6 +1774,39 @@ img { display: block; max-width: 100%; }
   background: linear-gradient(135deg, #9fe8ff 0%, #b8d8ff 24%, #d39ce6 56%, #ff5ba7 100%);
   border-radius: 0;
 }
+.product-card-media {
+  --product-frame-height: 270px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  height: auto;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 35%, #e1e5eb, #c7cdd7);
+}
+.product-card-media::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1.37;
+  transform: translateX(-50%);
+  background: url("assets/products/card-studio-background.webp") center / 100% 100% no-repeat;
+  mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+  pointer-events: none;
+}
+/* Blend only the photo's outer background; the vial and label stay opaque and untouched. */
+.product-card .product-card-media img,
+.catalog-card .product-card-media img {
+  position: relative;
+  width: min(100%, var(--product-frame-height));
+  height: auto;
+  aspect-ratio: 1;
+  background: none;
+  mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+}
 .catalog-copy {
   padding: 22px;
 }
@@ -4892,7 +4925,7 @@ body.lightbox-open {
     width: 100%;
     min-width: 0;
   }
-  .product-card img { height: auto; }
+  .product-card-media { --product-frame-height: 240px; }
   .site-footer { flex-direction: column; }
 }
 
