@@ -56,7 +56,7 @@
     ipamorelin: 'assets/products/20261022/ipamorelin.webp',
     pinealon: 'pinealon-new-hero-product-image.webp',
     selank: 'assets/products/20261022/selank.webp',
-    vip: 'vip-new-hero-product-image.webp',
+    vip: 'assets/products/20261022/vip-20261029.webp',
     mazdutide: 'mazdutide-new-hero-product-image.webp',
     thymalin: 'thymalin-new-hero-product-image.webp',
     'thymosin-alpha-1': 'assets/products/20261022/thymosin-alpha-1.webp',

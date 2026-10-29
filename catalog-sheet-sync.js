@@ -291,7 +291,8 @@
     glutathione: 'assets/products/20261022/glutathione.webp',
     hcg: 'assets/products/20261022/hcg.webp',
     'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'assets/products/20261022/bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg.webp',
-    'b12-10000mcg-10ml': 'assets/products/20261022/b12-3000mcg-3ml.webp'
+    'b12-10000mcg-10ml': 'assets/products/20261022/b12-3000mcg-3ml.webp',
+    vip: 'assets/products/20261022/vip-20261029.webp'
   };
 
   const DESCRIPTION_BY_CATEGORY = {
