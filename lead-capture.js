@@ -81,7 +81,7 @@
       <div class="lead-capture-dialog" role="dialog" aria-modal="true" aria-label="Jonezie Labs insider access">
         <button class="lead-capture-close" type="button" data-lead-close aria-label="Close sign-up prompt">&times;</button>
         <div class="lead-capture-brand">
-          <img class="lead-capture-logo" src="jonezie-logo-white-text-transparent.webp" alt="Jonezie Labs" />
+          <img class="lead-capture-logo" src="jonezie-labs-white-logo.webp?v=20261029" alt="Jonezie Labs" />
         </div>
         <p class="eyebrow">Jonezie Labs</p>
         <h2>Stay Connected</h2>
@@ -252,7 +252,7 @@
     dialog.innerHTML = `
       <button class="lead-capture-close" type="button" data-lead-close aria-label="Close sign-up prompt">&times;</button>
       <div class="lead-capture-brand">
-        <img class="lead-capture-logo" src="jonezie-logo-white-text-transparent.webp" alt="Jonezie Labs" />
+        <img class="lead-capture-logo" src="jonezie-labs-white-logo.webp?v=20261029" alt="Jonezie Labs" />
       </div>
       <p class="eyebrow">Jonezie Labs</p>
       <h2>Welcome to the tribe!</h2>

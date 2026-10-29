@@ -27,7 +27,7 @@ function initAgeGate() {
     <div class="age-gate__backdrop" aria-hidden="true"></div>
     <section class="age-gate__dialog">
       <div class="age-gate__brand">
-        <img src="jonezie-labs-master-logo.png?v=20260410c" alt="Jonezie Labs" />
+        <img src="jonezie-labs-logo.webp?v=20261029" alt="Jonezie Labs" />
       </div>
       <span class="age-gate__eyebrow">21+ confirmation required</span>
       <h2 id="age-gate-title">Before you enter, confirm you are 21 or older.</h2>

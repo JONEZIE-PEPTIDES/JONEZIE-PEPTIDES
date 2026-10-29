@@ -6,7 +6,7 @@
     <div class="site-footer-main">
       <section class="site-footer-brand" aria-label="Jonezie Labs">
         <a class="site-footer-logo" href="${ROOT}index.html" aria-label="Jonezie Labs home">
-          <img src="${ROOT}footer-jonezie-labs-logo.webp?v=20260603a" alt="Jonezie Labs" loading="eager" decoding="async" />
+          <img src="${ROOT}jonezie-labs-white-logo.webp?v=20261029" alt="Jonezie Labs" loading="eager" decoding="async" />
         </a>
         <h2>Quality peptides.<br />Clear pricing.<br /><span>Real support.</span></h2>
         <p>Built for researchers who want cleaner ordering, better product navigation, and faster answers.</p>
