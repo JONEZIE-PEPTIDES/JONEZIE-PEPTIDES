@@ -139,6 +139,19 @@ function getCardTitle(product) {
   return window.JONEZIE_SITE_LIBRARY?.getProductDisplayName?.(product) || product.name;
 }
 
+function getCardStockLabel(product) {
+  const statuses = (product.options || []).map((option) => String(option.inventoryStatus || 'in_stock').toLowerCase());
+  if (statuses.length && statuses.every((status) => status === 'sold_out')) return 'Sold out';
+  if (statuses.includes('in_stock')) return 'In stock';
+  if (statuses.includes('backorder')) return 'Backorder';
+  return 'Check availability';
+}
+
+function renderCardCoa(product) {
+  if (!siteLibrary?.getCoaImageForSlug?.(product.slug)) return '';
+  return `<a class="card-coa-link" href="${getProductUrl(product.slug)}#product-coa" aria-label="View ${escapeHtml(getCardTitle(product))} test report">View test report</a>`;
+}
+
 function getLowestOfferedPrice(product) {
   const candidates = [];
   (product.options || []).forEach((option) => {
@@ -197,8 +210,6 @@ function renderFeatured() {
 
   const featured = (catalogData.featured || []).filter(Boolean);
   grid.innerHTML = featured.map((product, index) => {
-    const productContent = getProductContent(product);
-    const description = getCardSummary(product, productContent);
     const strengthChips = renderStrengthChips(product.options);
     const pricing = renderCardPricing(product);
     const imageSrc = getImageSrc(product.image);
@@ -207,47 +218,90 @@ function renderFeatured() {
     const fetchPriority = index < 3 ? 'high' : 'low';
     const imageDimensions = product.hasUpdatedLabel ? 'width="1254" height="1254"' : '';
     return `
-      <a class="product-card card-link-shell ${getAccent(product.category)}" data-updated-label="${Boolean(product.hasUpdatedLabel)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(getCardTitle(product))} product page">
+      <article class="product-card ${getAccent(product.category)}" data-updated-label="${Boolean(product.hasUpdatedLabel)}">
+      <a class="card-link-shell card-main-link" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(getCardTitle(product))} product page">
         ${product.hasUpdatedLabel ? '<div class="product-card-media">' : ''}
         <img src="${imageSrc}" ${imageDimensions} alt="${escapeHtml(product.name)} product visual" loading="${loadingMode}" decoding="async" fetchpriority="${fetchPriority}" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         ${product.hasUpdatedLabel ? '</div>' : ''}
         <div class="product-copy">
           <h3>${escapeHtml(getCardTitle(product))}</h3>
           <div class="product-top product-top-price">${pricing}</div>
-          <p class="card-summary">${escapeHtml(description)}</p>
           <div class="option-chips">${strengthChips}</div>
-          <span class="catalog-link">View details</span>
+          <span class="card-availability">${escapeHtml(getCardStockLabel(product))}</span>
+          <span class="catalog-link">View product</span>
         </div>
-      </a>`;
+      </a>${renderCardCoa(product)}
+      </article>`;
   }).join('');
 }
 
 function renderCatalog() {
   const grid = document.querySelector('[data-catalog-grid]');
   if (!grid || !catalogData) return;
-
-  const products = [...(catalogData.products || [])].sort((a, b) => a.name.localeCompare(b.name));
+  const search = document.querySelector('[data-catalog-search]')?.value.trim().toLowerCase() || '';
+  const strength = document.querySelector('[data-catalog-strength]')?.value || '';
+  const stock = document.querySelector('[data-catalog-stock]')?.value || '';
+  const format = document.querySelector('[data-catalog-format]')?.value || '';
+  const products = [...(catalogData.products || [])]
+    .filter((product) => {
+      const options = product.options || [];
+      const searchTerms = [getCardTitle(product), product.name, product.sourceName, product.slug, ...(product.searchAliases || []), ...options.map((option) => option.mgOption)]
+        .filter(Boolean).join(' ').toLowerCase();
+      if (search && !searchTerms.includes(search)) return false;
+      if (strength && !options.some((option) => option.mgOption === strength)) return false;
+      if (stock && !options.some((option) => String(option.inventoryStatus || 'in_stock').toLowerCase() === stock)) return false;
+      if (format && !options.some((option) => parsePrice(option[format]) > 0)) return false;
+      return true;
+    })
+    .sort((a, b) => getCardTitle(a).localeCompare(getCardTitle(b)));
+  const resultCount = document.querySelector('[data-catalog-result-count]');
+  if (resultCount) resultCount.textContent = `${products.length} ${products.length === 1 ? 'product' : 'products'} found`;
+  if (!products.length) {
+    grid.innerHTML = '<div class="catalog-empty"><h2>No products found</h2><p>Try a different name, strength, or filter.</p></div>';
+    return;
+  }
   grid.innerHTML = products.map((product) => {
-    const productContent = getProductContent(product);
-    const description = getCardSummary(product, productContent);
     const strengthChips = renderStrengthChips(product.options);
     const pricing = renderCardPricing(product);
     const imageSrc = getImageSrc(product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
-      <a class="catalog-card card-link-shell" data-updated-label="${Boolean(product.hasUpdatedLabel)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(getCardTitle(product))} product page">
+      <article class="catalog-card" data-updated-label="${Boolean(product.hasUpdatedLabel)}">
+      <a class="card-link-shell card-main-link" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(getCardTitle(product))} product page">
         ${product.hasUpdatedLabel ? '<div class="product-card-media">' : ''}
         <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         ${product.hasUpdatedLabel ? '</div>' : ''}
         <div class="catalog-copy">
           <h3>${escapeHtml(getCardTitle(product))}</h3>
           <div class="catalog-top catalog-top-price">${pricing}</div>
-          <p class="card-summary">${escapeHtml(description)}</p>
           <div class="option-chips">${strengthChips}</div>
-          <span class="catalog-link">View details</span>
+          <span class="card-availability">${escapeHtml(getCardStockLabel(product))}</span>
+          <span class="catalog-link">View product</span>
         </div>
-      </a>`;
+      </a>${renderCardCoa(product)}
+      </article>`;
   }).join('');
+}
+
+function initCatalogControls() {
+  const strengthSelect = document.querySelector('[data-catalog-strength]');
+  if (!strengthSelect || !catalogData) return;
+  const strengths = [...new Set((catalogData.products || []).flatMap((product) =>
+    (product.options || []).map((option) => option.mgOption).filter(Boolean)))];
+  strengths.sort((a, b) => (parsePrice(a) || 0) - (parsePrice(b) || 0) || a.localeCompare(b));
+  strengthSelect.insertAdjacentHTML('beforeend', strengths.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join(''));
+  document.querySelectorAll('[data-catalog-search], [data-catalog-strength], [data-catalog-stock], [data-catalog-format]')
+    .forEach((control) => control.addEventListener(control.tagName === 'INPUT' ? 'input' : 'change', () => {
+      ensureCatalogRendered();
+      renderCatalog();
+      bindProductClickTracking(document.querySelector('[data-catalog-grid]'));
+    }));
+  document.querySelector('[data-catalog-clear]')?.addEventListener('click', () => {
+    document.querySelectorAll('[data-catalog-search], [data-catalog-strength], [data-catalog-stock], [data-catalog-format]')
+      .forEach((control) => { control.value = ''; });
+    renderCatalog();
+    bindProductClickTracking(document.querySelector('[data-catalog-grid]'));
+  });
 }
 
 let hasRenderedCatalog = false;
@@ -504,6 +558,7 @@ function initDeferredCatalogRender() {
 }
 
 renderCounts();
+initCatalogControls();
 renderFeatured();
 bindProductClickTracking(document.querySelector('[data-featured-grid]'));
 document.addEventListener('jonezie:promo-updated', handlePromoUpdated);

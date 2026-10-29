@@ -11,9 +11,6 @@
         <h2>Quality peptides.<br />Clear pricing.<br /><span>Real support.</span></h2>
         <p>Built for researchers who want cleaner ordering, better product navigation, and faster answers.</p>
         <div class="site-footer-socials" aria-label="Jonezie Labs links">
-          <a href="${ROOT}research-tools.html" aria-label="Research tools">
-            ${icon('beaker')}
-          </a>
           <a href="mailto:customerservice@jonezielabs.com?subject=Jonezie%20Labs%20Support" aria-label="Email Jonezie Labs">
             ${icon('mail')}
           </a>
@@ -28,7 +25,6 @@
         <a href="${ROOT}terms.html"><span>Policies</span>${icon('chevron')}</a>
         <a href="${ROOT}catalog.html"><span>Full Catalog</span>${icon('chevron')}</a>
         <a href="${ROOT}index.html#featured"><span>Popular Picks</span>${icon('chevron')}</a>
-        <a href="${ROOT}research-tools.html"><span>Research Tools</span>${icon('chevron')}</a>
         <a href="${ROOT}research-guides.html"><span>Research Guides</span>${icon('chevron')}</a>
       </nav>
 

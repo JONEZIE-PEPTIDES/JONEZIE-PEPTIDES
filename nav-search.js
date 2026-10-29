@@ -3,7 +3,6 @@
     ['catalog.html', 'Full Products'],
     ['index.html#featured', 'Popular Products'],
     ['why-jonezie.html', 'Why Jonezie'],
-    ['research-tools.html', 'Research Tools'],
     ['research-guides.html', 'Research Guides'],
     ['comparison.html', 'Comparisons'],
     ['michigan-peptides.html', 'Michigan'],

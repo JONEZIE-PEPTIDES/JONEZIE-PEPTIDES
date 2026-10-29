@@ -316,29 +316,12 @@ function renderProductPage() {
   const selectedTotal = document.querySelector('[data-selected-total]');
   const addToCartButton = document.querySelector('[data-add-to-cart]');
   const buyNowButton = document.querySelector('[data-buy-now]');
-  const purchaseActions = document.querySelector('.purchase-actions');
-  let keepShoppingButton = document.querySelector('[data-keep-shopping]');
-  const featuredProductsHref = window.location.pathname.includes('/products/') ? '../index.html#featured' : 'index.html#featured';
-
-  if (purchaseActions && buyNowButton && !keepShoppingButton) {
-    keepShoppingButton = document.createElement('a');
-    keepShoppingButton.className = 'button secondary purchase-button purchase-keep-shopping';
-    keepShoppingButton.href = featuredProductsHref;
-    keepShoppingButton.textContent = 'Keep Shopping';
-    keepShoppingButton.setAttribute('data-keep-shopping', '');
-    keepShoppingButton.hidden = true;
-    buyNowButton.insertAdjacentElement('afterend', keepShoppingButton);
-  } else if (keepShoppingButton) {
-    keepShoppingButton.href = featuredProductsHref;
-  }
 
   document.title = siteLibrary?.getProductPageTitle ? siteLibrary.getProductPageTitle(product) : `${product.name} | Jonezie Labs`;
   const meta = document.querySelector('meta[name="description"]');
   const productContent = getProductContent(product);
-  const shortDescription = siteLibrary?.getProductDisplaySummary
-    ? siteLibrary.getProductDisplaySummary(product, productContent)
-    : productContent?.shortDescription || product.description;
-  const researchSummary = getProductHeaderSummary(product);
+  const shortDescription = siteLibrary?.getProductMetaDescription?.(product, productContent)
+    || `${displayName} from Jonezie Labs. View available strengths, pack formats, pricing, and documentation.`;
   const productProfile = siteLibrary?.getProductInfoProfile(product, productContent, catalogData) || null;
   const researchFindings = productContent?.researchFindings || [];
   const storageProfile = siteLibrary?.getStorageProfile(product) || {
@@ -354,9 +337,7 @@ function renderProductPage() {
   const siteDisclaimer = siteLibrary?.RUO_COPY?.full || contentData?.disclaimerLong || 'All product information is provided for research, laboratory, or analytical reference only. Products are not for human or veterinary use.';
   const canonicalUrl = siteLibrary?.getProductCanonicalUrl ? siteLibrary.getProductCanonicalUrl(product.slug) : `${SITE_ORIGIN}/products/${encodeURIComponent(product.slug)}.html`;
   const ogImageUrl = getAbsoluteSiteUrl(product.image || PRODUCT_FALLBACK_IMAGE);
-  const baseMetaDescription = siteLibrary?.getProductMetaDescription
-    ? siteLibrary.getProductMetaDescription(product, productContent)
-    : `${product.name} from Jonezie Labs. ${(productProfile?.researchContext || shortDescription)} View listed strengths, pricing, storage notes, handling context, and related comparisons for laboratory reference only.`;
+  const baseMetaDescription = shortDescription;
   upsertLink('link[rel="canonical"]', { rel: 'canonical', href: canonicalUrl });
   upsertMeta('meta[name="robots"]', {
     name: 'robots',
@@ -371,7 +352,7 @@ function renderProductPage() {
       tenVialPrice: 'Full 10-Kit'
     };
     const packLabel = packMap[selectedPackKey] || 'Research pricing';
-    const metaDescription = `${productProfile?.researchContext || shortDescription} ${selectedOption ? `${selectedOption.mgOption} is currently listed with ${packLabel.toLowerCase()} pricing.` : ''} View ${product.name} product reference details from Jonezie Labs.`.replace(/\s+/g, ' ').trim();
+    const metaDescription = `${shortDescription} ${selectedOption ? `${selectedOption.mgOption} ${packLabel.toLowerCase()} available.` : ''}`.replace(/\s+/g, ' ').trim();
     if (meta) meta.setAttribute('content', metaDescription);
     upsertMeta('meta[property="og:type"]', { property: 'og:type', content: 'product' });
     upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: 'Jonezie Labs' });
@@ -389,7 +370,7 @@ function renderProductPage() {
       '@graph': [
         {
           '@type': 'Product',
-          name: product.name,
+          name: displayName,
           description: metaDescription,
           category: product.category,
           image: ogImageUrl,
@@ -430,21 +411,10 @@ function renderProductPage() {
             {
               '@type': 'ListItem',
               position: 2,
-              name: product.name,
+              name: displayName,
               item: canonicalUrl
             }
           ]
-        },
-        {
-          '@type': 'FAQPage',
-          mainEntity: productFaqs.map((item) => ({
-            '@type': 'Question',
-            name: item.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: item.answer
-            }
-          }))
         }
       ]
     };
@@ -461,11 +431,11 @@ function renderProductPage() {
     unitPrice: parsePrice(selectedOption?.[selectedPackKey] || product.startingPriceSingle)
   });
   if (titleNode) titleNode.textContent = displayName;
-  if (eyebrowNode) eyebrowNode.textContent = getCategoryDisplayLabel(product.category);
-  if (descriptionNode) descriptionNode.textContent = researchSummary;
+  if (eyebrowNode) eyebrowNode.textContent = 'Research use only';
+  if (descriptionNode) descriptionNode.textContent = `Available in ${product.options.map((option) => option.mgOption).filter(Boolean).join(', ')}. Choose a pack format to see current pricing.`;
   if (heroImageNode) {
     heroImageNode.src = getProductImageSrc(product.image);
-    heroImageNode.alt = `${product.name} product image`;
+    heroImageNode.alt = `${displayName} product image`;
     heroImageNode.loading = 'eager';
     heroImageNode.decoding = 'async';
     heroImageNode.setAttribute('fetchpriority', 'high');
@@ -489,19 +459,19 @@ function renderProductPage() {
   function openCoaLightbox(imagePath) {
     if (!coaLightbox || !coaLightboxImage) return;
     coaLightboxImage.src = `${imagePath}?v=${COA_ASSET_VERSION}`;
-    coaLightboxImage.alt = `${product.name} certificate of analysis`;
-    if (coaLightboxCaption) coaLightboxCaption.textContent = `${product.name} Certificate of Analysis`;
+    coaLightboxImage.alt = `${displayName} certificate of analysis`;
+    if (coaLightboxCaption) coaLightboxCaption.textContent = `${displayName} Certificate of Analysis`;
     coaLightbox.hidden = false;
     document.body.classList.add('lightbox-open');
   }
 
-  const coaImagePath = getCoaImageForSlug(product.slug);
+  const coaImagePath = siteLibrary?.getCoaImageForSlug?.(product.slug) || getCoaImageForSlug(product.slug);
   if (coaButton) {
     if (!coaImagePath || !coaLightbox || !coaLightboxImage) {
-      coaButton.textContent = 'CoA Soon';
+      coaButton.textContent = 'Test report unavailable';
       coaButton.disabled = true;
     } else {
-      coaButton.textContent = 'CoA';
+      coaButton.textContent = 'View test report';
       coaButton.disabled = false;
       coaButton.addEventListener('click', () => openCoaLightbox(coaImagePath));
       coaCloseButtons.forEach((button) => {
@@ -510,6 +480,7 @@ function renderProductPage() {
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') closeCoaLightbox();
       });
+      if (window.location.hash === '#product-coa') openCoaLightbox(coaImagePath);
     }
   }
 
@@ -537,12 +508,8 @@ function renderProductPage() {
       const isSoldOut = inventoryStatus === 'sold_out';
       return `
         <button type="button" class="spec-card spec-card-button${isActive ? ' is-selected' : ''}${isSoldOut ? ' is-sold-out' : ''}" data-option-code="${escapeHtml(option.code)}" ${isSoldOut ? 'disabled aria-disabled="true"' : ''}>
-          <p class="eyebrow">${escapeHtml(option.code)}</p>
-          <h3>${escapeHtml(option.mgOption)}</h3>
-          <p class="inventory-pill inventory-${inventoryStatus}">${getInventoryLabel(inventoryStatus)}</p>
-          ${option.singleVialPrice ? `<div class="spec-price-row"><span>Single</span><strong>${escapeHtml(option.singleVialPrice)}</strong></div>` : ''}
-          ${option.eightVialPrice ? `<div class="spec-price-row"><span>8-Kit</span><strong>${escapeHtml(option.eightVialPrice)}</strong></div>` : ''}
-          ${option.tenVialPrice ? `<div class="spec-price-row live-row"><span>Full 10-Kit</span><strong>${escapeHtml(option.tenVialPrice)}</strong></div>` : ''}
+          <strong>${escapeHtml(option.mgOption)}</strong>
+          <span class="inventory-pill inventory-${inventoryStatus}">${getInventoryLabel(inventoryStatus)}</span>
         </button>`;
     }).join('');
 
@@ -595,9 +562,9 @@ function renderProductPage() {
       if (selectedStatus === 'backorder') {
         selectedSubtitle.textContent = getBackorderNote(product, selectedOption);
       } else if (isSoldOut) {
-        selectedSubtitle.textContent = `${selectedOption.code} is currently sold out.`;
+        selectedSubtitle.textContent = `${selectedOption.mgOption} is currently sold out.`;
       } else {
-        selectedSubtitle.textContent = `${packLabel} selected for ${selectedOption.code}.`;
+        selectedSubtitle.textContent = `${selectedOption.mgOption} · ${packLabel} · In stock`;
       }
     }
     if (selectedPrice) selectedPrice.textContent = isSoldOut ? 'Sold Out' : (unitPrice !== null ? formatMoney(unitPrice) : 'Pending');
@@ -647,143 +614,58 @@ function renderProductPage() {
   });
   qtyInput?.addEventListener('input', renderSelectionSummary);
 
+  let lastAddedSelectionKey = '';
+  const cartSelectionKey = (item) => `${item.code}:${item.packKey}:${item.quantity}`;
+
   addToCartButton?.addEventListener('click', () => {
     const item = getSelectedCartItem();
     if (!item) return;
     addItemToCart(item);
+    lastAddedSelectionKey = cartSelectionKey(item);
     window.JONEZIE_ANALYTICS?.addToCart(item);
-    buyNowButton?.classList.add('purchase-button-pink');
-    if (keepShoppingButton) keepShoppingButton.hidden = false;
     addToCartButton.textContent = 'Added To Cart';
     window.setTimeout(() => {
-      addToCartButton.textContent = 'Add To Cart';
+      addToCartButton.textContent = 'Add to cart';
     }, 1400);
   });
 
   buyNowButton?.addEventListener('click', () => {
     const item = getSelectedCartItem();
     if (!item) return;
-    setCart([item]);
-    window.JONEZIE_ANALYTICS?.addToCart(item);
-    window.JONEZIE_ANALYTICS?.beginCheckout([item]);
+    if (lastAddedSelectionKey !== cartSelectionKey(item)) {
+      addItemToCart(item);
+      window.JONEZIE_ANALYTICS?.addToCart(item);
+    }
+    window.JONEZIE_ANALYTICS?.beginCheckout(getCart());
     window.location.href = 'checkout.html';
   });
 
   if (highlightsGrid) {
     const optionText = product.options.map((option) => option.mgOption).join(', ');
-    const handlingSteps = productProfile?.mixingProfile?.steps?.slice(0, 3) || [];
-    const findingsMarkup = researchFindings.length
-      ? `<ul class="research-list">${researchFindings.map((finding) => `<li>${escapeHtml(finding)}</li>`).join('')}</ul>`
-      : '';
+    const components = product.slug === 'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg'
+      ? '<div><dt>Components</dt><dd>GHK-Cu 50mg · BPC-157 10mg · TB-500 10mg</dd></div>' : '';
     highlightsGrid.innerHTML = `
-      <article>
-        <p class="eyebrow">Research Summary</p>
-        <h2>What this product is commonly referenced for</h2>
-        <p>${escapeHtml(productProfile?.researchContext || shortDescription)}</p>
-        ${findingsMarkup}
-      </article>
-      <article>
-        <p class="eyebrow">Compound Details</p>
-        <h2>Class, category, and form</h2>
-        <ul class="research-list">
-          <li>${escapeHtml(productProfile?.compoundClass || product.category)}</li>
-          <li>${escapeHtml(productProfile?.researchCategory || product.category)}</li>
-          <li>${escapeHtml(productProfile?.form || 'Research vial')}</li>
-          <li>${escapeHtml(optionText || 'Listed strengths pending')}</li>
-        </ul>
-      </article>
-      <article>
-        <p class="eyebrow">Storage Notes</p>
-        <h2>${escapeHtml(storageProfile.title)}</h2>
-        <p>${escapeHtml(productProfile?.storageNote || storageProfile.shortSummary)}</p>
-        <ul class="research-list">
-          ${storageProfile.bullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join('')}
-        </ul>
-      </article>
-      <article>
-        <p class="eyebrow">Handling Notes</p>
-        <h2>Preparation and label review</h2>
-        <p>${escapeHtml(productProfile?.handlingNote || 'Confirm the vial label before handling and keep preparation notes documented.')}</p>
-        ${handlingSteps.length ? `<ol class="tool-step-list">${handlingSteps.map((step) => `<li>${escapeHtml(step)}</li>`).join('')}</ol>` : ''}
-      </article>
-      <article>
-        <p class="eyebrow">Comparison Context</p>
-        <h2>How this listing fits into side-by-side review</h2>
-        <p>${escapeHtml(productProfile?.structureNote || 'Listed as a research product inside the active Jonezie catalog.')}</p>
-        <p>${escapeHtml(productProfile?.comparisonSummary || 'Use the comparison pages to weigh class, form, listed strengths, and nearby compounds.')}</p>
-      </article>
-      <article>
-        <p class="eyebrow">Reference Note</p>
-        <h2>${escapeHtml(categoryGuide?.title || 'Related research guide')}</h2>
-        <p>${escapeHtml(categoryGuide?.summary || 'Use the guide library to move into related products, comparison pages, and research tools.')}</p>
-        <p>${escapeHtml(siteDisclaimer)}</p>
-      </article>`;
+      <details>
+        <summary>Product details <span>Strengths, format, and use notice</span></summary>
+        <dl>
+          <div><dt>Available strengths</dt><dd>${escapeHtml(optionText || 'See options above')}</dd></div>
+          <div><dt>Format</dt><dd>${escapeHtml(siteLibrary?.getProductForm?.(product) || 'Research vial')}</dd></div>
+          ${components}
+          <div><dt>Use</dt><dd>Laboratory research only. Not for human or veterinary use.</dd></div>
+        </dl>
+      </details>`;
   }
 
   if (resourcesNode) {
-    resourcesNode.innerHTML = `
-      <div class="resource-strip">
-        <article class="resource-strip-card">
-          <p class="eyebrow">Related Products</p>
-          <h2>Keep moving through similar listings.</h2>
-          <div class="mini-link-grid">
-            ${relatedProducts.map((relatedProduct) => `
-              <a class="mini-link-card" href="${siteLibrary.getProductUrl(relatedProduct.slug)}">
-                <strong>${escapeHtml(relatedProduct.name)}</strong>
-                <span>${escapeHtml(siteLibrary.getProductInfoProfile(relatedProduct, getProductContent(relatedProduct), catalogData).researchContext)}</span>
-              </a>`).join('')}
-          </div>
-        </article>
-        <article class="resource-strip-card">
-          <p class="eyebrow">Related Pages</p>
-          <h2>Open the next reference page without leaving the lane.</h2>
-          <div class="mini-link-grid">
-            ${comparisonCandidates.map((comparisonProduct) => `
-              <a class="mini-link-card" href="${siteLibrary.getComparisonUrl(product.slug, comparisonProduct.slug)}">
-                <strong>${escapeHtml(product.name)} vs ${escapeHtml(comparisonProduct.name)}</strong>
-                <span>Open the direct comparison for class notes, storage context, listed strengths, and related products.</span>
-              </a>`).join('')}
-            ${categoryGuide ? `
-              <a class="mini-link-card" href="${siteLibrary.getGuideUrl(categoryGuide.key)}">
-                <strong>${escapeHtml(categoryGuide.title)}</strong>
-                <span>${escapeHtml(categoryGuide.summary)}</span>
-              </a>` : ''}
-            ${relatedTools.map((tool) => `
-              <a class="mini-link-card" href="${escapeHtml(tool.href)}">
-                <strong>${escapeHtml(tool.title)}</strong>
-                <span>${escapeHtml(tool.description)}</span>
-              </a>`).join('')}
-            <a class="mini-link-card" href="index.html#faq">
-              <strong>FAQ</strong>
-              <span>Review the main-site ordering and research-use reference notes.</span>
-            </a>
-          </div>
-        </article>
-      </div>`;
-  }
-
-  if (faqNode) {
-    faqNode.innerHTML = `
-      <div class="faq-shell">
-        <div class="section-heading compact">
-          <p class="eyebrow">Product Reference FAQ</p>
-          <h2>Questions tied to this listing.</h2>
-        </div>
-        <div class="faq-list">
-          ${productFaqs.map((item, index) => `
-            <details${index === 0 ? ' open' : ''}>
-              <summary>
-                <span class="faq-index">${String(index + 1).padStart(2, '0')}</span>
-                <span class="faq-question-copy">
-                  <strong>${escapeHtml(item.question)}</strong>
-                  <small>Product support</small>
-                </span>
-                <span class="faq-toggle" aria-hidden="true"></span>
-              </summary>
-              <p>${escapeHtml(item.answer)}</p>
-            </details>`).join('')}
-        </div>
-      </div>`;
+    resourcesNode.innerHTML = relatedProducts.length ? `
+      <div class="product-related-heading"><p class="eyebrow">More products</p><h2>Explore the catalog</h2></div>
+      <div class="product-related-list">
+        ${relatedProducts.map((relatedProduct) => `
+          <a href="${siteLibrary.getProductUrl(relatedProduct.slug)}">
+            <strong>${escapeHtml(siteLibrary.getProductDisplayName(relatedProduct))}</strong>
+            <span>View product &rarr;</span>
+          </a>`).join('')}
+      </div>` : '';
   }
 
   ensureSelectedPack();

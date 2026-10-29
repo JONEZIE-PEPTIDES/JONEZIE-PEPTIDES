@@ -48,8 +48,6 @@ def main() -> None:
         f"{SITE_ORIGIN}/catalog.html",
         f"{SITE_ORIGIN}/comparison.html",
         f"{SITE_ORIGIN}/research-guides.html",
-        f"{SITE_ORIGIN}/research-tools.html",
-        f"{SITE_ORIGIN}/jonezie-labs-ruo-quick-reference.html",
         f"{SITE_ORIGIN}/michigan-peptides.html"
     ]
     product_urls = [f"{SITE_ORIGIN}/products/{slug}.html" for slug in unique_slugs]

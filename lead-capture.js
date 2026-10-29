@@ -44,7 +44,7 @@
       trigger?.addEventListener('click', async () => {
         const email = String(emailInput?.value || '').trim();
         if (!isValidEmail(email)) {
-          feedback.textContent = 'Enter a valid email to get the quick reference.';
+          feedback.textContent = 'Enter a valid email to sign up.';
           return;
         }
 
@@ -67,7 +67,7 @@
         window.JONEZIE_ANALYTICS?.generateLead('inline_signup', {
           lead_source: state.source
         });
-        feedback.innerHTML = `You are set. <a href="${library.RESOURCE_DOWNLOAD.pageHref}">Open the quick reference</a> or <a href="${library.RESOURCE_DOWNLOAD.fileHref}" download>download the text version</a>.`;
+        feedback.textContent = 'You are set. Thanks for signing up.';
       });
     });
   }

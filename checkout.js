@@ -18,6 +18,12 @@ const activePromoCopy = document.querySelector('[data-active-promo-copy]');
 const shippingMethodInput = document.querySelector('[data-shipping-method]');
 const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
+function getCartDisplayName(item) {
+  const product = window.JONEZIE_CATALOG?.products?.find((entry) => entry.slug === item.slug);
+  return product && window.JONEZIE_SITE_LIBRARY?.getProductDisplayName
+    ? window.JONEZIE_SITE_LIBRARY.getProductDisplayName(product)
+    : item.name;
+}
 const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
 const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
 const ORDER_REQUEST_RESPONSE_TIMEOUT_MS = 12000;
@@ -664,7 +670,7 @@ function renderSubmittedOrder() {
   renderSummaryValues(submittedOrderSnapshot);
   const orderLines = submittedOrderSnapshot.items.map((item) => `
     <li>
-      <span>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
+      <span>${escapeHtml(getCartDisplayName(item))} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
       <strong>${escapeHtml(item.lineTotalDisplay)}</strong>
     </li>`).join('');
   cartRoot.innerHTML = `
@@ -673,7 +679,7 @@ function renderSubmittedOrder() {
       <p>We are reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure invoice link by email shortly.</p>
       <p class="checkout-complete-meta">${escapeHtml(submittedOrderSnapshot.shippingLabel)}</p>
       <ul class="checkout-complete-list">
-        ${submittedOrderSnapshot.items.map((item) => `<li>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity} | ${escapeHtml(item.lineTotalDisplay)}</li>`).join('')}
+        ${submittedOrderSnapshot.items.map((item) => `<li>${escapeHtml(getCartDisplayName(item))} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity} | ${escapeHtml(item.lineTotalDisplay)}</li>`).join('')}
       </ul>
     </div>`;
 }
@@ -684,7 +690,7 @@ function renderSubmittedOrderPremium() {
   renderSummaryValues(submittedOrderSnapshot);
   const orderLines = submittedOrderSnapshot.items.map((item) => `
     <li>
-      <span>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
+      <span>${escapeHtml(getCartDisplayName(item))} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
       <strong>${escapeHtml(item.lineTotalDisplay)}</strong>
     </li>`).join('');
 
@@ -790,9 +796,9 @@ function renderCart() {
 
   cartRoot.innerHTML = cart.map((item, index) => `
     <article class="checkout-item-card">
-      <img src="${String(item.image || '').replace('../', '')}" alt="${escapeHtml(item.name)} product image" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
+      <img src="${String(item.image || '').replace('../', '')}" alt="${escapeHtml(getCartDisplayName(item))} product image" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
       <div class="checkout-item-copy">
-        <h2>${escapeHtml(item.name)}</h2>
+        <h2>${escapeHtml(getCartDisplayName(item))}</h2>
         <p>${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)}</p>
         <div class="checkout-item-meta">
           <span>Availability: ${escapeHtml(getInventoryLabel(item.inventoryStatus))}</span>

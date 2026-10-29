@@ -1,11 +1,6 @@
 window.JONEZIE_SITE_LIBRARY = (() => {
   const SITE_ORIGIN = 'https://www.jonezielabs.com';
-  const RESOURCE_DOWNLOAD = {
-    pageHref: 'jonezie-labs-ruo-quick-reference.html',
-    fileHref: 'jonezie-labs-ruo-quick-reference.txt',
-    title: 'RUO Quick Reference',
-    description: 'A fast reference covering cold-chain storage, concentration math, and mixing reminders for RUO compounds.'
-  };
+  const RESOURCE_DOWNLOAD = null;
   const LEAD_CAPTURE = {
     endpoint: String(window.JONEZIE_LEAD_CAPTURE_CONFIG?.endpoint || '').trim()
   };
@@ -13,6 +8,36 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     short: 'For laboratory research reference only. Not for human or veterinary use.',
     full: 'All product information is provided for research, laboratory, or analytical reference only. Products are not for human or veterinary use.'
   };
+  const COA_IMAGE_BY_SLUG = {
+    'bpc-157': 'coa-bpc-157.png',
+    'cjc-1295-with-dac': 'coa-cjc-1295.png',
+    'cjc-1295-without-dac': 'coa-cjc-1295.png',
+    'cjc-1295-without-dac-plus-ipamorelin': 'coa-cjc-1295.png',
+    cagrilintide: 'coa-cagrilintide.png',
+    'cagrilintide-2-5mg-plus-semaglutide-2-5mg': 'coa-cagrilintide.png',
+    'cagrilintide-5mg-plus-semaglutide-5mg': 'coa-cagrilintide.png',
+    'ghk-cu': 'coa-ghk-cu.png',
+    'ghk-cu-35mg-plus-tb-500-10mg-plus-bpc-157-5mg': 'coa-glow.png',
+    'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'coa-glow.png',
+    'ghk-cu-50mg-plus-kpv-10mg-plus-bpc-157-10mg': 'coa-klow.png',
+    'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg': 'coa-klow.png',
+    hcg: 'coa-hcg.png',
+    ipamorelin: 'coa-ipamorelin.png',
+    'mots-c': 'coa-mots-c.png',
+    nad: 'coa-nad.png',
+    'igf-1lr3': 'coa-igf-1lr3.png',
+    kpv: 'coa-kpv.png',
+    retatrutide: 'coa-retatrutide.png',
+    selank: 'coa-selank.png',
+    semaglutide: 'coa-semaglutide.png',
+    tb500: 'coa-tb500.png',
+    tesamorelin: 'coa-tesamorelin.png',
+    tirzepatide: 'coa-tirzepatide.png',
+    vip: 'coa-vip.png'
+  };
+  function getCoaImageForSlug(slug) {
+    return COA_IMAGE_BY_SLUG[String(slug || '')] || null;
+  }
   const CATEGORY_DISPLAY_LABELS = {
     Metabolic: 'Metabolic Research',
     Cognitive: 'Cognitive Research',
@@ -24,32 +49,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     Performance: 'Specialty Research',
     Support: 'Laboratory Support'
   };
-  const TOOL_LIBRARY = [
-    {
-      key: 'reconstitution-calculator',
-      title: 'Concentration Calculator',
-      href: 'research-tools.html#reconstitution-calculator',
-      description: 'Translate vial strength and dilution volume into a clean mg-per-mL reference.'
-    },
-    {
-      key: 'storage-guide',
-      title: 'Storage Guide',
-      href: 'research-tools.html#storage-guide-tool',
-      description: 'Review cold-chain notes and storage reminders for the selected compound.'
-    },
-    {
-      key: 'mixing-guide',
-      title: 'Mixing Guide',
-      href: 'research-tools.html#mixing-guide-tool',
-      description: 'Keep dilution order and vial-handling notes close before comparison work.'
-    },
-    {
-      key: 'ruo-reference',
-      title: 'RUO Quick Reference',
-      href: 'jonezie-labs-ruo-quick-reference.html',
-      description: 'Open the short-form reference for storage, preparation, and RUO handling reminders.'
-    }
-  ];
+  const TOOL_LIBRARY = [];
 
   const GUIDE_LIBRARY = [
     {
@@ -519,11 +519,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
 
   function getProductPageTitle(product) {
     if (!product?.name) return 'Research Product | Jonezie Labs';
-    if (product.slug === 'glutathione') return 'Glutathione Redox Research | Jonezie Labs';
-    if (product.slug === 'hcg') return 'HCG LHCGR Research | Jonezie Labs';
-    if (product.slug === 'ipamorelin') return 'Ipamorelin GHS-R1a Research | Jonezie Labs';
-    if (product.slug === 'selank') return 'Selank Neuroregulatory Research | Jonezie Labs';
-    return `${product.name} ${getProductSeoTypeLabel(product)} | Jonezie Labs`;
+    return `${getProductDisplayName(product)} | Jonezie Labs`;
   }
 
   function getSortedPair(leftSlug, rightSlug) {
@@ -553,8 +549,8 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     return guide ? getGuideUrl(guide.key) : 'research-guides.html';
   }
 
-  function getToolsUrl(anchor) {
-    return anchor ? `research-tools.html#${encodeURIComponent(anchor)}` : 'research-tools.html';
+  function getToolsUrl() {
+    return 'catalog.html';
   }
 
   function isBlendProduct(product) {
@@ -676,26 +672,14 @@ window.JONEZIE_SITE_LIBRARY = (() => {
 
   function getProductMetaDescription(product, productContent = null) {
     if (!product?.name) {
-      return 'Browse Jonezie Labs research-use-only product pages for current strengths, pricing, storage notes, and related comparisons.';
+      return 'Browse Jonezie Labs research products for current strengths, formats, pricing, and test reports.';
     }
-    const summary = getProductResearchContext(product, productContent);
-    return `${product.name} from Jonezie Labs. ${summary} View listed strengths, pricing, storage notes, handling context, and related comparisons for laboratory reference only.`
-      .replace(/\s+/g, ' ')
-      .trim();
+    const strengths = getOptionStrengthList(product).join(', ');
+    return `${getProductDisplayName(product)} at Jonezie Labs. View ${strengths || 'available strengths'}, pack formats, pricing, and available test documentation. For laboratory research only.`;
   }
 
   function getRelatedToolSet(product) {
-    if (!product) return TOOL_LIBRARY.slice();
-    const tools = [
-      TOOL_LIBRARY[0],
-      TOOL_LIBRARY[1],
-      TOOL_LIBRARY[2],
-      TOOL_LIBRARY[3]
-    ];
-    if (product.category === 'Support') {
-      return [TOOL_LIBRARY[1], TOOL_LIBRARY[3], TOOL_LIBRARY[0]];
-    }
-    return tools;
+    return [];
   }
 
   function getProductInfoProfile(product, productContent = null, catalog = null) {
@@ -917,7 +901,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       },
       {
         question: `Where should I go next after reviewing ${product.name}?`,
-        answer: `Use the related comparisons, ${profile.guide?.title.toLowerCase() || 'research guide'}, and research tools to review nearby compounds, storage notes, and handling context in the same research category.`
+        answer: `Use the related comparisons, ${profile.guide?.title.toLowerCase() || 'research guide'}, and product pages to review current strengths, formats, and available documentation.`
       }
     ];
   }
@@ -1285,6 +1269,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     getProductCompoundClass,
     getProductDisplaySummary,
     getProductDisplayName,
+    getCoaImageForSlug,
     getProductStructureNote,
     getProductResearchContext,
     getProductHandlingNote,
