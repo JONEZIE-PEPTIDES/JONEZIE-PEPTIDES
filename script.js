@@ -129,6 +129,16 @@ function getProductDisplaySummary(product, productContent) {
   return productContent?.shortDescription || product.description || '';
 }
 
+function getCardSummary(product, productContent) {
+  const description = getProductDisplaySummary(product, productContent).trim();
+  const firstSentence = description.match(/^.*?[.!?](?=\s|$)/);
+  return firstSentence ? firstSentence[0] : description;
+}
+
+function getCardTitle(product) {
+  return window.JONEZIE_SITE_LIBRARY?.getProductDisplayName?.(product) || product.name;
+}
+
 function getLowestOfferedPrice(product) {
   const candidates = [];
   (product.options || []).forEach((option) => {
@@ -178,7 +188,6 @@ function renderCardPricing(product) {
     <div class="card-pricing">
       <span class="card-from-price">${escapeHtml(price)}</span>
       ${promoLine}
-      <span class="catalog-price-rule">View all pricing</span>
     </div>`;
 }
 
@@ -189,7 +198,7 @@ function renderFeatured() {
   const featured = (catalogData.featured || []).filter(Boolean);
   grid.innerHTML = featured.map((product, index) => {
     const productContent = getProductContent(product);
-    const description = getProductDisplaySummary(product, productContent);
+    const description = getCardSummary(product, productContent);
     const strengthChips = renderStrengthChips(product.options);
     const pricing = renderCardPricing(product);
     const imageSrc = getImageSrc(product.image);
@@ -198,16 +207,16 @@ function renderFeatured() {
     const fetchPriority = index < 3 ? 'high' : 'low';
     const imageDimensions = product.hasUpdatedLabel ? 'width="1254" height="1254"' : '';
     return `
-      <a class="product-card card-link-shell ${getAccent(product.category)}" data-updated-label="${Boolean(product.hasUpdatedLabel)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
+      <a class="product-card card-link-shell ${getAccent(product.category)}" data-updated-label="${Boolean(product.hasUpdatedLabel)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(getCardTitle(product))} product page">
         ${product.hasUpdatedLabel ? '<div class="product-card-media">' : ''}
         <img src="${imageSrc}" ${imageDimensions} alt="${escapeHtml(product.name)} product visual" loading="${loadingMode}" decoding="async" fetchpriority="${fetchPriority}" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         ${product.hasUpdatedLabel ? '</div>' : ''}
         <div class="product-copy">
-          <h3>${escapeHtml(product.name)}</h3>
+          <h3>${escapeHtml(getCardTitle(product))}</h3>
           <div class="product-top product-top-price">${pricing}</div>
-          <span class="catalog-link">Open product page</span>
-          <p>${escapeHtml(description)}</p>
+          <p class="card-summary">${escapeHtml(description)}</p>
           <div class="option-chips">${strengthChips}</div>
+          <span class="catalog-link">View details</span>
         </div>
       </a>`;
   }).join('');
@@ -220,22 +229,22 @@ function renderCatalog() {
   const products = [...(catalogData.products || [])].sort((a, b) => a.name.localeCompare(b.name));
   grid.innerHTML = products.map((product) => {
     const productContent = getProductContent(product);
-    const description = getProductDisplaySummary(product, productContent);
+    const description = getCardSummary(product, productContent);
     const strengthChips = renderStrengthChips(product.options);
     const pricing = renderCardPricing(product);
     const imageSrc = getImageSrc(product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
     return `
-      <a class="catalog-card card-link-shell" data-updated-label="${Boolean(product.hasUpdatedLabel)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(product.name)} product page">
+      <a class="catalog-card card-link-shell" data-updated-label="${Boolean(product.hasUpdatedLabel)}" data-product-slug="${escapeHtml(product.slug)}" href="${getProductUrl(product.slug)}" aria-label="Open ${escapeHtml(getCardTitle(product))} product page">
         ${product.hasUpdatedLabel ? '<div class="product-card-media">' : ''}
         <img src="${imageSrc}" alt="${escapeHtml(product.name)} product visual" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.src='${fallbackImageSrc}'" />
         ${product.hasUpdatedLabel ? '</div>' : ''}
         <div class="catalog-copy">
-          <h3>${escapeHtml(product.name)}</h3>
+          <h3>${escapeHtml(getCardTitle(product))}</h3>
           <div class="catalog-top catalog-top-price">${pricing}</div>
-          <span class="catalog-link">Open product page</span>
-          <p>${escapeHtml(description)}</p>
+          <p class="card-summary">${escapeHtml(description)}</p>
           <div class="option-chips">${strengthChips}</div>
+          <span class="catalog-link">View details</span>
         </div>
       </a>`;
   }).join('');

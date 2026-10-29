@@ -284,6 +284,7 @@ function renderProductPage() {
   const product = (catalogData.products || []).find((item) => item.slug === slug)
     || (catalogData.featured || []).find((item) => item.slug === slug);
   if (!product) return;
+  const displayName = siteLibrary?.getProductDisplayName?.(product) || product.name;
 
   const firstAvailableOption = product.options.find((option) => getInventoryStatus(option) !== 'sold_out');
   let selectedOption = firstAvailableOption || product.options[0] || null;
@@ -459,7 +460,7 @@ function renderProductPage() {
     mgOption: selectedOption?.mgOption,
     unitPrice: parsePrice(selectedOption?.[selectedPackKey] || product.startingPriceSingle)
   });
-  if (titleNode) titleNode.textContent = product.name;
+  if (titleNode) titleNode.textContent = displayName;
   if (eyebrowNode) eyebrowNode.textContent = getCategoryDisplayLabel(product.category);
   if (descriptionNode) descriptionNode.textContent = researchSummary;
   if (heroImageNode) {
@@ -589,7 +590,7 @@ function renderProductPage() {
     const isSoldOut = selectedStatus === 'sold_out';
     const total = Number.isFinite(unitPrice) ? unitPrice * quantity : null;
 
-    if (selectedTitle) selectedTitle.textContent = `${product.name} ${selectedOption.mgOption}`;
+    if (selectedTitle) selectedTitle.textContent = `${displayName} ${selectedOption.mgOption}`;
     if (selectedSubtitle) {
       if (selectedStatus === 'backorder') {
         selectedSubtitle.textContent = getBackorderNote(product, selectedOption);

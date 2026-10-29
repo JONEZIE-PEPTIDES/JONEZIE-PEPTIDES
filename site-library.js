@@ -656,6 +656,11 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     }
   }
 
+  function getProductDisplayName(product) {
+    if (product?.slug === 'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg') return 'GLOW';
+    return product?.name || '';
+  }
+
   function getProductHandlingNote(product) {
     const profile = getMixingProfile(product);
     const steps = Array.isArray(profile?.steps) ? profile.steps.slice(0, 2) : [];
@@ -1279,6 +1284,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     getProductForm,
     getProductCompoundClass,
     getProductDisplaySummary,
+    getProductDisplayName,
     getProductStructureNote,
     getProductResearchContext,
     getProductHandlingNote,
