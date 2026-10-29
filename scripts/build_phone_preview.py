@@ -81,6 +81,10 @@ def main() -> None:
         elif normalized == "standards/merch-data.js":
             script = source.read_text(encoding="utf-8")
             target.write_text(script.replace("enabled: true,", "enabled: false,", 1), encoding="utf-8")
+        elif normalized in {"site-footer.js", "cart-nav.js"}:
+            script = source.read_text(encoding="utf-8")
+            script = script.replace("location.pathname.includes('/products/') ? '../' : ''", "''")
+            target.write_text(script, encoding="utf-8")
         else:
             shutil.copy2(source, target)
         copied += 1
