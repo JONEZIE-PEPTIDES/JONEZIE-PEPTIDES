@@ -31,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260728a" />
-  <link rel="stylesheet" href="styles.css?v=20261027catalog1" />
+  <link rel="stylesheet" href="styles.css?v=20261030cardactions1" />
   <script type="application/ld+json" data-product-schema>
     {
       "@context": "https://schema.org",
@@ -80,19 +80,18 @@
           </span>
         </button>
         <a class="brand-master-link" href="index.html#top" aria-label="Jonezie Labs home">
-          <img class="brand-master-logo" src="jonezie-labs-master-logo.png?v=20260410c" alt="Jonezie Labs" />
+          <img class="brand-master-logo" src="jonezie-labs-nav-refined.webp" alt="Jonezie Labs" />
         </a>
         <div id="brand-menu-product" class="brand-menu-panel" hidden>
           <a href="catalog.html">Full Products</a>
           <a href="index.html#featured">Popular Products</a>
           <a href="why-jonezie.html">Why Jonezie</a>
-          <a href="research-tools.html">Research Tools</a>
+
           <a href="research-guides.html">Research Guides</a>
           <a href="comparison.html">Comparisons</a>
           <a href="michigan-peptides.html">Michigan</a>
-          <a href="index.html#merch">Merch</a>
           <a href="index.html#faq">FAQ</a>
-          <a href="index.html#process">Ordering</a>
+          <a href="terms.html">Policies</a>
         
         </div>
       </div>
@@ -115,13 +114,12 @@
         <a href="catalog.html" class="site-nav-mobile-link">Full Products</a>
         <a href="index.html#featured" class="site-nav-mobile-link">Popular Products</a>
         <a href="why-jonezie.html" class="site-nav-mobile-link">Why Jonezie</a>
-        <a href="research-tools.html" class="site-nav-mobile-link">Research Tools</a>
+
         <a href="research-guides.html" class="site-nav-mobile-link">Research Guides</a>
         <a href="comparison.html" class="site-nav-mobile-link">Comparisons</a>
         <a href="michigan-peptides.html" class="site-nav-mobile-link">Michigan</a>
-        <a href="index.html#merch" class="site-nav-mobile-link">Merch</a>
         <a href="index.html#faq" class="site-nav-mobile-link">FAQ</a>
-        <a href="index.html#process" class="site-nav-mobile-link">Ordering</a>
+        <a href="terms.html" class="site-nav-mobile-link">Policies</a>
 
 
         <a href="catalog.html" class="nav-products-pill">Products</a>
@@ -140,66 +138,51 @@
     </header>
 
     <main>
-      <section class="hero section-shell product-hero block-section">
-        <div class="hero-copy">
-          <p class="eyebrow" data-product-category>Catalog</p>
-          <h1 data-product-title>Research Compound Catalog</h1>
-          <p class="hero-text" data-product-description>Use the catalog, search bar, or linked product pages to open a product-specific listing with current strengths, pricing, and research reference notes.</p>
-          <div class="hero-actions">
-            <button class="button primary" data-product-coa type="button">CoA</button>
-            <a class="button secondary" href="catalog.html">Back To Catalog</a>
-          </div>
-        </div>
-        <div class="product-hero-visual" data-product-hero-visual>
+      <section class="section-shell product-page-top block-section">
+        <div class="product-page-media" data-product-hero-visual>
           <img data-product-hero-image src="product-placeholder.svg" alt="Product image" />
         </div>
-      </section>
-
-      <section class="section-shell block-section product-purchase-layout">
-        <div>
-          <div class="section-heading compact">
-            <p class="eyebrow">Available Formats</p>
-            <h2>Select strength and pack size</h2>
-            <p>Review the listed strengths first, then choose the pack format that fits the current research order.</p>
+        <div class="product-page-order">
+          <a class="product-back-link" href="catalog.html">&larr; All products</a>
+          <p class="eyebrow" data-product-category>Research use only</p>
+          <h1 data-product-title>Research product</h1>
+          <p class="product-intro" data-product-description>Choose a strength and pack format to see current pricing.</p>
+          <div class="product-document-row">
+            <button class="product-document-link" id="product-coa" data-product-coa type="button">View test report</button>
+            <span>For laboratory research only</span>
           </div>
-          <div class="spec-grid product-summary-grid" data-product-options></div>
+          <div class="product-choice-group">
+            <h2>Choose your format</h2>
+            <p class="product-field-label">Strength</p>
+            <div class="spec-grid product-summary-grid" data-product-options></div>
+            <p class="product-field-label">Pack</p>
+            <div class="pack-picker" data-pack-picker></div>
+            <p class="product-selection-note" data-selected-subtitle>Select an option to review availability.</p>
+            <div class="product-quantity-price">
+              <div class="quantity-row">
+                <label for="quantity-input">Quantity</label>
+                <div class="quantity-control">
+                  <button type="button" data-qty-minus aria-label="Decrease quantity">-</button>
+                  <input id="quantity-input" type="number" min="1" value="1" data-quantity-input />
+                  <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+              <div class="selection-summary">
+                <span>Unit <strong data-selected-price>Choose an option</strong></span>
+                <div><span>Total</span><strong data-selected-total>Choose an option</strong></div>
+              </div>
+            </div>
+            <div class="purchase-actions">
+              <button class="button primary purchase-button" type="button" data-add-to-cart>Add to cart</button>
+              <button class="button secondary purchase-button" type="button" data-buy-now>Go to order request</button>
+            </div>
+            <p class="purchase-note">Submit a request at checkout. We review it, send a secure invoice link, and ship after payment.</p>
+          </div>
         </div>
-        <aside class="purchase-panel" data-purchase-panel>
-          <div class="purchase-top">
-            <p class="eyebrow">Selected Format</p>
-            <h2 data-selected-title>Choose an option</h2>
-            <p data-selected-subtitle>Select a listed strength to review pricing, pack formats, and the current order summary.</p>
-          </div>
-          <div class="pack-picker" data-pack-picker></div>
-          <div class="quantity-row">
-            <label for="quantity-input">Quantity</label>
-            <div class="quantity-control">
-              <button type="button" data-qty-minus>-</button>
-              <input id="quantity-input" type="number" min="1" value="1" data-quantity-input />
-              <button type="button" data-qty-plus>+</button>
-            </div>
-          </div>
-          <div class="selection-summary">
-            <div>
-              <span>Selected Price</span>
-              <strong data-selected-price>Choose an option</strong>
-            </div>
-            <div>
-              <span>Total</span>
-              <strong data-selected-total>Choose an option</strong>
-            </div>
-          </div>
-          <div class="purchase-actions">
-            <button class="button primary purchase-button" type="button" data-add-to-cart>Add To Cart</button>
-            <button class="button secondary purchase-button" type="button" data-buy-now>Complete Order Request</button>
-          </div>
-          <p class="purchase-note">All product information is provided for research, laboratory, or analytical reference only. Products are not for human or veterinary use. Checkout submits an order request for review, and Jonezie Labs emails a secure Stripe invoice after confirmation. Payment must be completed before shipment.</p>
-        </aside>
       </section>
 
-      <section class="section-shell block-section product-detail-grid" data-product-highlights></section>
-      <section class="section-shell block-section comparison-link-shell" data-product-resources></section>
-      <section class="section-shell block-section comparison-faq-shell" data-product-faq></section>
+      <section class="section-shell product-facts" data-product-highlights></section>
+      <section class="section-shell product-related" data-product-resources></section>
     </main>
 
     <footer class="site-footer">
@@ -227,13 +210,13 @@
   <script src="promo-banner.js?v=20260915fall25"></script>
   <script src="product-content.js?v=20261029ahkcu1"></script>
   <script src="lead-capture-config.js?v=20260513a"></script>
-  <script src="site-library.js?v=20261007glp3"></script>
-  <script src="cart-nav.js?v=20261013mobileheadercart"></script>
-  <script src="nav-search.js?v=20261027catalog1"></script>
+  <script src="site-library.js?v=20261029shop1"></script>
+  <script src="cart-nav.js?v=20261030footerwide2"></script>
+  <script src="nav-search.js?v=20261030navsync2"></script>
   <script src="age-gate.js?v=20260427c"></script>
-  <script src="product-page.js?v=20260914catlabels"></script>
-  <script src="site-footer.js?v=20261027catalog1"></script>
-  <script src="lead-capture.js?v=20260622a"></script>
+  <script src="product-page.js?v=20261029autonav1"></script>
+  <script src="site-footer.js?v=20261030footerwide2"></script>
+  <script src="lead-capture.js?v=20261029shop1"></script>
 </body>
 </html>
 

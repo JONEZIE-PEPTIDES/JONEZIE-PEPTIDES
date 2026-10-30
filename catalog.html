@@ -31,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260728a" />
-  <link rel="stylesheet" href="styles.css?v=20261028gridsteps1" />
+  <link rel="stylesheet" href="styles.css?v=20261030cardactions1" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -80,18 +80,18 @@
           </span>
         </button>
         <a class="brand-master-link" href="index.html" aria-label="Jonezie Labs home">
-          <img class="brand-master-logo" src="jonezie-labs-master-logo.png?v=20260410c" alt="Jonezie Labs" />
+          <img class="brand-master-logo" src="jonezie-labs-nav-refined.webp" alt="Jonezie Labs" />
         </a>
         <div id="brand-menu-home" class="brand-menu-panel" hidden>
           <a href="catalog.html">Full Products</a>
           <a href="index.html#featured">Popular Products</a>
           <a href="why-jonezie.html">Why Jonezie</a>
-          <a href="research-tools.html">Research Tools</a>
+
           <a href="research-guides.html">Research Guides</a>
           <a href="comparison.html">Comparisons</a>
           <a href="michigan-peptides.html">Michigan</a>
           <a href="index.html#faq">FAQ</a>
-          <a href="index.html#process">Ordering</a>
+          <a href="terms.html">Policies</a>
 
         </div>
       </div>
@@ -114,12 +114,12 @@
         <a href="catalog.html" class="site-nav-mobile-link">Full Products</a>
         <a href="index.html#featured" class="site-nav-mobile-link">Popular Products</a>
         <a href="why-jonezie.html" class="site-nav-mobile-link">Why Jonezie</a>
-        <a href="research-tools.html" class="site-nav-mobile-link">Research Tools</a>
+
         <a href="research-guides.html" class="site-nav-mobile-link">Research Guides</a>
         <a href="comparison.html" class="site-nav-mobile-link">Comparisons</a>
         <a href="michigan-peptides.html" class="site-nav-mobile-link">Michigan</a>
         <a href="index.html#faq" class="site-nav-mobile-link">FAQ</a>
-        <a href="index.html#process" class="site-nav-mobile-link">Ordering</a>
+        <a href="terms.html" class="site-nav-mobile-link">Policies</a>
 
         <a href="catalog.html" class="nav-products-pill">Products</a>
         <a href="checkout.html" class="nav-cart" data-cart-link aria-label="Open cart">
@@ -138,13 +138,37 @@
 
 
     <main>
-      <section id="full-catalog" class="section-shell block-section">
-        <div class="section-heading centered compact">
+      <section id="full-catalog" class="section-shell block-section catalog-page">
+        <div class="section-heading compact">
           <p class="eyebrow">All Research Products</p>
           <h1>Full catalog</h1>
-          <p>Browse our complete collection, including every new-label release. Open a product for available strengths and pricing.</p>
-          <a class="button secondary" href="index.html#featured">Back to featured products</a>
+          <p>Find a product, check availability, and choose the right format for your order.</p>
         </div>
+        <div class="catalog-controls" aria-label="Filter products">
+          <label class="catalog-search-field">Search products
+            <input type="search" data-catalog-search placeholder="Search by name or strength" autocomplete="off" />
+          </label>
+          <label>Strength
+            <select data-catalog-strength><option value="">All strengths</option></select>
+          </label>
+          <label>Availability
+            <select data-catalog-stock>
+              <option value="">All availability</option>
+              <option value="in_stock">In stock</option>
+              <option value="backorder">Backorder</option>
+            </select>
+          </label>
+          <label>Format
+            <select data-catalog-format>
+              <option value="">All formats</option>
+              <option value="singleVialPrice">Single vial</option>
+              <option value="eightVialPrice">8-kit</option>
+              <option value="tenVialPrice">Full 10-kit</option>
+            </select>
+          </label>
+          <button class="catalog-clear" type="button" data-catalog-clear>Clear filters</button>
+        </div>
+        <p class="catalog-result-count" data-catalog-result-count role="status" aria-live="polite"></p>
         <div class="catalog-grid" data-catalog-grid></div>
         <noscript><p>Please enable JavaScript to browse current products and pricing.</p></noscript>
       </section>
@@ -164,12 +188,12 @@
   <script src="promo-banner.js?v=20260915fall25"></script>
   <script src="product-content.js?v=20261029ahkcu1"></script>
   <script src="lead-capture-config.js?v=20260513a"></script>
-  <script src="site-library.js?v=20261007glp3"></script>
-  <script src="cart-nav.js?v=20261013mobileheadercart"></script>
-  <script src="nav-search.js?v=20261027catalog1"></script>
+  <script src="site-library.js?v=20261029shop1"></script>
+  <script src="cart-nav.js?v=20261030footerwide2"></script>
+  <script src="nav-search.js?v=20261030navsync2"></script>
   <script src="age-gate.js?v=20260427c"></script>
-  <script src="script.js?v=20261027widecards1"></script>
-  <script src="site-footer.js?v=20261027catalog1"></script>
-  <script src="lead-capture.js?v=20260622a"></script>
+  <script src="script.js?v=20261030unifiedcards1"></script>
+  <script src="site-footer.js?v=20261030footerwide2"></script>
+  <script src="lead-capture.js?v=20261029shop1"></script>
 </body>
 </html>

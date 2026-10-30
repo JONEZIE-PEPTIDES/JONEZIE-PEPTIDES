@@ -169,7 +169,9 @@
     'AHK-CU|100mg': 30,
     'FOXO4|10mg': 162,
     'B12 10000mcg 10ml|3000 MCG / 3 mL': 17,
-    'Retatrutide|20mg': 107
+    'Retatrutide|20mg': 107,
+    // Preserve the source sheet's 5mg:10mg ratio after matching the 10mg price at $67.99.
+    'Cagrilintide|5mg': 46.74
   };
 
   const NAME_OVERRIDES = {

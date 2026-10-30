@@ -85,13 +85,9 @@
             <a class="button secondary" href="research-guides.html">View Research Guides</a>
           </article>
           <article class="resource-strip-card">
-            <p class="eyebrow">Research Tools</p>
-            <h2>Keep storage and preparation notes close.</h2>
+            <p class="eyebrow">Catalog</p>
+            <h2>View current product details.</h2>
             <div class="mini-link-grid">
-              <a class="mini-link-card" href="research-tools.html">
-                <strong>Research Tools</strong>
-                <span>Open concentration, storage, and preparation references inside the same brand flow.</span>
-              </a>
               <a class="mini-link-card" href="catalog.html">
                 <strong>Full Products</strong>
                 <span>Return to the live catalog for product cards, current pricing, and the active listing view.</span>
@@ -150,7 +146,6 @@
         return leftMatch || rightMatch;
       })
       .slice(0, 6);
-    const combinedTools = uniqueTools([...leftProfile.relatedTools, ...rightProfile.relatedTools]).slice(0, 4);
 
     if (titleNode) titleNode.textContent = `${leftProduct.name} vs ${rightProduct.name}`;
     if (descriptionNode) {
@@ -245,23 +240,12 @@
             <p class="eyebrow">Related Pages</p>
             <h2>Keep the next reads close.</h2>
             <div class="mini-link-grid">
-              ${renderTextLinkCard('Research Tools', 'Open concentration, storage, and preparation notes for the same lineup.', 'research-tools.html')}
               ${renderTextLinkCard(leftProfile.guide?.title || 'Research Guide', leftProfile.guide?.summary || 'Open the related research guide.', library.getGuideUrlForProduct(leftProduct))}
               ${leftProfile.guide?.key !== rightProfile.guide?.key
                 ? renderTextLinkCard(rightProfile.guide?.title || 'Research Guide', rightProfile.guide?.summary || 'Open the related research guide.', library.getGuideUrlForProduct(rightProduct))
                 : ''}
-              ${renderTextLinkCard('RUO Quick Reference', library.RESOURCE_DOWNLOAD.description, library.RESOURCE_DOWNLOAD.pageHref)}
             </div>
           </article>
-        </div>
-        <div class="comparison-table-card comparison-context-card">
-          <div class="section-heading compact">
-            <p class="eyebrow">Related Tools</p>
-            <h2>Reference tools that fit this comparison.</h2>
-            <div class="mini-link-grid">
-              ${combinedTools.map((tool) => renderTextLinkCard(tool.title, tool.description, tool.href)).join('')}
-            </div>
-          </div>
         </div>
         <div class="section-heading compact comparison-secondary-heading">
           <p class="eyebrow">More Comparisons</p>

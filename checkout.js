@@ -18,6 +18,34 @@ const activePromoCopy = document.querySelector('[data-active-promo-copy]');
 const shippingMethodInput = document.querySelector('[data-shipping-method]');
 const shippingHelp = document.querySelector('[data-shipping-help]');
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
+function getCartDisplayName(item) {
+  const product = window.JONEZIE_CATALOG?.products?.find((entry) => entry.slug === item.slug);
+  return product && window.JONEZIE_SITE_LIBRARY?.getProductDisplayName
+    ? window.JONEZIE_SITE_LIBRARY.getProductDisplayName(product)
+    : item.name;
+}
+function getCartImage(item) {
+  const product = window.JONEZIE_CATALOG?.products?.find((entry) => entry.slug === item.slug);
+  const path = String(product?.image || item.image || PRODUCT_FALLBACK_IMAGE).replace(/^(\.\.\/)+/, '').trim();
+  return path.includes('?') ? path : `${path}?v=20261029checkoutcards1`;
+}
+function getCurrentCatalogCartItem(item) {
+  const product = window.JONEZIE_CATALOG?.products?.find((entry) => entry.slug === item.slug);
+  if (!product) return item;
+  const option = product.options?.find((entry) => entry.code === item.code)
+    || product.options?.find((entry) => entry.mgOption === item.mgOption);
+  const packKey = item.packKey || ({ 'single vial': 'singleVialPrice', '8-kit': 'eightVialPrice',
+    '8-vial kit': 'eightVialPrice', 'full 10-kit': 'tenVialPrice',
+    '10-vial pack': 'tenVialPrice' })[String(item.packLabel || '').toLowerCase()];
+  if (!option || !packKey || !option[packKey]) return item;
+  const unitPrice = Number(String(option[packKey]).replace(/[$,]/g, ''));
+  if (!Number.isFinite(unitPrice) || unitPrice <= 0) return item;
+  const inventoryStatus = option.inventoryStatus || 'in_stock';
+  return { ...item, code: option.code, packKey, image: product.image, unitPrice,
+    unitPriceDisplay: formatMoney(unitPrice), inventoryStatus,
+    backorderNote: inventoryStatus === 'backorder'
+      ? option.backorderNote || product.backorderNote || item.backorderNote || '' : '' };
+}
 const ORDER_REQUEST_CONFIG = window.JONEZIE_ORDER_REQUEST_CONFIG || {};
 const ORDER_REQUEST_FALLBACK_EMAIL = String(ORDER_REQUEST_CONFIG.fallbackEmail || 'orders@jonezielabs.com').trim() || 'orders@jonezielabs.com';
 const ORDER_REQUEST_RESPONSE_TIMEOUT_MS = 12000;
@@ -258,7 +286,18 @@ function getCart() {
     const removed = new Set(window.JONEZIE_ADMIN_CONFIG?.removeProductSlugs || []);
     const removedOptions = new Set(window.JONEZIE_ADMIN_CONFIG?.removeOptionCodes || []);
     const items = JSON.parse(window.localStorage.getItem(CART_KEY) || '[]');
-    return Array.isArray(items) ? items.filter((item) => !removed.has(item.slug) && !removedOptions.has(item.code)) : [];
+    if (!Array.isArray(items)) return [];
+    const grouped = new Map();
+    items.filter((item) => item && !removed.has(item.slug) && !removedOptions.has(item.code)).forEach((rawItem) => {
+      const item = getCurrentCatalogCartItem(rawItem);
+      const quantity = Math.max(1, Math.trunc(Number(item.quantity) || 1));
+      const unitCents = Math.round(Number(item.unitPrice || 0) * 100);
+      const variant = [item.slug || item.name, item.mgOption, item.packKey || item.packLabel, unitCents,
+        item.inventoryStatus, item.backorderNote].map((value) => String(value || '').trim().toLowerCase()).join('|');
+      if (grouped.has(variant)) grouped.get(variant).quantity += quantity;
+      else grouped.set(variant, { ...item, quantity });
+    });
+    return [...grouped.values()];
   } catch {
     return [];
   }
@@ -664,7 +703,7 @@ function renderSubmittedOrder() {
   renderSummaryValues(submittedOrderSnapshot);
   const orderLines = submittedOrderSnapshot.items.map((item) => `
     <li>
-      <span>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
+      <span>${escapeHtml(getCartDisplayName(item))} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
       <strong>${escapeHtml(item.lineTotalDisplay)}</strong>
     </li>`).join('');
   cartRoot.innerHTML = `
@@ -673,7 +712,7 @@ function renderSubmittedOrder() {
       <p>We are reviewing ${escapeHtml(submittedOrderSnapshot.customerName)}'s order and will send a secure invoice link by email shortly.</p>
       <p class="checkout-complete-meta">${escapeHtml(submittedOrderSnapshot.shippingLabel)}</p>
       <ul class="checkout-complete-list">
-        ${submittedOrderSnapshot.items.map((item) => `<li>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity} | ${escapeHtml(item.lineTotalDisplay)}</li>`).join('')}
+        ${submittedOrderSnapshot.items.map((item) => `<li>${escapeHtml(getCartDisplayName(item))} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity} | ${escapeHtml(item.lineTotalDisplay)}</li>`).join('')}
       </ul>
     </div>`;
 }
@@ -684,7 +723,7 @@ function renderSubmittedOrderPremium() {
   renderSummaryValues(submittedOrderSnapshot);
   const orderLines = submittedOrderSnapshot.items.map((item) => `
     <li>
-      <span>${escapeHtml(item.name)} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
+      <span>${escapeHtml(getCartDisplayName(item))} | ${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)} | Qty ${item.quantity}</span>
       <strong>${escapeHtml(item.lineTotalDisplay)}</strong>
     </li>`).join('');
 
@@ -693,8 +732,9 @@ function renderSubmittedOrderPremium() {
       <div class="checkout-complete-hero">
         <div class="checkout-complete-icon" aria-hidden="true">&#10003;</div>
         <div>
-          <h2>Order request received.</h2>
+          <h1>Order request received.</h1>
           <p class="checkout-complete-thanks">Thanks, ${escapeHtml(submittedOrderSnapshot.customerFirstName)} - we're reviewing your order now.</p>
+          <p class="checkout-complete-id">Request ID <strong>${escapeHtml(submittedOrderSnapshot.orderId)}</strong></p>
           <p>No payment was collected on this page. Once your order is reviewed and confirmed, Jonezie Labs will email a secure invoice link to the email address on your order. Please check your inbox and spam folder.</p>
           <p class="checkout-payment-options"><strong>Payment options include:</strong> credit or debit card, Apple Pay, Google Pay, Cash App Pay, ACH bank transfer, and Afterpay.</p>
         </div>
@@ -704,7 +744,7 @@ function renderSubmittedOrderPremium() {
         <span>48 HR</span>
         <div>
           <strong>Invoice must be paid before your order ships.</strong>
-          <p>Unpaid order requests automatically cancel after 48 hours.</p>
+          <p>Orders with unpaid invoices for more than 48 hours may be automatically canceled.</p>
         </div>
       </div>
 
@@ -790,20 +830,38 @@ function renderCart() {
 
   cartRoot.innerHTML = cart.map((item, index) => `
     <article class="checkout-item-card">
-      <img src="${String(item.image || '').replace('../', '')}" alt="${escapeHtml(item.name)} product image" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
+      <div class="checkout-item-visual"><img src="${escapeHtml(getCartImage(item))}" alt="${escapeHtml(getCartDisplayName(item))} product image" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" /></div>
       <div class="checkout-item-copy">
-        <h2>${escapeHtml(item.name)}</h2>
-        <p>${escapeHtml(item.mgOption)} | ${escapeHtml(item.packLabel)}</p>
-        <div class="checkout-item-meta">
-          <span>Availability: ${escapeHtml(getInventoryLabel(item.inventoryStatus))}</span>
-          ${item.backorderNote ? `<span>${escapeHtml(item.backorderNote)}</span>` : ''}
-          <span>Unit price: ${escapeHtml(item.unitPriceDisplay)}</span>
-          <span>Quantity: ${item.quantity}</span>
-          <span>Line total: ${formatMoney(item.unitPrice * item.quantity)}</span>
-        </div>
+        <div class="checkout-item-topline"><h2>${escapeHtml(getCartDisplayName(item))}</h2><strong>${formatMoney(item.unitPrice * item.quantity)}</strong></div>
+        <p class="checkout-item-variant">${escapeHtml(item.mgOption)} · ${escapeHtml(item.packLabel)}</p>
+        <p class="checkout-item-unit">${formatMoney(item.unitPrice)} each · ${escapeHtml(getInventoryLabel(item.inventoryStatus))}</p>
+        ${item.backorderNote ? `<p class="checkout-item-note">${escapeHtml(item.backorderNote)}</p>` : ''}
       </div>
-      <button class="remove-item-button" type="button" data-remove-index="${index}">Remove</button>
+      <div class="checkout-item-controls">
+        <div class="checkout-item-stepper" role="group" aria-label="Quantity for ${escapeHtml(getCartDisplayName(item))} ${escapeHtml(item.mgOption)} ${escapeHtml(item.packLabel)}">
+          <button type="button" data-quantity-index="${index}" data-quantity-delta="-1" aria-label="Decrease quantity">−</button>
+          <span aria-live="polite">${item.quantity}</span>
+          <button type="button" data-quantity-index="${index}" data-quantity-delta="1" aria-label="Increase quantity">+</button>
+        </div>
+        <button class="remove-item-button" type="button" data-remove-index="${index}">Remove</button>
+      </div>
     </article>`).join('');
+
+  cartRoot.querySelectorAll('[data-quantity-index]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const nextCart = getCart();
+      const index = Number(button.dataset.quantityIndex);
+      const delta = Number(button.dataset.quantityDelta);
+      const item = nextCart[index];
+      if (!item || ![-1, 1].includes(delta)) return;
+      if (delta < 0) window.JONEZIE_ANALYTICS?.removeFromCart({ ...item, quantity: 1 });
+      else window.JONEZIE_ANALYTICS?.addToCart({ ...item, quantity: 1 });
+      item.quantity += delta;
+      if (item.quantity <= 0) nextCart.splice(index, 1);
+      setCart(nextCart);
+      renderCart();
+    });
+  });
 
   cartRoot.querySelectorAll('[data-remove-index]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -1072,6 +1130,9 @@ form?.addEventListener('submit', async (event) => {
   const notes = formData.get('customerNotes') || '';
   const promo = getPromoDetails();
   if (promo.isValid && promo.firstOrderOnly && hasRedeemedFirstOrderCode(email, promo.code)) {
+    isSubmittingOrderRequest = false;
+    if (submitButton) submitButton.disabled = false;
+    if (clearCartButton) clearCartButton.disabled = false;
     setFeedback(`${promo.code} has already been used with this email address.`, 'error');
     return;
   }
@@ -1134,6 +1195,7 @@ form?.addEventListener('submit', async (event) => {
   window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
   if (promo.isValid && promo.firstOrderOnly) markFirstOrderCodeRedeemed(email, promo.code);
   submittedOrderSnapshot = buildSubmittedOrderSnapshot(payload);
+  document.body.classList.add('checkout-order-complete');
   if (successCard) {
     successCard.hidden = false;
     successCard.innerHTML = `
@@ -1152,6 +1214,7 @@ form?.addEventListener('submit', async (event) => {
 clearCartButton?.addEventListener('click', () => {
   if (isSubmittingOrderRequest) return;
   submittedOrderSnapshot = null;
+  document.body.classList.remove('checkout-order-complete');
   if (successCard) successCard.hidden = true;
   if (form) form.hidden = false;
   clearFeedback();

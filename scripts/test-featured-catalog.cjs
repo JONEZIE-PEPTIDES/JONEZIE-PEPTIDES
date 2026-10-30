@@ -28,13 +28,12 @@ assert(order.includes('ahk-cu'));
 const vipLabel = labels.find(item => item.slug === 'vip');
 assert.equal(vipLabel.image, 'assets/products/20261022/vip-20261029.webp');
 assert.equal(vipLabel.thumbnail, 'assets/products/label-reveal/vip-20261029.webp');
-for (const file of ['products/vip.html', 'vip.html']) {
-  const html = read(file);
-  assert(html.includes(`data-product-hero-image src="${vipLabel.image}"`));
-  assert(html.includes(`"image": "https://www.jonezielabs.com/${vipLabel.image}"`));
-  assert(html.includes(`property="og:image" content="https://www.jonezielabs.com/${vipLabel.image}"`));
-  assert(html.includes(`name="twitter:image" content="https://www.jonezielabs.com/${vipLabel.image}"`));
-}
+const vipPage = read('products/vip.html');
+assert(vipPage.includes(`data-product-hero-image src="${vipLabel.image}"`));
+assert(vipPage.includes(`"image": "https://www.jonezielabs.com/${vipLabel.image}"`));
+assert(vipPage.includes(`property="og:image" content="https://www.jonezielabs.com/${vipLabel.image}"`));
+assert(vipPage.includes(`name="twitter:image" content="https://www.jonezielabs.com/${vipLabel.image}"`));
+assert(read('vip.html').includes('url=products/vip.html'));
 for (const item of labels) {
   assert(fs.existsSync(path.join(root, item.image)), item.image);
   assert(fs.existsSync(path.join(root, item.thumbnail)), item.thumbnail);
@@ -63,8 +62,8 @@ for (const selector of ['product-card', 'catalog-card']) {
 assert.match(styles, /\.product-card-media \{\s*--product-frame-height: 270px;/);
 assert.match(styles, /\.product-card-media \{ --product-frame-height: 240px; \}/);
 assert(!home.includes('.product-card img'), 'Homepage must not override shared compact image sizing');
-assert.equal(read('script.js').split('data-updated-label="${Boolean(product.hasUpdatedLabel)}"').length - 1, 2);
-assert.equal(read('script.js').split("product.hasUpdatedLabel ? '<div class=\"product-card-media\">'").length - 1, 2);
+assert.equal(read('script.js').split('data-updated-label="${Boolean(product.hasUpdatedLabel)}"').length - 1, 1);
+assert.equal(read('script.js').split("product.hasUpdatedLabel ? '<div class=\"product-card-media\">'").length - 1, 1);
 assert.match(styles, /width: min\(100%, var\(--product-frame-height\)\);\s*height: auto;\s*aspect-ratio: 1;/);
 assert(styles.includes('transparent, #000 20%, #000 80%, transparent'), 'The complete vial stays in the opaque center');
 assert(fs.statSync(path.join(root, 'assets/products/card-studio-background.webp')).size < 30000);

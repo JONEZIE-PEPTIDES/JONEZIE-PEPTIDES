@@ -56,7 +56,6 @@
         .filter((pair) => guide.categories.includes(pair.left?.category) || guide.categories.includes(pair.right?.category))
         .slice(0, 4);
       const practicalNotes = buildGuidePracticalNotes(guide, products);
-      const relatedTools = buildGuideTools(products);
 
       return `
         <section id="guide-${guide.key}" class="guide-article">
@@ -96,13 +95,6 @@
               </div>
             </article>
             <article class="guide-article-card">
-              <p class="eyebrow">Related Tools</p>
-              <h3>Research tools</h3>
-              <div class="mini-link-grid">
-                ${relatedTools.map((tool) => renderToolMiniCard(tool)).join('')}
-              </div>
-            </article>
-            <article class="guide-article-card">
               <p class="eyebrow">FAQ</p>
               <h3>Common questions</h3>
               <div class="guide-faq-list">
@@ -128,7 +120,6 @@
           <p>Move from a guide into direct compound comparisons for class notes, product context, storage information, and related listings.</p>
           <div class="resource-links-inline">
             <a class="button secondary" href="comparison.html">View Comparisons</a>
-            <a class="button secondary" href="research-tools.html">Use Research Tools</a>
           </div>
         </article>
         <article class="resource-strip-card">
@@ -138,10 +129,6 @@
             <a class="mini-link-card" href="catalog.html">
               <strong>Full Products</strong>
               <span>Return to the live product listing for current pricing, card presentation, and the active catalog view.</span>
-            </a>
-            <a class="mini-link-card" href="${library.RESOURCE_DOWNLOAD.pageHref}">
-              <strong>${escapeHtml(library.RESOURCE_DOWNLOAD.title)}</strong>
-              <span>${escapeHtml(library.RESOURCE_DOWNLOAD.description)}</span>
             </a>
             <a class="mini-link-card" href="index.html#faq">
               <strong>FAQ</strong>
@@ -172,24 +159,6 @@
     return notes.slice(0, 4);
   }
 
-  function buildGuideTools(products) {
-    const seen = new Set();
-    const collected = [];
-
-    products.forEach((product) => {
-      library.getRelatedToolSet(product).forEach((tool) => {
-        if (!tool?.key || seen.has(tool.key)) return;
-        seen.add(tool.key);
-        collected.push(tool);
-      });
-    });
-
-    if (!collected.length) {
-      return library.TOOL_LIBRARY.slice(0, 4);
-    }
-
-    return collected.slice(0, 4);
-  }
 
   function renderProductMiniCard(product) {
     const profile = library.getProductInfoProfile(product, getProductContent(product), catalog);
@@ -205,14 +174,6 @@
       <a class="mini-link-card" href="${library.getComparisonUrl(leftProduct.slug, rightProduct.slug)}">
         <strong>${escapeHtml(leftProduct.name)} vs ${escapeHtml(rightProduct.name)}</strong>
         <span>Compare research classification, molecular targets, available strengths, product format, and general storage information.</span>
-      </a>`;
-  }
-
-  function renderToolMiniCard(tool) {
-    return `
-      <a class="mini-link-card" href="${escapeHtml(tool.href)}">
-        <strong>${escapeHtml(tool.title)}</strong>
-        <span>${escapeHtml(tool.description)}</span>
       </a>`;
   }
 

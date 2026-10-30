@@ -36,6 +36,12 @@ def get_category_display_label(category: str | None) -> str:
     return CATEGORY_DISPLAY_LABELS.get(key, key or "Research")
 
 
+def get_display_name(product: dict) -> str:
+    if product.get("slug") == "bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg":
+        return "GLOW"
+    return product.get("name") or "Research product"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate all product pages or selected slugs.")
     parser.add_argument("--slug", action="append", help="Generate only this product; may be repeated.")
@@ -145,7 +151,8 @@ def dedupe_products(catalog: dict) -> list[dict]:
 
 
 def render_product_page(*, template: str, product: dict, product_content: dict, profile: dict, faqs: list[dict], title: str, meta_description: str, canonical: str) -> str:
-    hero_summary = profile.get("researchContext") or product_content.get("researchSummary") or product_content.get("shortDescription") or product.get("description") or ""
+    display_name = get_display_name(product)
+    hero_summary = f"Available in {', '.join(option.get('mgOption') for option in product.get('options') or [] if option.get('mgOption'))}. Choose a pack format to see current pricing."
     og_image = absolute_url(product.get("image") or FALLBACK_IMAGE)
     image_src = escape(product.get("image") or FALLBACK_IMAGE, quote=True)
     selected_option = (product.get("options") or [{}])[0]
@@ -161,9 +168,9 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
     selected_price = selected_option.get(selected_pack_key) or "Pending"
     selected_code = selected_option.get("code") or "Option"
     selected_subtitle = (
-        f"{selected_code} is currently on backorder."
+        f"{selected_option.get('mgOption') or 'This strength'} is currently on backorder."
         if selected_option.get("inventoryStatus") == "backorder"
-        else f"{selected_code} is currently listed with {selected_pack_label.lower()} pricing."
+        else f"{selected_option.get('mgOption') or 'This strength'} · {selected_pack_label} · In stock"
     )
     strengths = ", ".join(profile.get("strengths") or [option.get("mgOption") for option in product.get("options") or [] if option.get("mgOption")])
     research_findings = product_content.get("researchFindings") or []
@@ -179,7 +186,7 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
         "@graph": [
             {
                 "@type": "Product",
-                "name": product["name"],
+                "name": display_name,
                 "description": meta_description,
                 "category": product.get("category"),
                 "image": og_image,
@@ -204,18 +211,7 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
                 "@type": "BreadcrumbList",
                 "itemListElement": [
                     {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.jonezielabs.com/"},
-                    {"@type": "ListItem", "position": 2, "name": product["name"], "item": canonical},
-                ],
-            },
-            {
-                "@type": "FAQPage",
-                "mainEntity": [
-                    {
-                        "@type": "Question",
-                        "name": item["question"],
-                        "acceptedAnswer": {"@type": "Answer", "text": item["answer"]},
-                    }
-                    for item in faqs
+                    {"@type": "ListItem", "position": 2, "name": display_name, "item": canonical},
                 ],
             },
         ],
@@ -269,12 +265,12 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
         flags=re.S,
     )
     html = html.replace("<body>", f'<body data-product-slug="{escape(product["slug"], quote=True)}">', 1)
-    html = replace_wrapped(r'(<p class="eyebrow" data-product-category>).*?(</p>)', escape(get_category_display_label(product.get('category'))))
-    html = replace_wrapped(r'(<h1 data-product-title>).*?(</h1>)', escape(product['name']))
-    html = replace_wrapped(r'(<p class="hero-text" data-product-description>).*?(</p>)', escape(hero_summary))
+    html = replace_wrapped(r'(<p class="eyebrow" data-product-category>).*?(</p>)', 'Research use only')
+    html = replace_wrapped(r'(<h1 data-product-title>).*?(</h1>)', escape(display_name))
+    html = replace_wrapped(r'(<p class="product-intro" data-product-description>).*?(</p>)', escape(hero_summary))
     html = re.sub(
         r'<img data-product-hero-image src=".*?" alt=".*?" />',
-        f'<img data-product-hero-image src="{image_src}" alt="{escape(product["name"], quote=True)} product image" />',
+        f'<img data-product-hero-image src="{image_src}" alt="{escape(display_name, quote=True)} product image" />',
         html,
         count=1,
     )
@@ -284,14 +280,7 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
         1,
     )
     html = re.sub(
-        r'(<h2 data-selected-title>).*?(</h2>)',
-        lambda match: f"{match.group(1)}{escape(product['name'])} {escape(selected_option.get('mgOption') or 'Reference')}{match.group(2)}",
-        html,
-        count=1,
-        flags=re.S,
-    )
-    html = re.sub(
-        r'(<p data-selected-subtitle>).*?(</p>)',
+        r'(<p class="product-selection-note" data-selected-subtitle>).*?(</p>)',
         lambda match: (
             f"{match.group(1)}"
             f"{escape(selected_subtitle)}"
@@ -309,18 +298,13 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
     html = replace_wrapped(r'(<strong data-selected-price>).*?(</strong>)', escape(selected_price))
     html = replace_wrapped(r'(<strong data-selected-total>).*?(</strong>)', escape(selected_price))
     html = html.replace(
-        '<section class="section-shell block-section product-detail-grid" data-product-highlights></section>',
-        f'<section class="section-shell block-section product-detail-grid" data-product-highlights>{render_highlights(product, product_content, profile, strengths, research_findings, storage_profile, mixing_profile, category_guide)}</section>',
+        '<section class="section-shell product-facts" data-product-highlights></section>',
+        f'<section class="section-shell product-facts" data-product-highlights>{render_highlights(product, product_content, profile, strengths, research_findings, storage_profile, mixing_profile, category_guide)}</section>',
         1,
     )
     html = html.replace(
-        '<section class="section-shell block-section comparison-link-shell" data-product-resources></section>',
-        f'<section class="section-shell block-section comparison-link-shell" data-product-resources>{render_resources(product, related_products, comparison_candidates, related_tools, category_guide)}</section>',
-        1,
-    )
-    html = html.replace(
-        '<section class="section-shell block-section comparison-faq-shell" data-product-faq></section>',
-        f'<section class="section-shell block-section comparison-faq-shell" data-product-faq>{render_faq(faqs)}</section>',
+        '<section class="section-shell product-related" data-product-resources></section>',
+        f'<section class="section-shell product-related" data-product-resources>{render_resources(product, related_products, comparison_candidates, related_tools, category_guide)}</section>',
         1,
     )
     return "\n".join(line.rstrip() for line in html.splitlines()) + "\n"
@@ -335,12 +319,8 @@ def render_option_cards(product: dict, selected_option: dict) -> str:
         cards.append(
             f"""
         <button type="button" class="spec-card spec-card-button{selected}" data-option-code="{escape(option.get('code') or '', quote=True)}">
-          <p class="eyebrow">{escape(option.get('code') or '')}</p>
-          <h3>{escape(option.get('mgOption') or 'Pending')}</h3>
-          <p class="inventory-pill inventory-{escape(status)}">{escape(label)}</p>
-          <div class="spec-price-row"><span>Single</span><strong>{escape(option.get('singleVialPrice') or 'Pending')}</strong></div>
-          <div class="spec-price-row"><span>8-pack</span><strong>{escape(option.get('eightVialPrice') or 'Pending')}</strong></div>
-          <div class="spec-price-row live-row"><span>10-pack</span><strong>{escape(option.get('tenVialPrice') or 'Pending')}</strong></div>
+          <strong>{escape(option.get('mgOption') or 'Pending')}</strong>
+          <span class="inventory-pill inventory-{escape(status)}">{escape(label)}</span>
         </button>"""
         )
     return "".join(cards)
@@ -369,115 +349,36 @@ def render_pack_picker(option: dict, selected_pack_key: str) -> str:
 
 
 def render_highlights(product: dict, product_content: dict, profile: dict, strengths: str, research_findings: list[str], storage_profile: dict, mixing_profile: dict, category_guide: dict) -> str:
-    findings_markup = (
-        '<ul class="research-list">' + "".join(f"<li>{escape(item)}</li>" for item in research_findings) + "</ul>"
-        if research_findings
-        else ""
-    )
-    handling_steps = mixing_profile.get("steps") or []
-    handling_markup = (
-        '<ol class="tool-step-list">' + "".join(f"<li>{escape(step)}</li>" for step in handling_steps[:3]) + "</ol>"
-        if handling_steps
-        else ""
+    components = (
+        '<div><dt>Components</dt><dd>GHK-Cu 50mg · BPC-157 10mg · TB-500 10mg</dd></div>'
+        if product.get('slug') == 'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg' else ''
     )
     return f"""
-      <article>
-        <p class=\"eyebrow\">Research Summary</p>
-        <h2>What this product is commonly referenced for</h2>
-        <p>{escape(profile.get('researchContext') or product_content.get('shortDescription') or product.get('description') or '')}</p>
-        {findings_markup}
-      </article>
-      <article>
-        <p class=\"eyebrow\">Compound Details</p>
-        <h2>Class, category, and form</h2>
-        <ul class=\"research-list\">
-          <li>{escape(profile.get('compoundClass') or product.get('category') or 'Research compound')}</li>
-          <li>{escape(profile.get('researchCategory') or product.get('category') or 'Research')}</li>
-          <li>{escape(profile.get('form') or 'Research vial')}</li>
-          <li>{escape(strengths or 'Listed strengths pending')}</li>
-        </ul>
-      </article>
-      <article>
-        <p class=\"eyebrow\">Storage Notes</p>
-        <h2>{escape(storage_profile.get('title') or 'Storage information')}</h2>
-        <p>{escape(profile.get('storageNote') or storage_profile.get('shortSummary') or '')}</p>
-        <ul class=\"research-list\">
-          {''.join(f'<li>{escape(item)}</li>' for item in storage_profile.get('bullets') or [])}
-        </ul>
-      </article>
-      <article>
-        <p class=\"eyebrow\">Handling Notes</p>
-        <h2>Preparation and label review</h2>
-        <p>{escape(profile.get('handlingNote') or 'Confirm the vial label before handling and keep preparation notes documented.')}</p>
-        {handling_markup}
-      </article>
-      <article>
-        <p class=\"eyebrow\">Comparison Context</p>
-        <h2>How this listing fits into side-by-side review</h2>
-        <p>{escape(profile.get('structureNote') or 'Listed as a research product inside the active Jonezie catalog.')}</p>
-        <p>{escape(profile.get('comparisonSummary') or 'Use the comparison pages to weigh class, form, listed strengths, and nearby compounds.')}</p>
-      </article>
-      <article>
-        <p class=\"eyebrow\">Reference Note</p>
-        <h2>{escape((category_guide or {}).get('title') or 'Related research guide')}</h2>
-        <p>{escape((category_guide or {}).get('summary') or 'Use the guide library to move into related products, comparison pages, and research tools.')}</p>
-        <p>{escape(profile.get('ruoDisclaimer') or 'All product information is provided for research, laboratory, or analytical reference only. Products are not for human or veterinary use.')}</p>
-      </article>"""
+      <details>
+        <summary>Product details <span>Strengths, format, and use notice</span></summary>
+        <dl>
+          <div><dt>Available strengths</dt><dd>{escape(strengths or 'See options above')}</dd></div>
+          <div><dt>Format</dt><dd>{escape(profile.get('form') or 'Research vial')}</dd></div>
+          {components}
+          <div><dt>Use</dt><dd>Laboratory research only. Not for human or veterinary use.</dd></div>
+        </dl>
+      </details>"""
 
 
 def render_resources(product: dict, related_products: list[dict], comparison_candidates: list[dict], related_tools: list[dict], category_guide: dict) -> str:
-    left_cards = "".join(
+    if not related_products:
+        return ""
+    cards = "".join(
         f"""
-              <a class=\"mini-link-card\" href=\"{escape(get_product_href(related_product.get('slug') or ''), quote=True)}\">
-                <strong>{escape(related_product.get('name') or 'Related product')}</strong>
-                <span>{escape(get_related_summary(related_product))}</span>
-              </a>"""
-        for related_product in related_products
+        <a href="{escape(get_product_href(item.get('slug') or ''), quote=True)}">
+          <strong>{escape(get_display_name(item))}</strong>
+          <span>View product &rarr;</span>
+        </a>"""
+        for item in related_products
     )
-    right_cards = "".join(
-        f"""
-              <a class=\"mini-link-card\" href=\"{escape(get_comparison_href(product.get('slug') or '', candidate.get('slug') or ''), quote=True)}\">
-                <strong>{escape(product.get('name') or 'Product')} vs {escape(candidate.get('name') or 'Related product')}</strong>
-                <span>Open the direct comparison for class notes, storage context, listed strengths, and related products.</span>
-              </a>"""
-        for candidate in comparison_candidates
-    )
-    if category_guide:
-        right_cards += f"""
-              <a class=\"mini-link-card\" href=\"{escape(get_guide_href(category_guide.get('key') or ''), quote=True)}\">
-                <strong>{escape(category_guide.get('title') or 'Research guide')}</strong>
-                <span>{escape(category_guide.get('summary') or 'Use the guide library to move into related products, comparison pages, and research tools.')}</span>
-              </a>"""
-    right_cards += "".join(
-        f"""
-              <a class=\"mini-link-card\" href=\"{escape(tool.get('href') or 'research-tools.html', quote=True)}\">
-                <strong>{escape(tool.get('title') or 'Research tool')}</strong>
-                <span>{escape(tool.get('description') or 'Open the related research tool.')}</span>
-              </a>"""
-        for tool in related_tools
-    )
-    right_cards += """
-              <a class=\"mini-link-card\" href=\"index.html#faq\">
-                <strong>FAQ</strong>
-                <span>Review the main-site ordering and research-use reference notes.</span>
-              </a>"""
     return f"""
-      <div class=\"resource-strip\">
-        <article class=\"resource-strip-card\">
-          <p class=\"eyebrow\">Related Products</p>
-          <h2>Keep moving through similar listings.</h2>
-          <div class=\"mini-link-grid\">
-            {left_cards}
-          </div>
-        </article>
-        <article class=\"resource-strip-card\">
-          <p class=\"eyebrow\">Related Pages</p>
-          <h2>Open the next reference page without leaving the lane.</h2>
-          <div class=\"mini-link-grid\">
-            {right_cards}
-          </div>
-        </article>
-      </div>"""
+      <div class="product-related-heading"><p class="eyebrow">More products</p><h2>Explore the catalog</h2></div>
+      <div class="product-related-list">{cards}</div>"""
 
 
 def render_faq(faqs: list[dict]) -> str:
