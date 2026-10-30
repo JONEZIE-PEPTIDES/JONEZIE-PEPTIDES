@@ -59,6 +59,8 @@ def main() -> None:
         if source.suffix.lower() == ".html":
             html = source.read_text(encoding="utf-8")
             html = html.replace('<base href="/" />', f'<base href="{PREFIX}" />')
+            html = re.sub(r'(site-footer\.js\?v=)[^"\']+', r'\g<1>20261029phonepreview3', html)
+            html = re.sub(r'(cart-nav\.js\?v=)[^"\']+', r'\g<1>20261029phonepreview3', html)
             html = html.replace(
                 'https://www.jonezielabs.com/jonezie-labs-logo.webp?v=20261029',
                 'https://jonezie-peptides.github.io/jonezie-labs-staging/jonezie-labs-logo.webp?v=20261029',
