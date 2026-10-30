@@ -91,7 +91,8 @@
     ['Thymosin Alpha-1', '5mg', 43.125, 301.2, 357],
     ['Thymosin Alpha-1', '10mg', 77.625, 542.16, 642.6],
     ['LC216', '10mg', 31.625, 220.88, 261.8],
-    ['FOXO4', '10mg', 162, 1131.46, 1341.08]
+    ['FOXO4', '10mg', 162, 1131.46, 1341.08],
+    ['AHK-CU', '100mg', 30, 209.53, 248.35]
   ];
 
   const EXTRA_PRODUCTS = [
@@ -165,6 +166,7 @@
     'Thymosin Alpha-1|10mg': 39.99
   };
   const SINGLE_PRICE_OVERRIDES = {
+    'AHK-CU|100mg': 30,
     'FOXO4|10mg': 162,
     'B12 10000mcg 10ml|3000 MCG / 3 mL': 17,
     'Retatrutide|20mg': 107
@@ -224,6 +226,7 @@
     aod: 'Metabolic',
     tesamorelin: 'Growth',
     'ghk-cu': 'Aesthetics',
+    'ahk-cu': 'Aesthetics',
     'kpv': 'Aesthetics',
     'kisspeptin-10': 'Performance',
     'mots-c': 'Cellular',
@@ -296,10 +299,12 @@
     'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'assets/products/20261022/bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg.webp',
     'b12-10000mcg-10ml': 'assets/products/20261022/b12-3000mcg-3ml.webp',
     vip: 'assets/products/20261022/vip-20261029.webp',
-    foxo4: 'assets/products/20261022/foxo4-20261029.webp'
+    foxo4: 'assets/products/20261022/foxo4-20261029.webp',
+    'ahk-cu': 'assets/products/20261022/ahk-cu-20261029.webp'
   };
 
   const DESCRIPTION_BY_SLUG = {
+    'ahk-cu': 'AHK-CU, supplied as 100 mg in a 3 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For research use only; not for human or veterinary use.',
     foxo4: 'FOXO4, supplied as 10 mg in a 3 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For research use only; not for human or veterinary use.'
   };
 

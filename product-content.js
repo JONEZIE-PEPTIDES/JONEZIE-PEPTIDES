@@ -2,6 +2,11 @@ window.JONEZIE_PRODUCT_CONTENT = {
   disclaimerShort: 'Research Use Only. Not for human or veterinary use. Site copy summarizes published and preclinical literature and is not medical advice.',
   disclaimerLong: 'All compounds listed on this site are offered strictly for laboratory research, analytical, or in-vitro use. Statements on this site summarize published research themes, preclinical findings, and early clinical observations where available; they are not medical claims, treatment claims, or dosing instructions. Products are not approved to diagnose, treat, cure, or prevent disease, and they are not for human consumption.',
   products: {
+    'ahk-cu': {
+      shortDescription: 'AHK-CU, supplied as 100 mg in a 3 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For research use only; not for human or veterinary use.',
+      researchSummary: 'AHK-CU is available in one listed strength: 100 mg in a 3 mL vial. This listing is for laboratory research use only, not human or veterinary use.',
+      researchFindings: []
+    },
     '5-amino-1mq': {
       shortDescription: '5-Amino-1MQ is a small-molecule nicotinamide N-methyltransferase inhibitor used in metabolic research. Preclinical work has focused on adipose-tissue signaling, glucose-homeostasis markers, liver-lipid signaling, and cellular energy pathways.',
       researchSummary: 'Research around NNMT inhibition has examined adipose-tissue metabolism, glucose-homeostasis readouts, hepatic lipid accumulation, and energy-expenditure markers in preclinical metabolic models.',
