@@ -114,9 +114,9 @@ a {
 }
 
 .rs-button.secondary {
-  border-color: var(--ad-teal);
+  border-color: var(--ad-pink);
   background: #fffdf9;
-  color: var(--ad-teal);
+  color: #b41a68;
   box-shadow: none;
 }
 
