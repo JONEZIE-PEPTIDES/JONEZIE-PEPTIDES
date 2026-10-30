@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import json
 import re
 from html import escape
@@ -36,16 +37,26 @@ def get_category_display_label(category: str | None) -> str:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate all product pages or selected slugs.")
+    parser.add_argument("--slug", action="append", help="Generate only this product; may be repeated.")
+    args = parser.parse_args()
     ctx = build_context()
     template = TEMPLATE_PATH.read_text()
     catalog = load_json(ctx, "window.JONEZIE_CATALOG")
     products = dedupe_products(catalog)
+    if args.slug:
+        requested = set(args.slug)
+        missing = requested - {product["slug"] for product in products}
+        if missing:
+            parser.error("Unknown product slug(s): " + ", ".join(sorted(missing)))
+        products = [product for product in products if product["slug"] in requested]
     expected_files = {f"{product['slug']}.html" for product in products}
 
     OUTPUT_DIR.mkdir(exist_ok=True)
-    for existing in OUTPUT_DIR.glob("*.html"):
-        if existing.name not in expected_files:
-            existing.unlink()
+    if not args.slug:
+        for existing in OUTPUT_DIR.glob("*.html"):
+            if existing.name not in expected_files:
+                existing.unlink()
     for product in products:
         slug = product["slug"]
         product_content = load_json(ctx, f"window.JONEZIE_PRODUCT_CONTENT.products[{json.dumps(slug)}] || null")

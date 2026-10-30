@@ -37,7 +37,8 @@
     ipamorelin: 'ipamorelin',
     'thymosin-alpha-1': 'thymosin-alpha-1',
     'b12-10000mcg-10ml': 'b12-3000mcg-3ml',
-    vip: 'vip-20261029'
+    vip: 'vip-20261029',
+    foxo4: 'foxo4-20261029'
   };
 
   window.JONEZIE_NEW_LABELS = Object.entries(artwork).map(([slug, file]) => ({

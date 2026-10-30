@@ -191,6 +191,11 @@ window.JONEZIE_PRODUCT_CONTENT = {
         'The literature is intriguing but less mainstream than GLP-1 metabolic research, so good copy should stay measured.'
       ]
     },
+    foxo4: {
+      shortDescription: 'FOXO4, supplied as 10 mg in a 3 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For research use only; not for human or veterinary use.',
+      researchSummary: 'FOXO4 is available in one listed strength: 10 mg in a 3 mL vial. This listing is for laboratory research use only, not human or veterinary use.',
+      researchFindings: []
+    },
     'ghk-cu': {
       shortDescription: 'GHK-Cu is a copper peptide widely used in skin, hair, and wound-closure research models. It is typically positioned around collagen signaling, remodeling, and aesthetics-focused tissue biology.',
       researchSummary: 'Published studies have examined fibroblast activity, wound-closure models, collagen-associated pathways, and tissue-remodeling responses.',

@@ -90,7 +90,8 @@
     ['DSIP', '15mg', 46, 321.28, 380.8],
     ['Thymosin Alpha-1', '5mg', 43.125, 301.2, 357],
     ['Thymosin Alpha-1', '10mg', 77.625, 542.16, 642.6],
-    ['LC216', '10mg', 31.625, 220.88, 261.8]
+    ['LC216', '10mg', 31.625, 220.88, 261.8],
+    ['FOXO4', '10mg', 162, 1131.46, 1341.08]
   ];
 
   const EXTRA_PRODUCTS = [
@@ -164,6 +165,7 @@
     'Thymosin Alpha-1|10mg': 39.99
   };
   const SINGLE_PRICE_OVERRIDES = {
+    'FOXO4|10mg': 162,
     'B12 10000mcg 10ml|3000 MCG / 3 mL': 17,
     'Retatrutide|20mg': 107
   };
@@ -247,6 +249,7 @@
     'slu-pp-322': 'Metabolic',
     'igf-1lr3': 'Growth',
     vip: 'Cognitive',
+    foxo4: 'Cellular',
     'ghrp-6 acetate': 'Growth',
     mazdutide: 'Metabolic',
     thymalin: 'Cellular',
@@ -292,7 +295,12 @@
     hcg: 'assets/products/20261022/hcg.webp',
     'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'assets/products/20261022/bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg.webp',
     'b12-10000mcg-10ml': 'assets/products/20261022/b12-3000mcg-3ml.webp',
-    vip: 'assets/products/20261022/vip-20261029.webp'
+    vip: 'assets/products/20261022/vip-20261029.webp',
+    foxo4: 'assets/products/20261022/foxo4-20261029.webp'
+  };
+
+  const DESCRIPTION_BY_SLUG = {
+    foxo4: 'FOXO4, supplied as 10 mg in a 3 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For research use only; not for human or veterinary use.'
   };
 
   const DESCRIPTION_BY_CATEGORY = {
@@ -411,7 +419,7 @@
         sourceName: rawName,
         slug,
         category,
-        description: `${displayName} is an active ${category.toLowerCase()} listing at Jonezie. ${DESCRIPTION_BY_CATEGORY[category] || DESCRIPTION_BY_CATEGORY.Support}`,
+        description: DESCRIPTION_BY_SLUG[slug] || `${displayName} is an active ${category.toLowerCase()} listing at Jonezie. ${DESCRIPTION_BY_CATEGORY[category] || DESCRIPTION_BY_CATEGORY.Support}`,
         startingPriceSingle: '$0.00',
         startingPrice8: '$0.00',
         startingPrice10: '$0.00',

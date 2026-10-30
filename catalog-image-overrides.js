@@ -57,6 +57,7 @@
     pinealon: 'pinealon-new-hero-product-image.webp',
     selank: 'assets/products/20261022/selank.webp',
     vip: 'assets/products/20261022/vip-20261029.webp',
+    foxo4: 'assets/products/20261022/foxo4-20261029.webp',
     mazdutide: 'mazdutide-new-hero-product-image.webp',
     thymalin: 'thymalin-new-hero-product-image.webp',
     'thymosin-alpha-1': 'assets/products/20261022/thymosin-alpha-1.webp',
