@@ -1247,6 +1247,9 @@ form?.addEventListener('submit', async (event) => {
     });
   }
   window.JONEZIE_ANALYTICS?.orderRequestSubmit(payload);
+  if (submission.mode === 'remote' && !submission.reason) {
+    window.JONEZIE_TIKTOK_PIXEL?.trackOrderRequest(payload.orderId);
+  }
   if (promo.isValid && promo.firstOrderOnly) markFirstOrderCodeRedeemed(email, promo.code);
   submittedOrderSnapshot = buildSubmittedOrderSnapshot(payload);
   document.body.classList.add('checkout-order-complete');
