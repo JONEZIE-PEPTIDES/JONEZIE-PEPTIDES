@@ -10,6 +10,7 @@ window.JONEZIE_TIKTOK_PIXEL = (() => {
     new URLSearchParams(window.location.search).get('ad') === 'fall40';
   const enabled = isLive && (isCampaignPage || isCampaignCheckoutOrProduct);
   const trackedRequests = new Set();
+  let checkoutStarted = false;
 
   if (enabled && !window.ttq) {
     // TikTok's queue bootstrap, using the pixel ID supplied for Jonezie Labs.
@@ -45,13 +46,31 @@ window.JONEZIE_TIKTOK_PIXEL = (() => {
     ttq.page();
   }
 
-  function trackOrderRequest(orderId) {
-    const id = String(orderId || '').trim();
-    if (!enabled || !id || trackedRequests.has(id) || typeof window.ttq?.track !== 'function') return;
-    trackedRequests.add(id);
-    // The invoice is still unpaid. A Lead represents the request, not a Purchase.
-    window.ttq.track('Lead');
+  function track(eventName) {
+    if (!enabled || typeof window.ttq?.track !== 'function') return false;
+    window.ttq.track(eventName);
+    return true;
   }
 
-  return { enabled, trackOrderRequest };
+  function trackViewContent() {
+    track('ViewContent');
+  }
+
+  function trackAddToCart() {
+    track('AddToCart');
+  }
+
+  function trackCheckoutStart() {
+    if (checkoutStarted || !track('InitiateCheckout')) return;
+    checkoutStarted = true;
+  }
+
+  function trackOrderRequest(orderId) {
+    const id = String(orderId || '').trim();
+    if (!id || trackedRequests.has(id) || !track('Lead')) return;
+    trackedRequests.add(id);
+    // The invoice is still unpaid. A Lead represents the request, not a Purchase.
+  }
+
+  return { enabled, trackViewContent, trackAddToCart, trackCheckoutStart, trackOrderRequest };
 })();

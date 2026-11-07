@@ -624,6 +624,7 @@ function markFirstOrderCodeRedeemed(email, code) {
 function trackBeginCheckoutOnce(cart, promo, shippingOption) {
   if (hasTrackedBeginCheckout || !cart.length) return;
   hasTrackedBeginCheckout = true;
+  window.JONEZIE_TIKTOK_PIXEL?.trackCheckoutStart();
   window.JONEZIE_ANALYTICS?.beginCheckout(cart, {
     coupon: promo?.isValid ? promo.code : '',
     shipping_tier: shippingOption?.label || ''
