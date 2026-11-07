@@ -110,7 +110,7 @@ window.JONEZIE_ANALYTICS = (() => {
   function viewItem(item) {
     const payload = buildCartPayload([{ ...item, quantity: 1 }]);
     event('view_item', payload);
-    window.JONEZIE_TIKTOK_PIXEL?.trackViewContent();
+    window.JONEZIE_TIKTOK_PIXEL?.trackViewContent(item);
   }
 
   function selectItem(item) {
@@ -119,7 +119,7 @@ window.JONEZIE_ANALYTICS = (() => {
 
   function addToCart(item) {
     event('add_to_cart', buildCartPayload([item]));
-    window.JONEZIE_TIKTOK_PIXEL?.trackAddToCart();
+    window.JONEZIE_TIKTOK_PIXEL?.trackAddToCart(item);
   }
 
   function removeFromCart(item) {

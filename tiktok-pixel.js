@@ -1,4 +1,4 @@
-// TikTok tracking is limited to the live Fall ad path. No customer or cart data is sent.
+// TikTok tracking is limited to the live Fall ad path. No customer details or full cart is sent.
 window.JONEZIE_TIKTOK_PIXEL = (() => {
   const PIXEL_ID = 'DBMCCORC77U1OI24UGKG';
   const host = window.location.hostname.toLowerCase();
@@ -46,18 +46,30 @@ window.JONEZIE_TIKTOK_PIXEL = (() => {
     ttq.page();
   }
 
-  function track(eventName) {
+  function track(eventName, parameters) {
     if (!enabled || typeof window.ttq?.track !== 'function') return false;
-    window.ttq.track(eventName);
+    if (parameters) window.ttq.track(eventName, parameters);
+    else window.ttq.track(eventName);
     return true;
   }
 
-  function trackViewContent() {
-    track('ViewContent');
+  function productParameters(item) {
+    const contentId = String(item?.slug || item?.code || '').trim().slice(0, 100);
+    if (!contentId) return undefined;
+    const quantity = Math.max(1, Number.parseInt(item?.quantity, 10) || 1);
+    return {
+      content_type: 'product',
+      content_id: contentId,
+      contents: [{ content_id: contentId, quantity }]
+    };
   }
 
-  function trackAddToCart() {
-    track('AddToCart');
+  function trackViewContent(item) {
+    track('ViewContent', productParameters(item));
+  }
+
+  function trackAddToCart(item) {
+    track('AddToCart', productParameters(item));
   }
 
   function trackCheckoutStart() {

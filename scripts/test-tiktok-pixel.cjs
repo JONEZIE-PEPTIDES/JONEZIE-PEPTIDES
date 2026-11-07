@@ -39,8 +39,13 @@ product.window.oaiq = () => {};
 vm.runInNewContext(analyticsCode, { window: product.window });
 product.window.JONEZIE_ANALYTICS.viewItem({ slug: 'retatrutide', name: 'Retatrutide' });
 product.window.JONEZIE_ANALYTICS.addToCart({ slug: 'retatrutide', name: 'Retatrutide', quantity: 1 });
-assert.deepEqual(Array.from(product.window.ttq[1]), ['track', 'ViewContent']);
-assert.deepEqual(Array.from(product.window.ttq[2]), ['track', 'AddToCart']);
+assert.equal(product.window.ttq[1][0], 'track');
+assert.equal(product.window.ttq[1][1], 'ViewContent');
+assert.equal(product.window.ttq[1][2].content_id, 'retatrutide');
+assert.equal(product.window.ttq[1][2].contents[0].content_id, 'retatrutide');
+assert.equal(product.window.ttq[2][0], 'track');
+assert.equal(product.window.ttq[2][1], 'AddToCart');
+assert.equal(product.window.ttq[2][2].content_id, 'retatrutide');
 
 const checkout = load('https://www.jonezielabs.com/checkout.html?ad=fall40');
 checkout.window.JONEZIE_TIKTOK_PIXEL.trackCheckoutStart();
@@ -70,7 +75,7 @@ for (const file of [
   ...fs.readdirSync(path.join(root, 'products')).filter((file) => file.endsWith('.html')).map((file) => `products/${file}`)
 ]) {
   const html = fs.readFileSync(path.join(root, file), 'utf8');
-  assert.match(html, /<script src="tiktok-pixel\.js\?v=20261107a"><\/script>/, file);
+  assert.match(html, /<script src="tiktok-pixel\.js\?v=20261107b"><\/script>/, file);
 }
 
 console.log('TikTok ad-path context, actual funnel events, lead deduplication, and page coverage verified.');
