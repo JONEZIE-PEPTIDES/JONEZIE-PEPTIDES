@@ -1141,6 +1141,16 @@ async function submitOrderRequest(payload) {
 
   if (result.status === 'timeout') {
     console.warn('Order request response timed out; the background request is still running.');
+    // The request can finish after the confirmation is shown. Count the lead only
+    // if that background request actually completes, never merely on the timer.
+    request.then((lateResult) => {
+      if (lateResult.status !== 'completed') return;
+      try {
+        window.JONEZIE_TIKTOK_PIXEL?.trackOrderRequest(payload.orderId);
+      } catch (error) {
+        console.warn('Could not track the completed order request.', error);
+      }
+    });
     return { ok: true, mode: 'remote', reason: 'response-timeout' };
   }
 
