@@ -45,6 +45,7 @@
   window.JONEZIE_NEW_LABELS = Object.entries(artwork).map(([slug, file]) => ({
     slug,
     image: `assets/products/20261022/${file}.webp`,
-    thumbnail: `assets/products/label-reveal/${file}.webp`
+    thumbnail: `assets/products/label-reveal/${file}.webp`,
+    cardImage: `assets/products/cards/${file}.webp`
   }));
 })();

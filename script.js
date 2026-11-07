@@ -256,15 +256,15 @@ function getCatalogCardSelection(product, strength, stock, format) {
   return pack ? { option, pack } : null;
 }
 
-function renderShopCard(product, index, prioritizeImage = false, selectionOverride = undefined) {
+function renderShopCard(product, selectionOverride = undefined) {
     const selection = selectionOverride === undefined ? getFeaturedQuickAdd(product) : selectionOverride;
     const canAdd = selection && String(selection.option.inventoryStatus || 'in_stock').toLowerCase() === 'in_stock';
     const pricing = renderCardPricing(product, selection?.pack.price);
-    const imageSrc = getImageSrc(product.image);
+    const imageSrc = getImageSrc(product.cardImage || product.image);
     const fallbackImageSrc = `${PRODUCT_FALLBACK_IMAGE}?v=${IMAGE_ASSET_VERSION}`;
-    const loadingMode = prioritizeImage && index < 3 ? 'eager' : 'lazy';
-    const fetchPriority = prioritizeImage && index < 3 ? 'high' : 'low';
-    const imageDimensions = product.hasUpdatedLabel ? 'width="1254" height="1254"' : '';
+    const loadingMode = 'lazy';
+    const fetchPriority = 'low';
+    const imageDimensions = product.hasUpdatedLabel ? 'width="768" height="768"' : '';
     const productUrl = getProductUrl(product.slug);
     const title = getCardTitle(product);
     const selectionLabel = selection
@@ -293,7 +293,7 @@ function renderFeatured() {
   const grid = document.querySelector('[data-featured-grid]');
   if (!grid || !catalogData) return;
   grid.innerHTML = (catalogData.featured || []).filter((product) => product && !product.hideUntilNewImage)
-    .map((product, index) => renderShopCard(product, index, true)).join('');
+    .map((product) => renderShopCard(product)).join('');
 }
 
 function bindShopCardQuickAdds(grid) {
@@ -355,8 +355,8 @@ function renderCatalog() {
     grid.innerHTML = '<div class="catalog-empty"><h2>No products found</h2><p>Try a different name, strength, or filter.</p></div>';
     return;
   }
-  grid.innerHTML = products.map((product, index) =>
-    renderShopCard(product, index, false, getCatalogCardSelection(product, strength, stock, format))).join('');
+  grid.innerHTML = products.map((product) =>
+    renderShopCard(product, getCatalogCardSelection(product, strength, stock, format))).join('');
 }
 
 function initCatalogControls() {

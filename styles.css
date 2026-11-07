@@ -7164,6 +7164,16 @@ body.product-sticky-visible { padding-bottom: 100px; }
   object-position: center;
 }
 .featured-card-image .product-card-media { display: grid; }
+.featured-card-image .product-card-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  max-width: 280px;
+  height: 100%;
+  margin: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
 .featured-shop-card .product-copy {
   display: flex;
   flex-direction: column;

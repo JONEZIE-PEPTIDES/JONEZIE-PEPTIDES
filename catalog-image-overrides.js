@@ -3,6 +3,7 @@
   if (!catalog) return;
   const approvedLabels = window.JONEZIE_NEW_LABELS || [];
   const approvedSlugs = new Set(approvedLabels.map(({ slug }) => slug));
+  const approvedArtwork = new Map(approvedLabels.map((item) => [item.slug, item]));
 
   const IMAGE_OVERRIDES_BY_SLUG = {
     'mt-2': 'assets/products/20261022/mt-2.webp',
@@ -109,6 +110,7 @@
       const override = IMAGE_OVERRIDES_BY_SLUG[product?.slug];
       if (override) product.image = override;
       product.hasUpdatedLabel = approvedSlugs.has(product.slug);
+      product.cardImage = approvedArtwork.get(product.slug)?.cardImage || '';
       // Keep older artwork out of discovery until an approved new label is added.
       product.hideUntilNewImage = !product.hasUpdatedLabel;
       const displayName = DISPLAY_NAME_OVERRIDES[product?.slug];
