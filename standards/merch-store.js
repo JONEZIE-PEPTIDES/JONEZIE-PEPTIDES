@@ -22,13 +22,19 @@
     return Math.max(promotionRate, specialRate);
   };
   const salePriceCents = (item) => Math.round(cents(basePrice(item)) * (1 - productPromotionRate(item)));
+  const freeCase = products.find((item) => item.slug === config.promotion?.freeCaseSlug);
+  const qualifyingSlugs = new Set(config.promotion?.qualifyingSlugs || []);
+  const freeCaseThreshold = Number(config.promotion?.freeCaseThreshold) || 0;
+  const hasFreeCase = (cart) => Boolean(freeCase && freeCaseThreshold &&
+    cart.reduce((sum, item) => sum + (qualifyingSlugs.has(item.slug) ? Number(item.quantity) || 0 : 0), 0) >= freeCaseThreshold);
 
   function renderPromotion() {
     const specialOffers = products.filter((product) => productPromotionRate(product) > promotionRate);
     if (!promotionRate && !specialOffers.length) return;
     const offers = [
       promotionRate ? `${Math.round(promotionRate * 100)}% off ${specialOffers.length ? 'other Standards Store products' : 'every Standards Store item'}` : '',
-      ...specialOffers.map((product) => `${product.promotionLabel || product.name}: ${Math.round(productPromotionRate(product) * 100)}% off`)
+      ...specialOffers.map((product) => `${product.promotionLabel || product.name}: ${Math.round(productPromotionRate(product) * 100)}% off`),
+      freeCaseThreshold ? `Buy ${freeCaseThreshold} qualifying lab equipment items and receive one research case free` : ''
     ].filter(Boolean).join('. ');
     all('[data-merch-promo-announcement]').forEach((node) => {
       node.hidden = false;
@@ -77,6 +83,13 @@
     updateCartCount();
   }
 
+  if (new URLSearchParams(location.search).get('ad') === 'standards25') {
+    all('a[href="checkout.html"]').forEach((link) => { link.href = 'checkout.html?ad=standards25'; });
+    all('a[href="index.html"], a[href="index.html#merchandise"]').forEach((link) => {
+      link.href = link.getAttribute('href').replace('index.html', 'index.html?ad=standards25');
+    });
+  }
+
   function cartQuantity(cart = readCart()) {
     return cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
   }
@@ -123,6 +136,7 @@
       });
     }
     writeCart(cart);
+    window.JONEZIE_TIKTOK_PIXEL?.trackAddToCart({ slug: product.slug, quantity });
   }
 
   function initProductPage() {
@@ -199,7 +213,8 @@
   }
 
   function calculateTotals(cart = readCart(), shipping = getSelectedShipping()) {
-    const items = cartQuantity(cart);
+    const gift = hasFreeCase(cart);
+    const items = cartQuantity(cart) + (gift ? 1 : 0);
     const subtotalCents = cart.reduce((sum, item) => sum + cents(basePrice(item)) * Number(item.quantity), 0);
     const saleSubtotalCents = cart.reduce((sum, item) => sum + salePriceCents(item) * Number(item.quantity), 0);
     const shippingCents = cart.length && shipping ? cents(shipping.price) : 0;
@@ -209,7 +224,8 @@
       discount: (subtotalCents - saleSubtotalCents) / 100,
       shipping: shippingCents / 100,
       total: (saleSubtotalCents + shippingCents) / 100,
-      promotionRate
+      promotionRate,
+      gift
     };
   }
 
@@ -265,7 +281,11 @@
         </div>
         <button type="button" data-remove-merch="${index}">Remove</button>
       </article>
-    `).join('');
+    `).join('') + (hasFreeCase(cart) ? `
+      <article class="checkout-item checkout-gift">
+        <img src="${freeCase.image}" alt="${freeCase.name}" />
+        <div><h2>${freeCase.name}</h2><p>Free with 3 qualifying lab equipment items</p><span>Qty 1</span><strong>FREE</strong></div>
+      </article>` : '');
 
     all('[data-remove-merch]', root).forEach((button) => {
       button.addEventListener('click', () => {
@@ -291,36 +311,82 @@
     const cart = readCart();
     const shipping = getSelectedShipping();
     const totals = calculateTotals(cart, shipping);
+    const firstName = String(formData.get('firstName') || '').trim();
+    const lastName = String(formData.get('lastName') || '').trim();
+    const street = String(formData.get('street') || '').trim();
+    const city = String(formData.get('city') || '').trim();
+    const state = String(formData.get('state') || '').trim().toUpperCase();
+    const zip = String(formData.get('zip') || '').trim();
+    const paidItems = cart.map((item) => ({
+      sku: item.sku,
+      slug: item.slug,
+      name: item.name,
+      option: item.option,
+      mgOption: item.option,
+      packLabel: item.productType,
+      quantity: item.quantity,
+      inventoryStatus: 'Order request',
+      regularUnitPrice: basePrice(item),
+      promotionRate: productPromotionRate(item),
+      unitPrice: salePriceCents(item) / 100,
+      unitPriceDisplay: money(salePriceCents(item) / 100),
+      lineTotal: salePriceCents(item) * Number(item.quantity) / 100,
+      lineTotalDisplay: money(salePriceCents(item) * Number(item.quantity) / 100)
+    }));
+    if (totals.gift) paidItems.push({
+      sku: freeCase.sku,
+      slug: freeCase.slug,
+      name: freeCase.name,
+      option: freeCase.option,
+      mgOption: freeCase.option,
+      packLabel: 'Free case with 3 qualifying lab equipment items',
+      quantity: 1,
+      inventoryStatus: 'Included with order',
+      regularUnitPrice: freeCase.price,
+      promotionRate: 1,
+      unitPrice: 0,
+      unitPriceDisplay: '$0.00',
+      lineTotal: 0,
+      lineTotalDisplay: '$0.00'
+    });
     return {
       orderId: createOrderId(),
       requestedAt: new Date().toISOString(),
       channel: 'standards-merchandise',
+      invoiceFlow: 'Review and confirm order, then email a secure invoice link.',
+      paymentNotice: 'All invoices must be paid before an order is shipped.',
       paymentFlow: config.payment?.label || 'Secure invoice after order review',
       taxBehavior: config.tax?.label || 'Calculated on invoice',
       customer: {
-        firstName: String(formData.get('firstName') || '').trim(),
-        lastName: String(formData.get('lastName') || '').trim(),
+        firstName,
+        lastName,
+        name: `${firstName} ${lastName}`.trim(),
         email: String(formData.get('email') || '').trim(),
         phone: String(formData.get('phone') || '').trim(),
-        street: String(formData.get('street') || '').trim(),
-        city: String(formData.get('city') || '').trim(),
-        state: String(formData.get('state') || '').trim().toUpperCase(),
-        zip: String(formData.get('zip') || '').trim()
+        shippingStreetAddress: street,
+        shippingCity: city,
+        shippingState: state,
+        shippingZip: zip,
+        shippingAddress: `${street}, ${city}, ${state} ${zip}`
       },
+      promoCode: 'STANDARDS25',
       notes: String(formData.get('notes') || '').trim(),
-      shippingMethod: shipping,
-      totals,
-      items: cart.map((item) => ({
-        sku: item.sku,
-        name: item.name,
-        option: item.option,
-        quantity: item.quantity,
-        regularUnitPrice: basePrice(item),
-        promotionRate: productPromotionRate(item),
-        unitPrice: salePriceCents(item) / 100,
-        lineTotal: salePriceCents(item) * Number(item.quantity) / 100
-      })),
-      pageUrl: location.href
+      shippingMethod: shipping ? { ...shipping, cost: totals.shipping, costDisplay: money(totals.shipping) } : null,
+      totals: {
+        ...totals,
+        itemCount: totals.items,
+        subtotalDisplay: money(totals.subtotal),
+        discountDisplay: `- ${money(totals.discount)}`,
+        shippingDisplay: money(totals.shipping),
+        estimatedTotal: totals.total,
+        estimatedTotalDisplay: money(totals.total)
+      },
+      items: paidItems,
+      includedWithOrder: totals.gift ? ['One free research case'] : [],
+      pageUrl: location.href,
+      timezone: String(Intl.DateTimeFormat().resolvedOptions().timeZone || ''),
+      locale: String(navigator.language || ''),
+      userAgent: String(navigator.userAgent || '')
     };
   }
 
@@ -329,8 +395,8 @@
     if (!success) return;
     success.hidden = false;
     success.innerHTML = `
-      <h2>Merchandise order request staged.</h2>
-      <p>This staging checkout captured the request locally and did not send a live payment or production order.</p>
+      <h2>Order request received.</h2>
+      <p>Thank you. We will review your request and email a secure invoice link. No payment was collected on this page.</p>
       <div class="order-reference">
         <span>Order ID</span>
         <strong>${payload.orderId}</strong>
@@ -349,13 +415,16 @@
   function initCheckoutPage() {
     const form = by('[data-merch-checkout-form]');
     if (!form) return;
+    let submitting = false;
 
     renderShippingOptions();
     renderCheckoutItems();
     renderSummary();
+    if (readCart().length) window.JONEZIE_TIKTOK_PIXEL?.trackCheckoutStart();
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
+      if (submitting) return;
       const feedback = by('[data-merch-checkout-feedback]');
       const cart = readCart();
       if (!cart.length) {
@@ -365,7 +434,34 @@
       if (!form.reportValidity()) return;
 
       const payload = buildOrderPayload(new FormData(form));
+      const submitButton = by('button[type="submit"]', form);
+      const endpoint = String(window.JONEZIE_ORDER_REQUEST_CONFIG?.endpoint || '').trim();
+      if (!endpoint) {
+        if (feedback) feedback.textContent = 'Order requests are unavailable. Please contact orders@jonezielabs.com.';
+        return;
+      }
+      submitting = true;
+      if (submitButton) submitButton.disabled = true;
+      if (feedback) feedback.textContent = 'Submitting your order request…';
+      try {
+        await fetch(endpoint, {
+          method: 'POST',
+          mode: 'no-cors',
+          cache: 'no-store',
+          credentials: 'omit',
+          keepalive: true,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+      } catch (error) {
+        submitting = false;
+        if (submitButton) submitButton.disabled = false;
+        if (feedback) feedback.textContent = 'We could not send your request. Please try again or email orders@jonezielabs.com.';
+        console.error('Standards order request failed.', error);
+        return;
+      }
       localStorage.setItem(orderKey, JSON.stringify(payload));
+      window.JONEZIE_TIKTOK_PIXEL?.trackOrderRequest(payload.orderId);
       writeCart([]);
       renderCheckoutItems();
       renderSummary();

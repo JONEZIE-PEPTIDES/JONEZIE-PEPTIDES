@@ -10,7 +10,14 @@ window.JONEZIE_STANDARDS_MERCH = {
   orderKey: 'jonezie_standards_merch_last_order',
   promotion: {
     enabled: true,
-    rate: 0.25
+    rate: 0.25,
+    freeCaseThreshold: 3,
+    freeCaseSlug: 'research-vial-kit-case',
+    qualifyingSlugs: [
+      'fully-automatic-micro-vickers-hardness-tester',
+      'stainless-steel-lab-spatula-micro-scoop-set',
+      'drying-rack-stand-lab-glassware-bottles'
+    ]
   },
   products: [
     {

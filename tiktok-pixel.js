@@ -8,7 +8,9 @@ window.JONEZIE_TIKTOK_PIXEL = (() => {
   const isCampaignCheckoutOrProduct =
     /\/(products\/[^/]+|product|checkout)\.html$/.test(path) &&
     new URLSearchParams(window.location.search).get('ad') === 'fall40';
-  const enabled = isLive && (isCampaignPage || isCampaignCheckoutOrProduct);
+  const isStandardsCampaign = /\/standards\/(?:index\.html|checkout\.html)?$/.test(path) &&
+    new URLSearchParams(window.location.search).get('ad') === 'standards25';
+  const enabled = isLive && (isCampaignPage || isCampaignCheckoutOrProduct || isStandardsCampaign);
   const trackedRequests = new Set();
   let checkoutStarted = false;
 
