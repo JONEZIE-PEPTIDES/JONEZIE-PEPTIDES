@@ -10,14 +10,12 @@ window.JONEZIE_STANDARDS_MERCH = {
   orderKey: 'jonezie_standards_merch_last_order',
   promotion: {
     enabled: true,
-    rate: 0.25,
-    freeCaseThreshold: 3,
-    freeCaseSlug: 'research-vial-kit-case',
-    qualifyingSlugs: [
-      'fully-automatic-micro-vickers-hardness-tester',
-      'stainless-steel-lab-spatula-micro-scoop-set',
-      'drying-rack-stand-lab-glassware-bottles'
-    ]
+    rate: 0.40
+  },
+  gift: {
+    threshold: 3,
+    name: 'Empty Jonezie Labs research case',
+    image: '../assets/promos/jonezie-empty-case-fall40.webp'
   },
   products: [
     {
