@@ -1,4 +1,4 @@
-// TikTok tracking is limited to the live Fall ad path. No customer details or full cart is sent.
+// TikTok tracking is limited to the live Fall ad and Standards store paths. No customer details or full cart is sent.
 window.JONEZIE_TIKTOK_PIXEL = (() => {
   const PIXEL_ID = 'DBMCCORC77U1OI24UGKG';
   const host = window.location.hostname.toLowerCase();
@@ -8,8 +8,7 @@ window.JONEZIE_TIKTOK_PIXEL = (() => {
   const isCampaignCheckoutOrProduct =
     /\/(products\/[^/]+|product|checkout)\.html$/.test(path) &&
     new URLSearchParams(window.location.search).get('ad') === 'fall40';
-  const isStandardsCampaign = /\/standards\/(?:index\.html|checkout\.html)?$/.test(path) &&
-    new URLSearchParams(window.location.search).get('ad') === 'standards25';
+  const isStandardsCampaign = /\/standards\/(?:index\.html|checkout\.html)?$/.test(path);
   const enabled = isLive && (isCampaignPage || isCampaignCheckoutOrProduct || isStandardsCampaign);
   const trackedRequests = new Set();
   let checkoutStarted = false;

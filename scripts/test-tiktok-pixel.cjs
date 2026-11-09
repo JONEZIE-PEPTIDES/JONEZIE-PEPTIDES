@@ -57,10 +57,22 @@ assert.deepEqual(Array.from(checkout.window.ttq[2]), ['track', 'Lead']);
 assert.equal(checkout.window.ttq.length, 3, 'One checkout and order request produce one event each');
 assert.equal(checkout.window.ttq.some((entry) => entry[1] === 'Purchase'), false);
 
+const standards = load('https://www.jonezielabs.com/standards/');
+assert.equal(standards.window.JONEZIE_TIKTOK_PIXEL.enabled, true);
+standards.window.JONEZIE_TIKTOK_PIXEL.trackAddToCart({ slug: 'jonezie-labs-signature-hat', quantity: 3 });
+assert.deepEqual(Array.from(standards.window.ttq[1]).slice(0, 2), ['track', 'AddToCart']);
+const standardsCheckout = load('https://www.jonezielabs.com/standards/checkout.html');
+assert.equal(standardsCheckout.window.JONEZIE_TIKTOK_PIXEL.enabled, true);
+standardsCheckout.window.JONEZIE_TIKTOK_PIXEL.trackCheckoutStart();
+standardsCheckout.window.JONEZIE_TIKTOK_PIXEL.trackOrderRequest('JLS-TEST-1');
+assert.deepEqual(Array.from(standardsCheckout.window.ttq[1]), ['track', 'InitiateCheckout']);
+assert.deepEqual(Array.from(standardsCheckout.window.ttq[2]), ['track', 'Lead']);
+
 for (const url of [
   'https://www.jonezielabs.com/checkout.html',
   'https://www.jonezielabs.com/products/retatrutide.html',
   'https://jonezie-peptides.github.io/jonezie-labs-staging/research-entry.html',
+  'https://jonezie-peptides.github.io/jonezie-labs-staging/standards/',
   'http://127.0.0.1:8035/research-store.html'
 ]) {
   const visit = load(url);
@@ -76,6 +88,11 @@ for (const file of [
 ]) {
   const html = fs.readFileSync(path.join(root, file), 'utf8');
   assert.match(html, /<script src="tiktok-pixel\.js\?v=20261107b"><\/script>/, file);
+}
+
+for (const file of ['standards/index.html', 'standards/checkout.html']) {
+  const html = fs.readFileSync(path.join(root, file), 'utf8');
+  assert.match(html, /<script src="\.\.\/tiktok-pixel\.js\?v=20261109standardsfall40"><\/script>/, file);
 }
 
 console.log('TikTok ad-path context, actual funnel events, lead deduplication, and page coverage verified.');

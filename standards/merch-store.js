@@ -141,6 +141,7 @@
       });
     }
     writeCart(cart);
+    window.JONEZIE_TIKTOK_PIXEL?.trackAddToCart({ slug: product.slug, quantity });
   }
 
   function initProductPage() {
@@ -389,6 +390,7 @@
     renderShippingOptions();
     renderCheckoutItems();
     renderSummary();
+    if (cartQuantity() > 0) window.JONEZIE_TIKTOK_PIXEL?.trackCheckoutStart();
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -424,6 +426,7 @@
         }
       }
       localStorage.setItem(orderKey, JSON.stringify(payload));
+      if (!previewOnly) window.JONEZIE_TIKTOK_PIXEL?.trackOrderRequest(payload.orderId);
       writeCart([]);
       const cartItems = by('[data-merch-checkout-items]');
       if (cartItems) cartItems.hidden = true;
