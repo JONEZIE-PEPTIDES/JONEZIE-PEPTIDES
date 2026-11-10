@@ -133,7 +133,7 @@ window.JONEZIE_ANALYTICS = (() => {
   function addShippingInfo(cart, shippingOption = {}, extra = {}) {
     event('add_shipping_info', buildCartPayload(cart, {
       shipping_tier: String(shippingOption.label || shippingOption.id || '').slice(0, 80),
-      shipping_cost: toNumber(shippingOption.price),
+      ...(shippingOption.quoteRequired ? {} : { shipping_cost: toNumber(shippingOption.price) }),
       ...extra
     }));
   }
@@ -170,13 +170,14 @@ window.JONEZIE_ANALYTICS = (() => {
     const coupon = String(payload.promoCode || '').slice(0, 80);
     const shippingTier = String(payload.shipping?.label || payload.shippingMethod?.label || '').slice(0, 80);
     const shippingCost = toNumber(payload.shipping?.cost || payload.shippingMethod?.cost || payload.totals?.shipping);
+    const quoteRequired = Boolean(payload.shippingMethod?.quoteRequired);
     const discount = toNumber(payload.totals?.discount);
     const orderPayload = buildCartPayload(cart, {
       value: orderValue,
       order_id: String(payload.orderId || '').slice(0, 80),
       coupon,
       shipping_tier: shippingTier,
-      shipping_cost: shippingCost,
+      ...(quoteRequired ? {} : { shipping_cost: shippingCost }),
       discount
     });
 
@@ -184,7 +185,7 @@ window.JONEZIE_ANALYTICS = (() => {
     event('purchase', {
       ...orderPayload,
       transaction_id: orderId || `order-request-${Date.now()}`,
-      shipping: shippingCost,
+      ...(quoteRequired ? {} : { shipping: shippingCost }),
       tax: 0,
       order_request_status: 'invoice_pending'
     });

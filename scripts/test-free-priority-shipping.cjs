@@ -47,3 +47,10 @@ test('An existing free-shipping promotion still works', () => {
   const freeShippingPromo = { isValid: true, rate: 0, freeShipping: true };
   assert.equal(context.getEffectiveShippingCost(ground, freeShippingPromo, cart(5000)), 0);
 });
+
+test('Australia shipping still requires a quote with free-shipping offers', () => {
+  const australiaQuote = { id: 'australia-quote', quoteRequired: true };
+  const freeShippingPromo = { isValid: true, rate: 0, freeShipping: true };
+  assert.equal(context.hasFreeShipping(cart(120000), australiaQuote, freeShippingPromo), false);
+  assert.equal(context.getEffectiveShippingCost(australiaQuote, freeShippingPromo, cart(120000)), null);
+});

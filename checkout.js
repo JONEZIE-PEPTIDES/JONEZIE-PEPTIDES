@@ -7,8 +7,12 @@ const summarySubtotal = document.querySelector('[data-summary-subtotal]');
 const summaryDiscount = document.querySelector('[data-summary-discount]');
 const summaryShipping = document.querySelector('[data-summary-shipping]');
 const summaryTotal = document.querySelector('[data-summary-total]');
+const summaryTotalLabel = document.querySelector('[data-summary-total-label]');
 const form = document.querySelector('[data-checkout-form]');
 const phoneInput = form?.querySelector('input[name="customerPhone"]') || null;
+const phoneHelp = document.getElementById('checkout-phone-help');
+const shippingCountryInput = form?.querySelector('[name="shippingCountry"]');
+const shippingPostalInput = form?.querySelector('[name="shippingZip"]');
 const submitButton = form?.querySelector('button[type="submit"]') || null;
 const formFeedback = document.querySelector('[data-checkout-feedback]');
 const successCard = document.querySelector('[data-checkout-success]');
@@ -191,6 +195,14 @@ const SHIPPING_OPTIONS = [
     backorderOnly: true
   }
 ];
+const AUSTRALIA_SHIPPING = {
+  id: 'australia-quote',
+  label: 'Australia shipping quote',
+  window: 'Shipping confirmed before payment',
+  note: 'We review your order and confirm the shipping cost on your invoice.',
+  quoteRequired: true
+};
+const SHIPPING_QUOTE_DISPLAY = 'Quoted on invoice';
 
 let isSubmittingOrderRequest = false;
 let submittedOrderSnapshot = null;
@@ -265,16 +277,29 @@ initCheckoutForm();
 function initCheckoutForm() {
   if (!form) return;
 
+  if (shippingCountryInput && new URLSearchParams(window.location.search).get('country') === 'AU') {
+    shippingCountryInput.value = 'AU';
+  }
+  syncShippingCountryFields();
+  shippingCountryInput?.addEventListener('change', () => {
+    syncShippingCountryFields();
+    syncPhoneValidity();
+    shippingChoiceTouched = false;
+    clearFeedback();
+    renderCart();
+    const cart = getCart();
+    if (cart.length) trackShippingIfChanged(cart, getSelectedShipping(cart), getPromoDetails());
+  });
+
   if (phoneInput) {
-    phoneInput.maxLength = 14;
     phoneInput.addEventListener('input', () => {
-      phoneInput.value = formatPhoneDisplay(phoneInput.value);
+      if (getShippingCountry() === 'US') phoneInput.value = formatPhoneDisplay(phoneInput.value);
       syncPhoneValidity();
       if (formFeedback?.dataset.state === 'error') clearFeedback();
     });
 
     phoneInput.addEventListener('blur', () => {
-      phoneInput.value = formatPhoneDisplay(phoneInput.value);
+      if (getShippingCountry() === 'US') phoneInput.value = formatPhoneDisplay(phoneInput.value);
       syncPhoneValidity();
     });
 
@@ -286,6 +311,29 @@ function initCheckoutForm() {
       clearFeedback();
     }
   });
+}
+
+function getShippingCountry() {
+  return shippingCountryInput?.value === 'AU' ? 'AU' : 'US';
+}
+
+function syncShippingCountryFields() {
+  const australia = getShippingCountry() === 'AU';
+  form.querySelectorAll('[data-shipping-state-us], [data-shipping-state-au]').forEach((field) => {
+    field.hidden = field.hasAttribute('data-shipping-state-au') !== australia;
+    field.querySelector('input, select').disabled = field.hidden;
+  });
+  form.querySelector('[data-shipping-city-label]')?.replaceChildren(australia ? 'Suburb or Locality' : 'City');
+  form.querySelector('[data-shipping-postal-label]')?.replaceChildren(australia ? 'Postcode' : 'ZIP Code');
+  if (shippingPostalInput) {
+    shippingPostalInput.pattern = australia ? '[0-9]{4}' : '[0-9]{5}(-[0-9]{4})?';
+  }
+  if (phoneInput) phoneInput.maxLength = australia ? 24 : 14;
+  if (phoneHelp) {
+    phoneHelp.textContent = australia
+      ? 'Enter your Australian mobile or landline, with or without +61.'
+      : 'Required for order confirmation and invoice delivery updates.';
+  }
 }
 
 function getCart() {
@@ -376,22 +424,29 @@ function formatPhoneDisplay(value) {
   return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
 }
 
+function normalizeAustralianPhone(value) {
+  const text = String(value || '').trim();
+  if (!/^\+?[0-9\s().-]+$/.test(text)) return '';
+  const digits = getPhoneDigits(text);
+  if (!text.startsWith('+') && /^0[1-9][0-9]{8}$/.test(digits)) return `+61${digits.slice(1)}`;
+  if (/^61[1-9][0-9]{8}$/.test(digits)) return `+${digits}`;
+  return '';
+}
+
 function syncPhoneValidity() {
   if (!phoneInput) return true;
-  const normalizedDigits = normalizePhoneDigits(phoneInput.value);
 
   if (!phoneInput.value.trim()) {
     phoneInput.setCustomValidity('Phone number is required.');
     return false;
   }
 
-  if (normalizedDigits.length !== 10) {
-    phoneInput.setCustomValidity('Enter a valid 10-digit phone number.');
-    return false;
-  }
-
-  phoneInput.setCustomValidity('');
-  return true;
+  const australia = getShippingCountry() === 'AU';
+  const valid = australia ? Boolean(normalizeAustralianPhone(phoneInput.value)) : normalizePhoneDigits(phoneInput.value).length === 10;
+  phoneInput.setCustomValidity(valid ? '' : australia
+    ? 'Enter an Australian mobile or landline, with or without +61.'
+    : 'Enter a valid 10-digit phone number.');
+  return valid;
 }
 
 function setFeedback(message, state = '') {
@@ -647,11 +702,12 @@ function trackShippingIfChanged(cart, shippingOption, promo) {
   lastTrackedShippingId = shippingOption.id;
   window.JONEZIE_ANALYTICS?.addShippingInfo(cart, shippingOption, {
     coupon: promo?.isValid ? promo.code : '',
-    shipping_cost: getEffectiveShippingCost(shippingOption, promo)
+    ...(shippingOption.quoteRequired ? {} : { shipping_cost: getEffectiveShippingCost(shippingOption, promo) })
   });
 }
 
 function getAvailableShippingOptions(cart) {
+  if (getShippingCountry() === 'AU') return [AUSTRALIA_SHIPPING];
   const hasBackorder = cart.some((item) => String(item.inventoryStatus || '').toLowerCase() === 'backorder');
   return SHIPPING_OPTIONS.filter((option) => !option.backorderOnly || hasBackorder);
 }
@@ -674,7 +730,7 @@ function getSelectedShipping(cart) {
 }
 
 function hasFreeShipping(cart, shippingOption, promo) {
-  if (!shippingOption) return false;
+  if (!shippingOption || shippingOption.quoteRequired) return false;
   if (promo?.freeShipping) return true;
   if (shippingOption.id !== 'priority-mail') return false;
   const subtotalCents = cart.reduce((sum, item) =>
@@ -684,6 +740,7 @@ function hasFreeShipping(cart, shippingOption, promo) {
 }
 
 function getEffectiveShippingCost(shippingOption, promo, cart = getCart()) {
+  if (shippingOption?.quoteRequired) return null;
   if (!shippingOption) return 0;
   return hasFreeShipping(cart, shippingOption, promo) ? 0 : (shippingOption.price || 0);
 }
@@ -692,6 +749,13 @@ function renderShippingOptions(cart, promo = null) {
   if (!shippingMethodInput) return null;
   const availableOptions = getAvailableShippingOptions(cart);
   const previousValue = shippingMethodInput.value;
+  const quoteOption = availableOptions.find((option) => option.quoteRequired);
+  if (quoteOption) {
+    shippingMethodInput.replaceChildren(new Option(quoteOption.label, quoteOption.id));
+    shippingMethodInput.disabled = true;
+    if (shippingHelp) shippingHelp.textContent = quoteOption.note;
+    return quoteOption;
+  }
 
   shippingMethodInput.innerHTML = availableOptions.map((option) => `
     <option value="${option.id}">
@@ -722,8 +786,12 @@ function renderShippingOptions(cart, promo = null) {
   return selected;
 }
 
-function buildShippingAddressDisplay(streetAddress, city, state, zipCode) {
+function buildShippingAddressDisplay(streetAddress, city, state, zipCode, country) {
   const street = String(streetAddress || '').trim();
+  if (country === 'AU') {
+    const locality = [city, state, zipCode].map((value) => String(value || '').trim()).filter(Boolean).join(' ');
+    return [street, locality, 'Australia'].filter(Boolean).join(', ');
+  }
   const locality = [String(city || '').trim(), String(state || '').trim()]
     .filter(Boolean)
     .join(', ');
@@ -734,11 +802,19 @@ function buildShippingAddressDisplay(streetAddress, city, state, zipCode) {
   return [street, localityWithZip].filter(Boolean).join(', ');
 }
 
-function renderSummaryValues({ itemCount, subtotal, discountAmount, shippingCost, total, isFreeShipping = false }) {
+function checkoutTotalLabel(quoteRequired) {
+  return quoteRequired ? 'Merchandise Total (USD)' : 'Estimated Total';
+}
+
+function renderSummaryValues({ itemCount, subtotal, discountAmount, shippingCost, total, isFreeShipping = false, quoteRequired = false }) {
   if (summaryItems) summaryItems.textContent = String(itemCount || 0);
   if (summarySubtotal) summarySubtotal.textContent = formatMoney(subtotal || 0);
   if (summaryDiscount) summaryDiscount.textContent = discountAmount ? `- ${formatMoney(discountAmount)}` : '$0.00';
-  if (summaryShipping) summaryShipping.textContent = isFreeShipping && itemCount ? 'FREE' : formatMoney(shippingCost || 0);
+  if (summaryShipping) {
+    summaryShipping.textContent = quoteRequired ? SHIPPING_QUOTE_DISPLAY
+      : isFreeShipping && itemCount ? 'FREE' : formatMoney(shippingCost || 0);
+  }
+  if (summaryTotalLabel) summaryTotalLabel.textContent = checkoutTotalLabel(quoteRequired);
   if (summaryTotal) summaryTotal.textContent = formatMoney(total || 0);
 }
 
@@ -753,6 +829,7 @@ function buildSubmittedOrderSnapshot(payload) {
     shippingCost: payload.totals.shipping,
     total: payload.totals.estimatedTotal,
     isFreeShipping: payload.totals.shippingDisplay === 'FREE',
+    quoteRequired: Boolean(payload.shippingMethod?.quoteRequired),
     shippingLabel: payload.shippingMethod
       ? `${payload.shippingMethod.label} | ${payload.shippingMethod.window}`
       : 'Shipping pending',
@@ -801,7 +878,9 @@ function renderSubmittedOrderPremium() {
           <p class="checkout-complete-thanks">Thanks, ${escapeHtml(submittedOrderSnapshot.customerFirstName)} - we're reviewing your order now.</p>
           <p class="checkout-complete-id">Request ID <strong>${escapeHtml(submittedOrderSnapshot.orderId)}</strong></p>
           <p>No payment was collected on this page. Once your order is reviewed and confirmed, Jonezie Labs will email a secure invoice link to the email address on your order. Please check your inbox and spam folder.</p>
-          <p class="checkout-payment-options"><strong>Payment options include:</strong> credit or debit card, Apple Pay, Google Pay, Cash App Pay, ACH bank transfer, and Afterpay.</p>
+          ${submittedOrderSnapshot.quoteRequired
+            ? '<p class="checkout-payment-options">Your invoice will include the shipping quote and available payment options.</p>'
+            : '<p class="checkout-payment-options"><strong>Payment options include:</strong> credit or debit card, Apple Pay, Google Pay, Cash App Pay, ACH bank transfer, and Afterpay.</p>'}
         </div>
       </div>
 
@@ -820,7 +899,7 @@ function renderSubmittedOrderPremium() {
           <p>${escapeHtml(submittedOrderSnapshot.shippingWindow)}</p>
         </div>
         <div>
-          <span class="checkout-complete-label">Estimated Total</span>
+          <span class="checkout-complete-label">${checkoutTotalLabel(submittedOrderSnapshot.quoteRequired)}</span>
           <strong>${escapeHtml(formatMoney(submittedOrderSnapshot.total))}</strong>
           <p>Final confirmation arrives by email.</p>
         </div>
@@ -868,7 +947,8 @@ function renderCart() {
       subtotal: 0,
       discountAmount: 0,
       shippingCost: 0,
-      total: 0
+      total: 0,
+      quoteRequired: getShippingCountry() === 'AU'
     });
     renderShippingOptions(cart, getPromoDetails());
     return;
@@ -881,7 +961,7 @@ function renderCart() {
   const shippingOption = renderShippingOptions(cart, promo);
   const shippingCost = getEffectiveShippingCost(shippingOption, promo, cart);
   const discountAmount = getPromoDiscount(cart, promo);
-  const total = subtotal - discountAmount + shippingCost;
+  const total = subtotal - discountAmount + (shippingCost ?? 0);
   trackBeginCheckoutOnce(cart, promo, shippingOption);
 
   renderSummaryValues({
@@ -890,7 +970,8 @@ function renderCart() {
     discountAmount,
     shippingCost,
     total,
-    isFreeShipping: hasFreeShipping(cart, shippingOption, promo)
+    isFreeShipping: hasFreeShipping(cart, shippingOption, promo),
+    quoteRequired: Boolean(shippingOption?.quoteRequired)
   });
 
   cartRoot.innerHTML = cart.map((item, index) => `
@@ -949,6 +1030,7 @@ function buildOrderRequestPayload({
   city,
   state,
   zipCode,
+  country,
   notes,
   promo,
   shippingOption,
@@ -960,10 +1042,13 @@ function buildOrderRequestPayload({
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const orderId = createOrderId();
   const requestedAt = new Date().toISOString();
-  const formattedPhone = formatPhoneDisplay(phone);
+  const formattedPhone = country === 'AU' ? normalizeAustralianPhone(phone) : formatPhoneDisplay(phone);
   const normalizedFirstName = String(firstName || '').trim();
   const normalizedLastName = String(lastName || '').trim();
-  const shippingAddress = buildShippingAddressDisplay(streetAddress, city, state, zipCode);
+  const shippingAddress = buildShippingAddressDisplay(streetAddress, city, state, zipCode, country);
+  const quoteRequired = Boolean(shippingOption?.quoteRequired);
+  const shippingDisplay = quoteRequired ? SHIPPING_QUOTE_DISPLAY
+    : hasFreeShipping(cart, shippingOption, promo) ? 'FREE' : formatMoney(shippingCost);
 
   return {
     orderId,
@@ -977,11 +1062,12 @@ function buildOrderRequestPayload({
       name: `${normalizedFirstName} ${normalizedLastName}`.trim(),
       email: String(email || '').trim(),
       phone: formattedPhone,
-      phoneDigits: normalizePhoneDigits(phone),
+      phoneDigits: getPhoneDigits(formattedPhone),
       shippingStreetAddress: String(streetAddress || '').trim(),
       shippingCity: String(city || '').trim(),
       shippingState: String(state || '').trim().toUpperCase(),
       shippingZip: String(zipCode || '').trim(),
+      shippingCountry: country,
       shippingAddress
     },
     promoCode: promo.isValid && (!promo.auto || discountAmount > 0) &&
@@ -993,7 +1079,8 @@ function buildOrderRequestPayload({
       window: shippingOption.window,
       note: shippingOption.note,
       cost: shippingCost,
-      costDisplay: hasFreeShipping(cart, shippingOption, promo) ? 'FREE' : formatMoney(shippingCost)
+      costDisplay: shippingDisplay,
+      quoteRequired
     } : null,
     totals: {
       itemCount,
@@ -1002,9 +1089,9 @@ function buildOrderRequestPayload({
       discount: discountAmount,
       discountDisplay: discountAmount > 0 ? `- ${formatMoney(discountAmount)}` : '$0.00',
       shipping: shippingCost,
-      shippingDisplay: shippingOption ? (hasFreeShipping(cart, shippingOption, promo) ? 'FREE' : formatMoney(shippingCost)) : '$0.00',
+      shippingDisplay,
       estimatedTotal: total,
-      estimatedTotalDisplay: formatMoney(total)
+      estimatedTotalDisplay: quoteRequired ? `${formatMoney(total)} USD + shipping` : formatMoney(total)
     },
     items: cart.map((item) => {
       const saleUnitPrice = promo.auto && isAdSaleEligibleItem(item)
@@ -1036,6 +1123,7 @@ function buildOrderRequestPayload({
 }
 
 function buildOrderRequestLines(payload) {
+  const australia = payload.customer.shippingCountry === 'AU';
   const shippingLine = payload.shippingMethod
     ? `${payload.shippingMethod.label} | ${payload.shippingMethod.window} | ${payload.shippingMethod.costDisplay}`
     : 'Not selected';
@@ -1056,9 +1144,10 @@ function buildOrderRequestLines(payload) {
     `Email: ${payload.customer.email || 'Not provided'}`,
     `Phone: ${payload.customer.phone || 'Not provided'}`,
     `Street Address: ${payload.customer.shippingStreetAddress || 'Not provided'}`,
-    `City: ${payload.customer.shippingCity || 'Not provided'}`,
-    `State: ${payload.customer.shippingState || 'Not provided'}`,
-    `ZIP Code: ${payload.customer.shippingZip || 'Not provided'}`,
+    `${australia ? 'Suburb or Locality' : 'City'}: ${payload.customer.shippingCity || 'Not provided'}`,
+    `${australia ? 'State or Territory' : 'State'}: ${payload.customer.shippingState || 'Not provided'}`,
+    `${australia ? 'Postcode' : 'ZIP Code'}: ${payload.customer.shippingZip || 'Not provided'}`,
+    `Country: ${australia ? 'Australia' : 'United States'}`,
     `Shipping Address: ${payload.customer.shippingAddress || 'Not provided'}`,
     `Shipping Method: ${shippingLine}`,
     `Promo code: ${payload.promoCode || 'None'}`,
@@ -1208,6 +1297,7 @@ form?.addEventListener('submit', async (event) => {
   const city = formData.get('shippingCity') || '';
   const state = formData.get('shippingState') || '';
   const zipCode = formData.get('shippingZip') || '';
+  const country = getShippingCountry();
   const notes = formData.get('customerNotes') || '';
   const promo = getPromoDetails();
   if (promo.isValid && promo.firstOrderOnly && hasRedeemedFirstOrderCode(email, promo.code)) {
@@ -1221,7 +1311,7 @@ form?.addEventListener('submit', async (event) => {
   const shippingCost = getEffectiveShippingCost(shippingOption, promo, cart);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
   const discountAmount = getPromoDiscount(cart, promo);
-  const total = subtotal - discountAmount + shippingCost;
+  const total = subtotal - discountAmount + (shippingCost ?? 0);
 
   const payload = buildOrderRequestPayload({
     cart,
@@ -1233,6 +1323,7 @@ form?.addEventListener('submit', async (event) => {
     city,
     state,
     zipCode,
+    country,
     notes,
     promo,
     shippingOption,
