@@ -3,6 +3,7 @@
     ['catalog.html', 'Full Products'],
     ['index.html#featured', 'Popular Products'],
     ['why-jonezie.html', 'Why Jonezie'],
+    ['partners.html', 'Become an Affiliate'],
     ['research-guides.html', 'Research Guides'],
     ['comparison.html', 'Comparisons'],
     ['michigan-peptides.html', 'Michigan'],
@@ -216,13 +217,16 @@
 
   function syncSiteNavigation() {
     const isHome = /(^|\/)(index\.html)?$/.test(window.location.pathname);
+    const links = window.JONEZIE_PROMO?.isAdSaleContext?.()
+      ? NAV_CATEGORY_LINKS.filter(([href]) => href !== 'partners.html')
+      : NAV_CATEGORY_LINKS;
     const normalizeHref = (href) => {
       if (!isHome) return href;
       return href.replace(/^index\.html(?=#)/, '');
     };
 
     document.querySelectorAll('.brand-menu-panel').forEach((panel) => {
-      panel.innerHTML = NAV_CATEGORY_LINKS
+      panel.innerHTML = links
         .map(([href, label]) => `<a href="${normalizeHref(href)}">${label}</a>`)
         .join('');
     });
@@ -230,7 +234,7 @@
     document.querySelectorAll('.site-nav').forEach((nav) => {
       const productPill = nav.querySelector('.nav-products-pill');
       nav.querySelectorAll('.site-nav-mobile-link').forEach((link) => link.remove());
-      const mobileMarkup = NAV_CATEGORY_LINKS
+      const mobileMarkup = links
         .map(([href, label]) => `<a href="${normalizeHref(href)}" class="site-nav-mobile-link">${label}</a>`)
         .join('');
       if (productPill) {
