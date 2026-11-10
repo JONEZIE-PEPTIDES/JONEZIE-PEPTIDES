@@ -197,6 +197,7 @@ let submittedOrderSnapshot = null;
 let hasTrackedBeginCheckout = false;
 let lastTrackedPromoCode = '';
 let lastTrackedShippingId = '';
+let shippingChoiceTouched = false;
 
 if (menuToggle && siteNav && !menuToggle.dataset.menuBound) {
   menuToggle.dataset.menuBound = 'true';
@@ -672,9 +673,19 @@ function getSelectedShipping(cart) {
   return defaultOption;
 }
 
-function getEffectiveShippingCost(shippingOption, promo) {
+function hasFreeShipping(cart, shippingOption, promo) {
+  if (!shippingOption) return false;
+  if (promo?.freeShipping) return true;
+  if (shippingOption.id !== 'priority-mail') return false;
+  const subtotalCents = cart.reduce((sum, item) =>
+    sum + Math.round(Number(item.unitPrice) * 100) * Number(item.quantity), 0);
+  const discountedMerchandiseCents = subtotalCents - Math.round(getPromoDiscount(cart, promo) * 100);
+  return discountedMerchandiseCents > 100000;
+}
+
+function getEffectiveShippingCost(shippingOption, promo, cart = getCart()) {
   if (!shippingOption) return 0;
-  return promo?.freeShipping ? 0 : (shippingOption.price || 0);
+  return hasFreeShipping(cart, shippingOption, promo) ? 0 : (shippingOption.price || 0);
 }
 
 function renderShippingOptions(cart, promo = null) {
@@ -684,7 +695,7 @@ function renderShippingOptions(cart, promo = null) {
 
   shippingMethodInput.innerHTML = availableOptions.map((option) => `
     <option value="${option.id}">
-      ${option.label} - ${option.window} - ${promo?.freeShipping ? 'FREE' : formatMoney(option.price)}
+      ${option.label} - ${option.window} - ${hasFreeShipping(cart, option, promo) ? 'FREE' : formatMoney(option.price)}
     </option>`).join('');
 
   if (!availableOptions.length) {
@@ -697,11 +708,16 @@ function renderShippingOptions(cart, promo = null) {
   if (previousValue && availableOptions.some((option) => option.id === previousValue)) {
     shippingMethodInput.value = previousValue;
   }
+  const freePriority = availableOptions.find((option) =>
+    option.id === 'priority-mail' && hasFreeShipping(cart, option, promo));
+  if (freePriority && !shippingChoiceTouched) shippingMethodInput.value = freePriority.id;
   const selected = getSelectedShipping(cart);
   if (shippingHelp && selected) {
     shippingHelp.textContent = promo?.freeShipping
       ? `Free shipping applied with ${promo.code}. ${selected.window} delivery window.`
-      : `${selected.note}. ${selected.window} delivery window.`;
+      : hasFreeShipping(cart, selected, promo)
+        ? `Free USPS Priority Mail on orders over $1,000 after discounts. ${selected.window} delivery window.`
+        : `${selected.note}. ${selected.window} delivery window. USPS Priority Mail is free on orders over $1,000 after discounts.`;
   }
   return selected;
 }
@@ -863,7 +879,7 @@ function renderCart() {
   const promo = getPromoDetails();
   renderPromoStatus(promo, cart);
   const shippingOption = renderShippingOptions(cart, promo);
-  const shippingCost = getEffectiveShippingCost(shippingOption, promo);
+  const shippingCost = getEffectiveShippingCost(shippingOption, promo, cart);
   const discountAmount = getPromoDiscount(cart, promo);
   const total = subtotal - discountAmount + shippingCost;
   trackBeginCheckoutOnce(cart, promo, shippingOption);
@@ -874,7 +890,7 @@ function renderCart() {
     discountAmount,
     shippingCost,
     total,
-    isFreeShipping: promo.freeShipping && Boolean(shippingOption)
+    isFreeShipping: hasFreeShipping(cart, shippingOption, promo)
   });
 
   cartRoot.innerHTML = cart.map((item, index) => `
@@ -977,7 +993,7 @@ function buildOrderRequestPayload({
       window: shippingOption.window,
       note: shippingOption.note,
       cost: shippingCost,
-      costDisplay: promo.freeShipping ? 'FREE' : formatMoney(shippingCost)
+      costDisplay: hasFreeShipping(cart, shippingOption, promo) ? 'FREE' : formatMoney(shippingCost)
     } : null,
     totals: {
       itemCount,
@@ -986,7 +1002,7 @@ function buildOrderRequestPayload({
       discount: discountAmount,
       discountDisplay: discountAmount > 0 ? `- ${formatMoney(discountAmount)}` : '$0.00',
       shipping: shippingCost,
-      shippingDisplay: shippingOption ? (promo.freeShipping ? 'FREE' : formatMoney(shippingCost)) : '$0.00',
+      shippingDisplay: shippingOption ? (hasFreeShipping(cart, shippingOption, promo) ? 'FREE' : formatMoney(shippingCost)) : '$0.00',
       estimatedTotal: total,
       estimatedTotalDisplay: formatMoney(total)
     },
@@ -1202,7 +1218,7 @@ form?.addEventListener('submit', async (event) => {
     return;
   }
   const shippingOption = getSelectedShipping(cart);
-  const shippingCost = getEffectiveShippingCost(shippingOption, promo);
+  const shippingCost = getEffectiveShippingCost(shippingOption, promo, cart);
   const subtotal = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
   const discountAmount = getPromoDiscount(cart, promo);
   const total = subtotal - discountAmount + shippingCost;
@@ -1299,6 +1315,7 @@ promoCodeInput?.addEventListener('input', () => {
 
 shippingMethodInput?.addEventListener('change', () => {
   if (submittedOrderSnapshot) return;
+  shippingChoiceTouched = true;
   const cart = getCart();
   trackShippingIfChanged(cart, getSelectedShipping(cart), getPromoDetails());
   renderCart();
