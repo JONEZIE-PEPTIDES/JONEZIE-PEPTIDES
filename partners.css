@@ -13,8 +13,8 @@
 .partner-hero h1 span { color: #ff78b3; }
 .partner-intro { max-width: 590px; margin: 24px 0 0; color: #bdccd2; font-size: clamp(1rem, 1.5vw, 1.16rem); }
 .partner-hero-actions { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: center; margin-top: 30px; }
-.partner-status { display: inline-flex; gap: 10px; align-items: center; min-height: 48px; padding: 10px 17px; border: 1px solid rgba(140, 235, 211, .34); border-radius: 13px; background: rgba(140, 235, 211, .09); color: #b9f8e8; font: 800 .85rem/1.3 Manrope, sans-serif; }
-.partner-status > span { width: 8px; height: 8px; border-radius: 50%; background: #8cebd3; box-shadow: 0 0 14px #8cebd3; }
+.partner-apply { display: inline-flex; gap: 10px; align-items: center; justify-content: center; min-height: 48px; padding: 10px 17px; border: 1px solid #8cebd3; border-radius: 13px; background: #8cebd3; color: #102830; font: 800 .9rem/1.3 Manrope, sans-serif; text-decoration: none; }
+.partner-apply:hover, .partner-apply:focus-visible { background: #b9f8e8; color: #102830; }
 .partner-link { color: #ffc0dc; font-weight: 800; text-decoration: none; }
 .partner-link:hover, .partner-link:focus-visible { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
 .partner-offer { padding: clamp(24px, 3.2vw, 38px); border: 1px solid rgba(233, 246, 246, .14); border-radius: 23px; background: linear-gradient(155deg, rgba(24, 46, 57, .95), rgba(12, 28, 37, .95)); box-shadow: 0 20px 65px rgba(0, 0, 0, .22), inset 0 1px rgba(255, 255, 255, .07); }
@@ -43,8 +43,8 @@
 .partner-end { display: flex; justify-content: space-between; gap: 30px; align-items: center; padding: clamp(28px, 4vw, 48px); border: 1px solid rgba(137, 234, 215, .22); border-radius: 24px; background: linear-gradient(120deg, #102d35, #152632 70%, #302236); }
 .partner-end > div { max-width: 650px; }
 .partner-end p:last-child { margin-bottom: 0; }
-.partner-end > a { display: inline-flex; gap: 12px; align-items: center; flex: none; min-height: 52px; padding: 0 22px; border: 1px solid rgba(255, 150, 199, .46); border-radius: 13px; background: linear-gradient(130deg, #3e2940, #202b39); color: #ffe0ed; font-weight: 800; text-decoration: none; }
-.partner-end > a:hover, .partner-end > a:focus-visible { border-color: #ff96c7; background: #50304b; }
+.partner-end > .partner-apply { flex: none; min-height: 52px; padding-inline: 22px; }
+#program-terms { scroll-margin-top: 24px; }
 @media (max-width: 850px) {
   .partner-hero, .partner-details { grid-template-columns: 1fr; }
   .partner-hero { min-height: 0; }
