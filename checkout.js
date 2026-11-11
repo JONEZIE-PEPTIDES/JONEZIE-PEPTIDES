@@ -1341,6 +1341,26 @@ function renderManualOrderFallback(payload) {
   });
 }
 
+function buildOrderRequestSubmission(payload) {
+  if (!payload.partnerOffer && !payload.creditRequest) return payload;
+  const partner = payload.partnerOffer;
+  const credit = payload.creditRequest;
+  const notes = [
+    payload.notes,
+    ...(partner ? [
+      `Partner discount code: ${partner.code}`,
+      `RefRef tracking code: ${partner.refCode}`,
+      'Verify the partner code and discount before invoicing. Award Jonezie Cash only after full Square payment.'
+    ] : []),
+    ...(credit ? [
+      `Jonezie Cash code: ${credit.code}`,
+      `Jonezie Cash requested: ${credit.amountRequestedDisplay}`,
+      'Verify the balance and record the redemption before sending the Square invoice.'
+    ] : [])
+  ].filter(Boolean).join('\n');
+  return { ...payload, notes };
+}
+
 async function submitOrderRequest(payload) {
   const endpoint = getOrderRequestEndpoint();
   if (!endpoint) {
@@ -1360,7 +1380,7 @@ async function submitOrderRequest(payload) {
       headers: {
         'Content-Type': 'text/plain;charset=utf-8'
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(buildOrderRequestSubmission(payload))
     })
     .then(() => ({ status: 'completed' }))
     .catch((error) => ({ status: 'failed', error }));

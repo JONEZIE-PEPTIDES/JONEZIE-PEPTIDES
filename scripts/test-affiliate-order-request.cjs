@@ -4,75 +4,57 @@ const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
-function loadEndpoint({ sheetFails = false } = {}) {
-  const rows = [];
+const checkout = fs.readFileSync(path.join(__dirname, '..', 'checkout.js'), 'utf8');
+const start = checkout.indexOf('function buildOrderRequestSubmission(');
+const end = checkout.indexOf('async function submitOrderRequest(', start);
+assert.ok(start >= 0 && end > start);
+const buildSubmission = vm.runInNewContext(checkout.slice(start, end) + '\nbuildOrderRequestSubmission');
+const backend = fs.readFileSync(path.join(__dirname, '..', 'google-apps-script', 'order-request', 'Code.gs'), 'utf8');
+
+function submitOrder(fields = {}) {
   const emails = [];
-  const properties = new Map();
-  const sheet = {
-    getLastRow: () => rows.length,
-    appendRow: (row) => rows.push(row),
-    setFrozenRows: () => {}
-  };
-  const spreadsheet = {
-    getId: () => 'test-sheet',
-    getUrl: () => 'https://docs.google.com/spreadsheets/d/test-sheet',
-    getSheetByName: () => sheet,
-    insertSheet: () => sheet
-  };
   const context = {
-    Date, JSON, Math, String, Number, Array, Boolean,
-    MailApp: { sendEmail: (email) => emails.push(email) },
-    SpreadsheetApp: {
-      create: () => {
-        if (sheetFails) throw new Error('Sheet unavailable');
-        return spreadsheet;
-      },
-      openById: () => spreadsheet
-    },
-    PropertiesService: { getScriptProperties: () => ({
-      getProperty: (key) => properties.get(key),
-      setProperty: (key, value) => properties.set(key, value)
-    }) },
+    MailApp: { sendEmail: email => emails.push(email) },
     ContentService: {
-      MimeType: { JSON: 'json', TEXT: 'text' },
-      createTextOutput: (value) => ({ value, setMimeType() { return this; } })
+      MimeType: { JSON: 'json' },
+      createTextOutput: value => ({ value, setMimeType() { return this; } })
     }
   };
-  const source = fs.readFileSync(path.join(__dirname, '..', 'google-apps-script', 'order-request', 'Code.gs'), 'utf8');
-  vm.runInNewContext(source, context);
-  return { context, rows, emails };
+  vm.runInNewContext(backend, context);
+  const request = {
+    orderId: 'JL-TEST-1',
+    customer: { name: 'Test Customer', email: 'customer@example.com' },
+    totals: { estimatedTotalDisplay: '$120.00' },
+    notes: 'Sample delivery instructions.',
+    items: [],
+    ...fields
+  };
+  const submission = buildSubmission(request);
+  assert.equal(request.notes, 'Sample delivery instructions.');
+  const result = context.doPost({ postData: { contents: JSON.stringify(submission) } });
+  assert.equal(JSON.parse(result.value).ok, true);
+  assert.equal(emails.length, 2);
+  return emails;
 }
 
-const request = {
-  orderId: 'JL-TEST-1',
-  requestedAt: '2026-11-10T16:00:00.000Z',
-  customer: { name: 'Test Customer', email: 'customer@example.com' },
-  partnerOffer: { code: 'ZLEONARD', refCode: 'u9vj3ea82z' },
-  referralHandle: 'sample-handle',
-  creditRequest: { amountRequested: 20, amountRequestedDisplay: '$20.00' },
-  totals: { subtotal: 200, discount: 60, estimatedTotalDisplay: '$120.00' },
-  items: []
-};
-
-test('partner requests reach the owner email and review sheet', () => {
-  const { context, rows, emails } = loadEndpoint();
-  const result = context.doPost({ postData: { contents: JSON.stringify(request) } });
-  assert.equal(JSON.parse(result.value).ok, true);
-  assert.equal(rows.length, 2);
-  assert.deepEqual(Array.from(rows[1]).slice(0, 8), [
-    request.requestedAt, request.orderId, 'customer@example.com', 'ZLEONARD',
-    'sample-handle', 140, 20, 'Awaiting owner review'
-  ]);
-  assert.match(emails[0].body, /Partner order log: https:\/\/docs\.google\.com/);
-  assert.match(emails[0].body, /Partner credit: issue only after the Square invoice is fully paid/);
-  assert.equal(rows[1].length, rows[0].length);
-  assert.equal(rows[1][rows[0].indexOf('RefRef Tracking Code')], 'u9vj3ea82z');
-  assert.match(emails[0].body, /RefRef Tracking Code: u9vj3ea82z/);
+test('the existing order email surfaces the partner code and credit request in the owner notes', () => {
+  const [owner, customer] = submitOrder({
+    partnerOffer: { code: 'ZLEONARD', refCode: 'example123' },
+    creditRequest: { code: 'SAMPLE', amountRequestedDisplay: '$20.00' }
+  });
+  const orderNotes = owner.body.split('RAW CHECKOUT PAYLOAD')[0];
+  assert.match(orderNotes, /Notes: Sample delivery instructions\./);
+  assert.match(orderNotes, /Partner discount code: ZLEONARD/);
+  assert.match(orderNotes, /RefRef tracking code: example123/);
+  assert.match(orderNotes, /Jonezie Cash requested: \$20.00/);
+  assert.match(orderNotes, /only after full Square payment/);
+  assert.doesNotMatch(customer.body, /example123|SAMPLE/);
 });
 
-test('sheet failure never suppresses the order request email', () => {
-  const { context, emails } = loadEndpoint({ sheetFails: true });
-  const result = context.doPost({ postData: { contents: JSON.stringify(request) } });
-  assert.equal(JSON.parse(result.value).ok, true);
-  assert.match(emails[0].body, /Could not save; use this email as the record/);
+test('ordinary orders still send both emails with unmodified notes', () => {
+  const [owner, customer] = submitOrder();
+  assert.match(owner.body, /Notes: Sample delivery instructions\./);
+  assert.equal(customer.to, 'customer@example.com');
+  assert.equal(customer.cc, 'orders@jonezielabs.com');
+  assert.doesNotMatch(owner.body + customer.body, /RefRef tracking code|Jonezie Cash/);
 });
