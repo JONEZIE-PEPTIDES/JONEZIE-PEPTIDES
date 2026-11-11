@@ -14,6 +14,7 @@ assert.ok(shippingStart >= 0 && shippingEnd > shippingStart);
 
 const context = {
   getCart: () => [],
+  affiliatePricing: require('../affiliate-pricing.js'),
   isAdSaleEligibleItem: () => true,
   window: { JONEZIE_PROMO: { getAdSaleUnitPrice: (price) => Math.round(price * 60) / 100 } }
 };
@@ -53,4 +54,12 @@ test('Australia shipping still requires a quote with free-shipping offers', () =
   const freeShippingPromo = { isValid: true, rate: 0, freeShipping: true };
   assert.equal(context.hasFreeShipping(cart(120000), australiaQuote, freeShippingPromo), false);
   assert.equal(context.getEffectiveShippingCost(australiaQuote, freeShippingPromo, cart(120000)), null);
+});
+
+test('The partner offer preserves the domestic Ground threshold and Australia quotes', () => {
+  const partnerPromo = { isValid: true, partnerCode: true };
+  const australiaQuote = { id: 'australia-quote', quoteRequired: true };
+  assert.equal(context.getEffectiveShippingCost(ground, partnerPromo, cart(21427)), 8);
+  assert.equal(context.getEffectiveShippingCost(ground, partnerPromo, cart(21428)), 0);
+  assert.equal(context.getEffectiveShippingCost(australiaQuote, partnerPromo, cart(21429)), null);
 });
