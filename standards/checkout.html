@@ -2,6 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script src="merch-data.js?v=20261112redirecton"></script>
+  <script>
+    const standardsRedirect = window.JONEZIE_STANDARDS_MERCH?.redirect || {};
+
+    if (!standardsRedirect.enabled && standardsRedirect.hideMainSiteLinksWhenDisabled !== false) {
+      document.documentElement.classList.add('rs-hide-main-site-entrances');
+    }
+
+    if (standardsRedirect.enabled) {
+      const redirectTarget = standardsRedirect.target || 'https://www.jonezielabs.com/';
+      const redirectDelayMs = Number(standardsRedirect.delayMs) || 0;
+
+      if (redirectDelayMs <= 0) {
+        window.location.replace(redirectTarget);
+      } else {
+        window.setTimeout(() => {
+          window.location.replace(redirectTarget);
+        }, redirectDelayMs);
+      }
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Merchandise Checkout | Jonezie Labs Standards</title>
   <meta name="description" content="Review and submit a Jonezie Labs merchandise order request." />
@@ -12,21 +33,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="../favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=20260728a" />
-  <script src="merch-data.js?v=20261112redirectoff"></script>
   <script src="../order-request-config.js"></script>
-  <script>
-    const standardsRedirect = window.JONEZIE_STANDARDS_MERCH?.redirect || {};
-
-    if (!standardsRedirect.enabled && standardsRedirect.hideMainSiteLinksWhenDisabled !== false) {
-      document.documentElement.classList.add('rs-hide-main-site-entrances');
-    }
-
-    if (standardsRedirect.enabled) {
-      window.setTimeout(() => {
-        window.location.replace(standardsRedirect.target || 'https://www.jonezielabs.com/');
-      }, Number(standardsRedirect.delayMs) || 0);
-    }
-  </script>
   <link rel="stylesheet" href="storefront.css?v=20261109fall40" />
 </head>
 <body>
