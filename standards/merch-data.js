@@ -10,7 +10,7 @@ window.JONEZIE_STANDARDS_MERCH = {
   orderKey: 'jonezie_standards_merch_last_order',
   promotion: {
     enabled: true,
-    rate: 0.40
+    rate: 0.25
   },
   gift: {
     threshold: 3,
@@ -62,10 +62,8 @@ window.JONEZIE_STANDARDS_MERCH = {
       slug: 'research-vial-kit-case',
       sku: 'JL-STANDARDS-VIAL-CASE-001',
       name: 'Research Kit',
-      promotionLabel: 'Peptide Research Kits',
       option: 'One Case',
       price: 57.18,
-      saleRate: 0.30,
       image: 'research-vial-kit-case.png?v=20261008a',
       productType: 'Vial Storage Case',
       description: 'Compact case with molded compartments for organizing research vials and small laboratory supplies.'
