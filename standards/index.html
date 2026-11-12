@@ -31,7 +31,7 @@
   <link rel="icon" type="image/png" href="../favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=20260728a" />
 <script src="landing-config.js?v=20260920entryoff1"></script>
-<script src="merch-data.js?v=20261112standards25"></script>
+<script src="merch-data.js?v=20261112home"></script>
   <script>
     const standardsRedirect = window.JONEZIE_STANDARDS_MERCH?.redirect || {};
     const hideMainSiteEntrances = window.JONEZIE_RESEARCH_STANDARDS_CONFIG?.showMainSiteEntrances === false ||
@@ -42,7 +42,7 @@
     }
 
     if (standardsRedirect.enabled) {
-      const redirectTarget = standardsRedirect.target || 'https://www.jonezielabs.com/research-store.html?ad=fall40';
+      const redirectTarget = standardsRedirect.target || 'https://www.jonezielabs.com/';
       const redirectDelayMs = Number(standardsRedirect.delayMs) || 0;
 
       if (redirectDelayMs <= 0) {
