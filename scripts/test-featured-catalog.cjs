@@ -14,7 +14,7 @@ const before = JSON.parse(JSON.stringify(catalog.products));
 vm.runInContext(read('catalog-image-overrides.js'), context);
 const labels = Array.from(context.window.JONEZIE_NEW_LABELS);
 const featured = Array.from(catalog.featured);
-assert.equal(labels.length, 38);
+assert.equal(labels.length, 39);
 assert.deepEqual(featured.map(p => p.slug), labels.map(p => p.slug));
 assert(featured.every(p => p.hasUpdatedLabel));
 const order = featured.map(p => p.slug);
@@ -25,6 +25,7 @@ assert(order.includes('bpc-5mg-plus-tb-5mg'));
 assert(order.includes('vip'));
 assert(order.includes('foxo4'));
 assert(order.includes('ahk-cu'));
+assert(order.includes('lc216'));
 const vipLabel = labels.find(item => item.slug === 'vip');
 assert.equal(vipLabel.image, 'assets/products/20261022/vip-20261029.webp');
 assert.equal(vipLabel.thumbnail, 'assets/products/label-reveal/vip-20261029.webp');
@@ -40,7 +41,7 @@ for (const item of labels) {
   assert.equal(catalog.products.find(p => p.slug === item.slug).image, item.image);
 }
 const stripPresentation = product => {
-  const { image, hasUpdatedLabel, name, searchAliases, ...data } = product;
+  const { image, cardImage, hasUpdatedLabel, hideUntilNewImage, name, searchAliases, ...data } = product;
   return data;
 };
 assert.deepEqual(JSON.parse(JSON.stringify(catalog.products)).map(stripPresentation), before.map(stripPresentation), 'Inventory, options and prices stay unchanged');

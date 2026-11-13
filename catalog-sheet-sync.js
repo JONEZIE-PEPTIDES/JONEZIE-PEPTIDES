@@ -90,7 +90,7 @@
     ['DSIP', '15mg', 46, 321.28, 380.8],
     ['Thymosin Alpha-1', '5mg', 43.125, 301.2, 357],
     ['Thymosin Alpha-1', '10mg', 77.625, 542.16, 642.6],
-    ['LC216', '10mg', 31.625, 220.88, 261.8],
+    ['LC216', '216 MG', 46, 321.28, 380.8],
     ['FOXO4', '10mg', 162, 1131.46, 1341.08],
     ['AHK-CU', '100mg', 30, 209.53, 248.35]
   ];
@@ -166,6 +166,7 @@
     'Thymosin Alpha-1|10mg': 39.99
   };
   const SINGLE_PRICE_OVERRIDES = {
+    'LC216|216 MG': 46,
     'AHK-CU|100mg': 30,
     'FOXO4|10mg': 162,
     'B12 10000mcg 10ml|3000 MCG / 3 mL': 17,
@@ -175,6 +176,7 @@
   };
 
   const NAME_OVERRIDES = {
+    lc216: 'Lipo-B 216mg/10ml Vial',
     bpc157: 'BPC-157',
     'mt-1': 'MT-1 (Melanotan 1)',
     'wolverine (bpc 5mg + tb 5mg)': 'Wolverine (BPC 5mg + TB 5mg)',
@@ -190,6 +192,7 @@
   };
 
   const SLUG_OVERRIDES = {
+    lc216: 'lc216',
     bpc157: 'bpc-157',
     'mt-1': 'mt-1',
     'mt-2 (melanotan 2 acetate)': 'mt-2',
@@ -302,10 +305,12 @@
     'b12-10000mcg-10ml': 'assets/products/20261022/b12-3000mcg-3ml.webp',
     vip: 'assets/products/20261022/vip-20261029.webp',
     foxo4: 'assets/products/20261022/foxo4-20261029.webp',
+    lc216: 'assets/products/20261022/lipo-b-216mg.webp',
     'ahk-cu': 'assets/products/20261022/ahk-cu-20261029.webp'
   };
 
   const DESCRIPTION_BY_SLUG = {
+    lc216: 'Lipo-B is supplied as 216 mg in a 10 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For laboratory research use only.',
     'ahk-cu': 'AHK-CU, supplied as 100 mg in a 3 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For research use only; not for human or veterinary use.',
     foxo4: 'FOXO4, supplied as 10 mg in a 3 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For research use only; not for human or veterinary use.'
   };
@@ -388,7 +393,8 @@
       strengthToken = `${numberToken}${unit}`.slice(0, 8);
     }
 
-    let code = `${prefix}${strengthToken}`;
+    // Keep the established SKU for saved carts and order records.
+    let code = slug === 'lc216' ? 'LC210MG' : `${prefix}${strengthToken}`;
     if (!code) code = `OPT${usedCodes.size + 1}`;
     let index = 2;
     while (usedCodes.has(code)) {
