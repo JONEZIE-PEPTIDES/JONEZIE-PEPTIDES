@@ -66,7 +66,8 @@ function getCurrentCatalogCartItem(item) {
   const unitPrice = Number(String(option[packKey]).replace(/[$,]/g, ''));
   if (!Number.isFinite(unitPrice) || unitPrice <= 0) return item;
   const inventoryStatus = option.inventoryStatus || 'in_stock';
-  return { ...item, code: option.code, packKey, image: product.image, unitPrice,
+  return { ...item, name: getCartDisplayName(item), code: option.code, mgOption: option.mgOption,
+    packKey, image: product.image, unitPrice,
     unitPriceDisplay: formatMoney(unitPrice), inventoryStatus,
     backorderNote: inventoryStatus === 'backorder'
       ? option.backorderNote || product.backorderNote || item.backorderNote || '' : '' };

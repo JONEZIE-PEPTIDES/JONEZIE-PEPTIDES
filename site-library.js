@@ -191,7 +191,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
       summary: 'Explore preparation supplies and specialty research products that do not fall within the primary research categories.',
       intro: 'Support and specialty products can be used alongside broader research workflows or reviewed as narrower standalone listings. Check product pages for format, documentation, storage notes, and whether the item is eligible for comparison.',
       bullets: [
-        'Review BAC Water, B12 support items, Dermorphin, PT-141, LC216, and related specialty products when listed.',
+        'Review BAC Water, B12 support items, Dermorphin, PT-141, Lipo-B, and related specialty products when listed.',
         'Use product pages to confirm whether a listing is a support material, specialty compound, or comparison-eligible product.',
         'Keep storage, label, and preparation references available when reviewing support materials.'
       ],
