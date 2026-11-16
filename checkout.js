@@ -91,6 +91,10 @@ const PROMO_CODES = {
     rate: 0.25,
     freeShipping: false
   },
+  VIXEN: {
+    rate: 0.40,
+    freeShipping: false
+  },
   VET40: {
     rate: 0.40,
     freeShipping: false
