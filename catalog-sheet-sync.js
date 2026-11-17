@@ -92,7 +92,9 @@
     ['Thymosin Alpha-1', '10mg', 77.625, 542.16, 642.6],
     ['LC216', '216 MG', 46, 321.28, 380.8],
     ['FOXO4', '10mg', 162, 1131.46, 1341.08],
-    ['AHK-CU', '100mg', 30, 209.53, 248.35]
+    ['AHK-CU', '100mg', 30, 209.53, 248.35],
+    ['Eloralintide', '5mg', 93, 649.54, 769.88],
+    ['Eloralintide', '10mg', 145, 1012.73, 1200.35]
   ];
 
   const EXTRA_PRODUCTS = [
@@ -166,6 +168,8 @@
     'Thymosin Alpha-1|10mg': 39.99
   };
   const SINGLE_PRICE_OVERRIDES = {
+    'Eloralintide|5mg': 93,
+    'Eloralintide|10mg': 145,
     'LC216|216 MG': 46,
     'AHK-CU|100mg': 30,
     'FOXO4|10mg': 162,
@@ -213,6 +217,7 @@
   };
 
   const CATEGORY_OVERRIDES = {
+    eloralintide: 'Metabolic',
     'mt-1': 'Aesthetics',
     'mt-2 (melanotan 2 acetate)': 'Aesthetics',
     'pt-141': 'Performance',
@@ -268,6 +273,7 @@
   };
 
   const IMAGE_OVERRIDES_BY_SLUG = {
+    eloralintide: 'assets/products/20261022/eloralintide-20261117.webp',
     'bpc-5mg-plus-tb-5mg': 'assets/products/20261022/wolverine.webp',
     'mots-c': 'assets/products/20261022/mots-c.webp',
     'bpc-157': 'assets/products/20261022/bpc-157.webp',
@@ -310,6 +316,7 @@
   };
 
   const DESCRIPTION_BY_SLUG = {
+    eloralintide: 'Eloralintide is available in 5 mg and 10 mg strengths, as single vials, 8-vial kits, or 10-vial kits. For laboratory research use only.',
     lc216: 'Lipo-B is supplied as 216 mg in a 10 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For laboratory research use only.',
     'ahk-cu': 'AHK-CU, supplied as 100 mg in a 3 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For research use only; not for human or veterinary use.',
     foxo4: 'FOXO4, supplied as 10 mg in a 3 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For research use only; not for human or veterinary use.'
