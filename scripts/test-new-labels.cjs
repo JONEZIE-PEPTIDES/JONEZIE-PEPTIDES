@@ -12,7 +12,7 @@ const approved = window.JONEZIE_NEW_LABELS;
 assert.equal(new Set(approved.map(item => item.slug)).size, approved.length);
 assert(!approved.some(item => item.image.endsWith('/tirzepatide.webp')));
 const totalBytes = approved.reduce((n, item) => n + fs.statSync(path.join(root, item.thumbnail)).size, 0);
-assert(totalBytes < 400000);
+assert(totalBytes < 410000);
 
 class Element {
   constructor() {

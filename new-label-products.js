@@ -40,7 +40,8 @@
     vip: 'vip-20261029',
     foxo4: 'foxo4-20261029',
     'ahk-cu': 'ahk-cu-20261029',
-    lc216: 'lipo-b-216mg'
+    lc216: 'lipo-b-216mg',
+    eloralintide: 'eloralintide-20261117'
   };
 
   window.JONEZIE_NEW_LABELS = Object.entries(artwork).map(([slug, file]) => ({

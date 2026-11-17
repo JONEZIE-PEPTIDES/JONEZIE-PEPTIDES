@@ -2,6 +2,11 @@ window.JONEZIE_PRODUCT_CONTENT = {
   disclaimerShort: 'Research Use Only. Not for human or veterinary use. Site copy summarizes published and preclinical literature and is not medical advice.',
   disclaimerLong: 'All compounds listed on this site are offered strictly for laboratory research, analytical, or in-vitro use. Statements on this site summarize published research themes, preclinical findings, and early clinical observations where available; they are not medical claims, treatment claims, or dosing instructions. Products are not approved to diagnose, treat, cure, or prevent disease, and they are not for human consumption.',
   products: {
+    eloralintide: {
+      shortDescription: 'Eloralintide is available in 5 mg and 10 mg strengths, as single vials, 8-vial kits, or 10-vial kits. For laboratory research use only.',
+      researchSummary: 'Available strengths are 5 mg and 10 mg. Select a strength and pack format to view current pricing.',
+      researchFindings: []
+    },
     'ahk-cu': {
       shortDescription: 'AHK-CU, supplied as 100 mg in a 3 mL vial. Available as a single vial, an 8-vial kit, or a 10-vial kit. For research use only; not for human or veterinary use.',
       researchSummary: 'AHK-CU is available in one listed strength: 100 mg in a 3 mL vial. This listing is for laboratory research use only, not human or veterinary use.',
