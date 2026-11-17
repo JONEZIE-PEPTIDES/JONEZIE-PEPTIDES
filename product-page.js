@@ -284,17 +284,6 @@ function renderProductPage() {
   const product = (catalogData.products || []).find((item) => item.slug === slug)
     || (catalogData.featured || []).find((item) => item.slug === slug);
   if (!product) return;
-  if (product.hideUntilNewImage) {
-    let robots = document.querySelector('meta[name="robots"]');
-    if (!robots) {
-      robots = document.createElement('meta');
-      robots.name = 'robots';
-      document.head.append(robots);
-    }
-    robots.content = 'noindex, nofollow';
-    window.location.replace(new URL(window.location.pathname.includes('/products/') ? '../catalog.html' : 'catalog.html', window.location.href));
-    return;
-  }
   const displayName = siteLibrary?.getProductDisplayName?.(product) || product.name;
   const adSale = Boolean(window.JONEZIE_PROMO?.isAdSaleContext?.());
   const adSalePrice = (price) => window.JONEZIE_PROMO.getAdSaleUnitPrice(price);
@@ -474,10 +463,11 @@ function renderProductPage() {
   });
   if (titleNode) titleNode.textContent = displayName;
   if (eyebrowNode) eyebrowNode.textContent = 'Research use only';
-  if (descriptionNode) descriptionNode.textContent = `Available in ${product.options.map((option) => option.mgOption).filter(Boolean).join(', ')}. Choose a pack format to see current pricing.`;
+  if (descriptionNode) descriptionNode.textContent = productContent?.heroSummary
+    || `Available in ${product.options.map((option) => option.mgOption).filter(Boolean).join(', ')}. Choose a pack format to see current pricing.`;
   if (heroImageNode) {
     heroImageNode.src = getProductImageSrc(product.image);
-    heroImageNode.alt = `${displayName} product image`;
+    heroImageNode.alt = productContent?.imageAlt || `${displayName} product image`;
     heroImageNode.loading = 'eager';
     heroImageNode.decoding = 'async';
     heroImageNode.setAttribute('fetchpriority', 'high');

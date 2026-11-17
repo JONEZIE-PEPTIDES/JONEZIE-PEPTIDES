@@ -519,7 +519,8 @@ window.JONEZIE_SITE_LIBRARY = (() => {
 
   function getProductPageTitle(product) {
     if (!product?.name) return 'Research Product | Jonezie Labs';
-    return `${getProductDisplayName(product)} | Jonezie Labs`;
+    const seoTitle = window.JONEZIE_PRODUCT_CONTENT?.products?.[product.slug]?.seoTitle;
+    return seoTitle || `${getProductDisplayName(product)} | Jonezie Labs`;
   }
 
   function getSortedPair(leftSlug, rightSlug) {
@@ -563,6 +564,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     if (!product) return 'Research vial';
     if (product.slug === 'bac-water') return 'Support vial';
     if (product.slug === 'b12-10000mcg-10ml') return 'Red aqueous support vial';
+    if (product?.slug === 'lc216') return '10mL research vial';
     if (isBlendProduct(product)) return 'Multi-compound lyophilized vial';
     return 'Lyophilized research vial';
   }
@@ -674,6 +676,7 @@ window.JONEZIE_SITE_LIBRARY = (() => {
     if (!product?.name) {
       return 'Browse Jonezie Labs research products for current strengths, formats, pricing, and test reports.';
     }
+    if (productContent?.seoDescription) return productContent.seoDescription;
     const strengths = getOptionStrengthList(product).join(', ');
     return `${getProductDisplayName(product)} at Jonezie Labs. View ${strengths || 'available strengths'}, pack formats, pricing, and available test documentation. For laboratory research only.`;
   }

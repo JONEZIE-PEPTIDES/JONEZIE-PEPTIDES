@@ -2,7 +2,20 @@ window.JONEZIE_PRODUCT_CONTENT = {
   disclaimerShort: 'Research Use Only. Not for human or veterinary use. Site copy summarizes published and preclinical literature and is not medical advice.',
   disclaimerLong: 'All compounds listed on this site are offered strictly for laboratory research, analytical, or in-vitro use. Statements on this site summarize published research themes, preclinical findings, and early clinical observations where available; they are not medical claims, treatment claims, or dosing instructions. Products are not approved to diagnose, treat, cure, or prevent disease, and they are not for human consumption.',
   products: {
+    lc216: {
+      seoTitle: 'Lipo-B 216mg/10mL Vial (LC216) | Jonezie Labs',
+      seoDescription: 'Lipo-B 216mg in a 10mL vial, formerly LC216. Compare single vials and 8- or 10-vial kits at Jonezie Labs. For laboratory research only.',
+      heroSummary: 'Lipo-B, formerly LC216, contains 216mg in a 10mL vial. Choose a single vial, an 8-vial kit, or a 10-vial kit.',
+      imageAlt: 'Lipo-B 216mg / 10mL research vial with a green cap',
+      shortDescription: 'Lipo-B, formerly LC216, is available as 216mg in a 10mL vial, in single-vial, 8-vial, and 10-vial formats. For laboratory research use only.',
+      researchSummary: 'This listing offers one strength, 216mg, in a 10mL research vial.',
+      researchFindings: []
+    },
     eloralintide: {
+      seoTitle: 'Eloralintide 5mg & 10mg Research Peptide | Jonezie Labs',
+      seoDescription: 'Eloralintide research peptide in 5mg and 10mg strengths. Compare single vials and 8- or 10-vial kits at Jonezie Labs. For laboratory research only.',
+      heroSummary: 'Eloralintide research peptide is available in 5mg and 10mg strengths. Choose a single vial, an 8-vial kit, or a 10-vial kit.',
+      imageAlt: 'Eloralintide 10mg / 3mL research vial with a pink cap',
       shortDescription: 'Eloralintide is available in 5 mg and 10 mg strengths, as single vials, 8-vial kits, or 10-vial kits. For laboratory research use only.',
       researchSummary: 'Available strengths are 5 mg and 10 mg. Select a strength and pack format to view current pricing.',
       researchFindings: []

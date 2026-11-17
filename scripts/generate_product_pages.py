@@ -152,9 +152,10 @@ def dedupe_products(catalog: dict) -> list[dict]:
 
 def render_product_page(*, template: str, product: dict, product_content: dict, profile: dict, faqs: list[dict], title: str, meta_description: str, canonical: str) -> str:
     display_name = get_display_name(product)
-    hero_summary = f"Available in {', '.join(option.get('mgOption') for option in product.get('options') or [] if option.get('mgOption'))}. Choose a pack format to see current pricing."
+    hero_summary = product_content.get("heroSummary") or f"Available in {', '.join(option.get('mgOption') for option in product.get('options') or [] if option.get('mgOption'))}. Choose a pack format to see current pricing."
     og_image = absolute_url(product.get("image") or FALLBACK_IMAGE)
     image_src = escape(product.get("image") or FALLBACK_IMAGE, quote=True)
+    image_alt = escape(product_content.get("imageAlt") or f"{display_name} product image", quote=True)
     selected_option = (product.get("options") or [{}])[0]
     selected_pack_key = next(
         (key for key in ("singleVialPrice", "eightVialPrice", "tenVialPrice") if selected_option.get(key)),
@@ -270,7 +271,7 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
     html = replace_wrapped(r'(<p class="product-intro" data-product-description>).*?(</p>)', escape(hero_summary))
     html = re.sub(
         r'<img data-product-hero-image src=".*?" alt=".*?" />',
-        f'<img data-product-hero-image src="{image_src}" alt="{escape(display_name, quote=True)} product image" />',
+        f'<img data-product-hero-image src="{image_src}" alt="{image_alt}" />',
         html,
         count=1,
     )
