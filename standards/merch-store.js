@@ -426,7 +426,14 @@
         }
       }
       localStorage.setItem(orderKey, JSON.stringify(payload));
-      if (!previewOnly) window.JONEZIE_TIKTOK_PIXEL?.trackOrderRequest(payload.orderId);
+      if (!previewOnly) {
+        window.JONEZIE_TIKTOK_PIXEL?.trackOrderRequest(payload.orderId);
+        try {
+          window.JONEZIE_ANALYTICS?.openAiLeadCreated();
+        } catch {
+          // A tracking failure must not interrupt an order request already sent.
+        }
+      }
       writeCart([]);
       const cartItems = by('[data-merch-checkout-items]');
       if (cartItems) cartItems.hidden = true;
