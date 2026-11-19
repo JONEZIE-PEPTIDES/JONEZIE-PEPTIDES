@@ -196,6 +196,7 @@ window.JONEZIE_ANALYTICS = (() => {
 
   return {
     event,
+    openAiLeadCreated,
     buildItem,
     buildCartPayload,
     viewItem,
