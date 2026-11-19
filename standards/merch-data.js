@@ -1,7 +1,7 @@
 window.JONEZIE_STANDARDS_MERCH = {
   redirect: {
     // Light-switch control for /standards/: false shows this page, true redirects to target.
-    enabled: false,
+    enabled: true,
     target: 'https://www.jonezielabs.com/',
     delayMs: 0,
     hideMainSiteLinksWhenDisabled: true

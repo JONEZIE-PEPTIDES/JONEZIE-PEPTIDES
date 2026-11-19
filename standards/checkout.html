@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <script src="merch-data.js?v=20261119redirectoff1"></script>
+  <script src="merch-data.js?v=20261119redirecton1"></script>
   <script>
     const standardsRedirect = window.JONEZIE_STANDARDS_MERCH?.redirect || {};
 
@@ -11,14 +11,19 @@
     }
 
     if (standardsRedirect.enabled) {
-      const redirectTarget = standardsRedirect.target || 'https://www.jonezielabs.com/';
+      const redirectTarget = new URL(standardsRedirect.target || 'https://www.jonezielabs.com/', window.location.href);
+      for (const [key, value] of new URLSearchParams(window.location.search)) {
+        if (/^(utm_[a-z0-9_]+|oppref|olref|gclid|gbraid|wbraid|msclkid|fbclid|ttclid)$/i.test(key) && !redirectTarget.searchParams.has(key)) {
+          redirectTarget.searchParams.append(key, value);
+        }
+      }
       const redirectDelayMs = Number(standardsRedirect.delayMs) || 0;
 
       if (redirectDelayMs <= 0) {
-        window.location.replace(redirectTarget);
+        window.location.replace(redirectTarget.href);
       } else {
         window.setTimeout(() => {
-          window.location.replace(redirectTarget);
+          window.location.replace(redirectTarget.href);
         }, redirectDelayMs);
       }
     }
