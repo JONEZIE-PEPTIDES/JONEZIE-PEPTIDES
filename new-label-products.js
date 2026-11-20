@@ -3,6 +3,7 @@
   // This shared list controls homepage features and the animated reveal.
   const artwork = {
     retatrutide: 'retatrutide',
+    eloralintide: 'eloralintide-20261117',
     semaglutide: 'semaglutide-20261028',
     'mots-c': 'mots-c',
     semax: 'semax',
@@ -40,8 +41,7 @@
     vip: 'vip-20261029',
     foxo4: 'foxo4-20261029',
     'ahk-cu': 'ahk-cu-20261029',
-    lc216: 'lipo-b-216mg',
-    eloralintide: 'eloralintide-20261117'
+    lc216: 'lipo-b-216mg'
   };
 
   window.JONEZIE_NEW_LABELS = Object.entries(artwork).map(([slug, file]) => ({
