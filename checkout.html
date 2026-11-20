@@ -21,7 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="favicon.png?v=20260728a" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260728a" />
-  <link rel="stylesheet" href="styles.css?v=20261107imagefit1" />
+  <link rel="stylesheet" href="styles.css?v=20261120invoicepayments1" />
   <link rel="stylesheet" href="affiliate-checkout.css?v=20261110a" />
   <style>
     .checkout-form label[hidden] { display: none; }
@@ -345,6 +345,19 @@
               Order Notes (Optional)
               <textarea name="customerNotes" rows="5"></textarea>
             </label>
+            <aside class="checkout-invoice-methods" aria-label="Invoice payment methods">
+              <p class="checkout-invoice-methods-title">Invoice payment methods</p>
+              <ul class="checkout-payment-brands" aria-label="Accepted cards and wallets">
+                <li class="payment-brand-visa">Visa</li>
+                <li>Mastercard</li>
+                <li aria-label="American Express">AmEx</li>
+                <li>Apple Pay</li>
+                <li>Google Pay</li>
+                <li>Afterpay</li>
+              </ul>
+              <p class="checkout-invoice-methods-detail">Credit/debit &middot; Cash App Pay &middot; ACH</p>
+              <p class="checkout-invoice-methods-note">Pay after order review using the options on your invoice.</p>
+            </aside>
             <div class="purchase-actions checkout-actions">
               <button class="button primary purchase-button" type="submit">Submit Order Request</button>
               <button class="button secondary purchase-button" type="button" data-clear-cart>Clear Cart</button>
