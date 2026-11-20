@@ -69,7 +69,7 @@
 
 (() => {
   if (document.body.classList.contains('ad-store-page')) return;
-  const hasFooter = document.querySelector('script[src*="site-footer.js"]');
+  const hasFooter = document.querySelector('script[src*="site-footer.js"], .checkout-footer');
   if (hasFooter || window.JONEZIE_FOOTER_LOADER_ADDED) return;
   window.JONEZIE_FOOTER_LOADER_ADDED = true;
 

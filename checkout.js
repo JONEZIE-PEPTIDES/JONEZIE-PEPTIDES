@@ -1,7 +1,11 @@
-﻿const CART_KEY = 'jonezie_cart';
+const CART_KEY = 'jonezie_cart';
 const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
 const cartRoot = document.querySelector('[data-checkout-cart]');
+const cartHome = document.querySelector('[data-checkout-cart-home]');
+const completedOrderHost = document.querySelector('[data-checkout-completed-host]');
+const cartToggle = document.querySelector('[data-cart-toggle]');
+let cartPreviewExpanded = false;
 const summaryItems = document.querySelector('[data-summary-items]');
 const summarySubtotal = document.querySelector('[data-summary-subtotal]');
 const summaryDiscount = document.querySelector('[data-summary-discount]');
@@ -1031,11 +1035,17 @@ function renderCart() {
   if (cashCard) cashCard.hidden = AD_SALE_MODE || !activePartnerCodes.size;
   if (!cartRoot) return;
   if (submittedOrderSnapshot) {
+    if (completedOrderHost && cartRoot.parentElement !== completedOrderHost) completedOrderHost.appendChild(cartRoot);
     renderSubmittedOrderPremium();
     return;
   }
 
+  if (cartHome && cartRoot.parentElement !== cartHome) cartHome.prepend(cartRoot);
+
   const cart = getCart();
+  document.body.classList.toggle('checkout-cart-empty', !cart.length);
+  if (!cart.length) cartPreviewExpanded = false;
+  updateCartPreview(cart.length);
 
   if (!cart.length) {
     renderPromoStatus(getPromoDetails());
@@ -1085,7 +1095,7 @@ function renderCart() {
   });
 
   cartRoot.innerHTML = cart.map((item, index) => `
-    <article class="checkout-item-card">
+    <article class="checkout-item-card"${index >= 3 && !cartPreviewExpanded && cartToggle ? ' hidden' : ''}>
       <div class="checkout-item-visual"><img src="${escapeHtml(getCartImage(item))}" alt="${escapeHtml(getCartDisplayName(item))} product image" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" /></div>
       <div class="checkout-item-copy">
         <div class="checkout-item-topline"><h2>${escapeHtml(getCartDisplayName(item))}</h2><strong>${renderCheckoutItemPrice(item, item.quantity)}</strong></div>
@@ -1129,6 +1139,32 @@ function renderCart() {
     });
   });
 }
+
+function updateCartPreview(productCount) {
+  if (!cartToggle) return;
+  cartToggle.hidden = productCount <= 3;
+  cartToggle.setAttribute('aria-expanded', String(cartPreviewExpanded));
+  cartToggle.textContent = cartPreviewExpanded ? 'Show fewer products' : `Show all ${productCount} products`;
+  cartRoot?.querySelectorAll('.checkout-item-card').forEach((card, index) => {
+    card.hidden = index >= 3 && !cartPreviewExpanded;
+  });
+}
+
+cartToggle?.addEventListener('click', () => {
+  cartPreviewExpanded = !cartPreviewExpanded;
+  updateCartPreview(getCart().length);
+});
+
+document.querySelector('[data-apply-promo]')?.addEventListener('click', () => {
+  if (submittedOrderSnapshot || AD_SALE_MODE) return;
+  const cart = getCart();
+  trackPromoIfValid(getPromoDetails(), cart);
+  renderCart();
+  if (activePromoCopy) {
+    activePromoCopy.setAttribute('role', 'status');
+    activePromoCopy.setAttribute('aria-live', 'polite');
+  }
+});
 
 function buildOrderRequestPayload({
   cart,
