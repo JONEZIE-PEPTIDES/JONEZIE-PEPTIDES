@@ -2755,6 +2755,49 @@ body.lightbox-open {
 .selection-summary strong { display: block; margin-top: 8px; font-family: "Space Grotesk", sans-serif; font-size: 1.3rem; }
 .purchase-actions,
 .checkout-actions { display: grid; gap: 12px; margin-top: 22px; }
+.checkout-invoice-methods {
+  padding: 14px;
+  border: 1px solid rgba(146, 239, 210, 0.2);
+  border-radius: 16px;
+  background: linear-gradient(120deg, rgba(146, 239, 210, 0.055), rgba(255, 121, 188, 0.035));
+}
+.checkout-form .checkout-invoice-methods-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 800;
+  line-height: 1.5;
+}
+.checkout-payment-brands {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 12px 0 10px;
+  padding: 0;
+  list-style: none;
+}
+.checkout-payment-brands li {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  min-width: 0;
+  padding: 5px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  background: #f4f8f7;
+  color: #12252d;
+  font: 800 0.7rem/1.2 "Manrope", sans-serif;
+}
+.checkout-payment-brands .payment-brand-visa { font-style: italic; letter-spacing: 0.035em; }
+.checkout-form .checkout-invoice-methods-detail,
+.checkout-form .checkout-invoice-methods-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+.checkout-form .checkout-invoice-methods-note { margin-top: 8px; }
 .purchase-button { width: 100%; border: 0; }
 .purchase-button:disabled { opacity: 0.55; cursor: not-allowed; }
 .button.purchase-button-pink {
