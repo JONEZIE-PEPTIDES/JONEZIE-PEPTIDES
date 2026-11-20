@@ -2769,30 +2769,25 @@ body.lightbox-open {
   line-height: 1.5;
 }
 .checkout-payment-brands {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin: 12px 0 10px;
   padding: 0;
   list-style: none;
 }
 .checkout-payment-brands li {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 30px;
-  min-width: 0;
-  padding: 5px 4px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
-  background: #f4f8f7;
-  color: #12252d;
-  font: 800 0.7rem/1.2 "Manrope", sans-serif;
-  white-space: nowrap;
+  display: flex;
+  flex: 0 0 57px;
+  padding: 0;
+  border: 0;
+  background: none;
 }
-.checkout-payment-brands .payment-brand-visa { font-style: italic; letter-spacing: 0.035em; }
-@media (max-width: 380px) {
-  .checkout-payment-brands { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.checkout-payment-brands img {
+  display: block;
+  width: 57px;
+  height: 36px;
+  object-fit: contain;
 }
 .checkout-form .checkout-invoice-methods-detail,
 .checkout-form .checkout-invoice-methods-note {
@@ -7444,6 +7439,43 @@ body.product-sticky-visible { padding-bottom: 100px; }
   }
   .checkout-summary-card { padding: 20px 18px; }
   .checkout-form { padding: 20px 18px; }
+}
+
+/* Keep the form beside the summary on desktop; retain mobile reading order. */
+@media (min-width: 1041px) {
+  body:not(.checkout-order-complete) .checkout-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 360px);
+    gap: 22px 28px;
+  }
+  body:not(.checkout-order-complete) .checkout-layout > div:first-child {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  body:not(.checkout-order-complete) .checkout-panel { display: contents; }
+  body:not(.checkout-order-complete) .checkout-sidebar {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: start;
+    min-width: 0;
+  }
+  body:not(.checkout-order-complete) .checkout-form {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 0;
+  }
+  body:not(.checkout-order-complete) .checkout-success-card {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  body:not(.checkout-order-complete) .checkout-panel > .purchase-note {
+    grid-column: 1;
+    grid-row: 3;
+    margin: 0;
+  }
+  .checkout-actions { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); margin-top: 4px; }
+}
+@media (min-width: 1041px) and (min-height: 1080px) {
+  body:not(.checkout-order-complete) .checkout-sidebar { position: sticky; top: 24px; }
 }
 
 /* Home research standards, styled as a compact brand band. */
