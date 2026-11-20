@@ -32,7 +32,7 @@ for (const [file, title] of pages) {
 </head>
 <body>
   <header class="policy-header">
-    <a href="../index.html" aria-label="Jonezie Labs Standards Store"><img src="../../jonezie-labs-logo.webp?v=20261029" alt="Jonezie Labs" width="2172" height="724" /></a>
+    <a href="../index.html" aria-label="Jonezie Labs Standards Store"><img src="../../jonezie-wordmark-black.webp" alt="Jonezie Labs" width="2172" height="724" /></a>
     <nav aria-label="Standards navigation"><a href="../index.html#merchandise">Store</a><a href="../checkout.html">Checkout</a></nav>
   </header>
   <main class="policy-layout">

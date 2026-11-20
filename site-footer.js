@@ -5,7 +5,7 @@
       <div class="footer-grid">
         <section class="footer-brand" aria-label="Jonezie Labs">
           <a class="footer-logo" href="${ROOT}index.html" aria-label="Jonezie Labs home">
-            <img src="${ROOT}jonezie-labs-footer-refined.webp" alt="Jonezie Labs" loading="lazy" decoding="async" />
+            <img src="${ROOT}jonezie-wordmark-white.webp" alt="Jonezie Labs" loading="lazy" decoding="async" />
           </a>
           <p>Clear product information, straightforward ordering, and real support.</p>
           <a class="footer-email" href="mailto:customerservice@jonezielabs.com?subject=Jonezie%20Labs%20Support">customerservice@jonezielabs.com</a>
