@@ -2782,14 +2782,18 @@ body.lightbox-open {
   justify-content: center;
   min-height: 30px;
   min-width: 0;
-  padding: 5px 6px;
+  padding: 5px 4px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
   background: #f4f8f7;
   color: #12252d;
   font: 800 0.7rem/1.2 "Manrope", sans-serif;
+  white-space: nowrap;
 }
 .checkout-payment-brands .payment-brand-visa { font-style: italic; letter-spacing: 0.035em; }
+@media (max-width: 380px) {
+  .checkout-payment-brands { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 .checkout-form .checkout-invoice-methods-detail,
 .checkout-form .checkout-invoice-methods-note {
   margin: 0;
