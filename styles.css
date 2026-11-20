@@ -6815,16 +6815,15 @@ body.resource-page {
   .footer-bottom p:last-child { text-align: left; }
 }
 
-/* Restore the colorful home hero treatment on phones. */
+/* Match both homepage hero buttons to the Featured Products gradient. */
+.hero-home .hero-home-actions .button {
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: var(--ember-brand-fill);
+  color: var(--ink);
+  box-shadow: 0 18px 38px rgba(255, 95, 169, 0.2);
+}
 @media (max-width: 620px) {
-  .hero-home .button.primary,
-  .hero-home .button.secondary {
-    border: 1px solid rgba(255, 255, 255, 0.38);
-    border-radius: 999px;
-    background: linear-gradient(135deg, #8fdfff, #ff79bc);
-    color: var(--ink);
-    box-shadow: 0 18px 38px rgba(255, 95, 169, 0.2);
-  }
+  .hero-home .hero-home-actions .button { border-radius: 999px; }
 }
 
 /* Color-fill study: one catalog card and its matching product page. */
