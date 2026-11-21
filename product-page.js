@@ -497,8 +497,21 @@ function renderProductPage() {
     document.body.classList.add('lightbox-open');
   }
 
+  const batchCoa = window.JONEZIE_BATCH_COA?.create({
+    product,
+    button: coaButton,
+    onStrengthChange(code) {
+      selectedOption = product.options.find(option => option.code === code) || selectedOption;
+      ensureSelectedPack();
+      renderOptionCards();
+      renderPackPicker();
+      renderSelectionSummary();
+    }
+  });
   const coaImagePath = siteLibrary?.getCoaImageForSlug?.(product.slug) || getCoaImageForSlug(product.slug);
-  if (coaButton) {
+  if (batchCoa) {
+    if (['#product-coa', '#batch-records'].includes(window.location.hash)) requestAnimationFrame(batchCoa.focus);
+  } else if (coaButton) {
     if (!coaImagePath || !coaLightbox || !coaLightboxImage) {
       coaButton.textContent = 'Test report unavailable';
       coaButton.disabled = true;
@@ -613,6 +626,7 @@ function renderProductPage() {
     if (buyNowButton) buyNowButton.disabled = disabled;
     syncStickyBar();
     updateProductSeo();
+    batchCoa?.update(selectedOption);
   }
 
   function getSelectedCartItem() {
