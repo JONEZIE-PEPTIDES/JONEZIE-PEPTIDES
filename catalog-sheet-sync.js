@@ -174,7 +174,11 @@
     'AHK-CU|100mg': 30,
     'FOXO4|10mg': 162,
     'B12 10000mcg 10ml|3000 MCG / 3 mL': 17,
-    'Retatrutide|20mg': 107,
+    // GLP-3(RT): $8 off each single-vial strength; preserve the existing kit ratios.
+    'Retatrutide|10mg': 54.59,
+    'Retatrutide|15mg': 69.37,
+    'Retatrutide|20mg': 99,
+    'Retatrutide|30mg': 126.55,
     // Preserve the source sheet's 5mg:10mg ratio after matching the 10mg price at $67.99.
     'Cagrilintide|5mg': 46.74
   };
