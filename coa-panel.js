@@ -32,7 +32,7 @@ window.JONEZIE_BATCH_COA = (() => {
             <p class="batch-coa-sample-note" data-coa-sample-note></p>
           </div>
           <div role="tabpanel" id="batch-original" aria-labelledby="batch-original-tab" hidden>
-            <div class="batch-coa-original"><span class="batch-coa-paper-icon" aria-hidden="true">↗</span><p class="batch-coa-eyebrow">KMD Analytical</p><h3>The complete laboratory report.</h3><p>Read the full certificate, chromatogram, sample photograph, results, and laboratory notes on the issuing laboratory’s website.</p><span data-coa-original-id></span><a data-coa-report-link target="_blank" rel="noopener noreferrer">Open the original report <span aria-hidden="true">↗</span></a><p class="batch-coa-original-note">Opens KMD Analytical in a new tab.</p></div>
+            <div class="batch-coa-original"><span class="batch-coa-paper-icon" aria-hidden="true">↗</span><p class="batch-coa-eyebrow">KMD Analytical</p><h3>The complete laboratory report.</h3><p>Read the full certificate, chromatogram, sample photograph, results, and laboratory notes on the issuing laboratory’s website.</p><span data-coa-original-id></span><div class="batch-coa-original-actions"><a data-coa-report-link target="_blank" rel="noopener noreferrer">Open the original report <span aria-hidden="true">↗</span></a><a data-coa-download download hidden>Download PDF <span aria-hidden="true">↓</span></a></div><p class="batch-coa-original-note">Opens KMD Analytical in a new tab.</p></div>
           </div>
           <div role="tabpanel" id="batch-history" aria-labelledby="batch-history-tab" hidden><p class="batch-coa-records-intro">Published certificates for this lot and selected strength.</p><div data-coa-history></div></div>
         </div>
@@ -82,7 +82,8 @@ window.JONEZIE_BATCH_COA = (() => {
         }
         const sameStrength = normalizeStrength(option.mgOption) === normalizeStrength(record.sampleStrength);
         find('[data-coa-lot]').textContent = `LOT · ${record.lot}`;
-        find('[data-coa-coverage]').textContent = `Shared lot · ${record.coveredStrengths.join(' / ')}`;
+        const sharedLot = record.coveredStrengths.length > 1;
+        find('[data-coa-coverage]').textContent = sharedLot ? `Shared lot · ${record.coveredStrengths.join(' / ')}` : `Tested ${record.sampleStrength} sample`;
         find('[data-coa-purity]').innerHTML = `${escape(record.purityPercent)}<small>%</small>`;
         find('[data-coa-purity-scope]').textContent = `${record.method} · tested ${record.sampleStrength} sample`;
         find('[data-coa-metadata]').innerHTML = [
@@ -92,11 +93,17 @@ window.JONEZIE_BATCH_COA = (() => {
           ['Date analyzed', date(record.analyzed)]
         ].map(([label, value]) => `<div><dt>${escape(label)}</dt><dd>${escape(value)}</dd></div>`).join('');
         panel.querySelectorAll('[data-coa-report-link]').forEach(link => { link.href = record.reportUrl; });
+        const download = find('[data-coa-download]');
+        download.hidden = !record.pdfUrl;
+        if (record.pdfUrl) {
+          download.href = record.pdfUrl;
+          download.download = `KMD-COA-${record.id}.pdf`;
+        } else download.removeAttribute('href');
         find('[data-coa-certificate]').textContent = record.id;
         find('[data-coa-original-id]').textContent = `Certificate ${record.id} · Issued ${date(record.issued)}`;
         find('[data-coa-results]').innerHTML = `<table><thead><tr><th scope="col">Test</th><th scope="col">Specification</th><th scope="col">Result</th></tr></thead><tbody>${record.results.map(row => `<tr><th scope="row">${escape(row.test)}</th><td>${escape(row.specification)}</td><td>${escape(row.result)}<span>${escape(row.status)}</span></td></tr>`).join('')}</tbody></table><p>Retention time: ${escape(record.retentionMinutes)} minutes. ${escape(record.overall)}.</p>`;
         find('[data-coa-sample-note]').textContent = sameStrength
-          ? `Laboratory results apply to the submitted ${record.sampleStrength} sample. Jonezie identifies this lot as supplying both listed strengths; match the lot number to your vial.`
+          ? `Laboratory results apply to the submitted ${record.sampleStrength} sample.${sharedLot ? ' Jonezie identifies this lot as supplying the listed strengths;' : ''} ${sharedLot ? 'match' : 'Match'} the lot number to your vial.`
           : `This lot also supplies ${option.mgOption}, as confirmed by Jonezie. The laboratory tested a ${record.sampleStrength} vial: the ${record.contentMg}mg content result is for that sample, not a measured ${option.mgOption} vial.`;
         find('[data-coa-history]').innerHTML = matching.map(item => `<div class="batch-coa-history-row"><div><strong>${escape(item.lot)}</strong><span>${escape(item.sampleStrength)} sample tested · ${escape(date(item.analyzed))}</span></div><a href="${escape(item.reportUrl)}" target="_blank" rel="noopener noreferrer">View certificate ↗</a></div>`).join('');
       }
