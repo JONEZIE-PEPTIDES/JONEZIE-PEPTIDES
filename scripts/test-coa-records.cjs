@@ -130,6 +130,25 @@ test('glutathione retains the tested 600mg sample across owner-confirmed strengt
   assert.equal(api.recordsFor('nad', '500mg')[0].id, 'JL-20261116-RXSX-01');
 });
 
+test('semaglutide preserves its 10mg assay across five strengths without covering blends', () => {
+  const report = api.recordsFor('semaglutide', '10mg')[0];
+  const expected = {
+    id: 'JL-20261116-4RR8-01', compound: 'Semaglutide', lot: 'JLSA1037',
+    laboratoryBatch: 'JL-20261116-4RR8', sampleStrength: '10mg', labelClaimMg: '10',
+    purityPercent: '99.96', contentMg: '9.81', percentOfClaim: '98.1', retentionMinutes: '7.821',
+    received: '2026-11-16', analyzed: '2026-11-20', issued: '2026-11-22',
+    reportUrl: 'https://kmdanalytical.com/coa/JL-20261116-4RR8-01'
+  };
+  for (const [key, value] of Object.entries(expected)) assert.equal(report[key], value, key);
+  assert.equal(report.results[2].result, '9.81mg · 98.1% of claim');
+  for (const strength of ['5mg', '10mg', '15mg', '20mg', '30mg']) assert.equal(api.recordsFor('semaglutide', strength)[0], report);
+  for (const [slug, strength] of [
+    ['semaglutide', '50mg'],
+    ['cagrilintide-2-5mg-plus-semaglutide-2-5mg', '5mg'],
+    ['cagrilintide-5mg-plus-semaglutide-5mg', '10mg']
+  ]) assert.equal(api.recordsFor(slug, strength).length, 0);
+});
+
 test('the owner’s shared-lot workflow covers each product’s currently listed strengths', () => {
   const catalogContext = { window: {}, document: { querySelector: () => null } };
   vm.createContext(catalogContext);

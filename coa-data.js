@@ -314,5 +314,33 @@ window.JONEZIE_COA_RECORDS = [
       { test: 'Purity · HPLC peak area', specification: '≥ 95.0%', result: '99.98%', status: 'Conforms' },
       { test: 'Content · tested 600mg vial', specification: '≥ 90% of the 600mg label claim', result: '596.02mg · 99.3% of claim', status: 'Conforms' }
     ]
+  },
+  {
+    id: 'JL-20261116-4RR8-01',
+    slug: 'semaglutide',
+    compound: 'Semaglutide',
+    lot: 'JLSA1037',
+    laboratoryBatch: 'JL-20261116-4RR8',
+    sampleStrength: '10mg',
+    coveredStrengths: ['5mg', '10mg', '15mg', '20mg', '30mg'],
+    coverageSource: 'Owner confirmed submitted product lots cover all listed strengths going forward on 2026-11-22.',
+    laboratory: 'KMD Analytical',
+    method: 'HPLC-DAD',
+    received: '2026-11-16',
+    analyzed: '2026-11-20',
+    issued: '2026-11-22',
+    purityPercent: '99.96',
+    contentMg: '9.81',
+    labelClaimMg: '10',
+    percentOfClaim: '98.1',
+    retentionMinutes: '7.821',
+    identity: 'Conforms · RT + UV against reference',
+    overall: 'Conforms to the report’s specification',
+    reportUrl: 'https://kmdanalytical.com/coa/JL-20261116-4RR8-01',
+    results: [
+      { test: 'Appearance', specification: 'White lyophilized powder', result: 'Clear, colorless', status: 'Conforms' },
+      { test: 'Purity · HPLC peak area', specification: '≥ 95.0%', result: '99.96%', status: 'Conforms' },
+      { test: 'Content · tested 10mg vial', specification: '≥ 90% of the 10mg label claim', result: '9.81mg · 98.1% of claim', status: 'Conforms' }
+    ]
   }
 ];
