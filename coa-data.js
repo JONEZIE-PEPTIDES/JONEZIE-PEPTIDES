@@ -92,5 +92,199 @@ window.JONEZIE_COA_RECORDS = [
       { test: 'Purity · HPLC peak area', specification: '≥ 95.0%', result: '99.99%', status: 'Conforms' },
       { test: 'Content · tested 15mg vial', specification: '≥ 90% of the 15mg label claim', result: '14.89mg · 99.3% of claim', status: 'Conforms' }
     ]
+  },
+  {
+    "id": "JL-20261116-RXSX-01",
+    "slug": "nad",
+    "compound": "NAD+",
+    "lot": "JLND53442",
+    "laboratoryBatch": "JL-20261116-RXSX",
+    "sampleStrength": "500mg",
+    "coveredStrengths": [
+      "100mg",
+      "500mg",
+      "1000mg"
+    ],
+    "coverageSource": "Owner confirmed submitted product lots cover all listed strengths going forward on 2026-11-22.",
+    "laboratory": "KMD Analytical",
+    "method": "HPLC-DAD",
+    "received": "2026-11-16",
+    "analyzed": "2026-11-19",
+    "issued": "2026-11-22",
+    "purityPercent": "99.97",
+    "contentMg": "511.80",
+    "labelClaimMg": "500",
+    "percentOfClaim": "102.4",
+    "retentionMinutes": "1.519",
+    "identity": "Conforms · RT + UV against reference",
+    "overall": "Conforms to the report’s specification",
+    "reportUrl": "https://kmdanalytical.com/coa/JL-20261116-RXSX-01",
+    "pdfUrl": "assets/coa/KMD-COA-JL-20261116-RXSX-01.pdf",
+    "pdfSha256": "cf106bcdc6f54afaaadd11ff10cdbf8bf3ba7e10b143565d409c9c9739882c88",
+    "results": [
+      {
+        "test": "Appearance",
+        "specification": "White lyophilized powder",
+        "result": "Clear, colorless",
+        "status": "Conforms"
+      },
+      {
+        "test": "Purity · HPLC peak area",
+        "specification": "≥ 95.0%",
+        "result": "99.97%",
+        "status": "Conforms"
+      },
+      {
+        "test": "Content · tested 500mg vial",
+        "specification": "≥ 90% of the 500mg label claim",
+        "result": "511.80mg · 102.4% of claim",
+        "status": "Conforms"
+      }
+    ]
+  },
+  {
+    "id": "JL-20261116-S4FG-01",
+    "slug": "tesamorelin",
+    "compound": "Tesamorelin",
+    "lot": "JLTSA1477",
+    "laboratoryBatch": "JL-20261116-S4FG",
+    "sampleStrength": "10mg",
+    "coveredStrengths": [
+      "5mg",
+      "10mg",
+      "15mg"
+    ],
+    "coverageSource": "Owner confirmed submitted product lots cover all listed strengths going forward on 2026-11-22.",
+    "laboratory": "KMD Analytical",
+    "method": "HPLC-DAD",
+    "received": "2026-11-16",
+    "analyzed": "2026-11-19",
+    "issued": "2026-11-22",
+    "purityPercent": "99.98",
+    "contentMg": "9.93",
+    "labelClaimMg": "10",
+    "percentOfClaim": "99.3",
+    "retentionMinutes": "9.202",
+    "identity": "Conforms · RT + UV against reference",
+    "overall": "Conforms to the report’s specification",
+    "reportUrl": "https://kmdanalytical.com/coa/JL-20261116-S4FG-01",
+    "pdfUrl": "assets/coa/KMD-COA-JL-20261116-S4FG-01.pdf",
+    "pdfSha256": "67a23a325cc2d827231f0b44e323fdf6a7d73a28c91f6c8b5eca7c6902f1049e",
+    "results": [
+      {
+        "test": "Appearance",
+        "specification": "White lyophilized powder",
+        "result": "Clear, colorless",
+        "status": "Conforms"
+      },
+      {
+        "test": "Purity · HPLC peak area",
+        "specification": "≥ 95.0%",
+        "result": "99.98%",
+        "status": "Conforms"
+      },
+      {
+        "test": "Content · tested 10mg vial",
+        "specification": "≥ 90% of the 10mg label claim",
+        "result": "9.93mg · 99.3% of claim",
+        "status": "Conforms"
+      }
+    ]
+  },
+  {
+    "id": "JL-20261116-EQTM-01",
+    "slug": "bpc-157",
+    "compound": "BPC-157",
+    "lot": "JLBPC6246",
+    "laboratoryBatch": "JL-20261116-EQTM",
+    "sampleStrength": "10mg",
+    "coveredStrengths": [
+      "5mg",
+      "10mg"
+    ],
+    "coverageSource": "Owner confirmed submitted product lots cover all listed strengths going forward on 2026-11-22.",
+    "laboratory": "KMD Analytical",
+    "method": "HPLC-DAD",
+    "received": "2026-11-16",
+    "analyzed": "2026-11-19",
+    "issued": "2026-11-22",
+    "purityPercent": "99.99",
+    "contentMg": "11.03",
+    "labelClaimMg": "10",
+    "percentOfClaim": "110.3",
+    "retentionMinutes": "6.520",
+    "identity": "Conforms · RT + UV against reference",
+    "overall": "Conforms to the report’s specification",
+    "reportUrl": "https://kmdanalytical.com/coa/JL-20261116-EQTM-01",
+    "pdfUrl": "assets/coa/KMD-COA-JL-20261116-EQTM-01.pdf",
+    "pdfSha256": "f14a204d551acd116c16f3f84a609a4e9f91d4ad51d18aebeaa6161cf944afff",
+    "results": [
+      {
+        "test": "Appearance",
+        "specification": "White lyophilized powder",
+        "result": "Clear, colorless",
+        "status": "Conforms"
+      },
+      {
+        "test": "Purity · HPLC peak area",
+        "specification": "≥ 95.0%",
+        "result": "99.99%",
+        "status": "Conforms"
+      },
+      {
+        "test": "Content · tested 10mg vial",
+        "specification": "≥ 90% of the 10mg label claim",
+        "result": "11.03mg · 110.3% of claim",
+        "status": "Conforms"
+      }
+    ]
+  },
+  {
+    "id": "JL-20261116-P87A-01",
+    "slug": "mots-c",
+    "compound": "MOTS-c",
+    "lot": "JLMOT4001",
+    "laboratoryBatch": "JL-20261116-P87A",
+    "sampleStrength": "10mg",
+    "coveredStrengths": [
+      "10mg",
+      "40mg"
+    ],
+    "coverageSource": "Owner confirmed submitted product lots cover all listed strengths going forward on 2026-11-22.",
+    "laboratory": "KMD Analytical",
+    "method": "HPLC-DAD",
+    "received": "2026-11-16",
+    "analyzed": "2026-11-19",
+    "issued": "2026-11-22",
+    "purityPercent": "99.98",
+    "contentMg": "13.04",
+    "labelClaimMg": "10",
+    "percentOfClaim": "130.4",
+    "retentionMinutes": "8.776",
+    "identity": "Conforms · RT + UV against reference",
+    "overall": "Conforms to the report’s specification",
+    "reportUrl": "https://kmdanalytical.com/coa/JL-20261116-P87A-01",
+    "pdfUrl": "assets/coa/KMD-COA-JL-20261116-P87A-01.pdf",
+    "pdfSha256": "2d7f68a1ae337daa8a20c8edf23b5fd16a754f2577fe8b904fc506f4d8cdc756",
+    "results": [
+      {
+        "test": "Appearance",
+        "specification": "White lyophilized powder",
+        "result": "Clear, colorless",
+        "status": "Conforms"
+      },
+      {
+        "test": "Purity · HPLC peak area",
+        "specification": "≥ 95.0%",
+        "result": "99.98%",
+        "status": "Conforms"
+      },
+      {
+        "test": "Content · tested 10mg vial",
+        "specification": "≥ 90% of the 10mg label claim",
+        "result": "13.04mg · 130.4% of claim",
+        "status": "Conforms"
+      }
+    ]
   }
 ];
