@@ -32,7 +32,9 @@
 .batch-coa-document strong { font-size: 12px; }
 .batch-coa-document > div > span { color: #abc4cb; font-size: 11px; overflow-wrap: anywhere; }
 .batch-coa a { color: #ffc1dc; text-underline-offset: 3px; }
-.batch-coa-document > a, .batch-coa-original > a, .batch-coa-unavailable > a { display: inline-flex; justify-content: center; align-items: center; gap: 10px; flex-shrink: 0; min-height: 44px; padding: 10px 16px; border: 1px solid #94718c; border-radius: 9px; color: #ffd6e9; text-decoration: none; font-size: 12px; font-weight: 800; background: #302c3e; }
+.batch-coa-document > a, .batch-coa-original-actions > a, .batch-coa-unavailable > a { display: inline-flex; justify-content: center; align-items: center; gap: 10px; flex-shrink: 0; min-height: 44px; padding: 10px 16px; border: 1px solid #94718c; border-radius: 9px; color: #ffd6e9; text-decoration: none; font-size: 12px; font-weight: 800; background: #302c3e; }
+.batch-coa-original-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.batch-coa-original-actions > [data-coa-download] { border-color: #49766f; color: #a2f4dc; background: #193b3d; }
 .batch-coa a:hover { color: #ffe6f1; }
 .batch-coa-assays { padding: 18px 0 0; }
 .batch-coa-assays summary { display: flex; justify-content: space-between; list-style: none; cursor: pointer; font-size: 12px; font-weight: 700; min-height: 30px; }
