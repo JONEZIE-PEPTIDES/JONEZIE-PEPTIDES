@@ -1405,6 +1405,10 @@ main :is(p, li, dd) a:not([class]):is(:hover, :focus-visible) {
 
 .featured-offer-code strong { font-size: 1rem; letter-spacing: 0.03em; }
 
+.featured-order-gift { margin: 14px 0 0; color: var(--paper); font-size: clamp(0.64rem, 1vw, 0.8rem); line-height: 1.5; }
+.featured-order-gift strong { display: block; color: var(--cyan-soft); font-size: 1.15em; }
+.featured-order-gift span { display: block; color: var(--muted); }
+
 .featured-case-scene {
   min-width: 0;
   width: 100%;
@@ -6962,6 +6966,7 @@ body[data-product-slug="5-amino-1mq"] .product-choice-group .pack-choice.is-sele
 .product-related-list .product-related-name:hover { color: var(--shop-pink); }
 .product-related-selection { display: grid; gap: 4px; min-height: 3em; margin: 0; color: #a9c2c6; font-size: 0.72rem; }
 .product-related-selection strong { color: var(--text); font: 700 1.08rem "Space Grotesk", sans-serif; }
+.product-related-promo { color: var(--shop-mint); font-weight: 700; line-height: 1.4; }
 .product-related-actions { display: grid; gap: 8px; margin-top: auto; }
 .product-related-actions button {
   min-height: 40px;

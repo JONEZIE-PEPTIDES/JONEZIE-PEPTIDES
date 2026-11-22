@@ -248,6 +248,13 @@ function formatMoney(value) {
   return `$${value.toFixed(2)}`;
 }
 
+function relatedPromoMarkup(price) {
+  const promo = window.JONEZIE_PROMO?.getActivePromo?.();
+  if (!promo?.code || !promo.rate || promo.auto) return '';
+  const sale = Math.round(parsePrice(price) * 100 * (1 - promo.rate)) / 100;
+  return `<span class="product-related-promo">${formatMoney(sale)} with code ${escapeHtml(promo.code)} · ${Math.round(promo.rate * 100)}% off</span>`;
+}
+
 function getCoaImageForSlug(slug) {
   return COA_IMAGE_BY_SLUG[String(slug || '')] || null;
 }
@@ -776,7 +783,7 @@ function renderProductPage() {
               </a>
               <div class="product-related-content">
                 <a class="product-related-name" href="${escapeHtml(href)}">${escapeHtml(name)}</a>
-                ${pack ? `<p class="product-related-selection">${escapeHtml(option.mgOption)} · ${escapeHtml(pack.label)}<strong>${adPriceMarkup(pack.price)}</strong></p>` : '<p class="product-related-selection">View available options</p>'}
+                ${pack ? `<p class="product-related-selection">${escapeHtml(option.mgOption)} · ${escapeHtml(pack.label)}<strong>${adPriceMarkup(pack.price)}</strong>${relatedPromoMarkup(pack.price)}</p>` : '<p class="product-related-selection">View available options</p>'}
                 <div class="product-related-actions">
                   ${pack ? `<button type="button" data-related-add="${escapeHtml(relatedProduct.slug)}">+ Add to cart</button>` : ''}
                   <a href="${escapeHtml(href)}">View options &rarr;</a>
