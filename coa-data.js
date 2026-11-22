@@ -286,5 +286,33 @@ window.JONEZIE_COA_RECORDS = [
         "status": "Conforms"
       }
     ]
+  },
+  {
+    id: 'JL-20261116-56T5-01',
+    slug: 'glutathione',
+    compound: 'Glutathione (GSH)',
+    lot: 'JLGLU7452',
+    laboratoryBatch: 'JL-20261116-56T5',
+    sampleStrength: '600mg',
+    coveredStrengths: ['600mg', '1200mg', '1500mg'],
+    coverageSource: 'Owner confirmed submitted product lots cover all listed strengths going forward on 2026-11-22.',
+    laboratory: 'KMD Analytical',
+    method: 'HPLC-DAD',
+    received: '2026-11-16',
+    analyzed: '2026-11-19',
+    issued: '2026-11-22',
+    purityPercent: '99.98',
+    contentMg: '596.02',
+    labelClaimMg: '600',
+    percentOfClaim: '99.3',
+    retentionMinutes: '1.107',
+    identity: 'Conforms · RT + UV against reference',
+    overall: 'Conforms to the report’s specification',
+    reportUrl: 'https://kmdanalytical.com/coa/JL-20261116-56T5-01',
+    results: [
+      { test: 'Appearance', specification: 'White lyophilized powder', result: 'Clear, colorless', status: 'Conforms' },
+      { test: 'Purity · HPLC peak area', specification: '≥ 95.0%', result: '99.98%', status: 'Conforms' },
+      { test: 'Content · tested 600mg vial', specification: '≥ 90% of the 600mg label claim', result: '596.02mg · 99.3% of claim', status: 'Conforms' }
+    ]
   }
 ];
