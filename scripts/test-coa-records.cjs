@@ -108,6 +108,28 @@ test('the four additional certificates preserve their own assays, lots, tested s
   }
 });
 
+test('glutathione retains the tested 600mg sample across owner-confirmed strengths', () => {
+  const report = api.recordsFor('glutathione', '600mg')[0];
+  assert.equal(report.id, 'JL-20261116-56T5-01');
+  assert.equal(report.compound, 'Glutathione (GSH)');
+  assert.equal(report.lot, 'JLGLU7452');
+  assert.equal(report.laboratoryBatch, 'JL-20261116-56T5');
+  assert.equal(report.sampleStrength, '600mg');
+  assert.equal(report.labelClaimMg, '600');
+  assert.equal(report.purityPercent, '99.98');
+  assert.equal(report.contentMg, '596.02');
+  assert.equal(report.percentOfClaim, '99.3');
+  assert.equal(report.retentionMinutes, '1.107');
+  assert.equal(report.received, '2026-11-16');
+  assert.equal(report.analyzed, '2026-11-19');
+  assert.equal(report.issued, '2026-11-22');
+  assert.equal(report.reportUrl, 'https://kmdanalytical.com/coa/JL-20261116-56T5-01');
+  assert.equal(report.results[2].result, '596.02mg · 99.3% of claim');
+  for (const strength of ['600mg', '1200mg', '1500mg']) assert.equal(api.recordsFor('glutathione', strength)[0], report);
+  assert.equal(api.recordsFor('glutathione', '500mg').length, 0);
+  assert.equal(api.recordsFor('nad', '500mg')[0].id, 'JL-20261116-RXSX-01');
+});
+
 test('the owner’s shared-lot workflow covers each product’s currently listed strengths', () => {
   const catalogContext = { window: {}, document: { querySelector: () => null } };
   vm.createContext(catalogContext);
