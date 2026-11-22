@@ -660,8 +660,8 @@ function renderPromoStatus(promo, cart = []) {
   }
   if (!promo.code) {
     const activePromo = window.JONEZIE_PROMO?.getActivePromo?.();
-    const activeCode = activePromo?.code || 'FALL25';
-    const activeRate = Number(activePromo?.rate || 0.25);
+    const activeCode = activePromo?.code || 'VIXEN';
+    const activeRate = Number(activePromo?.rate || 0.40);
     activePromoCopy.innerHTML = `Active code: <strong>${escapeHtml(activeCode)}</strong> (${Math.round(activeRate * 100)}% off)`;
     activePromoCopy.dataset.state = 'default';
     return;
@@ -1277,6 +1277,7 @@ function buildOrderRequestPayload({
     }),
     includedWithOrder: [
       'Free vial cap cover',
+      'Free 10 mL BAC Water',
     ],
     pageUrl: window.location.href,
     timezone: String(Intl.DateTimeFormat().resolvedOptions().timeZone || '').trim(),

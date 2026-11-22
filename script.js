@@ -217,7 +217,7 @@ function renderCardPricing(product, selectedPrice) {
   }
   const promoPrice = promo ? formatDiscountedPrice(price, promo.rate) : '';
   const promoLine = promoPrice
-    ? `<span class="card-promo-price">${escapeHtml(promoPrice)} with code ${escapeHtml(promo.code)}</span>`
+    ? `<span class="card-promo-price">${escapeHtml(promoPrice)} with code ${escapeHtml(promo.code)} · ${Math.round(promo.rate * 100)}% off</span>`
     : '';
   return `
     <div class="card-pricing">

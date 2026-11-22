@@ -1,9 +1,9 @@
 (() => {
   const DEFAULT_PROMO = {
-    code: 'FALL25',
-    rate: 0.25,
+    code: 'VIXEN',
+    rate: 0.40,
     freeShipping: false,
-    message: 'Use code FALL25 for 25% off'
+    message: 'Use code VIXEN for 40% off'
   };
   const AD_FALL_SALE = {
     code: 'FALL40-AUTO',
@@ -137,9 +137,10 @@
 
   function renderPromoCopy() {
     const activePromo = getActivePromo();
+    let offerIndex = 0;
     document.querySelectorAll('.promo-track span').forEach((span) => {
-      if (span.textContent.includes('Use code') || span.textContent.includes('Memorial Day sale') || span.textContent.includes('Fall sale')) {
-        span.textContent = activePromo.message;
+      if (span.textContent.includes('Use code') || span.textContent.includes('Memorial Day sale') || span.textContent.includes('Fall sale') || span.textContent.includes('Free 10 mL BAC Water')) {
+        span.textContent = offerIndex++ % 2 === 0 ? activePromo.message : 'Free 10 mL BAC Water with every order';
       }
     });
 

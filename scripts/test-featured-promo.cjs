@@ -9,9 +9,10 @@ const css = read('styles.css');
 const sceneScript = read('featured-promo.js');
 const promo = home.slice(home.indexOf('<div class="featured-promo">'), home.indexOf('<div class="featured-grid"'));
 
-assert(promo.includes('25% <span>OFF</span>'));
+assert(promo.includes('40% <span>OFF</span>'));
 assert(promo.includes('Sitewide'));
-assert(promo.includes('FALL25'));
+assert(promo.includes('VIXEN'));
+assert(promo.includes('10 mL BAC Water'));
 assert(promo.includes('Buy 3+ units'));
 assert(promo.includes('Get a free Jonezie case'));
 assert(promo.includes('For research use only.'));
