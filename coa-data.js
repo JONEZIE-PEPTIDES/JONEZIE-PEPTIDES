@@ -342,5 +342,33 @@ window.JONEZIE_COA_RECORDS = [
       { test: 'Purity · HPLC peak area', specification: '≥ 95.0%', result: '99.96%', status: 'Conforms' },
       { test: 'Content · tested 10mg vial', specification: '≥ 90% of the 10mg label claim', result: '9.81mg · 98.1% of claim', status: 'Conforms' }
     ]
+  },
+  {
+    id: 'JL-20261116-4TBG-01',
+    slug: 'mt-2',
+    compound: 'Melanotan II',
+    lot: 'JLMT20345',
+    laboratoryBatch: 'JL-20261116-4TBG',
+    sampleStrength: '10mg',
+    coveredStrengths: ['10mg'],
+    coverageSource: 'Matches the active MT-2 10mg catalog strength and the tested vial label claim.',
+    laboratory: 'KMD Analytical',
+    method: 'HPLC-DAD',
+    received: '2026-11-16',
+    analyzed: '2026-11-20',
+    issued: '2026-11-22',
+    purityPercent: '99.98',
+    contentMg: '11.87',
+    labelClaimMg: '10',
+    percentOfClaim: '118.7',
+    retentionMinutes: '3.403',
+    identity: 'Conforms · RT + UV against reference',
+    overall: 'Conforms to the report’s specification',
+    reportUrl: 'https://kmdanalytical.com/coa/JL-20261116-4TBG-01',
+    results: [
+      { test: 'Appearance', specification: 'White lyophilized powder', result: 'Clear, colorless', status: 'Conforms' },
+      { test: 'Purity · HPLC peak area', specification: '≥ 95.0%', result: '99.98%', status: 'Conforms' },
+      { test: 'Content · tested 10mg vial', specification: '≥ 90% of the 10mg label claim', result: '11.87mg · 118.7% of claim', status: 'Conforms' }
+    ]
   }
 ];

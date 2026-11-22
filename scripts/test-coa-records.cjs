@@ -149,6 +149,21 @@ test('semaglutide preserves its 10mg assay across five strengths without coverin
   ]) assert.equal(api.recordsFor(slug, strength).length, 0);
 });
 
+test('Melanotan II retains its exact 10mg vial assay without being assigned to MT-1', () => {
+  const report = api.recordsFor('mt-2', '10mg')[0];
+  const expected = {
+    id: 'JL-20261116-4TBG-01', compound: 'Melanotan II', lot: 'JLMT20345',
+    laboratoryBatch: 'JL-20261116-4TBG', sampleStrength: '10mg', labelClaimMg: '10',
+    purityPercent: '99.98', contentMg: '11.87', percentOfClaim: '118.7', retentionMinutes: '3.403',
+    received: '2026-11-16', analyzed: '2026-11-20', issued: '2026-11-22',
+    reportUrl: 'https://kmdanalytical.com/coa/JL-20261116-4TBG-01'
+  };
+  for (const [key, value] of Object.entries(expected)) assert.equal(report[key], value, key);
+  assert.equal(report.results[2].result, '11.87mg · 118.7% of claim');
+  assert.equal(api.recordsFor('mt-2', '5mg').length, 0);
+  for (const strength of ['5mg', '10mg']) assert.equal(api.recordsFor('mt-1', strength).length, 0);
+});
+
 test('the owner’s shared-lot workflow covers each product’s currently listed strengths', () => {
   const catalogContext = { window: {}, document: { querySelector: () => null } };
   vm.createContext(catalogContext);
