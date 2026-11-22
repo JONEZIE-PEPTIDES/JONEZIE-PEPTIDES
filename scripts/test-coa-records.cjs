@@ -72,6 +72,42 @@ test('tirzepatide keeps its 15mg sample and unchanged source PDF separate from G
   assert.equal(api.recordsFor('tirzepatide', '50mg').length, 0);
 });
 
+test('the four additional certificates preserve their own assays, lots, tested strengths, and source PDFs', () => {
+  const expected = [
+    ['nad', 'RXSX', 'JLND53442', '500', ['100mg', '500mg', '1000mg'], '99.97', '511.80', '102.4', '1.519', 'cf106bcdc6f54afaaadd11ff10cdbf8bf3ba7e10b143565d409c9c9739882c88'],
+    ['tesamorelin', 'S4FG', 'JLTSA1477', '10', ['5mg', '10mg', '15mg'], '99.98', '9.93', '99.3', '9.202', '67a23a325cc2d827231f0b44e323fdf6a7d73a28c91f6c8b5eca7c6902f1049e'],
+    ['bpc-157', 'EQTM', 'JLBPC6246', '10', ['5mg', '10mg'], '99.99', '11.03', '110.3', '6.520', 'f14a204d551acd116c16f3f84a609a4e9f91d4ad51d18aebeaa6161cf944afff'],
+    ['mots-c', 'P87A', 'JLMOT4001', '10', ['10mg', '40mg'], '99.98', '13.04', '130.4', '8.776', '2d7f68a1ae337daa8a20c8edf23b5fd16a754f2577fe8b904fc506f4d8cdc756']
+  ];
+  for (const [slug, code, lot, claim, strengths, purity, content, percent, retention, sha] of expected) {
+    const id = `JL-20261116-${code}-01`;
+    const report = api.recordsFor(slug, `${claim}mg`)[0];
+    assert.equal(report.id, id);
+    assert.equal(report.lot, lot);
+    assert.equal(report.laboratoryBatch, `JL-20261116-${code}`);
+    assert.equal(report.sampleStrength, `${claim}mg`);
+    assert.equal(report.labelClaimMg, claim);
+    assert.equal(report.purityPercent, purity);
+    assert.equal(report.contentMg, content);
+    assert.equal(report.percentOfClaim, percent);
+    assert.equal(report.retentionMinutes, retention);
+    assert.equal(report.received, '2026-11-16');
+    assert.equal(report.analyzed, '2026-11-19');
+    assert.equal(report.issued, '2026-11-22');
+    assert.equal(report.reportUrl, `https://kmdanalytical.com/coa/${id}`);
+    assert.equal(report.pdfUrl, `assets/coa/KMD-COA-${id}.pdf`);
+    assert.equal(report.results[2].result, `${content}mg · ${percent}% of claim`);
+    for (const strength of strengths) assert.equal(api.recordsFor(slug, strength)[0], report);
+    const pdf = fs.readFileSync(path.join(__dirname, '..', report.pdfUrl));
+    assert.equal(report.pdfSha256, sha);
+    assert.equal(crypto.createHash('sha256').update(pdf).digest('hex'), sha);
+    assert.equal(api.recordsFor(slug, '2000mg').length, 0);
+  }
+  for (const slug of ['bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg', 'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg']) {
+    assert.equal(api.recordsFor(slug, '10mg').length, 0);
+  }
+});
+
 test('the owner’s shared-lot workflow covers each product’s currently listed strengths', () => {
   const catalogContext = { window: {}, document: { querySelector: () => null } };
   vm.createContext(catalogContext);
