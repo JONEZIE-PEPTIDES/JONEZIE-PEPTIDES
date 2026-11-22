@@ -370,5 +370,33 @@ window.JONEZIE_COA_RECORDS = [
       { test: 'Purity · HPLC peak area', specification: '≥ 95.0%', result: '99.98%', status: 'Conforms' },
       { test: 'Content · tested 10mg vial', specification: '≥ 90% of the 10mg label claim', result: '11.87mg · 118.7% of claim', status: 'Conforms' }
     ]
+  },
+  {
+    id: 'JL-20261116-W4X9-01',
+    slug: 'kpv',
+    compound: 'KPV',
+    lot: 'JLKP6226',
+    laboratoryBatch: 'JL-20261116-W4X9',
+    sampleStrength: '10mg',
+    coveredStrengths: ['10mg'],
+    coverageSource: 'Matches the active KPV 10mg catalog strength and the tested vial label claim.',
+    laboratory: 'KMD Analytical',
+    method: 'HPLC-DAD',
+    received: '2026-11-16',
+    analyzed: '2026-11-19',
+    issued: '2026-11-22',
+    purityPercent: '99.96',
+    contentMg: '9.89',
+    labelClaimMg: '10',
+    percentOfClaim: '98.9',
+    retentionMinutes: '2.299',
+    identity: 'Conforms · RT + UV against reference',
+    overall: 'Conforms to the report’s specification',
+    reportUrl: 'https://kmdanalytical.com/coa/JL-20261116-W4X9-01',
+    results: [
+      { test: 'Appearance', specification: 'White lyophilized powder', result: 'Clear, colorless', status: 'Conforms' },
+      { test: 'Purity · HPLC peak area', specification: '≥ 95.0%', result: '99.96%', status: 'Conforms' },
+      { test: 'Content · tested 10mg vial', specification: '≥ 90% of the 10mg label claim', result: '9.89mg · 98.9% of claim', status: 'Conforms' }
+    ]
   }
 ];

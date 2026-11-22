@@ -164,6 +164,21 @@ test('Melanotan II retains its exact 10mg vial assay without being assigned to M
   for (const strength of ['5mg', '10mg']) assert.equal(api.recordsFor('mt-1', strength).length, 0);
 });
 
+test('KPV retains its 10mg sample results without applying them to KLOW', () => {
+  const report = api.recordsFor('kpv', '10mg')[0];
+  const expected = {
+    id: 'JL-20261116-W4X9-01', compound: 'KPV', lot: 'JLKP6226',
+    laboratoryBatch: 'JL-20261116-W4X9', sampleStrength: '10mg', labelClaimMg: '10',
+    purityPercent: '99.96', contentMg: '9.89', percentOfClaim: '98.9', retentionMinutes: '2.299',
+    received: '2026-11-16', analyzed: '2026-11-19', issued: '2026-11-22',
+    reportUrl: 'https://kmdanalytical.com/coa/JL-20261116-W4X9-01'
+  };
+  for (const [key, value] of Object.entries(expected)) assert.equal(report[key], value, key);
+  assert.equal(report.results[2].result, '9.89mg · 98.9% of claim');
+  assert.equal(api.recordsFor('kpv', '5mg').length, 0);
+  for (const strength of ['10mg', '80mg']) assert.equal(api.recordsFor('ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg', strength).length, 0);
+});
+
 test('the owner’s shared-lot workflow covers each product’s currently listed strengths', () => {
   const catalogContext = { window: {}, document: { querySelector: () => null } };
   vm.createContext(catalogContext);
