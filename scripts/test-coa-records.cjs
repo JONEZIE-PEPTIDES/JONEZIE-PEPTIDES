@@ -48,3 +48,41 @@ test('GLP-3(RT) results retain the exact tested sample values and original PDF',
   assert.equal(api.recordsFor('ghk-cu', '10mg').length, 0);
   assert.equal(api.recordsFor('retatrutide', '50mg').length, 0);
 });
+
+test('tirzepatide keeps its 15mg sample and unchanged source PDF separate from GLP-3(RT)', () => {
+  const report = api.recordsFor('tirzepatide', '15mg')[0];
+  assert.equal(report.id, 'JL-20261116-VRYT-01');
+  assert.equal(report.lot, 'JLTZ2634');
+  assert.equal(report.sampleStrength, '15mg');
+  assert.equal(report.labelClaimMg, '15');
+  assert.equal(report.contentMg, '14.89');
+  assert.equal(report.purityPercent, '99.99');
+  assert.equal(report.percentOfClaim, '99.3');
+  assert.equal(report.retentionMinutes, '8.350');
+  assert.equal(report.analyzed, '2026-11-20');
+  assert.equal(report.issued, '2026-11-22');
+  assert.equal(report.reportUrl, 'https://kmdanalytical.com/coa/JL-20261116-VRYT-01');
+  for (const strength of ['10mg', '15mg', '20mg', '30mg']) {
+    assert.equal(api.recordsFor('tirzepatide', strength)[0], report);
+    assert.equal(api.recordsFor('tirzepatide', strength)[0].sampleStrength, '15mg');
+  }
+  const pdf = fs.readFileSync(path.join(__dirname, '..', report.pdfUrl));
+  assert.equal(crypto.createHash('sha256').update(pdf).digest('hex'), report.pdfSha256);
+  assert.notEqual(api.recordsFor('retatrutide', '15mg')[0].id, report.id);
+  assert.equal(api.recordsFor('tirzepatide', '50mg').length, 0);
+});
+
+test('the owner’s shared-lot workflow covers each product’s currently listed strengths', () => {
+  const catalogContext = { window: {}, document: { querySelector: () => null } };
+  vm.createContext(catalogContext);
+  for (const file of ['catalog-data.js', 'catalog-sheet-sync.js', 'catalog-admin-config.js', 'catalog-admin.js', 'new-label-products.js', 'catalog-image-overrides.js']) {
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', file), 'utf8'), catalogContext);
+  }
+  const products = catalogContext.window.JONEZIE_CATALOG.products;
+  const slugs = new Set(context.window.JONEZIE_COA_RECORDS.map(record => record.slug));
+  for (const slug of slugs) {
+    const product = products.find(product => product.slug === slug);
+    assert(product, slug);
+    for (const option of product.options) assert(api.recordsFor(slug, option.mgOption).length, `${slug} ${option.mgOption}`);
+  }
+});
