@@ -8,18 +8,15 @@ const COA_ASSET_VERSION = '20260415b';
 const PRODUCT_ASSET_VERSION = '20260427a';
 const PRODUCT_FALLBACK_IMAGE = 'product-placeholder.svg';
 const SITE_ORIGIN = siteLibrary?.getSiteOrigin() || 'https://www.jonezielabs.com';
+if (window.JONEZIE_PROMO?.isAdSaleContext?.()) {
+  document.querySelectorAll('[data-coa-archive-static]').forEach(panel => panel.remove());
+}
 const COA_IMAGE_BY_SLUG = {
   'bpc-157': 'coa-bpc-157.png',
   'cjc-1295-with-dac': 'coa-cjc-1295.png',
-  'cjc-1295-without-dac': 'coa-cjc-1295.png',
-  'cjc-1295-without-dac-plus-ipamorelin': 'coa-cjc-1295.png',
   'cagrilintide': 'coa-cagrilintide.png',
-  'cagrilintide-2-5mg-plus-semaglutide-2-5mg': 'coa-cagrilintide.png',
-  'cagrilintide-5mg-plus-semaglutide-5mg': 'coa-cagrilintide.png',
   'ghk-cu': 'coa-ghk-cu.png',
-  'ghk-cu-35mg-plus-tb-500-10mg-plus-bpc-157-5mg': 'coa-glow.png',
   'bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg': 'coa-glow.png',
-  'ghk-cu-50mg-plus-kpv-10mg-plus-bpc-157-10mg': 'coa-klow.png',
   'ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg': 'coa-klow.png',
   hcg: 'coa-hcg.png',
   ipamorelin: 'coa-ipamorelin.png',

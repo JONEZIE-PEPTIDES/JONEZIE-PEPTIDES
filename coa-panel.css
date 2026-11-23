@@ -78,3 +78,6 @@
   .batch-coa-record { padding: 20px 14px; }
   .batch-coa-tabs { gap: 12px; flex-wrap: wrap; }
 }
+
+.batch-coa-library-links, .batch-coa-archive-links { font-size:14px; line-height:1.8; margin-top:24px; }
+.batch-coa-archive-links { border-top:1px solid #36505a; padding-top:18px; }

@@ -10,6 +10,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 import quickjs
+from generate_coa_pages import load_records, href
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,6 +47,7 @@ def main() -> None:
     base_urls = [
         f"{SITE_ORIGIN}/",
         f"{SITE_ORIGIN}/catalog.html",
+        f"{SITE_ORIGIN}/lab-results.html",
         f"{SITE_ORIGIN}/comparison.html",
         f"{SITE_ORIGIN}/research-guides.html",
         f"{SITE_ORIGIN}/michigan-peptides.html"
@@ -55,7 +57,9 @@ def main() -> None:
 
     lastmod = date.today().isoformat()
     write_robots()
-    write_sitemap(base_urls + product_urls + comparison_urls, lastmod)
+    current, archive = load_records()
+    coa_urls = [f"{SITE_ORIGIN}/{href(r)}" for r in current + archive]
+    write_sitemap(base_urls + product_urls + comparison_urls + coa_urls, lastmod)
 
 
 def get_removed_product_slugs() -> set[str]:

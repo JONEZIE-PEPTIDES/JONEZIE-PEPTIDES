@@ -4,6 +4,7 @@
     ['index.html#featured', 'Popular Products'],
     ['why-jonezie.html', 'Why Jonezie'],
     ['partners.html', 'Become an Affiliate'],
+    ['lab-results.html', 'Lab Results & COAs'],
     ['research-guides.html', 'Research Guides'],
     ['comparison.html', 'Comparisons'],
     ['michigan-peptides.html', 'Michigan'],
@@ -218,7 +219,7 @@
   function syncSiteNavigation() {
     const isHome = /(^|\/)(index\.html)?$/.test(window.location.pathname);
     const links = window.JONEZIE_PROMO?.isAdSaleContext?.()
-      ? NAV_CATEGORY_LINKS.filter(([href]) => href !== 'partners.html')
+      ? NAV_CATEGORY_LINKS.filter(([href]) => !['partners.html', 'lab-results.html'].includes(href))
       : NAV_CATEGORY_LINKS;
     const normalizeHref = (href) => {
       if (!isHome) return href;
