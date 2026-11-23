@@ -75,7 +75,7 @@
 
   const root = location.pathname.includes('/products/') ? '../' : '';
   const script = document.createElement('script');
-  script.src = `${root}site-footer.js?v=20261030footerwide2`;
+  script.src = `${root}site-footer.js?v=20261123coa1`;
   script.defer = true;
   document.head.appendChild(script);
 })();

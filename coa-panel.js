@@ -35,10 +35,13 @@ window.JONEZIE_BATCH_COA = (() => {
             <div class="batch-coa-original"><span class="batch-coa-paper-icon" aria-hidden="true">↗</span><p class="batch-coa-eyebrow">KMD Analytical</p><h3>The complete laboratory report.</h3><p>Read the full certificate, chromatogram, sample photograph, results, and laboratory notes on the issuing laboratory’s website.</p><span data-coa-original-id></span><div class="batch-coa-original-actions"><a data-coa-report-link target="_blank" rel="noopener noreferrer">Open the original report <span aria-hidden="true">↗</span></a><a data-coa-download download hidden>Download PDF <span aria-hidden="true">↓</span></a></div><p class="batch-coa-original-note">Opens KMD Analytical in a new tab.</p></div>
           </div>
           <div role="tabpanel" id="batch-history" aria-labelledby="batch-history-tab" hidden><p class="batch-coa-records-intro">Published certificates for this lot and selected strength.</p><div data-coa-history></div></div>
+          <p class="batch-coa-library-links" data-coa-library-links><a data-coa-detail-link>Read this batch record</a> · <a href="lab-results.html">All lab results &amp; COAs</a> · <a href="lab-results.html?product=${escape(product.slug)}#previous-reports">Previous reports for this product</a></p>
         </div>
         <div class="batch-coa-unavailable" data-coa-unavailable hidden><span>Report not posted</span><h3>No matching report is published for this strength.</h3><p>Results from another strength or lot are not substituted here.</p><a data-coa-question>Ask about this report</a></div>
       </div>`;
-    anchor.before(panel);
+    const staticPanel = document.querySelector("[data-coa-static]");
+    if (staticPanel) staticPanel.replaceWith(panel);
+    else anchor.before(panel);
     const find = selector => panel.querySelector(selector);
     const tabs = Array.from(panel.querySelectorAll('[role="tab"]'));
     function selectTab(tab, focus = false) {
@@ -80,6 +83,8 @@ window.JONEZIE_BATCH_COA = (() => {
           find('[data-coa-question]').href = `mailto:customerservice@jonezielabs.com?subject=${encodeURIComponent(`COA request: ${product.name} ${option.mgOption}`)}`;
           return;
         }
+        find('[data-coa-library-links]').hidden = Boolean(window.JONEZIE_PROMO?.isAdSaleContext?.());
+        find('[data-coa-detail-link]').href = `coa/${record.id.toLowerCase()}.html`;
         const sameStrength = normalizeStrength(option.mgOption) === normalizeStrength(record.sampleStrength);
         find('[data-coa-lot]').textContent = `LOT · ${record.lot}`;
         const sharedLot = record.coveredStrengths.length > 1;

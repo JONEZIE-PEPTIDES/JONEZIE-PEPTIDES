@@ -8,6 +8,7 @@ from html import escape
 from pathlib import Path
 
 import quickjs
+from generate_coa_pages import product_summary
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -300,7 +301,7 @@ def render_product_page(*, template: str, product: dict, product_content: dict, 
     html = replace_wrapped(r'(<strong data-selected-total>).*?(</strong>)', escape(selected_price))
     html = html.replace(
         '<section class="section-shell product-facts" data-product-highlights></section>',
-        f'<section class="section-shell product-facts" data-product-highlights>{render_highlights(product, product_content, profile, strengths, research_findings, storage_profile, mixing_profile, category_guide)}</section>',
+        product_summary(product["slug"]) + f'<section class="section-shell product-facts" data-product-highlights>{render_highlights(product, product_content, profile, strengths, research_findings, storage_profile, mixing_profile, category_guide)}</section>',
         1,
     )
     html = html.replace(

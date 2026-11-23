@@ -1,0 +1,21 @@
+[
+  {"id":"janoshik-133069","slug":"bpc-157","compound":"BPC-157","sampleStrength":"5mg","lot":"ZHM2026BC5","analyzed":"2026-03-30","task":"133069","image":"coa-bpc-157.png"},
+  {"id":"janoshik-86145","slug":"cagrilintide","compound":"Cagrilintide","sampleStrength":"10mg","lot":"135","analyzed":"2025-11-03","task":"86145","image":"coa-cagrilintide.png"},
+  {"id":"janoshik-133071","slug":"","compound":"CJC-1295 DAC","sampleStrength":"5mg","lot":"ZHM2026CD5","analyzed":"2026-03-30","task":"133071","image":"coa-cjc-1295.png","note":"The report identifies CJC-1295 DAC. It is not a report for CJC-1295 without DAC or a CJC/ipamorelin blend."},
+  {"id":"janoshik-67747","slug":"ghk-cu","compound":"GHK-Cu","sampleStrength":"100mg","lot":"CU100/202507","analyzed":"2025-06-13","task":"67747","image":"coa-ghk-cu.png","note":"The original report names www.baojuchem.com as its client. Retained here as a previously published supplier report."},
+  {"id":"janoshik-84113","slug":"bpc-157-10mg-plus-ghk-cu-50mg-plus-tb500-10mg","compound":"GLOW","sampleStrength":"TB-500 10mg + BPC-157 10mg + GHK-Cu 50mg","lot":"BBG70/2025-1011","analyzed":"2025-10-21","task":"84113","image":"coa-glow.png"},
+  {"id":"janoshik-85665","slug":"hcg","compound":"HCG","sampleStrength":"5000 IU","lot":"HC5K/2025-1011","analyzed":"2025-11-03","task":"85665","image":"coa-hcg.png"},
+  {"id":"janoshik-86133","slug":"igf-1lr3","compound":"IGF-1 LR3","sampleStrength":"1mg","lot":"197","analyzed":"2025-11-03","task":"86133","image":"coa-igf-1lr3.png"},
+  {"id":"janoshik-86129","slug":"ipamorelin","compound":"Ipamorelin","sampleStrength":"10mg","lot":"179","analyzed":"2025-11-03","task":"86129","image":"coa-ipamorelin.png"},
+  {"id":"janoshik-84114","slug":"ghk-cu-50mg-plus-tb-500-10mg-plus-bpc-157-10mg-plus-kpv-10mg","compound":"KLOW","sampleStrength":"TB-500 10mg + BPC-157 10mg + GHK-Cu 50mg + KPV 10mg","lot":"KLOW80/2025-1011","analyzed":"2025-10-21","task":"84114","image":"coa-klow.png"},
+  {"id":"janoshik-86156","slug":"kpv","compound":"KPV","sampleStrength":"10mg","lot":"199","analyzed":"2025-11-03","task":"86156","image":"coa-kpv.png"},
+  {"id":"janoshik-75503","slug":"mots-c","compound":"MOTS-c","sampleStrength":"40mg","lot":"MS40/202509","analyzed":"2025-08-20","task":"75503","image":"coa-mots-c.png"},
+  {"id":"janoshik-84119","slug":"nad","compound":"NAD+","sampleStrength":"500mg","lot":"NJ500/2025-1011","analyzed":"2025-10-20","task":"84119","image":"coa-nad.png"},
+  {"id":"janoshik-67746","slug":"retatrutide","compound":"Retatrutide / GLP-3(RT)","sampleStrength":"10mg","lot":"RT10/202507","analyzed":"2025-06-13","task":"67746","image":"coa-retatrutide.png"},
+  {"id":"janoshik-106606","slug":"selank","compound":"Selank","sampleStrength":"10mg","lot":"168","analyzed":"2026-01-26","task":"106606","image":"coa-selank.png"},
+  {"id":"janoshik-84111","slug":"semaglutide","compound":"Semaglutide","sampleStrength":"10mg","lot":"SM10/2025-1011","analyzed":"2025-10-21","task":"84111","image":"coa-semaglutide.png"},
+  {"id":"janoshik-106593","slug":"tb500","compound":"TB-500 (TB4)","sampleStrength":"Not stated in sample name","lot":"153","analyzed":"2026-01-26","task":"106593","image":"coa-tb500.png"},
+  {"id":"janoshik-84123","slug":"tesamorelin","compound":"Tesamorelin","sampleStrength":"10mg","lot":"TSM10/2025-1011","analyzed":"2025-10-21","task":"84123","image":"coa-tesamorelin.png"},
+  {"id":"janoshik-84110","slug":"tirzepatide","compound":"Tirzepatide","sampleStrength":"30mg","lot":"TR30/2025-1011","analyzed":"2025-10-21","task":"84110","image":"coa-tirzepatide.png"},
+  {"id":"janoshik-106332","slug":"vip","compound":"VIP","sampleStrength":"10mg","lot":"#136","analyzed":"2026-02-11","task":"106332","image":"coa-vip.png"}
+]

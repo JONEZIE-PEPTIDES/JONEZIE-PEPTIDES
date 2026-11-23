@@ -17,6 +17,7 @@
           <a href="${ROOT}index.html#featured">Popular Picks</a>
           <a href="${ROOT}why-jonezie.html">Why Jonezie</a>
           ${window.JONEZIE_PROMO?.isAdSaleContext?.() ? '' : `<a href="${ROOT}partners.html">Partner Program</a>`}
+          ${window.JONEZIE_PROMO?.isAdSaleContext?.() ? '' : `<a href="${ROOT}lab-results.html">Lab Results &amp; COAs</a>`}
           <a href="${ROOT}research-guides.html">Research Guides</a>
           <a href="${ROOT}comparison.html">Comparisons</a>
         </nav>
